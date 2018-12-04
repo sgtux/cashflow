@@ -13,7 +13,8 @@ namespace FinanceApi.Infra.Entity
     public int Plots { get; set; }
     public TypePayment Type { get; set; }
     public DateTime FirstPayment { get; set; }
-    public CreditCard CarditCard { get; set; }
-    public CreditCard CarditCardId { get; set; }
+    public CreditCard CreditCard { get; set; }
+    public int? CreditCardId { get; set; }
+    public int PlotsPaid { get; set; }
   }
 }

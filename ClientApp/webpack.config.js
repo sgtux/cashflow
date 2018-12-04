@@ -32,7 +32,7 @@ module.exports = {
     contentBase: './dist',
     hot: true,
     proxy: {
-      '/api': 'http://localhost:3000'
+      '/api': 'http://localhost:5000'
     }
   }
 }

@@ -53,6 +53,7 @@ class Login extends React.Component {
   }
 
   login(e) {
+    if (this.state.loading) return;
     this.setState({ loading: true })
     if (e)
       e.preventDefault()
@@ -60,7 +61,7 @@ class Login extends React.Component {
       email: this.state.email,
       password: this.state.password
     }).then(user => {
-      setTimeout(() => this.setState({ loading: false }), 500)      
+      setTimeout(() => this.setState({ loading: false }), 500)
       setTimeout(() => this.props.userChanged(user), 600)
     }).catch(err =>
       setTimeout(() => this.setState({
@@ -74,8 +75,8 @@ class Login extends React.Component {
       <Zoom in={true}>
         <Card style={styles.Card}>
           <form onSubmit={e => this.login(e)}>
-            <GoogleButton label="Login with google" disabled={this.state.loading} />
-            <div style={styles.Or}>OR</div>
+            {/* <GoogleButton label="Login with google" disabled={this.state.loading} />
+            <div style={styles.Or}>OR</div> */}
             <CardContent>
               <IconTextInput
                 label="Email"

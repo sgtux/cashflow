@@ -2,20 +2,24 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using FinanceApi.Infra;
 using FinanceApi.Infra.Repository;
 using FinanceApi.Shared;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace FinanceApi
 {
+#pragma warning disable CS1591
   public class Startup
   {
     public Startup(IHostingEnvironment env)
@@ -37,6 +41,9 @@ namespace FinanceApi
         options.UseNpgsql(connectionString));
       services.AddMvc();
       CofigureScopes(services);
+
+      ConfigureAuth(services, jwtKey);
+
       services.AddSingleton(typeof(AppConfiguration), new AppConfiguration(jwtKey));
 
       services.AddSwaggerGen(c =>
@@ -56,6 +63,7 @@ namespace FinanceApi
 
     public void Configure(IApplicationBuilder app, IHostingEnvironment env)
     {
+      app.UseAuthentication();
       app.UseSwagger();
       app.UseSwaggerUI(c =>
       {
@@ -73,6 +81,27 @@ namespace FinanceApi
       services.AddScoped<IUserRepository, UserRepository>();
       services.AddScoped<IPaymentRepository, PaymentRepository>();
       services.AddScoped<ICreditCardRepository, CreditCardRepository>();
+    }
+
+    private void ConfigureAuth(IServiceCollection services, string jwtKey)
+    {
+      var secretKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtKey));
+      var tokenValidationParameters = new TokenValidationParameters
+      {
+        ValidateLifetime = true,
+        ValidateAudience = false,
+        ValidateIssuer = false,
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = secretKey
+      };
+
+      services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+      .AddJwtBearer(
+        options =>
+        {
+          options.TokenValidationParameters = tokenValidationParameters;
+        }
+      );
     }
   }
 }

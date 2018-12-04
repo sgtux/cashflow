@@ -1,6 +1,7 @@
 import axios from 'axios'
+import { STORAGE_KEYS } from '../helpers/storageKeys'
 
-const getToken = () => localStorage.getItem('TOKEN')
+const getToken = () => localStorage.getItem(STORAGE_KEYS.TOKEN)
 
 const sendRequest = (method, url, headers, data) => {
   return axios({
@@ -12,7 +13,7 @@ const sendRequest = (method, url, headers, data) => {
     .catch(err => { throw err.response.data })
 }
 
-const getHeaders = () => ({ token: getToken() })
+const getHeaders = () => ({ Authorization: `Bearer ${getToken()}` })
 
 export default {
   getNotAuthenticated: (url) => sendRequest('get', `/api${url}`),

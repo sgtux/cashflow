@@ -7,8 +7,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FinanceApi.Controllers
 {
+  /// <summary>
+  /// Base Controller
+  /// </summary>
   public abstract class BaseController : Controller
   {
+    /// <summary>
+    /// Identificador do usuário logado
+    /// </summary>
     protected int UserId
     {
       get
@@ -18,6 +24,9 @@ namespace FinanceApi.Controllers
       }
     }
 
+    /// <summary>
+    /// Chamado quando ocorre de validação em entidades
+    /// </summary>
     protected void ThrowValidationError(string error) => throw new ValidateException(error);
   }
 }

@@ -21,9 +21,9 @@
     <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.0" />
   </ItemGroup>
 
-  <!-- <PropertyGroup>
+  <PropertyGroup>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <NoWarn>$(NoWarn);1591</NoWarn>
-  </PropertyGroup> -->
+    <!-- <NoWarn>$(NoWarn);1591</NoWarn> -->
+  </PropertyGroup>
 
 </Project>

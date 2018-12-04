@@ -1,5 +1,5 @@
 import React from 'react'
-import { Paper } from '@material-ui/core';
+import { Paper, CircularProgress } from '@material-ui/core';
 
 const styles = {
   legend: {
@@ -11,6 +11,7 @@ const styles = {
   },
   paper: {
     marginTop: '50px',
+    marginBottom: '50px',
     marginLeft: '20px',
     marginRight: '20px',
     padding: '10px'
@@ -22,7 +23,13 @@ export default (props) => {
     <Paper style={styles.paper}>
       <fieldset style={styles.legend}>
         <legend>{props.title}</legend>
-        {props.children}
+
+        {
+          props.loading ?
+            <div style={{ textAlign: 'center', marginBottom: '10px', boxAlign: "center" }}>
+              <CircularProgress size={60} />
+            </div>
+            : props.children}
       </fieldset>
     </Paper>
   )
