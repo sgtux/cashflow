@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using FinanceApi.Shared;
 
 namespace FinanceApi.Infra.Entity
@@ -17,5 +18,7 @@ namespace FinanceApi.Infra.Entity
     public int? CreditCardId { get; set; }
     public int PlotsPaid { get; set; }
     public bool FixedPayment { get; set; }
+    [NotMapped]
+    public string FirstPaymentFormatted => FirstPayment.ToString("dd-MM-yyyy");
   }
 }

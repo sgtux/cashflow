@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -17,6 +18,16 @@ namespace FinanceApi.Shared
         sb.Append(hash[i].ToString("X2"));
       }
       return sb.ToString();
+    }
+
+    public static T MapperTo<T>(this T source, T target)
+    {
+      foreach (var prop in typeof(T).GetProperties())
+      {
+        if (prop.GetMethod != null && prop.SetMethod != null)
+          prop.SetValue(target, prop.GetValue(source));
+      }
+      return target;
     }
   }
 }

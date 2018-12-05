@@ -55,10 +55,11 @@ const CreditCardComponent = (props) => {
   if (!props.card)
     return null
   return (
-    <div>
+    <span>
+      <br />
       <CardIcon />
       <span style={{ marginTop: '-20px' }}>{props.card.name}</span>
-    </div>
+    </span>
   )
 }
 
@@ -96,6 +97,7 @@ export default class Payment extends React.Component {
       payments: [],
       paymentType: 2,
       useCreditCard: false,
+      fixedPayment: false,
       card: null,
       firstPayment: getDateStringEg(new Date())
     }
@@ -122,16 +124,17 @@ export default class Payment extends React.Component {
   }
 
   save() {
-    const { description, firstPayment, cost, paymentType, plots, card, useCreditCard, plotsPaid } = this.state
+    const { fixedPayment, description, firstPayment, cost, paymentType, plots, card, useCreditCard, plotsPaid } = this.state
 
     const payment = {}
     payment.id = this.state.payment.id
     payment.description = description
     payment.firstPayment = getDateFromStringEg(firstPayment)
     payment.cost = cost ? Number(cost) : 0
+    payment.fixedPayment = fixedPayment
     payment.type = paymentType
-    payment.plots = plots ? Number(plots) : 0
-    payment.plotsPaid = plotsPaid ? Number(plotsPaid) : 0
+    payment.plots = plots && !fixedPayment ? Number(plots) : 0
+    payment.plotsPaid = plotsPaid && !fixedPayment ? Number(plotsPaid) : 0
 
     if (useCreditCard)
       payment.creditCardId = card
@@ -165,7 +168,7 @@ export default class Payment extends React.Component {
   render() {
     return (
       <CardMain title="Pagamentos" loading={this.state.loading}>
-        {this.state.cards.length > 0 ?
+        {this.state.payments.length ?
           <Paper>
             <List dense={true}>
               {this.state.payments.map(p =>
@@ -184,7 +187,7 @@ export default class Payment extends React.Component {
                         <Typography component="span" color={p.type === 1 ? 'primary' : 'secondary'}>
                           {p.type === 1 ? 'Renda' : 'Despesa'}
                         </Typography>
-                        {''}
+                        {p.firstPaymentFormatted}
                       </React.Fragment>
                     }
                   />
@@ -193,9 +196,7 @@ export default class Payment extends React.Component {
                     style={{ width: '200px' }}
                     secondary={
                       <React.Fragment>
-                        <Typography hidden={true} component="span">
-                          {`${p.plotsPaid}/${p.plots}`}
-                        </Typography>
+                        {p.fixedPayment ? 'Fixo Mensal' : `${p.plotsPaid}/${p.plots}`}
                         <CreditCardComponent card={p.creditCard} />
                       </React.Fragment>
                     }
@@ -264,7 +265,7 @@ export default class Payment extends React.Component {
                 onChange={(e) => this.setState({ plotsPaid: e.value.replace('.', ''), errorMessage: '' })}
               />
             </div>
-            <div hidden={this.state.cards.length === 0}>
+            <div hidden={!this.state.cards.length}>
               <FormControlLabel
                 control={
                   <Checkbox
@@ -276,15 +277,19 @@ export default class Payment extends React.Component {
                 label="Cartão de crédito ?"
               />
             </div>
-            <div hidden={!this.state.useCreditCard}>
-              <FormControl style={{ marginLeft: '20px', marginTop: '10px' }}>
-                <InputLabel htmlFor="select-tipo">Cartão de crédito</InputLabel>
-                <Select style={{ width: '200px' }} value={this.state.card}
-                  onChange={(e) => this.setState({ card: e.target.value })}>
-                  {this.state.cards.map(p => <MenuItem key={p.id} value={p.id}>{p.name}</MenuItem>)}
-                </Select>
-              </FormControl>
-            </div>
+            {
+              this.state.cards.length && this.state.useCreditCard ?
+                <div>
+                  <FormControl style={{ marginLeft: '20px', marginTop: '10px' }}>
+                    <InputLabel htmlFor="select-tipo">Cartão de crédito</InputLabel>
+                    <Select style={{ width: '200px' }} value={this.state.card}
+                      onChange={(e) => this.setState({ card: e.target.value })}>
+                      {this.state.cards.map(p => <MenuItem key={p.id} value={p.id}>{p.name}</MenuItem>)}
+                    </Select>
+                  </FormControl>
+                </div>
+                : null
+            }
 
             {/* <TextField
               label="Valor Total"
@@ -301,7 +306,7 @@ export default class Payment extends React.Component {
               type="number"
               onChange={(e) => this.setState({ cost: e.value, errorMessage: '' })}
             />
-            {/* <TextField style={{ marginLeft: '10px', marginTop: '10px' }}
+            <TextField style={{ marginLeft: '10px', marginTop: '10px' }}
               id="date"
               label="Primeiro Pagamento"
               type="date"
@@ -310,7 +315,7 @@ export default class Payment extends React.Component {
               InputLabelProps={{
                 shrink: true,
               }}
-            /> */}
+            />
 
             <div style={{ marginTop: '20px' }}>
               <Button color="primary" onClick={() => this.setState({ payment: null })}>

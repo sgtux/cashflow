@@ -27,3 +27,12 @@ export const toReal = (val) => {
     .toFixed(2).replace('.', ',')
     .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')}`
 }
+
+export const isSameMonth = (d1, d2) => {
+  const date1 = new Date(d1)
+  const date2 = new Date(d2)
+  if (date1 === 'Invalid Date' || date2 === 'Invalid Date')
+    return false
+  return date1.getMonth() === date2.getMonth()
+    && date1.getFullYear() === date2.getFullYear()
+}

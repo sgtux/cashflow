@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FinanceApi.Infra;
 using FinanceApi.Infra.Entity;
+using FinanceApi.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -58,13 +59,8 @@ namespace FinanceApi.Controllers
       var paymentDb = _context.Payment.FirstOrDefault(p => p.Id == payment.Id && p.UserId == UserId);
       if (paymentDb is null)
         ThrowValidationError("Pagamento não localizado.");
-
       payment.UserId = UserId;
-      paymentDb.Description = payment.Description;
-      paymentDb.Cost = payment.Cost;
-      paymentDb.CreditCardId = payment.CreditCardId;
-      paymentDb.Type = payment.Type;
-      paymentDb.Plots = payment.Plots;
+      payment.MapperTo(paymentDb);
       _context.Update(paymentDb);
       _context.SaveChanges();
     }
@@ -98,11 +94,14 @@ namespace FinanceApi.Controllers
       if (default(DateTime) == payment.FirstPayment)
         ThrowValidationError("A data do primeiro pagamento é obrigatória.");
 
-      if (payment.PlotsPaid > payment.Plots)
-        ThrowValidationError("O quantidade parcelas pagas não pode ser maior que o número de parcelas.");
+      if (!payment.FixedPayment)
+      {
+        if (payment.PlotsPaid > payment.Plots)
+          ThrowValidationError("O quantidade parcelas pagas não pode ser maior que o número de parcelas.");
 
-      if (payment.Plots <= 0)
-        ThrowValidationError("O pagamento deve ter pelo menos 1 parcela.");
+        if (payment.Plots <= 0)
+          ThrowValidationError("O pagamento deve ter pelo menos 1 parcela.");
+      }
 
       if (payment.CreditCardId.HasValue)
       {
