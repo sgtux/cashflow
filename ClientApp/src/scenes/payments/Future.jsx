@@ -286,22 +286,22 @@ export default class Payment extends React.Component {
               </FormControl>
             </div>
 
-            {/* <TextField
+            <TextField
               label="Valor Total"
               value={this.state.cost}
               onChange={(e) => this.setState({ cost: e.target.value, errorMessage: '' })}
               InputProps={{
                 inputComponent: NumberFormatCustom,
               }}
-            /> */}
+            />
 
-            <IconTextInput
+            {/* <IconTextInput
               label="Valor Total"
               value={this.state.cost}
               type="number"
               onChange={(e) => this.setState({ cost: e.value, errorMessage: '' })}
-            />
-            {/* <TextField style={{ marginLeft: '10px', marginTop: '10px' }}
+            /> */}
+            <TextField style={{ marginLeft: '10px', marginTop: '10px' }}
               id="date"
               label="Primeiro Pagamento"
               type="date"
@@ -310,7 +310,7 @@ export default class Payment extends React.Component {
               InputLabelProps={{
                 shrink: true,
               }}
-            /> */}
+            />
 
             <div style={{ marginTop: '20px' }}>
               <Button color="primary" onClick={() => this.setState({ payment: null })}>

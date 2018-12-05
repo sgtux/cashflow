@@ -21,3 +21,9 @@ export const getDateFromStringEg = (value) => {
 
   return new Date(`${month}-${day}-${year}`)
 }
+
+export const toReal = (val) => {
+  return isNaN(val) ? val : `R$ ${Number(val)
+    .toFixed(2).replace('.', ',')
+    .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')}`
+}

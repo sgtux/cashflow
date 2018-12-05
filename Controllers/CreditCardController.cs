@@ -75,6 +75,9 @@ namespace FinanceApi.Controllers
       if (card is null)
         ThrowValidationError("Cartão não localizado.");
 
+      if (_context.Payment.Any(p => p.CreditCardId == id))
+        ThrowValidationError("O cartão possui pagamentos vinculados e não pode ser excluído.");
+
       _context.Remove(card);
       _context.SaveChanges();
     }

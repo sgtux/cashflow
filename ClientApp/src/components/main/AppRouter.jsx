@@ -2,7 +2,8 @@ import React from 'react'
 import { Route, Switch, Link } from 'react-router-dom'
 import createHistory from 'history/createHashHistory'
 import CreditCards from '../../scenes/credit-cards/CreditCards'
-import Payment from '../../scenes/payments/Payment';
+import Payment from '../../scenes/payments/Payment'
+import FuturePayment from '../../scenes/payments/Future'
 
 const history = createHistory()
 const isAuthenticated = true
@@ -43,6 +44,7 @@ export default class AppRouter extends React.Component {
         <Route path="/about" component={About} />
         <Route path="/my-payments" component={Payment} />
         <Route path="/credit-cards" component={CreditCards} />
+        <Route path="/payment-future" component={FuturePayment} />        
       </Switch>
     )
   }

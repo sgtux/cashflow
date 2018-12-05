@@ -5,6 +5,7 @@ using FinanceApi.Infra;
 using FinanceApi.Infra.Entity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace FinanceApi.Controllers
 {
@@ -30,7 +31,7 @@ namespace FinanceApi.Controllers
     [HttpGet]
     public List<Payment> Get()
     {
-      return _context.Payment.Where(p => p.UserId == UserId).ToList();
+      return _context.Payment.Include(p => p.CreditCard).Where(p => p.UserId == UserId).ToList();
     }
 
     /// <summary>

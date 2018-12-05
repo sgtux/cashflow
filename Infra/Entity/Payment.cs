@@ -16,5 +16,6 @@ namespace FinanceApi.Infra.Entity
     public CreditCard CreditCard { get; set; }
     public int? CreditCardId { get; set; }
     public int PlotsPaid { get; set; }
+    public bool FixedPayment { get; set; }
   }
 }
