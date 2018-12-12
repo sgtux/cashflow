@@ -38,7 +38,7 @@ namespace FinanceApi.Controllers
     [SwaggerResponseExample((int)HttpStatusCode.OK, typeof(JwtToken))]
     public IActionResult Post([FromBody]LoginModel model)
     {
-      if (string.IsNullOrEmpty(model.Email) || string.IsNullOrEmpty(model.Password))
+      if (model is null || string.IsNullOrEmpty(model.Email) || string.IsNullOrEmpty(model.Password))
         return Unauthorized();
 
       var user = _context.User.FirstOrDefault(p => p.Email == model.Email);

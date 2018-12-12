@@ -108,7 +108,7 @@ export default class Payment extends React.Component {
   }
 
   refresh() {
-    this.setState({ loading: true, errorMessage: '' })
+    this.setState({ payment: null, loading: true, errorMessage: '' })
     creditCardService.get().then(res => this.setState({ cards: res, card: res[0] ? res[0].id : null }))
     paymentService.get().then(res => {
       setTimeout(() => {
@@ -291,15 +291,6 @@ export default class Payment extends React.Component {
                 : null
             }
 
-            {/* <TextField
-              label="Valor Total"
-              value={this.state.cost}
-              onChange={(e) => this.setState({ cost: e.target.value, errorMessage: '' })}
-              InputProps={{
-                inputComponent: NumberFormatCustom,
-              }}
-            /> */}
-
             <IconTextInput
               label="Valor Total"
               value={this.state.cost}
@@ -310,7 +301,7 @@ export default class Payment extends React.Component {
               id="date"
               label="Primeiro Pagamento"
               type="date"
-              onChange={(e, i) => this.setState({ firstPayment: e.target.value })}
+              onChange={(e) => this.setState({ firstPayment: e.target.value })}
               defaultValue={this.state.firstPayment}
               InputLabelProps={{
                 shrink: true,

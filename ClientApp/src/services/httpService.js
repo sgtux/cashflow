@@ -1,6 +1,16 @@
 import axios from 'axios'
 import { STORAGE_KEYS } from '../helpers/storageKeys'
 
+let callbackTokenExpired = null
+
+export const registerCallbackUnauthorized = (callback) => callbackTokenExpired = callback
+
+axios.interceptors.response.use(response => response, error => {
+  if (error.response && error.response.status === 401)
+    callbackTokenExpired();
+  return Promise.reject(error.response)
+})
+
 const getToken = () => localStorage.getItem(STORAGE_KEYS.TOKEN)
 
 const sendRequest = (method, url, headers, data) => {
@@ -10,7 +20,12 @@ const sendRequest = (method, url, headers, data) => {
     url: url,
     data: data
   }).then(res => res.data)
-    .catch(err => { throw err.response.data })
+    .catch(err => {
+      throw {
+        message: err.response.data,
+        status: err.response.status
+      }
+    })
 }
 
 const getHeaders = () => ({ Authorization: `Bearer ${getToken()}` })

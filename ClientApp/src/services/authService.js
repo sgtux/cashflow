@@ -1,5 +1,5 @@
 import httpService from './httpService'
-import {STORAGE_KEYS} from '../helpers/storageKeys'
+import { STORAGE_KEYS } from '../helpers/storageKeys'
 
 const updateToken = (token) => localStorage.setItem(STORAGE_KEYS.TOKEN, token)
 

@@ -1,5 +1,7 @@
-export const getDateStringEg = () => {
-  const date = new Date()
+export const Months = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
+
+export const getDateStringEg = (date) => {
+  date = date || new Date()
 
   let day = date.getDate() + ''
   day = day.length === 1 ? '0' + day : day
@@ -35,4 +37,9 @@ export const isSameMonth = (d1, d2) => {
     return false
   return date1.getMonth() === date2.getMonth()
     && date1.getFullYear() === date2.getFullYear()
+}
+
+export const getMonthYear = (date) => {
+  const d = date.split('/')
+  return `${Months[Number(d[0]) - 1]} - ${d[1]}`
 }

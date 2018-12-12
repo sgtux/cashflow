@@ -12,8 +12,6 @@ import {
   CircularProgress
 } from '@material-ui/core'
 
-
-import GoogleButton from '../../components/main/GoogleButton'
 import IconTextInput from '../../components/main/IconTextInput'
 import { userChanged } from '../../actions'
 import { authService } from '../../services'
@@ -63,11 +61,12 @@ class Login extends React.Component {
     }).then(user => {
       setTimeout(() => this.setState({ loading: false }), 500)
       setTimeout(() => this.props.userChanged(user), 600)
-    }).catch(err =>
+    }).catch(err => {
       setTimeout(() => this.setState({
-        errorMessage: err.message,
+        errorMessage: err.status && err.status ? 'Email ou Senha inválidos.' : err.message,
         loading: false
-      }), 500))
+      }), 300)
+    })
   }
 
   render() {
@@ -75,8 +74,6 @@ class Login extends React.Component {
       <Zoom in={true}>
         <Card style={styles.Card}>
           <form onSubmit={e => this.login(e)}>
-            {/* <GoogleButton label="Login with google" disabled={this.state.loading} />
-            <div style={styles.Or}>OR</div> */}
             <CardContent>
               <IconTextInput
                 label="Email"
@@ -90,7 +87,7 @@ class Login extends React.Component {
               />
               <IconTextInput
                 type={this.state.showPassword ? 'text' : 'password'}
-                label="Password"
+                label="Senha"
                 required
                 minlength={4}
                 onChange={this.onInputChange}

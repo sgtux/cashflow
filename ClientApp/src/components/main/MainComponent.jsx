@@ -10,7 +10,8 @@ import SidebarContent from './SidebarContent'
 import AppRouter from './AppRouter'
 import Auth from '../../scenes/auth/Auth'
 import { AlertModal } from '../main/Modal'
-import { hideAlert } from '../../actions'
+import { hideAlert, userChanged } from '../../actions'
+import { registerCallbackUnauthorized } from '../../services/httpService'
 
 const mql = window.matchMedia(`(min-width: 1024px)`)
 
@@ -27,6 +28,9 @@ class MainComponent extends React.Component {
 
   componentWillMount() {
     mql.addListener(this.mediaQueryChanged)
+    registerCallbackUnauthorized(() => {
+      this.setState({ showModal: true })
+    })
   }
 
   componentWillUnmount() {
@@ -37,13 +41,9 @@ class MainComponent extends React.Component {
     this.setState({ sidebarDocked: mql.matches })
   }
 
-  componentDidMount() {
-    // axios.interceptors.response.use(response => response, error => {
-    //   console.log(error.response)
-    //   if (error.response && error.response.status === 401)
-    //     this.setState({ showModal: true })
-    //   return Promise.reject(error.response)
-    // })
+  logout() {
+    this.setState({ showModal: false })
+    this.props.userChanged(null)
   }
 
   render() {
@@ -67,16 +67,16 @@ class MainComponent extends React.Component {
           :
           <Auth />
         }
-        <AlertModal type={this.props.modal.type}
-          text={this.props.modal.message}
-          show={this.props.modal.show}
-          onClose={() => this.props.hideAlert()} />
+        <AlertModal
+          text='Sessão Expirada!'
+          show={this.state.showModal}
+          onClose={() => this.logout()} />
       </div>
     )
   }
 }
 
 const mapStateToProps = state => ({ user: state.appState.user, modal: state.modalState })
-const mapDispatchToProps = dispatch => bindActionCreators({ hideAlert }, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({ hideAlert, userChanged }, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainComponent)

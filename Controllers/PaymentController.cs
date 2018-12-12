@@ -1,8 +1,10 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using FinanceApi.Infra;
 using FinanceApi.Infra.Entity;
+using FinanceApi.Models;
 using FinanceApi.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -33,6 +35,84 @@ namespace FinanceApi.Controllers
     public List<Payment> Get()
     {
       return _context.Payment.Include(p => p.CreditCard).Where(p => p.UserId == UserId).ToList();
+    }
+
+    /// <summary>
+    /// Obter os pagamentos usuário logado
+    /// </summary>
+    /// <returns></returns>
+    [Route("FuturePayments")]
+    [HttpGet]
+    public object GetFuturePayments([FromQuery]DateTime forecastAt)
+    {
+      var now = DateTime.Now;
+      var dates = new List<DateTime>();
+
+      if (forecastAt == default(DateTime) || forecastAt < now)
+        forecastAt = DateTime.Now.AddMonths(2);
+      else
+        forecastAt.AddMonths(1);
+
+      var currentDate = DateTime.Now;
+      var months = 0;
+      while (forecastAt.Month != currentDate.Month || forecastAt.Year != currentDate.Year)
+      {
+        currentDate = DateTime.Now.AddMonths(months);
+        dates.Add(currentDate);
+        months++;
+      }
+
+      var result = new Dictionary<string, PaymentFutureResultModel>();
+      var payments = _context.Payment.Include(p => p.CreditCard)
+        .Where(p => p.UserId == UserId).ToList();
+
+      dates.OrderBy(p => p.Ticks).ToList().ForEach(date =>
+      {
+        DateTime currentMonth = new DateTime(date.Year, date.Month, 1);
+        var paymentsMonth = new List<PaymentFutureModel>();
+        payments.ForEach(p =>
+        {
+          if (p.FixedPayment)
+          {
+            paymentsMonth.Add(new PaymentFutureModel()
+            {
+              PaymentId = p.Id,
+              Description = p.Description,
+              Cost = p.Cost,
+              PlotCost = 0,
+              Plots = 0,
+              Type = p.Type,
+              CreditCard = p.CreditCard?.Name,
+              PaymentDate = date.ToString("dd/MM/yyyy"),
+              Month = date.ToString("MM/yyyy"),
+              Day = p.FirstPayment.Day
+            });
+          }
+          else
+          {
+            var paymentMonths = GetMonthsFromPayment(p);
+            if (paymentMonths.Contains(date.ToString("MM/yyyy")))
+              paymentsMonth.Add(new PaymentFutureModel()
+              {
+                PaymentId = p.Id,
+                Description = p.Description,
+                Cost = p.Cost / p.Plots,
+                Plots = p.Plots,
+                Type = p.Type,
+                CreditCard = p.CreditCard?.Name,
+                PaymentDate = date.ToString("dd/MM/yyyy"),
+                Month = date.ToString("MM/yyyy"),
+                Day = p.FirstPayment.Day
+              });
+          }
+        });
+        var resultModel = new PaymentFutureResultModel();
+        resultModel.Payments = paymentsMonth.OrderBy(p => p.Day).ToList();
+        resultModel.Cost = paymentsMonth.Sum(p => p.Type == TypePayment.Income ? p.Cost : (p.Cost * -1));
+        result.Add(date.ToString("MM/yyyy"), resultModel);
+      });
+
+      return result;
     }
 
     /// <summary>
@@ -109,6 +189,15 @@ namespace FinanceApi.Controllers
         if (card is null)
           ThrowValidationError("Cartão não localizado.");
       }
+    }
+
+    private List<string> GetMonthsFromPayment(Payment p)
+    {
+      List<string> months = new List<string>();
+      months.Add(p.FirstPayment.ToString("MM/yyyy"));
+      for (int i = 1; i < p.Plots; i++)
+        months.Add(p.FirstPayment.AddMonths(i).ToString("MM/yyyy"));
+      return months;
     }
   }
 }
