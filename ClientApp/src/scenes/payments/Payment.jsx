@@ -215,7 +215,7 @@ export default class Payment extends React.Component {
           </Paper>
           :
           <div style={styles.noRecords}>
-            <span>Você pagamentos cadastrados.</span>
+            <span>Você não possui pagamentos cadastrados.</span>
           </div>
         }
         <div style={styles.divNewPayment}>

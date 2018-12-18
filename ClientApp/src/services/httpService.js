@@ -5,10 +5,11 @@ let callbackTokenExpired = null
 
 export const registerCallbackUnauthorized = (callback) => callbackTokenExpired = callback
 
-axios.interceptors.response.use(response => response, error => {
-  if (error.response && error.response.status === 401)
+axios.interceptors.response.use(response => response, err => {
+  const { request, status } = err
+  if (status === 401 && !request.responseURL.endsWith('/api/token'))
     callbackTokenExpired();
-  return Promise.reject(error.response)
+  return Promise.reject(err)
 })
 
 const getToken = () => localStorage.getItem(STORAGE_KEYS.TOKEN)

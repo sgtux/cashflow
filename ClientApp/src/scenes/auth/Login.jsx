@@ -63,7 +63,7 @@ class Login extends React.Component {
       setTimeout(() => this.props.userChanged(user), 600)
     }).catch(err => {
       setTimeout(() => this.setState({
-        errorMessage: err.status && err.status ? 'Email ou Senha inválidos.' : err.message,
+        errorMessage: err.status === 401 ? 'Email ou Senha inválidos.' : err.message,
         loading: false
       }), 300)
     })
