@@ -6,9 +6,9 @@ let callbackTokenExpired = null
 export const registerCallbackUnauthorized = (callback) => callbackTokenExpired = callback
 
 axios.interceptors.response.use(response => response, err => {
-  const { request, status } = err
+  const { request, status } = err.response
   if (status === 401 && !request.responseURL.endsWith('/api/token'))
-    callbackTokenExpired();
+    callbackTokenExpired()
   return Promise.reject(err)
 })
 
