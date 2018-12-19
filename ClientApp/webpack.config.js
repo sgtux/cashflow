@@ -1,4 +1,5 @@
 const webpack = require('webpack')
+const path = require('path')
 
 module.exports = {
   entry: './src/App.jsx',
@@ -21,7 +22,7 @@ module.exports = {
     extensions: ['*', '.js', '.jsx', '.ttf']
   },
   output: {
-    path: __dirname + '/dist',
+    path: path.join(__dirname, '..', '/wwwroot'),
     publicPath: '/',
     filename: 'bundle.js'
   },

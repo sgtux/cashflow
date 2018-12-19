@@ -24,9 +24,12 @@ import {
 
 import DeleteIcon from '@material-ui/icons/Delete'
 import CardIcon from '@material-ui/icons/CreditCardOutlined'
+import { DatePicker, MuiPickersUtilsProvider } from 'material-ui-pickers'
+import DateFnsUtilsIo from '@date-io/date-fns'
 
 import CardMain from '../../components/main/CardMain'
 import IconTextInput from '../../components/main/IconTextInput'
+import Grid from '@material-ui/core/Grid'
 
 import NumberFormat from 'react-number-format'
 
@@ -161,7 +164,7 @@ export default class Payment extends React.Component {
       card: creditCardId,
       useCreditCard: creditCardId ? true : false,
       plotsPaid: plotsPaid ? plotsPaid.toString() : '0',
-      fixedPayment: fixedPayment
+      fixedPayment: fixedPayment ? true : false
     })
   }
 
@@ -279,15 +282,13 @@ export default class Payment extends React.Component {
             </div>
             {
               this.state.cards.length && this.state.useCreditCard ?
-                <div>
-                  <FormControl style={{ marginLeft: '20px', marginTop: '10px' }}>
-                    <InputLabel htmlFor="select-tipo">Cartão de crédito</InputLabel>
-                    <Select style={{ width: '200px' }} value={this.state.card}
-                      onChange={(e) => this.setState({ card: e.target.value })}>
-                      {this.state.cards.map(p => <MenuItem key={p.id} value={p.id}>{p.name}</MenuItem>)}
-                    </Select>
-                  </FormControl>
-                </div>
+                <FormControl style={{ marginLeft: '20px', marginTop: '10px' }}>
+                  <InputLabel htmlFor="select-tipo">Cartão de crédito</InputLabel>
+                  <Select style={{ width: '200px' }} value={this.state.card}
+                    onChange={(e) => this.setState({ card: e.target.value })}>
+                    {this.state.cards.map(p => <MenuItem key={p.id} value={p.id}>{p.name}</MenuItem>)}
+                  </Select>
+                </FormControl>
                 : null
             }
 
@@ -300,7 +301,7 @@ export default class Payment extends React.Component {
             <TextField style={{ marginLeft: '10px', marginTop: '10px' }}
               id="date"
               label="Primeiro Pagamento"
-              type="date"
+              type="datetime-local"
               onChange={(e) => this.setState({ firstPayment: e.target.value })}
               defaultValue={this.state.firstPayment}
               InputLabelProps={{
