@@ -20,88 +20,100 @@ using Swashbuckle.AspNetCore.Swagger;
 namespace FinanceApi
 {
 #pragma warning disable CS1591
-  public class Startup
-  {
-    public Startup(IHostingEnvironment env)
+    public class Startup
     {
-      var builder = new ConfigurationBuilder()
-        .SetBasePath(env.ContentRootPath)
-        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-        .AddEnvironmentVariables();
-      Configuration = builder.Build();
-    }
-
-    public IConfigurationRoot Configuration { get; }
-
-    public void ConfigureServices(IServiceCollection services)
-    {
-      string connectionString = Configuration.GetConnectionString("Finance");
-      string jwtKey = Configuration["JwtKey"];
-      services.AddDbContext<AppDbContext>(options =>
-        options.UseNpgsql(connectionString));
-      services.AddMvc();
-      CofigureScopes(services);
-
-      ConfigureAuth(services, jwtKey);
-
-      services.AddSingleton(typeof(AppConfiguration), new AppConfiguration(jwtKey));
-
-      services.AddSwaggerGen(c =>
-      {
-        c.SwaggerDoc("v1", new Info { Title = "Finance API", Version = "v1" });
-        var filePath = Path.Combine(System.AppContext.BaseDirectory, "FinanceApi.xml");
-        c.IncludeXmlComments(filePath);
-        c.AddSecurityDefinition("Token", new ApiKeyScheme
+        private IHostingEnvironment _env;
+        public Startup(IHostingEnvironment env)
         {
-          Description = "Adicione o token.",
-          Name = "token",
-          In = "header",
-          Type = "apiKey"
-        });
-      });
-    }
-
-    public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-    {
-      app.UseAuthentication();
-      app.UseSwagger();
-      app.UseSwaggerUI(c =>
-      {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Finance API V1");
-      });
-
-      app.UseMiddleware(typeof(ExceptionHandler));
-      app.UseDefaultFiles();
-      app.UseStaticFiles();
-      app.UseMvc();
-    }
-
-    private void CofigureScopes(IServiceCollection services)
-    {
-      services.AddScoped<IUserRepository, UserRepository>();
-      services.AddScoped<IPaymentRepository, PaymentRepository>();
-      services.AddScoped<ICreditCardRepository, CreditCardRepository>();
-    }
-
-    private void ConfigureAuth(IServiceCollection services, string jwtKey)
-    {
-      var secretKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtKey));
-      var tokenValidationParameters = new TokenValidationParameters
-      {
-        ValidateLifetime = true,
-        ValidateAudience = false,
-        ValidateIssuer = false,
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey = secretKey
-      };
-
-      services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-      .AddJwtBearer(
-        options =>
-        {
-          options.TokenValidationParameters = tokenValidationParameters;
+            var builder = new ConfigurationBuilder()
+              .SetBasePath(env.ContentRootPath)
+              .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+              .AddEnvironmentVariables();
+            Configuration = builder.Build();
+            _env = env;
         }
-      );
+
+        public IConfigurationRoot Configuration { get; }
+
+        public void ConfigureServices(IServiceCollection services)
+        {
+            string connectionString = null;
+            string jwtKey = null;
+            if (_env.IsDevelopment())
+            {
+                connectionString = Configuration.GetConnectionString("FinanceDB");
+                jwtKey = Configuration["FinanceJwtKey"];
+            }
+            else
+            {
+                connectionString = Environment.GetEnvironmentVariable("FinanceDB");
+                jwtKey = Configuration["FinanceJwtKey"];
+            }
+            services.AddDbContext<AppDbContext>(options =>
+              options.UseNpgsql(connectionString));
+            services.AddMvc();
+            CofigureScopes(services);
+
+            ConfigureAuth(services, jwtKey);
+
+            services.AddSingleton(typeof(AppConfiguration), new AppConfiguration(jwtKey));
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "Finance API", Version = "v1" });
+                var filePath = Path.Combine(System.AppContext.BaseDirectory, "FinanceApi.xml");
+                c.IncludeXmlComments(filePath);
+                c.AddSecurityDefinition("Token", new ApiKeyScheme
+                {
+                    Description = "Adicione o token.",
+                    Name = "token",
+                    In = "header",
+                    Type = "apiKey"
+                });
+            });
+        }
+
+        public void Configure(IApplicationBuilder app)
+        {
+            app.UseAuthentication();
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Finance API V1");
+            });
+
+            app.UseMiddleware(typeof(ExceptionHandler));
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+            app.UseMvc();
+        }
+
+        private void CofigureScopes(IServiceCollection services)
+        {
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IPaymentRepository, PaymentRepository>();
+            services.AddScoped<ICreditCardRepository, CreditCardRepository>();
+        }
+
+        private void ConfigureAuth(IServiceCollection services, string jwtKey)
+        {
+            var secretKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtKey));
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateLifetime = true,
+                ValidateAudience = false,
+                ValidateIssuer = false,
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = secretKey
+            };
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(
+              options =>
+              {
+                  options.TokenValidationParameters = tokenValidationParameters;
+              }
+            );
+        }
     }
-  }
 }
