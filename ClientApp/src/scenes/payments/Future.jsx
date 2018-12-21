@@ -5,66 +5,63 @@ import {
   List,
   ListItem,
   ListItemText,
-  Typography,
-  TextField
+  Typography
 } from '@material-ui/core'
 
 import CardMain from '../../components/main/CardMain'
+import InputMonth from '../../components/inputs/InputMonth'
 
 import { paymentService } from '../../services/index'
 
-import { toReal, getMonthYear } from '../../helpers/utils'
+import { toReal, getMonthYear, Months } from '../../helpers/utils'
 
 export default class Payment extends React.Component {
 
   constructor(props) {
     super(props)
+    const now = new Date()
+    let month = now.getMonth() + 3
+    let year = now.getFullYear()
+    if (month > 12) {
+      month = month - 12
+      year++
+    }
     this.state = {
       loading: true,
       payments: [],
       dates: [],
-      totalCost: 0
+      totalCost: 0,
+      forecastDate: { month, year }
     }
   }
 
   componentDidMount() {
-    this.refresh()
+    this.refresh(this.state.forecastDate)
   }
 
   refresh(forecastDate) {
-    this.setState({ loading: true, errorMessage: '' })
-
-    paymentService.getFuture(forecastDate || this.state.forecastDate)
+    this.setState({ loading: true, errorMessage: '', forecastDate })
+    paymentService.getFuture(`${forecastDate.month}/01/${forecastDate.year}`)
       .then(res => {
         const dates = Object.keys(res)
         let total = 0
         dates.forEach(d => total += res[d].cost)
         setTimeout(() => {
-          this.setState({ totalCost: total, loading: false, payments: res, dates: dates })
+          this.setState({ totalCost: total, loading: false, payments: res, dates })
         }, 300)
-      })
-  }
-
-  forecastChanged(value) {
-    this.setState({ forecastDate: value })
-    this.refresh(value)
+      }).catch(err => this.setState({ loading: false, errorMessage: err.message, forecastDate }))
   }
 
   render() {
     return (
       <CardMain title="Pagamentos" loading={this.state.loading}>
         <Paper>
-          <div>
-            <TextField style={{ marginLeft: '10px', marginTop: '10px' }}
-              id="date"
+          <div style={{ marginLeft: '20px', marginBottom: '20px' }}>
+            <InputMonth
+              month={this.state.forecastDate.month}
+              year={this.state.forecastDate.year}
               label="Previsão até"
-              type="date"
-              onChange={(e) => this.forecastChanged(e.target.value)}
-              defaultValue={this.state.forecastDate}
-              InputLabelProps={{
-                shrink: true,
-              }}
-            />
+              onChange={v => this.refresh(v)} />
           </div>
           <List dense={true}>
             {this.state.dates.map((d, i) =>
@@ -94,16 +91,18 @@ export default class Payment extends React.Component {
                       color={this.state.payments[d].cost < 0 ? 'secondary' : 'primary'}>
                       {toReal(this.state.payments[d].cost)}
                     </Typography>
-                    {/* {toReal(this.state.payments[d].cost)} */}
                   </ListItemText>
+                  <hr />
                 </ListItemText>
               </ListItem>
             )}
           </List>
-          <Typography component="span"
-            color={this.state.totalCost < 0 ? 'secondary' : 'primary'}>
-            {toReal(this.state.totalCost)}
-          </Typography>
+          <div style={{ marginBottom: '20px' }}>
+            <Typography component="span" style={{ textAlign: 'center' }}
+              color={this.state.totalCost < 0 ? 'secondary' : 'primary'}>
+              {toReal(this.state.totalCost)}
+            </Typography>
+          </div>
         </Paper>
       </CardMain>
     )

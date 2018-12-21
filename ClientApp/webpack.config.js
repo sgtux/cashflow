@@ -1,5 +1,6 @@
 const webpack = require('webpack')
 const path = require('path')
+const ProgressBar = require('progress-bar-webpack-plugin')
 
 module.exports = {
   entry: './src/App.jsx',
@@ -27,7 +28,8 @@ module.exports = {
     filename: 'bundle.js'
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.HotModuleReplacementPlugin(),
+    new ProgressBar()
   ],
   devServer: {
     contentBase: './dist',
