@@ -74,19 +74,20 @@ namespace FinanceApi.Controllers
         {
           if (p.FixedPayment)
           {
-            paymentsMonth.Add(new PaymentFutureModel()
-            {
-              PaymentId = p.Id,
-              Description = p.Description,
-              Cost = p.Cost,
-              PlotCost = 0,
-              Plots = 0,
-              Type = p.Type,
-              CreditCard = p.CreditCard?.Name,
-              PaymentDate = date.ToString("dd/MM/yyyy"),
-              Month = date.ToString("MM/yyyy"),
-              Day = p.FirstPayment.Day
-            });
+            if (p.FirstPayment > currentMonth.AddDays(-1))
+              paymentsMonth.Add(new PaymentFutureModel()
+              {
+                PaymentId = p.Id,
+                Description = p.Description,
+                Cost = p.Cost,
+                PlotCost = 0,
+                Plots = 0,
+                Type = p.Type,
+                CreditCard = p.CreditCard?.Name,
+                PaymentDate = date.ToString("dd/MM/yyyy"),
+                Month = date.ToString("MM/yyyy"),
+                Day = p.FirstPayment.Day
+              });
           }
           else
           {
