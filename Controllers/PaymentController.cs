@@ -49,15 +49,15 @@ namespace FinanceApi.Controllers
       var dates = new List<DateTime>();
 
       if (forecastAt == default(DateTime) || forecastAt < now)
-        forecastAt = DateTime.Now.AddMonths(2);
+        forecastAt = now.AddMonths(2);
       else
         forecastAt.AddMonths(1);
 
-      var currentDate = DateTime.Now;
+      var currentDate = now;
       var months = 0;
       while (forecastAt.Month != currentDate.Month || forecastAt.Year != currentDate.Year)
       {
-        currentDate = DateTime.Now.AddMonths(months);
+        currentDate = now.AddMonths(months);
         dates.Add(currentDate);
         months++;
       }
@@ -68,13 +68,13 @@ namespace FinanceApi.Controllers
 
       dates.OrderBy(p => p.Ticks).ToList().ForEach(date =>
       {
-        DateTime currentMonth = new DateTime(date.Year, date.Month, 1);
+        var startDate = new DateTime(date.Year, date.Month, 1).AddMonths(1).AddDays(-1);
         var paymentsMonth = new List<PaymentFutureModel>();
         payments.ForEach(p =>
         {
           if (p.FixedPayment)
           {
-            if (p.FirstPayment > currentMonth.AddDays(-1))
+            if (p.FirstPayment < startDate)
               paymentsMonth.Add(new PaymentFutureModel()
               {
                 PaymentId = p.Id,
