@@ -72,43 +72,55 @@ namespace FinanceApi.Controllers
         var paymentsMonth = new List<PaymentFutureModel>();
         payments.ForEach(p =>
         {
-          if (p.FixedPayment)
+          var paymentMonths = GetMonthsFromPayment(p);
+          if (paymentMonths.Contains(date.ToString("MM/yyyy")) || (p.FixedPayment && p.FirstPayment < startDate))
           {
-            if (p.FirstPayment < startDate)
-              paymentsMonth.Add(new PaymentFutureModel()
+            string creditCardName = p.CreditCard?.Name;
+            PaymentFutureModel paymentModel = null;
+            if (!string.IsNullOrEmpty(creditCardName))
+            {
+              paymentModel = paymentsMonth.FirstOrDefault(x => x.Description == creditCardName);
+              if (paymentModel == null)
               {
-                PaymentId = p.Id,
-                Description = p.Description,
-                Cost = p.Cost,
-                PlotCost = 0,
-                Plots = 0,
-                Type = p.Type,
-                CreditCard = p.CreditCard?.Name,
-                PaymentDate = date.ToString("dd/MM/yyyy"),
-                Month = date.ToString("MM/yyyy"),
-                Day = p.FirstPayment.Day
-              });
-          }
-          else
-          {
-            var paymentMonths = GetMonthsFromPayment(p);
-            if (paymentMonths.Contains(date.ToString("MM/yyyy")))
-              paymentsMonth.Add(new PaymentFutureModel()
+                paymentModel = new PaymentFutureModel()
+                {
+                  Description = creditCardName,
+                  Type = TypePayment.Expense,
+                  IsCreditCard = true,
+                  Month = date.ToString("MM/yyyy")
+                };
+              }
+            }
+            else
+            {
+              paymentModel = new PaymentFutureModel()
               {
-                PaymentId = p.Id,
                 Description = p.Description,
-                Cost = p.Cost / p.Plots,
-                Plots = p.Plots,
                 Type = p.Type,
-                CreditCard = p.CreditCard?.Name,
-                PaymentDate = date.ToString("dd/MM/yyyy"),
-                Month = date.ToString("MM/yyyy"),
-                Day = p.FirstPayment.Day
-              });
+                IsCreditCard = false,
+                Month = date.ToString("MM/yyyy")
+              };
+            }
+
+            paymentModel.Items.Add(new PaymentItemModel()
+            {
+              PaymentId = p.Id,
+              Description = p.Description,
+              Cost = p.FixedPayment ? p.Cost : p.Cost / p.Plots,
+              Plots = p.FixedPayment ? 0 : p.Plots,
+              Type = p.Type,
+              CreditCard = creditCardName,
+              PaymentDate = date.ToString("dd/MM/yyyy"),
+              Month = date.ToString("MM/yyyy"),
+              Day = p.FirstPayment.Day
+            });
+            if (!paymentModel.IsCreditCard
+              || (paymentModel.IsCreditCard && !paymentsMonth.Any(x => x.Description == paymentModel.Description)))
+              paymentsMonth.Add(paymentModel);
           }
         });
         var resultModel = new PaymentFutureResultModel();
-        resultModel.Payments = paymentsMonth.OrderBy(p => p.Day).ToList();
+        resultModel.Payments = paymentsMonth;
         resultModel.Cost = paymentsMonth.Sum(p => p.Type == TypePayment.Income ? p.Cost : (p.Cost * -1));
         result.Add(date.ToString("MM/yyyy"), resultModel);
       });

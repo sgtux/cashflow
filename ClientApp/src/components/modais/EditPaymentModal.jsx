@@ -36,7 +36,6 @@ export default class EditPaymentModal extends React.Component {
   }
 
   componentDidMount() {
-    console.log('montei')
     creditCardService.get().then(res => this.setState({ cards: res, card: res[0] ? res[0].id : null }))
   }
 

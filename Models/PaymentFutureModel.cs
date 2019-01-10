@@ -1,18 +1,21 @@
+using System.Collections.Generic;
+using System.Linq;
 using FinanceApi.Shared;
 
 namespace FinanceApi.Models
 {
   public class PaymentFutureModel
   {
-    public int PaymentId { get; set; }
+
+    public PaymentFutureModel()
+    {
+      Items = new List<PaymentItemModel>();
+    }
     public string Description { get; set; }
-    public decimal Cost { get; set; }
-    public decimal PlotCost { get; set; }
-    public int Plots { get; set; }
+    public decimal Cost => Items.Sum(p => p.Cost);
     public TypePayment Type { get; set; }
-    public string CreditCard { get; set; }
-    public string PaymentDate { get; set; }
+    public bool IsCreditCard { get; set; }
     public string Month { get; set; }
-    public int Day { get; set; }
+    public List<PaymentItemModel> Items { get; set; }
   }
 }

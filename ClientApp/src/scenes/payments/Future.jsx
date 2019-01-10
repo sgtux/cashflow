@@ -5,8 +5,11 @@ import {
   List,
   ListItem,
   ListItemText,
-  Typography
+  Typography,
+  Button
 } from '@material-ui/core'
+
+import CardIcon from '@material-ui/icons/CreditCardOutlined'
 
 import CardMain from '../../components/main/CardMain'
 import InputMonth from '../../components/inputs/InputMonth'
@@ -31,7 +34,9 @@ export default class Payment extends React.Component {
       payments: [],
       dates: [],
       totalCost: 0,
-      forecastDate: { month, year }
+      forecastDate: { month, year },
+      i: -1,
+      j: -1
     }
   }
 
@@ -50,6 +55,13 @@ export default class Payment extends React.Component {
           this.setState({ totalCost: total, loading: false, payments: res, dates })
         }, 300)
       }).catch(err => this.setState({ loading: false, errorMessage: err.message, forecastDate }))
+  }
+
+  showItems(i, j) {
+    if (this.state.i === i && this.state.j === j)
+      this.setState({ i: -1, j: -1 })
+    else
+      this.setState({ i: i, j: j })
   }
 
   render() {
@@ -72,15 +84,28 @@ export default class Payment extends React.Component {
                   <List dense={true}>
                     {this.state.payments[d].payments.map((p, j) =>
                       <ListItem key={j}>
-                        <ListItemText>
-                          {`Dia ${p.day}`}
-                        </ListItemText>
                         <ListItemText style={{ width: '300px', textAlign: 'left' }}>
+                          {p.isCreditCard ? <span style={{ fontWeight: 'bold' }}>Fatura: </span> : null}
                           {p.description}
+
+                          <div hidden={this.state.i !== i || this.state.j !== j}>
+                            <List dense={true}>
+                              {p.items.map((g, k) =>
+                                <ListItem key={k}>
+                                  <ListItemText style={{ width: '100px', textAlign: 'right' }}>
+                                    {g.description}
+                                    <span style={{ marginLeft: 10, color: '#bb2222' }}>{toReal(g.cost)}</span>
+                                  </ListItemText>
+                                </ListItem>
+                              )}
+                            </List>
+                          </div>
+
                         </ListItemText>
                         <ListItemText>
                           <Typography component="span" color={p.type === 1 ? 'primary' : 'secondary'}>
                             {toReal(p.cost)}
+                            {p.isCreditCard ? <span onClick={() => this.showItems(i, j)} style={{ marginLeft: 20, color: 'gray', cursor: 'pointer' }}>Itens</span> : null}
                           </Typography>
                         </ListItemText>
                       </ListItem>
