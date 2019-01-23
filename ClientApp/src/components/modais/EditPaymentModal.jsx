@@ -49,9 +49,9 @@ export default class EditPaymentModal extends React.Component {
     payment.firstPayment = getDateFromStringEg(firstPayment)
     payment.cost = cost ? Number(cost) : 0
     payment.singlePlot = singlePlot
+    payment.type = paymentType
     if (!singlePlot) {
       payment.fixedPayment = fixedPayment
-      payment.type = paymentType
       payment.plots = plots && !fixedPayment ? Number(plots) : 0
       payment.plotsPaid = plotsPaid && !fixedPayment ? Number(plotsPaid) : 0
     }
