@@ -113,50 +113,57 @@ export default class Payment extends React.Component {
     return (
       <CardMain title="Pagamentos" loading={this.state.loading}>
         {this.state.payments.length ?
-          <Paper>
-            <List dense={true}>
-              {this.state.payments.map(p =>
-                <ListItem button key={p.id}
-                  onClick={() => this.openEditNew(p)}>
-                  <ListItemAvatar>
-                    <Avatar>
-                      <CardIcon />
-                    </Avatar>
-                  </ListItemAvatar>
-                  <ListItemText
-                    primary={p.description}
-                    style={{ width: '200px' }}
-                    secondary={
-                      <React.Fragment>
-                        <Typography component="span" color={p.type === 1 ? 'primary' : 'secondary'}>
-                          {p.type === 1 ? 'Renda' : 'Despesa'}
-                        </Typography>
-                        {p.firstPaymentFormatted}
-                      </React.Fragment>
-                    }
-                  />
-                  <ListItemText
-                    primary={toReal(p.cost)}
-                    style={{ width: '200px' }}
-                    secondary={
-                      <React.Fragment>
-                        {p.fixedPayment ? 'Fixo Mensal' : `${p.plotsPaid}/${p.plots}`}
-                        <CreditCardComponent card={p.creditCard} />
-                      </React.Fragment>
-                    }
-                  />
-                  <ListItemSecondaryAction>
-                    <Tooltip title="Remover este pagamento">
-                      <IconButton color="secondary" aria-label="Delete"
-                        onClick={() => this.removePayment(p.id)}>
-                        <DeleteIcon />
-                      </IconButton>
-                    </Tooltip>
-                  </ListItemSecondaryAction>
-                </ListItem>
-              )}
-            </List>
-          </Paper>
+          <div>
+            <div style={styles.divNewPayment}>
+              <Button variant="raised" color="primary" onClick={() => this.openEditNew()}>
+                Adicionar Pagamento
+            </Button>
+            </div>
+            <Paper style={{ marginTop: '20px' }}>
+              <List dense={true}>
+                {this.state.payments.map(p =>
+                  <ListItem button key={p.id}
+                    onClick={() => this.openEditNew(p)}>
+                    <ListItemAvatar>
+                      <Avatar>
+                        <CardIcon />
+                      </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={p.description}
+                      style={{ width: '200px' }}
+                      secondary={
+                        <React.Fragment>
+                          <Typography component="span" color={p.type === 1 ? 'primary' : 'secondary'}>
+                            {p.type === 1 ? 'Renda' : 'Despesa'}
+                          </Typography>
+                          {p.firstPaymentFormatted}
+                        </React.Fragment>
+                      }
+                    />
+                    <ListItemText
+                      primary={toReal(p.cost)}
+                      style={{ width: '200px' }}
+                      secondary={
+                        <React.Fragment>
+                          {p.fixedPayment ? 'Fixo Mensal' : `${p.plotsPaid}/${p.plots}`}
+                          <CreditCardComponent card={p.creditCard} />
+                        </React.Fragment>
+                      }
+                    />
+                    <ListItemSecondaryAction>
+                      <Tooltip title="Remover este pagamento">
+                        <IconButton color="secondary" aria-label="Delete"
+                          onClick={() => this.removePayment(p.id)}>
+                          <DeleteIcon />
+                        </IconButton>
+                      </Tooltip>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                )}
+              </List>
+            </Paper>
+          </div>
           :
           <div style={styles.noRecords}>
             <span>Você não possui pagamentos cadastrados.</span>

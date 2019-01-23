@@ -106,8 +106,8 @@ namespace FinanceApi.Controllers
             {
               PaymentId = p.Id,
               Description = p.Description,
-              Cost = p.FixedPayment ? p.Cost : p.Cost / p.Plots,
-              Plots = p.FixedPayment ? 0 : p.Plots,
+              Cost = p.FixedPayment || p.SinglePlot ? p.Cost : p.Cost / p.Plots,
+              Plots = p.FixedPayment || p.SinglePlot ? 0 : p.Plots,
               Type = p.Type,
               CreditCard = creditCardName,
               PaymentDate = date.ToString("dd/MM/yyyy"),
@@ -121,8 +121,8 @@ namespace FinanceApi.Controllers
         });
         var resultModel = new PaymentFutureResultModel();
         resultModel.Payments = paymentsMonth;
-        resultModel.Cost = paymentsMonth.Sum(p => p.Type == TypePayment.Income ? p.Cost : (p.Cost * -1));
         result.Add(date.ToString("MM/yyyy"), resultModel);
+        resultModel.AcumulatedCost = result.Values.Sum(p => p.CostIncome) - result.Values.Sum(p => p.CostExpense);
       });
 
       return result;
@@ -187,7 +187,7 @@ namespace FinanceApi.Controllers
       if (default(DateTime) == payment.FirstPayment)
         ThrowValidationError("A data do primeiro pagamento é obrigatória.");
 
-      if (!payment.FixedPayment)
+      if (!payment.SinglePlot && !payment.FixedPayment)
       {
         if (payment.PlotsPaid > payment.Plots)
           ThrowValidationError("O quantidade parcelas pagas não pode ser maior que o número de parcelas.");

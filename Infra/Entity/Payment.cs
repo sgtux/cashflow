@@ -18,6 +18,7 @@ namespace FinanceApi.Infra.Entity
     public int? CreditCardId { get; set; }
     public int PlotsPaid { get; set; }
     public bool FixedPayment { get; set; }
+    public bool SinglePlot { get; set; }
     [NotMapped]
     public string FirstPaymentFormatted => FirstPayment.ToString("dd-MM-yyyy");
   }

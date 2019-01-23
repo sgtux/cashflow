@@ -56,6 +56,8 @@ namespace FinanceApi.Migrations
 
                     b.Property<int>("PlotsPaid");
 
+                    b.Property<bool>("SinglePlot");
+
                     b.Property<int>("Type");
 
                     b.Property<int>("UserId");

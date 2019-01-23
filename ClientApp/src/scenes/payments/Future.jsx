@@ -5,18 +5,16 @@ import {
   List,
   ListItem,
   ListItemText,
-  Typography,
-  Button
+  Typography
 } from '@material-ui/core'
-
-import CardIcon from '@material-ui/icons/CreditCardOutlined'
 
 import CardMain from '../../components/main/CardMain'
 import InputMonth from '../../components/inputs/InputMonth'
 
 import { paymentService } from '../../services/index'
 
-import { toReal, getMonthYear, Months } from '../../helpers/utils'
+import { toReal, getMonthYear } from '../../helpers/utils'
+import { Colors } from '../../helpers/themes'
 
 export default class Payment extends React.Component {
 
@@ -36,7 +34,8 @@ export default class Payment extends React.Component {
       totalCost: 0,
       forecastDate: { month, year },
       i: -1,
-      j: -1
+      j: -1,
+      hiddenMonths: {}
     }
   }
 
@@ -64,6 +63,12 @@ export default class Payment extends React.Component {
       this.setState({ i: i, j: j })
   }
 
+  hideShowMonth(month) {
+    const { hiddenMonths } = this.state
+    hiddenMonths[month] = !hiddenMonths[month]
+    this.setState({ hiddenMonths: hiddenMonths })
+  }
+
   render() {
     return (
       <CardMain title="Pagamentos" loading={this.state.loading}>
@@ -80,50 +85,71 @@ export default class Payment extends React.Component {
               <ListItem key={i}>
                 <ListItemText>
                   <hr />
-                  <span style={{ fontSize: '16px', fontWeight: 'bold', color: '#666' }}>{getMonthYear(d)}</span>
-                  <List dense={true}>
-                    {this.state.payments[d].payments.map((p, j) =>
-                      <ListItem key={j}>
-                        <ListItemText style={{ width: '300px', textAlign: 'left' }}>
-                          {p.isCreditCard ? <span style={{ fontWeight: 'bold' }}>Fatura: </span> : null}
-                          {p.description}
+                  <span onClick={() => this.hideShowMonth(d)} style={{ cursor: 'pointer', fontSize: '16px', fontWeight: 'bold', color: '#666' }}>{getMonthYear(d)}</span>
+                  <div hidden={!this.state.hiddenMonths[d]}>
+                    <List dense={true}>
+                      {this.state.payments[d].payments.map((p, j) =>
+                        <ListItem key={j}>
+                          <ListItemText style={{ width: '300px', textAlign: 'left' }}>
+                            {p.isCreditCard ? <span style={{ fontWeight: 'bold' }}>Fatura: </span> : null}
+                            {p.description}
 
-                          <div hidden={this.state.i !== i || this.state.j !== j}>
-                            <List dense={true}>
-                              {p.items.map((g, k) =>
-                                <ListItem key={k}>
-                                  <ListItemText style={{ width: '100px', textAlign: 'right' }}>
-                                    {g.description}
-                                    <span style={{ marginLeft: 10, color: '#bb2222' }}>{toReal(g.cost)}</span>
-                                  </ListItemText>
-                                </ListItem>
-                              )}
-                            </List>
-                          </div>
+                            <div hidden={this.state.i !== i || this.state.j !== j}>
+                              <List dense={true}>
+                                {p.items.map((g, k) =>
+                                  <ListItem key={k}>
+                                    <ListItemText style={{ width: '100px', textAlign: 'right' }}>
+                                      {g.description}
+                                      <span style={{ marginLeft: 10, color: Colors.AppRed }}>{toReal(g.cost)}</span>
+                                    </ListItemText>
+                                  </ListItem>
+                                )}
+                              </List>
+                            </div>
 
-                        </ListItemText>
-                        <ListItemText>
-                          <Typography component="span" color={p.type === 1 ? 'primary' : 'secondary'}>
-                            {toReal(p.cost)}
-                            {p.isCreditCard ? <span onClick={() => this.showItems(i, j)} style={{ marginLeft: 20, color: 'gray', cursor: 'pointer' }}>Itens</span> : null}
-                          </Typography>
-                        </ListItemText>
-                      </ListItem>
-                    )}
-                  </List>
-                  <ListItemText style={{ textAlign: 'end' }}>
+                          </ListItemText>
+                          <ListItemText>
+                            <Typography component="span" color={p.type === 1 ? 'primary' : 'secondary'}>
+                              {toReal(p.cost)}
+                              {p.isCreditCard ? <span onClick={() => this.showItems(i, j)} style={{ marginLeft: 20, color: 'gray', cursor: 'pointer' }}>Itens</span> : null}
+                            </Typography>
+                          </ListItemText>
+                        </ListItem>
+                      )}
+                    </List>
+                    <ListItemText style={{ textAlign: 'end' }}>
+                      <Typography component="span"
+                        color={'secondary'}>
+                        {`${toReal(this.state.payments[d].costExpense)}`}
+                      </Typography>
+                      <Typography component="span"
+                        color={'primary'}>
+                        {`${toReal(this.state.payments[d].costIncome)}`}
+                      </Typography>
+                      <span style={{
+                        border: `solid 1px ${this.state.payments[d].cost < 0 ? Colors.AppRed : Colors.AppGreen}`,
+                        color: this.state.payments[d].cost < 0 ? Colors.AppRed : Colors.AppGreen,
+                        marginTop: '6px',
+                        padding: '3px'
+                      }}>
+                        {`= ${toReal(this.state.payments[d].cost)}`}
+                      </span>
+                    </ListItemText>
+                  </div>
+                  <div style={{ textAlign: 'center' }}>
                     <Typography component="span"
                       color={this.state.payments[d].cost < 0 ? 'secondary' : 'primary'}>
-                      {toReal(this.state.payments[d].cost)}
+                      {`${toReal(this.state.payments[d].acumulatedCost)}`}
                     </Typography>
-                  </ListItemText>
+                  </div>
                   <hr />
                 </ListItemText>
               </ListItem>
             )}
           </List>
-          <div style={{ marginBottom: '20px' }}>
-            <Typography component="span" style={{ textAlign: 'center' }}
+          <div style={{ textAlign: 'center', fontSize: '20px', marginBottom: '20px' }}>
+            <span>Total:</span>
+            <Typography component="span" style={{ fontSize: '30px' }}
               color={this.state.totalCost < 0 ? 'secondary' : 'primary'}>
               {toReal(this.state.totalCost)}
             </Typography>
