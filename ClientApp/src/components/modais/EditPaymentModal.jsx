@@ -30,6 +30,7 @@ export default class EditPaymentModal extends React.Component {
       paymentType: 2,
       useCreditCard: false,
       fixedPayment: false,
+      singlePlot: false,
       card: [],
       firstPayment: getDateStringEg(new Date())
     }
@@ -40,24 +41,27 @@ export default class EditPaymentModal extends React.Component {
   }
 
   save() {
-    const { fixedPayment, description, firstPayment, cost, paymentType, plots, card, useCreditCard, plotsPaid } = this.state
+    const { singlePlot, fixedPayment, description, firstPayment, cost, paymentType, plots, card, useCreditCard, plotsPaid } = this.state
 
     const payment = {}
     payment.id = this.props.payment.id
     payment.description = description
     payment.firstPayment = getDateFromStringEg(firstPayment)
     payment.cost = cost ? Number(cost) : 0
-    payment.fixedPayment = fixedPayment
-    payment.type = paymentType
-    payment.plots = plots && !fixedPayment ? Number(plots) : 0
-    payment.plotsPaid = plotsPaid && !fixedPayment ? Number(plotsPaid) : 0
+    payment.singlePlot = singlePlot
+    if (!singlePlot) {
+      payment.fixedPayment = fixedPayment
+      payment.type = paymentType
+      payment.plots = plots && !fixedPayment ? Number(plots) : 0
+      payment.plotsPaid = plotsPaid && !fixedPayment ? Number(plotsPaid) : 0
+    }
 
     if (useCreditCard)
       payment.creditCardId = card
 
     if (payment.id)
       paymentService.update(payment)
-      .then(() => this.props.onFinish())
+        .then(() => this.props.onFinish())
         .catch(err => this.setState({ errorMessage: err.error }))
     else
       paymentService.create(payment)
@@ -66,7 +70,7 @@ export default class EditPaymentModal extends React.Component {
   }
 
   onEnter() {
-    const { description, firstPayment, fixedPayment, cost, type, plots, creditCardId, plotsPaid } = this.props.payment || {}
+    const { description, singlePlot, firstPayment, fixedPayment, cost, type, plots, creditCardId, plotsPaid } = this.props.payment || {}
     this.setState({
       description: description || '',
       firstPayment: getDateStringEg(firstPayment ? new Date(firstPayment) : new Date()),
@@ -77,7 +81,8 @@ export default class EditPaymentModal extends React.Component {
       useCreditCard: creditCardId ? true : false,
       plotsPaid: plotsPaid ? plotsPaid.toString() : '0',
       fixedPayment: fixedPayment ? true : false,
-      showModal: true
+      showModal: true,
+      singlePlot: singlePlot ? true : false,
     })
   }
 
@@ -112,27 +117,40 @@ export default class EditPaymentModal extends React.Component {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={this.state.fixedPayment}
-                  onChange={(e, c) => this.setState({ fixedPayment: c })}
+                  checked={this.state.singlePlot}
+                  onChange={(e, c) => this.setState({ singlePlot: c })}
                   color="primary"
                 />
               }
-              label="Fixo mensal ?"
+              label="Parcela única ?"
             />
             <br />
-            <div hidden={this.state.fixedPayment}>
-              <IconTextInput
-                label="Quantidade de Parcelas"
-                value={this.state.plots}
-                type="number"
-                onChange={(e) => this.setState({ plots: e.value.replace('.', ''), errorMessage: '' })}
+            <div hidden={this.state.singlePlot}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={this.state.fixedPayment}
+                    onChange={(e, c) => this.setState({ fixedPayment: c })}
+                    color="primary"
+                  />
+                }
+                label="Fixo mensal ?"
               />
-              <IconTextInput style={{ marginLeft: '10px' }}
-                label="Parcelas Pagas"
-                value={this.state.plotsPaid}
-                type="number"
-                onChange={(e) => this.setState({ plotsPaid: e.value.replace('.', ''), errorMessage: '' })}
-              />
+              <br />
+              <div hidden={this.state.fixedPayment}>
+                <IconTextInput
+                  label="Quantidade de Parcelas"
+                  value={this.state.plots}
+                  type="number"
+                  onChange={(e) => this.setState({ plots: e.value.replace('.', ''), errorMessage: '' })}
+                />
+                <IconTextInput style={{ marginLeft: '10px' }}
+                  label="Parcelas Pagas"
+                  value={this.state.plotsPaid}
+                  type="number"
+                  onChange={(e) => this.setState({ plotsPaid: e.value.replace('.', ''), errorMessage: '' })}
+                />
+              </div>
             </div>
             <div hidden={!this.state.cards.length}>
               <FormControlLabel
