@@ -97,6 +97,8 @@ namespace FinanceApi.Controllers
               {
                 Description = p.Description,
                 Type = p.Type,
+                Plots = p.Plots,
+                PlotsPaid = p.PlotsPaid,
                 IsCreditCard = false,
                 Month = date.ToString("MM/yyyy")
               };
@@ -108,6 +110,7 @@ namespace FinanceApi.Controllers
               Description = p.Description,
               Cost = p.FixedPayment || p.SinglePlot ? p.Cost : p.Cost / p.Plots,
               Plots = p.FixedPayment || p.SinglePlot ? 0 : p.Plots,
+              PlotsPaid = p.FixedPayment || p.SinglePlot ? 0 : p.PlotsPaid,
               Type = p.Type,
               CreditCard = creditCardName,
               PaymentDate = date.ToString("dd/MM/yyyy"),

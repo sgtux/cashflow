@@ -13,6 +13,8 @@ namespace FinanceApi.Models
     }
     public string Description { get; set; }
     public decimal Cost => Items.Sum(p => p.Cost);
+    public int Plots { get; set; }
+    public int PlotsPaid { get; set; }
     public TypePayment Type { get; set; }
     public bool IsCreditCard { get; set; }
     public string Month { get; set; }
