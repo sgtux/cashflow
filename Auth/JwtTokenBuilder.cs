@@ -10,13 +10,13 @@ namespace FinanceApi.Auth
 {
   public class JwtTokenBuilder
   {
-    private int expiryInMinutes = 600;
-    private SecurityKey key; 
+    private int expiryInMinutes = 60 * 24 * 7;
+    private SecurityKey key;
     private Dictionary<string, string> claims;
 
     public JwtTokenBuilder(string key, Dictionary<string, string> claims)
-    { 
-      this.key =  new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key));
+    {
+      this.key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key));
       this.claims = claims;
     }
 

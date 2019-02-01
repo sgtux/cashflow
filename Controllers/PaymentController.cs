@@ -205,6 +205,10 @@ namespace FinanceApi.Controllers
         if (card is null)
           ThrowValidationError("Cartão não localizado.");
       }
+      else if (payment.CreditCard != null)
+      {
+        ThrowValidationError("Cartão não localizado.");
+      }
     }
 
     private List<string> GetMonthsFromPayment(Payment p)
