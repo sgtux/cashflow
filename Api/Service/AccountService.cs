@@ -28,10 +28,10 @@ namespace Cashflow.Api.Service
     {
 
       if (string.IsNullOrEmpty(model.Email) || !model.Email.Contains("@") || model.Email.Length < 5)
-        ThrowValidationError("O Email é inválido.");
+        ThrowValidationError("O email é inválido.");
 
       if (string.IsNullOrEmpty(model.Name))
-        ThrowValidationError("O Nome é obrigatório.");
+        ThrowValidationError("O nome é obrigatório.");
 
       if (string.IsNullOrEmpty(model.Password) || model.Password.Length < 4)
         ThrowValidationError("Informe uma senha de pelo menos 4 dígitos.");
@@ -41,8 +41,8 @@ namespace Cashflow.Api.Service
       if (user != null)
       {
         if (user.Name == model.Name)
-          ThrowValidationError("O Nome informado já está sendo usado.");
-        ThrowValidationError("O Email informado já está sendo usado.");
+          ThrowValidationError("O nome informado já está sendo usado.");
+        ThrowValidationError("O email informado já está sendo usado.");
       }
 
       user = new User();

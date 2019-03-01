@@ -14,6 +14,8 @@ namespace FinanceApi.Infra.Repository
 
     /// Find by name or email
     public User FindByNameEmail(string name, string email) => _context.User.FirstOrDefault(p => p.Email == email || p.Name == name);
+
+    /// Find by email
     public User FindByEmail(string email) => _context.User.FirstOrDefault(p => p.Email == email);
   }
 }
