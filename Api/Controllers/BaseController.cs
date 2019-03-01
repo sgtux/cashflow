@@ -5,7 +5,7 @@ using System.Security.Claims;
 using FinanceApi.Shared;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FinanceApi.Controllers
+namespace Cashflow.Api.Controllers
 {
   /// <summary>
   /// Base Controller

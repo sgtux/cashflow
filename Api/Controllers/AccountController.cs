@@ -2,7 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using FinanceApi.Auth;
+using Cashflow.Api.Auth;
+using Cashflow.Api.Service;
 using FinanceApi.Infra;
 using FinanceApi.Infra.Entity;
 using FinanceApi.Models;
@@ -11,65 +12,33 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace FinanceApi.Controllers
+namespace Cashflow.Api.Controllers
 {
   /// Account controller
   [Route("api/[controller]")]
   public class AccountController : BaseController
   {
-    private AppDbContext _context;
+    private AccountService _service;
 
     private AppConfiguration _config;
 
     /// Constructor
-    public AccountController(AppDbContext context, AppConfiguration config)
+    public AccountController(AccountService service, AppConfiguration config)
     {
       _config = config;
-      _context = context;
+      _service = service;
     }
 
     /// Get user details
     [Authorize]
     [HttpGet]
-    public IActionResult Get()
-    {
-      var user = _context.User.FirstOrDefault(p => p.Id == UserId);
-      return Ok(user);
-    }
+    public IActionResult Get() => Ok(_service.GetById(UserId));
 
     /// Create new Account
     [HttpPost]
     public IActionResult Post([FromBody]AccountModel model)
     {
-
-      if (string.IsNullOrEmpty(model.Email) || !model.Email.Contains("@") || model.Email.Length < 5)
-        ThrowValidationError("O Email é inválido.");
-
-      if (string.IsNullOrEmpty(model.Name))
-        ThrowValidationError("O Nome é obrigatório.");
-
-      if (string.IsNullOrEmpty(model.Password) || model.Password.Length < 4)
-        ThrowValidationError("Informe uma senha de pelo menos 4 dígitos.");
-
-      User user = _context.User.FirstOrDefault(p => p.Email == model.Email || p.Name == model.Name);
-
-      if (user != null)
-      {
-        if (user.Name == model.Name)
-          ThrowValidationError("O Nome informado já está sendo usado.");
-        ThrowValidationError("O Email informado já está sendo usado.");
-      }
-
-      user = new User();
-      user.Name = model.Name;
-      user.Email = model.Email;
-      user.Password = Utils.Sha1(model.Password);
-      user.CreatedAt = DateTime.Now;
-
-      _context.User.Add(user);
-      _context.SaveChanges();
-
-      user = _context.User.First(p => p.Email == model.Email);
+      var user = _service.Add(model);
 
       var claims = new Dictionary<string, string>();
       claims.Add(ClaimTypes.Sid, user.Id.ToString());

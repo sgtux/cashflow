@@ -6,7 +6,7 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 
-namespace FinanceApi.Auth
+namespace Cashflow.Api.Auth
 {
   /// Token builder
   public class JwtTokenBuilder

@@ -2,14 +2,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Security.Claims;
-using FinanceApi.Auth;
+using Cashflow.Api.Auth;
 using FinanceApi.Infra;
 using FinanceApi.Models;
 using FinanceApi.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Examples;
 
-namespace FinanceApi.Controllers
+namespace Cashflow.Api.Controllers
 {
   /// <summary>
   /// Token

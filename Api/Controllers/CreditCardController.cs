@@ -5,7 +5,7 @@ using FinanceApi.Infra.Entity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FinanceApi.Controllers
+namespace Cashflow.Api.Controllers
 {
   /// <summary>
   /// Cartões de crédito

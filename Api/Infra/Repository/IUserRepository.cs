@@ -7,5 +7,11 @@ namespace FinanceApi.Infra.Repository
   {
     /// Verify if user exists
     bool UserExists(int userId);
+
+    /// Find by name or email
+    User FindByNameEmail(string name, string email);
+
+    /// Find by email
+    User FindByEmail(string email);
   }
 }

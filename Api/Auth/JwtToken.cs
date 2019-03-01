@@ -1,7 +1,7 @@
 using System;
 using System.IdentityModel.Tokens.Jwt;
 
-namespace FinanceApi.Auth
+namespace Cashflow.Api.Auth
 {
   /// Jwt Token
   public sealed class JwtToken

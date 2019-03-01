@@ -38,5 +38,8 @@ namespace Cashflow.Tests.Mocks
     }
 
     public bool UserExists(int userId) => Users.Any(p => p.Id == userId);
+
+    public User FindByNameEmail(string name, string email) => Users.FirstOrDefault(p => p.Email == email || p.Name == name);
+    public User FindByEmail(string email) => Users.FirstOrDefault(p => p.Email == email);
   }
 }
