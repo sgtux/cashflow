@@ -3,15 +3,18 @@ using System;
 using FinanceApi.Infra;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
-namespace FinanceApi.Migrations
+namespace Cashflow.Api.Infra.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181201001150_BindUserCreditCard")]
+    partial class BindUserCreditCard
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// Build target model
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,22 +44,18 @@ namespace FinanceApi.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<decimal>("Cost");
+                    b.Property<int?>("CarditCardId1");
 
-                    b.Property<int?>("CreditCardId");
+                    b.Property<int?>("CarditCardIdId");
+
+                    b.Property<decimal>("Cost");
 
                     b.Property<string>("Description")
                         .HasMaxLength(256);
 
                     b.Property<DateTime>("FirstPayment");
 
-                    b.Property<bool>("FixedPayment");
-
                     b.Property<int>("Plots");
-
-                    b.Property<int>("PlotsPaid");
-
-                    b.Property<bool>("SinglePlot");
 
                     b.Property<int>("Type");
 
@@ -64,7 +63,9 @@ namespace FinanceApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreditCardId");
+                    b.HasIndex("CarditCardId1");
+
+                    b.HasIndex("CarditCardIdId");
 
                     b.HasIndex("UserId");
 
@@ -106,9 +107,13 @@ namespace FinanceApi.Migrations
 
             modelBuilder.Entity("FinanceApi.Infra.Entity.Payment", b =>
                 {
-                    b.HasOne("FinanceApi.Infra.Entity.CreditCard", "CreditCard")
+                    b.HasOne("FinanceApi.Infra.Entity.CreditCard", "CarditCard")
                         .WithMany()
-                        .HasForeignKey("CreditCardId");
+                        .HasForeignKey("CarditCardId1");
+
+                    b.HasOne("FinanceApi.Infra.Entity.CreditCard", "CarditCardId")
+                        .WithMany()
+                        .HasForeignKey("CarditCardIdId");
 
                     b.HasOne("FinanceApi.Infra.Entity.User", "User")
                         .WithMany("Payments")

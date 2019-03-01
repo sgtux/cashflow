@@ -13,19 +13,22 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FinanceApi.Controllers
 {
+  /// Account controller
   [Route("api/[controller]")]
   public class AccountController : BaseController
   {
     private AppDbContext _context;
-    
+
     private AppConfiguration _config;
 
+    /// Constructor
     public AccountController(AppDbContext context, AppConfiguration config)
     {
       _config = config;
       _context = context;
     }
 
+    /// Get user details
     [Authorize]
     [HttpGet]
     public IActionResult Get()
@@ -34,6 +37,7 @@ namespace FinanceApi.Controllers
       return Ok(user);
     }
 
+    /// Create new Account
     [HttpPost]
     public IActionResult Post([FromBody]AccountModel model)
     {

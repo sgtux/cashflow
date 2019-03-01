@@ -4,8 +4,10 @@ using System.Text;
 
 namespace FinanceApi.Shared
 {
+  /// Utilities
   public static class Utils
   {
+    /// Generate sha1 from input
     public static string Sha1(string input)
     {
       SHA1 sha = new SHA1CryptoServiceProvider();
@@ -20,6 +22,7 @@ namespace FinanceApi.Shared
       return sb.ToString();
     }
 
+    /// Mapper same properties between objects
     public static T MapperTo<T>(this T source, T target)
     {
       foreach (var prop in typeof(T).GetProperties())

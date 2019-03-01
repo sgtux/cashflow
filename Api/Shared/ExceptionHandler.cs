@@ -7,15 +7,18 @@ using Newtonsoft.Json;
 
 namespace FinanceApi.Shared
 {
+  /// App exception handler
   public class ExceptionHandler
   {
     private readonly RequestDelegate next;
 
+    /// Constructor
     public ExceptionHandler(RequestDelegate next)
     {
       this.next = next;
     }
 
+    /// Invoked by middleware on exception
     public async Task Invoke(HttpContext context)
     {
       try
