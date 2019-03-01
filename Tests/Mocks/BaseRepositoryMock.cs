@@ -38,8 +38,8 @@ namespace Cashflow.Tests.Mocks
     private List<User> CreateUserMock()
     {
       var users = new List<User>();
-      users.Add(new User() { Id = 1, Email = "primeirouser@mail.com", Name = "Primeiro User" });
-      users.Add(new User() { Id = 2, Email = "primeirouser@mail.com", Name = "Primeiro User" });
+      users.Add(new User() { Id = 1, Email = "primeirousuario@mail.com", Name = "Primeiro Usuário" });
+      users.Add(new User() { Id = 2, Email = "segundousuario@mail.com", Name = "Segundo Usuário" });
       return users;
     }
 
