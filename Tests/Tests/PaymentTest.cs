@@ -42,15 +42,32 @@ namespace Cashflow.Tests
     public void GetUserPayments()
     {
       var payments = _service.GetByUser(2);
-      Assert.IsFalse(!payments.Any(p => p.UserId != 2));
+      Assert.IsFalse(payments.Any(p => p.UserId != 2));
+    }
+
+    [TestMethod]
+    public void GetFuturePaymentsWithoutForecastAt()
+    {
+      var payments = _service.GetFuturePayments(3, default(DateTime));
+
+      Assert.AreEqual(payments.Count, 12);
+
+      Assert.AreEqual(141, payments["05/2019"].CostExpense); // 423/3
+      Assert.AreEqual(129, payments["05/2019"].CostIncome); // (225/3) + 54
+      Assert.AreEqual(-12, payments["05/2019"].Cost); // 129 - 141
+
+      Assert.AreEqual(621, payments["07/2019"].CostExpense); // 544 + 77
+      Assert.AreEqual(10000, payments["07/2019"].CostIncome); // 10000
+      Assert.AreEqual(9379, payments["07/2019"].Cost); // 10000 - (544 + 77)
+      Assert.AreEqual(8757, payments["07/2019"].AcumulatedCost); // (10000 + ((225/3)*2) + 54) - ((2 * 544) + ((423/3)*2) + 77)
     }
 
     [TestMethod]
     public void GetFuturePayments()
     {
-      // var response = Client.GetAsync("/api/Payment/FuturePayments").Result;
-      // var statusCode = (int)response.StatusCode;
-      // Assert.AreEqual(200, statusCode);
+      var payments = _service.GetFuturePayments(3, new DateTime(2019, 10, 1));
+      Assert.AreEqual(37125, payments["10/2019"].AcumulatedCost); // ((10000 * 4) + ((225/3)*2) + 54) - ((5 * 544) + ((423/3)*2) + 77)
+      Assert.AreEqual(payments.Count, 7);
     }
 
     [TestMethod]

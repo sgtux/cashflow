@@ -32,11 +32,11 @@ namespace Cashflow.Api.Service
     public Dictionary<string, PaymentFutureResultModel> GetFuturePayments(int userId, DateTime forecastAt)
     {
       var result = new Dictionary<string, PaymentFutureResultModel>();
-      var now = DateTime.Now;
+      var now = _paymentRepository.CurrentDate;
       var dates = new List<DateTime>();
 
       if (forecastAt == default(DateTime) || forecastAt < now)
-        forecastAt = now.AddMonths(2);
+        forecastAt = now.AddMonths(11);
       else
         forecastAt.AddMonths(1);
 
