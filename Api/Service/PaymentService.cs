@@ -26,7 +26,7 @@ namespace Cashflow.Api.Service
     }
 
     /// Obter pagamentos por usuário
-    public List<Payment> Get(int userId) => _paymentRepository.GetByUser(userId);
+    public List<Payment> GetByUser(int userId) => _paymentRepository.GetByUser(userId);
 
     /// Obter os pagamentos futuros agrupados pelo mês
     public Dictionary<string, PaymentFutureResultModel> GetFuturePayments(int userId, DateTime forecastAt)
@@ -119,7 +119,7 @@ namespace Cashflow.Api.Service
     /// <summary>
     /// Inserir um novo pagamento
     /// </summary>
-    public void Post(Payment payment)
+    public void Add(Payment payment)
     {
       ValidatePayment(payment);
       _paymentRepository.Add(payment);
@@ -129,7 +129,7 @@ namespace Cashflow.Api.Service
     /// <summary>
     /// Atualizar um pagamento
     /// </summary>
-    public void Put(Payment payment)
+    public void Update(Payment payment)
     {
       ValidatePayment(payment);
       var paymentDb = _paymentRepository.GetById(payment.Id);
@@ -143,7 +143,7 @@ namespace Cashflow.Api.Service
     /// <summary>
     /// Remove um cartão de crédito de um usuário
     /// </summary>
-    public void Delete(int paymentId, int userId)
+    public void Remove(int paymentId, int userId)
     {
       var payment = _paymentRepository.GetById(paymentId);
       if (payment is null || payment.UserId != userId)
