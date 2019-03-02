@@ -1,5 +1,5 @@
 using System;
-using FinanceApi.Shared;
+using Cashflow.Api.Shared;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Cashflow.Tests
@@ -12,7 +12,7 @@ namespace Cashflow.Tests
       try
       {
         action.Invoke();
-        Assert.AreEqual(null, message);
+        Assert.AreEqual(message, null);
       }
       catch (ValidateException ex)
       {

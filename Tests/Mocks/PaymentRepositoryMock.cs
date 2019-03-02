@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using FinanceApi.Infra.Entity;
-using FinanceApi.Infra.Repository;
+using Cashflow.Api.Infra.Entity;
+using Cashflow.Api.Infra.Repository;
 
 namespace Cashflow.Tests.Mocks
 {
@@ -14,6 +14,8 @@ namespace Cashflow.Tests.Mocks
     public List<Payment> GetAll() => Payments;
 
     public Payment GetById(int id) => Payments.FirstOrDefault(p => p.Id == id);
+
+    public List<Payment> GetByUser(int userId) => Payments.Where(p => p.UserId == userId).ToList();
 
     public List<Payment> GetSome(Expression<Func<Payment, bool>> expressions) => throw new NotImplementedException();
 

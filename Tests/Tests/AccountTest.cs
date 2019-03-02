@@ -1,6 +1,6 @@
+using Cashflow.Api.Models;
 using Cashflow.Api.Service;
 using Cashflow.Tests.Mocks;
-using FinanceApi.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Cashflow.Tests

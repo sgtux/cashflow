@@ -1,7 +1,6 @@
+using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Service;
 using Cashflow.Tests.Mocks;
-using FinanceApi.Infra.Entity;
-using FinanceApi.Shared;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Cashflow.Tests
