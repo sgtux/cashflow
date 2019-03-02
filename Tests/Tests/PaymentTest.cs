@@ -266,5 +266,23 @@ namespace Cashflow.Tests
         _service.Update(p);
       });
     }
+
+    [TestMethod]
+    public void RemoveWithPaymentNotFound()
+    {
+      AssertExceptionMessage(() =>
+      {
+        _service.Remove(99, 1);
+      }, "Pagamento não localizado.");
+    }
+
+    [TestMethod]
+    public void RemoveOK()
+    {
+      AssertExceptionMessage(() =>
+      {
+        _service.Remove(3, 1);
+      });
+    }
   }
 }

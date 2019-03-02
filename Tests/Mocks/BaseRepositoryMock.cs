@@ -20,9 +20,15 @@ namespace Cashflow.Tests.Mocks
         },
         new Payment()
         {
+          Id = 2,
           UserId = 1,
           CreditCardId = 1,
-          Id = 1
+        },
+        new Payment()
+        {
+          Id = 3,
+          UserId = 1,
+          CreditCardId = 1
         },
       };
     }
