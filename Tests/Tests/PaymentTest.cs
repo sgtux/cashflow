@@ -38,6 +38,111 @@ namespace Cashflow.Tests
     }
 
     [TestMethod]
+    public void AddWithInvalidPayment()
+    {
+      AssertExceptionMessage(() =>
+      {
+        _service.Add(null);
+      }, "Pagamento inválido.");
+    }
+
+    [TestMethod]
+    public void AddWithNoDescription()
+    {
+      AssertExceptionMessage(() =>
+      {
+        var p = DefaultPayment;
+        p.Description = "";
+        _service.Add(p);
+      }, "A descrição é obrigatória.");
+    }
+
+    [TestMethod]
+    public void AddWithZeroCost()
+    {
+      AssertExceptionMessage(() =>
+      {
+        var p = DefaultPayment;
+        p.Cost = 0;
+        _service.Add(p);
+      }, "O valor deve ser maior que Zero.");
+    }
+
+    [TestMethod]
+    public void AddWithNoFirstPayment()
+    {
+      AssertExceptionMessage(() =>
+      {
+        var p = DefaultPayment;
+        p.FirstPayment = default(DateTime);
+        _service.Add(p);
+      }, "A data do primeiro pagamento é obrigatória.");
+    }
+
+    [TestMethod]
+    public void AddWithWrongNumberPlots()
+    {
+      AssertExceptionMessage(() =>
+      {
+        var p = DefaultPayment;
+        p.FixedPayment = false;
+        p.SinglePlot = false;
+        p.Plots = 8;
+        p.PlotsPaid = 10;
+        _service.Add(p);
+      }, "O quantidade parcelas pagas não pode ser maior que o número de parcelas.");
+    }
+
+    [TestMethod]
+    public void AddWithNoPlots()
+    {
+      AssertExceptionMessage(() =>
+      {
+        var p = DefaultPayment;
+        p.PlotsPaid = 0;
+        p.Plots = 0;
+        p.FixedPayment = false;
+        p.SinglePlot = false;
+        _service.Add(p);
+      }, "O pagamento deve ter pelo menos 1 parcela.");
+    }
+
+    [TestMethod]
+    public void AddWithCreditCardIdNotFound()
+    {
+      AssertExceptionMessage(() =>
+      {
+        var p = DefaultPayment;
+        p.CreditCardId = 99;
+        p.CreditCard = null;
+        _service.Add(p);
+      }, "Cartão não localizado.");
+    }
+
+    [TestMethod]
+    public void AddWithCreditCardNotFound()
+    {
+      AssertExceptionMessage(() =>
+      {
+        var p = DefaultPayment;
+        p.CreditCardId = 0;
+        p.CreditCard = new CreditCard() { Id = 99 };
+        _service.Add(p);
+      }, "Cartão não localizado.");
+    }
+
+    [TestMethod]
+    public void AddOK()
+    {
+      AssertExceptionMessage(() =>
+      {
+        var p = DefaultPayment;
+        p.CreditCardId = 1;
+        _service.Add(p);
+      });
+    }
+
+    [TestMethod]
     public void GetFuturePayments()
     {
       // var response = Client.GetAsync("/api/Payment/FuturePayments").Result;
@@ -116,6 +221,18 @@ namespace Cashflow.Tests
     }
 
     [TestMethod]
+    public void UpdatePaymentNotFound()
+    {
+      AssertExceptionMessage(() =>
+      {
+        var p = DefaultPayment;
+        p.Id = 99;
+        p.CreditCardId = 1;
+        _service.Update(p);
+      }, "Pagamento não localizado.");
+    }
+
+    [TestMethod]
     public void UpdateWithCreditCardIdNotFound()
     {
       AssertExceptionMessage(() =>
@@ -133,7 +250,7 @@ namespace Cashflow.Tests
       AssertExceptionMessage(() =>
       {
         var p = DefaultPayment;
-        p.CreditCardId = 99;
+        p.CreditCardId = 0;
         p.CreditCard = new CreditCard() { Id = 99 };
         _service.Update(p);
       }, "Cartão não localizado.");
