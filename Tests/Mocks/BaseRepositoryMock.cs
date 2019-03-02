@@ -11,26 +11,12 @@ namespace Cashflow.Tests.Mocks
 
     private List<Payment> CreatePaymentsMock()
     {
-      return new List<Payment>()
-      {
-        new Payment()
-        {
-          UserId = 1,
-          CreditCardId = 1
-        },
-        new Payment()
-        {
-          Id = 2,
-          UserId = 1,
-          CreditCardId = 1,
-        },
-        new Payment()
-        {
-          Id = 3,
-          UserId = 1,
-          CreditCardId = 1
-        },
-      };
+      var list = new List<Payment>();
+      list.Add(new Payment() { UserId = 1, CreditCardId = 1 });
+      list.Add(new Payment() { Id = 2, UserId = 1, CreditCardId = 1 });
+      list.Add(new Payment() { Id = 3, UserId = 1, CreditCardId = 1 });
+      list.Add(new Payment() { Id = 3, UserId = 2, CreditCardId = 1 });
+      return list;
     }
 
     private List<CreditCard> CreateCreditCard()

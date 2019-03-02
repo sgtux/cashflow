@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Service;
 using Cashflow.Api.Shared;
@@ -35,6 +36,21 @@ namespace Cashflow.Tests
           SinglePlot = false
         };
       }
+    }
+
+    [TestMethod]
+    public void GetUserPayments()
+    {
+      var payments = _service.GetByUser(2);
+      Assert.IsFalse(!payments.Any(p => p.UserId != 2));
+    }
+
+    [TestMethod]
+    public void GetFuturePayments()
+    {
+      // var response = Client.GetAsync("/api/Payment/FuturePayments").Result;
+      // var statusCode = (int)response.StatusCode;
+      // Assert.AreEqual(200, statusCode);
     }
 
     [TestMethod]
@@ -140,14 +156,6 @@ namespace Cashflow.Tests
         p.CreditCardId = 1;
         _service.Add(p);
       });
-    }
-
-    [TestMethod]
-    public void GetFuturePayments()
-    {
-      // var response = Client.GetAsync("/api/Payment/FuturePayments").Result;
-      // var statusCode = (int)response.StatusCode;
-      // Assert.AreEqual(200, statusCode);
     }
 
     [TestMethod]
