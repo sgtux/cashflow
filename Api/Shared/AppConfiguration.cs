@@ -1,4 +1,4 @@
-namespace FinanceApi.Shared
+namespace Cashflow.Api.Shared
 {
   /// App configuration
   public class AppConfiguration

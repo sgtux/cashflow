@@ -1,6 +1,4 @@
-using FinanceApi.Shared;
-
-namespace FinanceApi.Models
+namespace Cashflow.Api.Models
 {
   /// Token model
   public class TokenModel

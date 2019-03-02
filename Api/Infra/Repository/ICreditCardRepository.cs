@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using FinanceApi.Infra.Entity;
+using Cashflow.Api.Infra.Entity;
 
-namespace FinanceApi.Infra.Repository
+namespace Cashflow.Api.Infra.Repository
 {
   /// Credit card repository contract
   public interface ICreditCardRepository : IRepository<CreditCard>

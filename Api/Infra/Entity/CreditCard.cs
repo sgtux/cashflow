@@ -1,4 +1,4 @@
-namespace FinanceApi.Infra.Entity
+namespace Cashflow.Api.Infra.Entity
 {
   /// Credit card
   public class CreditCard

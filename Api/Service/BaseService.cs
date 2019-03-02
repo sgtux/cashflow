@@ -1,4 +1,4 @@
-using FinanceApi.Shared;
+using Cashflow.Api.Shared;
 
 namespace Cashflow.Api.Service
 {

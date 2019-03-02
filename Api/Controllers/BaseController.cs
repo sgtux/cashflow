@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Claims;
-using FinanceApi.Shared;
+using Cashflow.Api.Shared;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cashflow.Api.Controllers

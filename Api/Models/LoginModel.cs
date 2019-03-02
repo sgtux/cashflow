@@ -1,4 +1,4 @@
-namespace FinanceApi.Models
+namespace Cashflow.Api.Models
 {
   /// Login model
   public class LoginModel

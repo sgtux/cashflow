@@ -1,6 +1,6 @@
-using FinanceApi.Infra.Entity;
+using Cashflow.Api.Infra.Entity;
 
-namespace FinanceApi.Infra.Repository
+namespace Cashflow.Api.Infra.Repository
 {
   /// User repository contract
   public interface IUserRepository : IRepository<User>

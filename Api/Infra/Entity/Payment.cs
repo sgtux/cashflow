@@ -1,8 +1,8 @@
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
-using FinanceApi.Shared;
+using Cashflow.Api.Shared;
 
-namespace FinanceApi.Infra.Entity
+namespace Cashflow.Api.Infra.Entity
 {
   /// Payment
   public class Payment

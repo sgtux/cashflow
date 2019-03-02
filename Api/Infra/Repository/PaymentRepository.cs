@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
-using FinanceApi.Infra.Entity;
+using Cashflow.Api.Infra.Entity;
 using Microsoft.EntityFrameworkCore;
 
-namespace FinanceApi.Infra.Repository
+namespace Cashflow.Api.Infra.Repository
 {
   /// Payment repository
   public class PaymentRepository : BaseRepository<Payment>, IPaymentRepository

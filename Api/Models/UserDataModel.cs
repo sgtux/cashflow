@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using FinanceApi.Infra.Entity;
+using Cashflow.Api.Infra.Entity;
 
 namespace Cashflow.Api.Models
 {

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace FinanceApi.Infra.Repository
+namespace Cashflow.Api.Infra.Repository
 {
   /// Contract for all repositories
   public interface IRepository<T> where T : class

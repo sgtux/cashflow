@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace FinanceApi.Infra.Entity
+namespace Cashflow.Api.Infra.Entity
 {
   /// User
   public class User

@@ -1,6 +1,6 @@
-using FinanceApi.Shared;
+using Cashflow.Api.Shared;
 
-namespace FinanceApi.Models
+namespace Cashflow.Api.Models
 {
   /// Payment item model
   public class PaymentItemModel

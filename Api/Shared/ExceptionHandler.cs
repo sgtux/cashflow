@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Rest;
 using Newtonsoft.Json;
 
-namespace FinanceApi.Shared
+namespace Cashflow.Api.Shared
 {
   /// App exception handler
   public class ExceptionHandler

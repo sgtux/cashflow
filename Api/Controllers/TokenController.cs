@@ -3,9 +3,9 @@ using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using Cashflow.Api.Auth;
-using FinanceApi.Infra;
-using FinanceApi.Models;
-using FinanceApi.Shared;
+using Cashflow.Api.Infra;
+using Cashflow.Api.Models;
+using Cashflow.Api.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Examples;
 

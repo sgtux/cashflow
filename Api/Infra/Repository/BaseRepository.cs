@@ -2,10 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using FinanceApi.Infra.Entity;
 using Microsoft.EntityFrameworkCore;
 
-namespace FinanceApi.Infra.Repository
+namespace Cashflow.Api.Infra.Repository
 {
   /// Base repository class
   public abstract class BaseRepository<T> : IRepository<T> where T : class

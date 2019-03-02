@@ -1,4 +1,4 @@
-namespace FinanceApi.Shared
+namespace Cashflow.Api.Shared
 {
   /// Payment type
   public enum TypePayment

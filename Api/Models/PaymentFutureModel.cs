@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using FinanceApi.Shared;
+using Cashflow.Api.Shared;
 
-namespace FinanceApi.Models
+namespace Cashflow.Api.Models
 {
   /// Payment future model
   public class PaymentFutureModel

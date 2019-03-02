@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using FinanceApi.Infra.Entity;
-using FinanceApi.Infra.Repository;
-using FinanceApi.Models;
-using FinanceApi.Shared;
+using Cashflow.Api.Infra.Entity;
+using Cashflow.Api.Infra.Repository;
+using Cashflow.Api.Models;
+using Cashflow.Api.Shared;
 
 namespace Cashflow.Api.Service
 {

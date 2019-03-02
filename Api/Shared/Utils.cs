@@ -2,7 +2,7 @@ using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace FinanceApi.Shared
+namespace Cashflow.Api.Shared
 {
   /// Utilities
   public static class Utils

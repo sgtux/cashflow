@@ -1,7 +1,7 @@
 using System.Linq;
-using FinanceApi.Infra.Entity;
+using Cashflow.Api.Infra.Entity;
 
-namespace FinanceApi.Infra.Repository
+namespace Cashflow.Api.Infra.Repository
 {
   /// User repository
   public class UserRepository : BaseRepository<User>, IUserRepository

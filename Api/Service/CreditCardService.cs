@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
-using FinanceApi.Infra.Entity;
-using FinanceApi.Infra.Repository;
+using Cashflow.Api.Infra.Entity;
+using Cashflow.Api.Infra.Repository;
 
 namespace Cashflow.Api.Service
 {
