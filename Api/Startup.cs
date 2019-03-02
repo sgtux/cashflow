@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Cashflow.Api.Service;
 using FinanceApi.Infra;
 using FinanceApi.Infra.Repository;
 using FinanceApi.Shared;
@@ -103,6 +104,10 @@ namespace Cashflow.Api
 
     private void CofigureScopes(IServiceCollection services)
     {
+      services.AddScoped<AccountService>();
+      services.AddScoped<PaymentService>();
+      services.AddScoped<CreditCardService>();
+
       services.AddScoped<IUserRepository, UserRepository>();
       services.AddScoped<IPaymentRepository, PaymentRepository>();
       services.AddScoped<ICreditCardRepository, CreditCardRepository>();

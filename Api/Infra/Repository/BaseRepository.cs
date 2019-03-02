@@ -27,7 +27,7 @@ namespace FinanceApi.Infra.Repository
     public T GetById(int id) => _dbSet.Find(id);
 
     /// Get all entities
-    public List<T> GetAll() => _dbSet.ToList();
+    public virtual List<T> GetAll() => _dbSet.ToList();
 
     /// Get some entities
     public List<T> GetSome(Expression<Func<T, bool>> expression) => _dbSet.Where(expression).ToList();
