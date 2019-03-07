@@ -60,6 +60,9 @@ namespace Cashflow.Tests
       Assert.AreEqual(10000, payments["07/2019"].CostIncome); // 10000
       Assert.AreEqual(9379, payments["07/2019"].Cost); // 10000 - (544 + 77)
       Assert.AreEqual(8757, payments["07/2019"].AcumulatedCost); // (10000 + ((225/3)*2) + 54) - ((2 * 544) + ((423/3)*2) + 77)
+
+      Assert.AreEqual(2, payments["04/2019"].Payments.First(p => p.Plots == 3).Items.First().PlotsPaid);
+      Assert.AreEqual(3, payments["05/2019"].Payments.First(p => p.Plots == 3).Items.First().PlotsPaid);
     }
 
     [TestMethod]
