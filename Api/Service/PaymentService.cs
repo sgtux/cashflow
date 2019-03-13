@@ -89,13 +89,21 @@ namespace Cashflow.Api.Service
               };
             }
 
+            var plotsPaid = 0;
+            if (!p.FixedPayment && !p.SinglePlot)
+            {
+              var diffYears = date.Year - p.FirstPayment.Year;
+              var diffMonths = date.Month - p.FirstPayment.Month;
+              plotsPaid = 1 + diffMonths + (diffYears * 12);
+            }
+
             paymentModel.Items.Add(new PaymentItemModel()
             {
               PaymentId = p.Id,
               Description = p.Description,
               Cost = p.FixedPayment || p.SinglePlot ? p.Cost : p.Cost / p.Plots,
               Plots = p.FixedPayment || p.SinglePlot ? 0 : p.Plots,
-              PlotsPaid = p.FixedPayment || p.SinglePlot ? 0 : p.PlotsPaid,
+              PlotsPaid = plotsPaid,
               Type = p.Type,
               CreditCard = creditCardName,
               PaymentDate = date.ToString("dd/MM/yyyy"),
