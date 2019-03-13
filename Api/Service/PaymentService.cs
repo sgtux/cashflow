@@ -131,8 +131,8 @@ namespace Cashflow.Api.Service
     /// </summary>
     public void Add(Payment payment, int userId)
     {
-      payment.UserId = userId;
       ValidatePayment(payment);
+      payment.UserId = userId;
       _paymentRepository.Add(payment);
       _paymentRepository.Save();
     }
@@ -142,8 +142,8 @@ namespace Cashflow.Api.Service
     /// </summary>
     public void Update(Payment payment, int userId)
     {
-      payment.UserId = userId;
       ValidatePayment(payment);
+      payment.UserId = userId;
       var paymentDb = _paymentRepository.GetById(payment.Id);
       if (paymentDb is null || paymentDb.UserId != payment.UserId)
         ThrowValidationError("Pagamento não localizado.");

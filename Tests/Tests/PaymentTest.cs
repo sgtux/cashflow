@@ -78,7 +78,8 @@ namespace Cashflow.Tests
     {
       AssertExceptionMessage(() =>
       {
-        _service.Add(null);
+        var p = DefaultPayment;
+        _service.Add(null, p.UserId);
       }, "Pagamento inválido.");
     }
 
@@ -89,7 +90,7 @@ namespace Cashflow.Tests
       {
         var p = DefaultPayment;
         p.Description = "";
-        _service.Add(p);
+        _service.Add(p, p.UserId);
       }, "A descrição é obrigatória.");
     }
 
@@ -100,7 +101,7 @@ namespace Cashflow.Tests
       {
         var p = DefaultPayment;
         p.Cost = 0;
-        _service.Add(p);
+        _service.Add(p, p.UserId);
       }, "O valor deve ser maior que Zero.");
     }
 
@@ -111,7 +112,7 @@ namespace Cashflow.Tests
       {
         var p = DefaultPayment;
         p.FirstPayment = default(DateTime);
-        _service.Add(p);
+        _service.Add(p, p.UserId);
       }, "A data do primeiro pagamento é obrigatória.");
     }
 
@@ -125,7 +126,7 @@ namespace Cashflow.Tests
         p.SinglePlot = false;
         p.Plots = 8;
         p.PlotsPaid = 10;
-        _service.Add(p);
+        _service.Add(p, p.UserId);
       }, "O quantidade parcelas pagas não pode ser maior que o número de parcelas.");
     }
 
@@ -139,7 +140,7 @@ namespace Cashflow.Tests
         p.Plots = 0;
         p.FixedPayment = false;
         p.SinglePlot = false;
-        _service.Add(p);
+        _service.Add(p, p.UserId);
       }, "O pagamento deve ter pelo menos 1 parcela.");
     }
 
@@ -151,7 +152,7 @@ namespace Cashflow.Tests
         var p = DefaultPayment;
         p.CreditCardId = 99;
         p.CreditCard = null;
-        _service.Add(p);
+        _service.Add(p, p.UserId);
       }, "Cartão não localizado.");
     }
 
@@ -163,7 +164,7 @@ namespace Cashflow.Tests
         var p = DefaultPayment;
         p.CreditCardId = 0;
         p.CreditCard = new CreditCard() { Id = 99 };
-        _service.Add(p);
+        _service.Add(p, p.UserId);
       }, "Cartão não localizado.");
     }
 
@@ -174,7 +175,7 @@ namespace Cashflow.Tests
       {
         var p = DefaultPayment;
         p.CreditCardId = 1;
-        _service.Add(p);
+        _service.Add(p, p.UserId);
       });
     }
 
@@ -183,7 +184,8 @@ namespace Cashflow.Tests
     {
       AssertExceptionMessage(() =>
       {
-        _service.Update(null);
+        var p = DefaultPayment;
+        _service.Update(null, p.UserId);
       }, "Pagamento inválido.");
     }
 
@@ -194,7 +196,7 @@ namespace Cashflow.Tests
       {
         var p = DefaultPayment;
         p.Description = "";
-        _service.Update(p);
+        _service.Update(p, p.UserId);
       }, "A descrição é obrigatória.");
     }
 
@@ -205,7 +207,7 @@ namespace Cashflow.Tests
       {
         var p = DefaultPayment;
         p.Cost = 0;
-        _service.Update(p);
+        _service.Update(p, p.UserId);
       }, "O valor deve ser maior que Zero.");
     }
 
@@ -216,7 +218,7 @@ namespace Cashflow.Tests
       {
         var p = DefaultPayment;
         p.FirstPayment = default(DateTime);
-        _service.Update(p);
+        _service.Update(p, p.UserId);
       }, "A data do primeiro pagamento é obrigatória.");
     }
 
@@ -230,7 +232,7 @@ namespace Cashflow.Tests
         p.SinglePlot = false;
         p.Plots = 8;
         p.PlotsPaid = 10;
-        _service.Update(p);
+        _service.Update(p, p.UserId);
       }, "O quantidade parcelas pagas não pode ser maior que o número de parcelas.");
     }
 
@@ -244,7 +246,7 @@ namespace Cashflow.Tests
         p.Plots = 0;
         p.FixedPayment = false;
         p.SinglePlot = false;
-        _service.Update(p);
+        _service.Update(p, p.UserId);
       }, "O pagamento deve ter pelo menos 1 parcela.");
     }
 
@@ -256,7 +258,7 @@ namespace Cashflow.Tests
         var p = DefaultPayment;
         p.Id = 99;
         p.CreditCardId = 1;
-        _service.Update(p);
+        _service.Update(p, p.UserId);
       }, "Pagamento não localizado.");
     }
 
@@ -268,7 +270,7 @@ namespace Cashflow.Tests
         var p = DefaultPayment;
         p.CreditCardId = 99;
         p.CreditCard = null;
-        _service.Update(p);
+        _service.Update(p, p.UserId);
       }, "Cartão não localizado.");
     }
 
@@ -280,7 +282,7 @@ namespace Cashflow.Tests
         var p = DefaultPayment;
         p.CreditCardId = 0;
         p.CreditCard = new CreditCard() { Id = 99 };
-        _service.Update(p);
+        _service.Update(p, p.UserId);
       }, "Cartão não localizado.");
     }
 
@@ -291,7 +293,7 @@ namespace Cashflow.Tests
       {
         var p = DefaultPayment;
         p.CreditCardId = 1;
-        _service.Update(p);
+        _service.Update(p, p.UserId);
       });
     }
 

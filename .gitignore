@@ -2,5 +2,5 @@ obj
 bin
 node_modules
 .vscode
-deploy.tgz
+deploy.tar.gz
 heroku-deploy.sh
