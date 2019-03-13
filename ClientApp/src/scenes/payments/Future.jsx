@@ -91,16 +91,24 @@ export default class Payment extends React.Component {
                       {this.state.payments[d].payments.map((p, j) =>
                         <ListItem key={j}>
                           <ListItemText style={{ width: '300px', textAlign: 'left' }}>
-                            {p.isCreditCard ? <span style={{ fontWeight: 'bold' }}>Fatura: </span> : null}
-                            {p.description}
-
+                            {p.isCreditCard ?
+                              <span>
+                                <span style={{ fontWeight: 'bold' }}>Fatura: </span>
+                                <span>{p.description}</span>
+                              </span> :
+                              <span>
+                                <span>{p.description}</span>
+                                {p.plots > 0 ? <span style={{ marginLeft: 10 }}> {p.plotsPaid} / {p.plots}</span> : null}
+                              </span>
+                            }
                             <div hidden={this.state.i !== i || this.state.j !== j}>
                               <List dense={true}>
                                 {p.items.map((g, k) =>
                                   <ListItem key={k}>
                                     <ListItemText style={{ width: '100px', textAlign: 'right' }}>
                                       {g.description}
-                                      <span style={{ marginLeft: 10, color: Colors.AppRed }}>{toReal(g.cost)}</span>
+                                      <span style={{ marginLeft: 10, marginRight: 10, color: Colors.AppRed }}>{toReal(g.cost)}</span>
+                                      <span>{`${g.plotsPaid}/${g.plots}`}</span>
                                     </ListItemText>
                                   </ListItem>
                                 )}

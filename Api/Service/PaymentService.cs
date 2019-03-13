@@ -97,6 +97,8 @@ namespace Cashflow.Api.Service
               plotsPaid = 1 + diffMonths + (diffYears * 12);
             }
 
+            paymentModel.PlotsPaid = plotsPaid;
+
             paymentModel.Items.Add(new PaymentItemModel()
             {
               PaymentId = p.Id,
