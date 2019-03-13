@@ -42,14 +42,14 @@ namespace Cashflow.Api.Controllers
     /// </summary>
     /// <param name="payment"></param>
     [HttpPost]
-    public void Post([FromBody]Payment payment) => _service.Add(payment);
+    public void Post([FromBody]Payment payment) => _service.Add(payment, UserId);
 
     /// <summary>
     /// Atualizar um pagamento do usuário logado
     /// </summary>
     /// <param name="payment"></param>
     [HttpPut]
-    public void Put([FromBody]Payment payment) => _service.Update(payment);
+    public void Put([FromBody]Payment payment) => _service.Update(payment, UserId);
 
     /// <summary>
     /// Remove um cartão de crédito do usuário logado

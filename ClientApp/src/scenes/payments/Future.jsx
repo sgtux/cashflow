@@ -21,7 +21,7 @@ export default class Payment extends React.Component {
   constructor(props) {
     super(props)
     const now = new Date()
-    let month = now.getMonth() + 3
+    let month = now.getMonth() + 6
     let year = now.getFullYear()
     if (month > 12) {
       month = month - 12
@@ -138,7 +138,7 @@ export default class Payment extends React.Component {
                   </div>
                   <div style={{ textAlign: 'center' }}>
                     <Typography component="span"
-                      color={this.state.payments[d].cost < 0 ? 'secondary' : 'primary'}>
+                      color={this.state.payments[d].acumulatedCost < 0 ? 'secondary' : 'primary'}>
                       {`${toReal(this.state.payments[d].acumulatedCost)}`}
                     </Typography>
                   </div>

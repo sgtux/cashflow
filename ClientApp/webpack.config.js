@@ -23,7 +23,7 @@ module.exports = {
     extensions: ['*', '.js', '.jsx', '.ttf']
   },
   output: {
-    path: path.join(__dirname, '..', '/wwwroot'),
+    path: path.join(__dirname, '..', '/Api', '/wwwroot'),
     publicPath: '/',
     filename: 'bundle.js'
   },

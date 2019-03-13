@@ -119,8 +119,9 @@ namespace Cashflow.Api.Service
     /// <summary>
     /// Inserir um novo pagamento
     /// </summary>
-    public void Add(Payment payment)
+    public void Add(Payment payment, int userId)
     {
+      payment.UserId = userId;
       ValidatePayment(payment);
       _paymentRepository.Add(payment);
       _paymentRepository.Save();
@@ -129,8 +130,9 @@ namespace Cashflow.Api.Service
     /// <summary>
     /// Atualizar um pagamento
     /// </summary>
-    public void Update(Payment payment)
+    public void Update(Payment payment, int userId)
     {
+      payment.UserId = userId;
       ValidatePayment(payment);
       var paymentDb = _paymentRepository.GetById(payment.Id);
       if (paymentDb is null || paymentDb.UserId != payment.UserId)
