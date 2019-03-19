@@ -11,7 +11,8 @@ import {
   ListItemText,
   Tooltip,
   Button,
-  Typography
+  Typography,
+  TextField
 } from '@material-ui/core'
 
 import DeleteIcon from '@material-ui/icons/Delete'
@@ -60,6 +61,7 @@ export default class Payment extends React.Component {
       cards: [],
       payment: {},
       payments: [],
+      filteredPayments: [],
       paymentType: 2,
       useCreditCard: false,
       fixedPayment: false,
@@ -76,7 +78,11 @@ export default class Payment extends React.Component {
     this.setState({ loading: true, errorMessage: '' })
     paymentService.get().then(res => {
       setTimeout(() => {
-        this.setState({ loading: false, payments: res })
+        this.setState({
+          loading: false,
+          payments: res,
+          filteredPayments: res
+        })
       }, 300)
     })
   }
@@ -104,6 +110,12 @@ export default class Payment extends React.Component {
     })
   }
 
+  filter(text) {
+    this.setState({
+      filteredPayments: this.state.payments.filter(p => p.description.toUpperCase().includes(text.toUpperCase()))
+    })
+  }
+
   onFinish() {
     this.setState({ showModal: false })
     this.refresh()
@@ -120,8 +132,15 @@ export default class Payment extends React.Component {
             </Button>
             </div>
             <Paper style={{ marginTop: '20px' }}>
+              <div style={{ textAlign: 'center' }}>
+                <TextField
+                  label="Filtrar"
+                  margin="dense"
+                  onChange={event => this.filter(event.target.value)}
+                />
+              </div>
               <List dense={true}>
-                {this.state.payments.map(p =>
+                {this.state.filteredPayments.map(p =>
                   <ListItem button key={p.id}
                     onClick={() => this.openEditNew(p)}>
                     <ListItemAvatar>
@@ -169,11 +188,6 @@ export default class Payment extends React.Component {
             <span>Você não possui pagamentos cadastrados.</span>
           </div>
         }
-        <div style={styles.divNewPayment}>
-          <Button variant="raised" color="primary" onClick={() => this.openEditNew()}>
-            Adicionar Pagamento
-          </Button>
-        </div>
         <EditPaymentModal onFinish={() => this.onFinish()} open={this.state.showModal} payment={this.state.payment} onClose={() => this.setState({ showModal: false })} />
       </CardMain>
     )
