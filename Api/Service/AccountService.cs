@@ -6,23 +6,18 @@ using Cashflow.Api.Shared;
 
 namespace Cashflow.Api.Service
 {
-  /// Account service
   public class AccountService : BaseService
   {
     private IUserRepository _userRepository;
 
-    /// Constructor
     public AccountService(IUserRepository repository) => _userRepository = repository;
 
-    /// Get user by id
     public UserDataModel GetById(int userId)
     {
       var user = _userRepository.GetById(userId);
       return new UserDataModel(user);
     }
 
-
-    /// Create a new account
     public UserDataModel Add(AccountModel model)
     {
 

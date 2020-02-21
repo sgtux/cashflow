@@ -8,11 +8,9 @@ using Cashflow.Api.Service;
 using Cashflow.Api.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Cashflow.Api.Controllers
 {
-  /// Account controller
   [Route("api/[controller]")]
   public class AccountController : BaseController
   {
@@ -20,19 +18,16 @@ namespace Cashflow.Api.Controllers
 
     private AppConfiguration _config;
 
-    /// Constructor
     public AccountController(AccountService service, AppConfiguration config)
     {
       _config = config;
       _service = service;
     }
 
-    /// Get user details
     [Authorize]
     [HttpGet]
     public IActionResult Get() => Ok(_service.GetById(UserId));
 
-    /// Create new Account
     [HttpPost]
     public IActionResult Post([FromBody]AccountModel model)
     {

@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using Cashflow.Api.Infra.Entity;
 
 namespace Cashflow.Api.Models

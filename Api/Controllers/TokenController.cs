@@ -1,13 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Security.Claims;
 using Cashflow.Api.Auth;
 using Cashflow.Api.Infra;
 using Cashflow.Api.Models;
 using Cashflow.Api.Shared;
 using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Examples;
 
 namespace Cashflow.Api.Controllers
 {
@@ -35,7 +33,6 @@ namespace Cashflow.Api.Controllers
     /// <response code="500">Erro interno no servidor</response>
     /// <response code="401">Não autorizado</response>
     [HttpPost]
-    [SwaggerResponseExample((int)HttpStatusCode.OK, typeof(JwtToken))]
     public IActionResult Post([FromBody]LoginModel model)
     {
       if (model is null || string.IsNullOrEmpty(model.Email) || string.IsNullOrEmpty(model.Password))

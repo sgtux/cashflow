@@ -2,7 +2,6 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Rest;
 using Newtonsoft.Json;
 
 namespace Cashflow.Api.Shared

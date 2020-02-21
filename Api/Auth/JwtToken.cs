@@ -3,7 +3,6 @@ using System.IdentityModel.Tokens.Jwt;
 
 namespace Cashflow.Api.Auth
 {
-  /// Jwt Token
   public sealed class JwtToken
   {
     private JwtSecurityToken token;
@@ -13,10 +12,8 @@ namespace Cashflow.Api.Auth
       this.token = token;
     }
 
-    /// Date expires token
     public DateTime ValidTo => token.ValidTo;
 
-    /// Token
     public string Value => new JwtSecurityTokenHandler().WriteToken(token);
   }
 }
