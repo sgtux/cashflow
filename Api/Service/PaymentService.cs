@@ -26,7 +26,7 @@ namespace Cashflow.Api.Service
     }
 
     /// Obter pagamentos por usuário
-    public IEnumerable<Payment> GetByUser(int userId) => _paymentRepository.GetByUser(userId);
+    public IEnumerable<Payment> GetByUser(int userId) => _paymentRepository.GetByUser(userId).Result;
 
     /// Obter os pagamentos futuros agrupados pelo mês
     public Dictionary<string, PaymentFutureResultModel> GetFuturePayments(int userId, DateTime forecastAt)
@@ -49,7 +49,7 @@ namespace Cashflow.Api.Service
         months++;
       }
 
-      var payments = _paymentRepository.GetByUser(userId);
+      var payments = _paymentRepository.GetByUser(userId).Result;
 
       dates.OrderBy(p => p.Ticks).ToList().ForEach(date =>
       {
@@ -134,7 +134,6 @@ namespace Cashflow.Api.Service
       ValidatePayment(payment);
       payment.UserId = userId;
       _paymentRepository.Add(payment);
-      _paymentRepository.Save();
     }
 
     /// <summary>
@@ -144,12 +143,11 @@ namespace Cashflow.Api.Service
     {
       ValidatePayment(payment);
       payment.UserId = userId;
-      var paymentDb = _paymentRepository.GetById(payment.Id);
+      var paymentDb = _paymentRepository.GetById(payment.Id).Result;
       if (paymentDb is null || paymentDb.UserId != payment.UserId)
         ThrowValidationError("Pagamento não localizado.");
       payment.MapperTo(paymentDb);
       _paymentRepository.Update(paymentDb);
-      _paymentRepository.Save();
     }
 
     /// <summary>
@@ -157,12 +155,11 @@ namespace Cashflow.Api.Service
     /// </summary>
     public void Remove(int paymentId, int userId)
     {
-      var payment = _paymentRepository.GetById(paymentId);
+      var payment = _paymentRepository.GetById(paymentId).Result;
       if (payment is null || payment.UserId != userId)
         ThrowValidationError("Pagamento não localizado.");
 
       _paymentRepository.Remove(paymentId);
-      _paymentRepository.Save();
     }
 
     private void ValidatePayment(Payment payment)
@@ -193,7 +190,7 @@ namespace Cashflow.Api.Service
         cardId = payment.CreditCardId.HasValue ? payment.CreditCardId.Value : 0;
       if (cardId > 0)
       {
-        var card = _creditCardRepository.GetById(cardId);
+        var card = _creditCardRepository.GetById(cardId).Result;
         if (card is null || card.UserId != payment.UserId)
           ThrowValidationError("Cartão não localizado.");
       }

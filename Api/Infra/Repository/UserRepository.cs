@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
-using Api.Extensions;
+using System.Threading.Tasks;
 using Api.Infra.Resources.User;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Shared;
@@ -12,46 +11,32 @@ namespace Cashflow.Api.Infra.Repository
   {
     public UserRepository(AppConfig config) : base(config) { }
 
-    public bool UserExists(int userId) => userId > 0;
-
-    public User FindByNameEmail(string name, string email) => new User();
-
-    public User FindByEmail(string email)
+    public async Task<User> FindByEmail(string email)
     {
-      return FirstOrDefault(UserResources.GetByEmail, new { Email = email }).Result;
+      return await FirstOrDefault(UserResources.ByEmail, new { Email = email });
     }
 
-    public User GetById(int id)
+    public async Task<User> GetById(int id)
     {
-      throw new NotImplementedException();
+      return await FirstOrDefault(UserResources.ById, new { Id = id });
     }
 
-    public IEnumerable<User> GetAll()
+    public async Task<IEnumerable<User>> GetAll()
     {
-      throw new NotImplementedException();
+      return await Many(UserResources.All);
     }
 
-    public IEnumerable<User> GetSome(Expression<Func<User, bool>> expressions)
+    public Task Add(User t)
     {
       throw new NotImplementedException();
     }
 
-    public void Add(User t)
+    public Task Update(User t)
     {
       throw new NotImplementedException();
     }
 
-    public void Update(User t)
-    {
-      throw new NotImplementedException();
-    }
-
-    public void Remove(int id)
-    {
-      throw new NotImplementedException();
-    }
-
-    public void Save()
+    public Task Remove(int id)
     {
       throw new NotImplementedException();
     }

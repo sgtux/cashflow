@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Shared;
 
@@ -10,41 +11,36 @@ namespace Cashflow.Api.Infra.Repository
   {
     public CreditCardRepository(AppConfig config) : base(config) { }
 
-    public void Add(CreditCard t)
+    public Task Add(CreditCard t)
     {
       throw new NotImplementedException();
     }
 
-    public IEnumerable<CreditCard> GetAll()
+    public Task<IEnumerable<CreditCard>> GetAll()
     {
       throw new NotImplementedException();
     }
 
-    public CreditCard GetById(int id)
+    public Task<CreditCard> GetById(int id)
     {
       throw new NotImplementedException();
     }
 
-    public IEnumerable<CreditCard> GetByUserId(int userId) => new List<CreditCard>();
+    public Task<IEnumerable<CreditCard>> GetByUserId(int userId) => throw new NotImplementedException();
 
-    public IEnumerable<CreditCard> GetSome(Expression<Func<CreditCard, bool>> expressions)
+    public Task<IEnumerable<CreditCard>> GetSome(Expression<Func<CreditCard, bool>> expressions)
     {
       throw new NotImplementedException();
     }
 
-    public bool HasPayments(int cardId) => cardId > 0;
+    public Task<bool> HasPayments(int cardId) => throw new NotImplementedException();
 
-    public void Remove(int id)
+    public Task Remove(int id)
     {
       throw new NotImplementedException();
     }
 
-    public void Save()
-    {
-      throw new NotImplementedException();
-    }
-
-    public void Update(CreditCard t)
+    public Task Update(CreditCard t)
     {
       throw new NotImplementedException();
     }

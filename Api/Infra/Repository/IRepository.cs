@@ -1,31 +1,20 @@
-using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Cashflow.Api.Infra.Repository
 {
-  /// Contract for all repositories
   public interface IRepository<T> where T : class
   {
-    /// Get by Id
-    T GetById(int id);
+    Task<bool> Exists(long userId);
+    
+    Task<T> GetById(int id);
 
-    /// Get all entities
-    IEnumerable<T> GetAll();
+    Task<IEnumerable<T>> GetAll();
 
-    /// Get some entities
-    IEnumerable<T> GetSome(Expression<Func <T, bool>> expressions);
+    Task Add(T t);
 
-    /// Insert entity
-    void Add(T t);
+    Task Update(T t);
 
-    /// Update entity
-    void Update(T t);
-
-    /// Remove entity   
-    void Remove(int id);
-
-    /// Save changes in database
-    void Save();
+    Task Remove(int id);
   }
 }

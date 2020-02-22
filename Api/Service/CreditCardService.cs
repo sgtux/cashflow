@@ -25,14 +25,14 @@ namespace Cashflow.Api.Service
     /// <summary>
     /// Get all credit cards of the logged in user
     /// </summary>
-    public IEnumerable<CreditCard> GetByUser(int userId) => _creditCardRepository.GetByUserId(userId);
+    public IEnumerable<CreditCard> GetByUser(int userId) => _creditCardRepository.GetByUserId(userId).Result;
 
     /// <summary>
     /// Insert a new credit card for the logged in user
     /// </summary>
     public void Add(string name, int userId)
     {
-      if (!_userRepository.UserExists(userId))
+      if (!_userRepository.Exists(userId).Result)
         ThrowValidationError("Usuário não localizado.");
       if (string.IsNullOrEmpty(name))
         ThrowValidationError("O nome do cartão é obrigatório.");
@@ -41,7 +41,6 @@ namespace Cashflow.Api.Service
         Name = name,
         UserId = userId
       });
-      _creditCardRepository.Save();
     }
 
     /// <summary>
@@ -52,13 +51,12 @@ namespace Cashflow.Api.Service
       if (string.IsNullOrEmpty(card.Name))
         ThrowValidationError("O nome do cartão é obrigatório.");
 
-      var dbCard = _creditCardRepository.GetByUserId(card.UserId).FirstOrDefault(p => p.Id == card.Id);
+      var dbCard = _creditCardRepository.GetByUserId(card.UserId).Result.FirstOrDefault(p => p.Id == card.Id);
       if (dbCard is null)
         ThrowValidationError("Cartão não localizado.");
 
       dbCard.Name = card.Name;
       _creditCardRepository.Update(dbCard);
-      _creditCardRepository.Save();
     }
 
     /// <summary>
@@ -66,15 +64,14 @@ namespace Cashflow.Api.Service
     /// </summary>
     public void Remove(int id, int userId)
     {
-      var card = _creditCardRepository.GetByUserId(userId).FirstOrDefault(p => p.Id == id);
+      var card = _creditCardRepository.GetByUserId(userId).Result.FirstOrDefault(p => p.Id == id);
       if (card is null)
         ThrowValidationError("Cartão não localizado.");
 
-      if (_creditCardRepository.HasPayments(id))
+      if (_creditCardRepository.HasPayments(id).Result)
         ThrowValidationError("O cartão possui pagamentos vinculados e não pode ser excluído.");
 
       _creditCardRepository.Remove(id);
-      _creditCardRepository.Save();
     }
   }
 }

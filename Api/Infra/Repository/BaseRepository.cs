@@ -39,15 +39,25 @@ namespace Cashflow.Api.Infra.Repository
     {
       query = await query.GetResource();
       Connection.Open();
-      return await Connection.QuerySingleAsync<T>(query, parameters);
+      return await Connection.QueryFirstOrDefaultAsync<T>(query, parameters);
     }
 
-    protected Task<IEnumerable<T>> Many(string query, object parameters)
+    protected Task<IEnumerable<T>> Many(string query, object parameters = null)
     {
       using (IDbConnection conn = Connection)
       {
         conn.Open();
         return conn.QueryAsync<T>(query, parameters);
+      }
+    }
+
+    public async Task<bool> Exists(long id)
+    {
+      var query = $"SELECT COUNT(1) FROM \"{typeof(T).Name}\" WHERE \"Id\" = @Id";
+      using (IDbConnection conn = Connection)
+      {
+        conn.Open();
+        return await conn.ExecuteScalarAsync<long>(query, new { Id = id }) > 0;
       }
     }
   }

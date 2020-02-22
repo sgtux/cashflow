@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Infra.Repository;
 using Cashflow.Api.Models;
@@ -15,10 +16,10 @@ namespace Cashflow.Api.Service
     public UserDataModel GetById(int userId)
     {
       var user = _userRepository.GetById(userId);
-      return new UserDataModel(user);
+      return new UserDataModel(user.Result);
     }
 
-    public UserDataModel Add(AccountModel model)
+    public async Task<UserDataModel> Add(AccountModel model)
     {
 
       if (string.IsNullOrEmpty(model.Email) || !model.Email.Contains("@") || model.Email.Length < 5)
@@ -30,14 +31,10 @@ namespace Cashflow.Api.Service
       if (string.IsNullOrEmpty(model.Password) || model.Password.Length < 4)
         ThrowValidationError("Informe uma senha de pelo menos 4 dígitos.");
 
-      User user = _userRepository.FindByNameEmail(model.Name, model.Email);
+      User user = await _userRepository.FindByEmail(model.Email);
 
       if (user != null)
-      {
-        if (user.Name == model.Name)
-          ThrowValidationError("O nome informado já está sendo usado.");
         ThrowValidationError("O email informado já está sendo usado.");
-      }
 
       user = new User();
       user.Name = model.Name;
@@ -45,18 +42,17 @@ namespace Cashflow.Api.Service
       user.Password = Utils.Sha1(model.Password);
       user.CreatedAt = DateTime.Now;
 
-      _userRepository.Add(user);
-      _userRepository.Save();
+      await _userRepository.Add(user);
 
-      user = _userRepository.FindByEmail(model.Email);
+      user = await _userRepository.FindByEmail(model.Email);
 
       return new UserDataModel(user);
     }
 
-    public User Login(string email, string password)
+    public async Task<User> Login(string email, string password)
     {
       password = Utils.Sha1(password);
-      var user = _userRepository.FindByEmail(email);
+      var user = await _userRepository.FindByEmail(email);
       return user?.Password == password ? user : null;
     }
   }

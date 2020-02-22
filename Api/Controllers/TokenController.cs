@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using Cashflow.Api.Auth;
 using Cashflow.Api.Infra;
 using Cashflow.Api.Infra.Repository;
@@ -36,12 +37,12 @@ namespace Cashflow.Api.Controllers
     /// <response code="500">Erro interno no servidor</response>
     /// <response code="401">Não autorizado</response>
     [HttpPost]
-    public IActionResult Post([FromBody]LoginModel model)
+    public async Task<IActionResult> Post([FromBody]LoginModel model)
     {
       if (model is null || string.IsNullOrEmpty(model.Email) || string.IsNullOrEmpty(model.Password))
         return Unauthorized();
 
-      var user = _accountService.Login(model.Email, model.Password);
+      var user = await _accountService.Login(model.Email, model.Password);
       if (user == null || user.Password != Utils.Sha1(model.Password))
         return Unauthorized();
 

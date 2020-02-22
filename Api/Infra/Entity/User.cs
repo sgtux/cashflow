@@ -17,8 +17,6 @@ namespace Cashflow.Api.Infra.Entity
 
     public DateTime? UpdatedAt { get; set; }
 
-    public DateTime LastAccess { get; set; }
-
     public ICollection<Payment> Payments { get; set; }
   }
 }

@@ -6,4 +6,4 @@ SELECT
     "CreatedAt",
     "UpdatedAt"
 FROM "User"
-WHERE "Email" = @Email
+WHERE "Id" = @Id

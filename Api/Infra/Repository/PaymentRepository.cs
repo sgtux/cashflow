@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Shared;
 
@@ -10,42 +11,32 @@ namespace Cashflow.Api.Infra.Repository
   {
     public PaymentRepository(AppConfig config) : base(config) { }
 
-    public IEnumerable<Payment> GetByUser(int userId)
-    {
-      return new List<Payment>();
-    }
-
-    public Payment GetById(int id)
+    public Task<IEnumerable<Payment>> GetByUser(int userId)
     {
       throw new NotImplementedException();
     }
 
-    public IEnumerable<Payment> GetAll()
+    public Task<Payment> GetById(int id)
     {
       throw new NotImplementedException();
     }
 
-    public IEnumerable<Payment> GetSome(Expression<Func<Payment, bool>> expressions)
+    public Task<IEnumerable<Payment>> GetAll()
     {
       throw new NotImplementedException();
     }
 
-    public void Add(Payment t)
+    public Task Add(Payment t)
     {
       throw new NotImplementedException();
     }
 
-    public void Update(Payment t)
+    public Task Update(Payment t)
     {
       throw new NotImplementedException();
     }
 
-    public void Remove(int id)
-    {
-      throw new NotImplementedException();
-    }
-
-    public void Save()
+    public Task Remove(int id)
     {
       throw new NotImplementedException();
     }
