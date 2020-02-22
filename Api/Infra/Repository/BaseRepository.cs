@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
+using Api.Extensions;
 using Cashflow.Api.Shared;
 using Dapper;
 using Npgsql;
@@ -34,10 +35,11 @@ namespace Cashflow.Api.Infra.Repository
       }
     }
 
-    protected Task<T> FirstOrDefault(string query, object parameters)
+    protected async Task<T> FirstOrDefault(string query, object parameters)
     {
+      query = await query.GetResource();
       Connection.Open();
-      return Connection.QuerySingleAsync<T>(query, parameters);
+      return await Connection.QuerySingleAsync<T>(query, parameters);
     }
 
     protected Task<IEnumerable<T>> Many(string query, object parameters)

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using Api.Extensions;
+using Api.Infra.Resources.User;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Shared;
 
@@ -16,7 +18,7 @@ namespace Cashflow.Api.Infra.Repository
 
     public User FindByEmail(string email)
     {
-      return FirstOrDefault("SELECT * FROM \"User\" WHERE email = @Email", new { Email = email }).Result;
+      return FirstOrDefault(UserResources.GetByEmail, new { Email = email }).Result;
     }
 
     public User GetById(int id)
