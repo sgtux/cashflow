@@ -13,13 +13,13 @@ namespace Cashflow.Tests.Mocks
 
     public void Add(Payment t) => Payments.Add(t);
 
-    public List<Payment> GetAll() => Payments;
+    public IEnumerable<Payment> GetAll() => Payments;
 
     public Payment GetById(int id) => Payments.FirstOrDefault(p => p.Id == id);
 
-    public List<Payment> GetByUser(int userId) => Payments.Where(p => p.UserId == userId).ToList();
+    public IEnumerable<Payment> GetByUser(int userId) => Payments.Where(p => p.UserId == userId);
 
-    public List<Payment> GetSome(Expression<Func<Payment, bool>> expressions) => throw new NotImplementedException();
+    public IEnumerable<Payment> GetSome(Expression<Func<Payment, bool>> expressions) => throw new NotImplementedException();
 
     public void Remove(int id)
     {

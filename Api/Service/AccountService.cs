@@ -52,5 +52,11 @@ namespace Cashflow.Api.Service
 
       return new UserDataModel(user);
     }
+
+    public User Login(string email, string password)
+    {
+      var user = _userRepository.FindByEmail(email);
+      return user?.Password == password ? user : null;
+    }
   }
 }

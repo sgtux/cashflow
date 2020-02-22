@@ -1,46 +1,54 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using Microsoft.EntityFrameworkCore;
+using System.Data;
+using System.Threading.Tasks;
+using Dapper;
+using Npgsql;
 
 namespace Cashflow.Api.Infra.Repository
 {
-  /// Base repository class
-  public abstract class BaseRepository<T> : IRepository<T> where T : class
+  public abstract class BaseRepository<T> where T : class
   {
-    /// Context for database interactions
-    protected AppDbContext _context;
+    private NpgsqlConnection _connection;
 
-    /// To facilitate database interactions
-    protected DbSet<T> _dbSet;
+    private DbConfig _dbConfig;
 
-    /// Constructor
-    public BaseRepository(AppDbContext context)
+    public BaseRepository(DbConfig dbConfig) => _dbConfig = dbConfig;
+
+    public IDbConnection Connection
     {
-      _context = context;
-      _dbSet = _context.Set<T>();
+      get
+      {
+        if (_connection == null)
+          _connection = new NpgsqlConnection(_dbConfig.ConnectionString);
+        return _connection;
+      }
     }
 
-    /// Get entity by primary key
-    public T GetById(int id) => _dbSet.Find(id);
+    protected Task<T> FirstOrDefault(string query, object parameters) 
+    {
+      using (IDbConnection conn = Connection)
+      {
+        conn.Open();
+        return conn.QueryFirstOrDefaultAsync<T>(query, parameters);
+      }
+    }
 
-    /// Get all entities
-    public virtual List<T> GetAll() => _dbSet.ToList();
+    protected Task Execute(string query, object parameters)
+    {
+      using (IDbConnection conn = Connection)
+      {
+        conn.Open();
+        return conn.QueryFirstOrDefaultAsync<T>(query, parameters);
+      }
+    }
 
-    /// Get some entities
-    public List<T> GetSome(Expression<Func<T, bool>> expression) => _dbSet.Where(expression).ToList();
-
-    /// Insert entity
-    public void Add(T t) => _dbSet.Add(t);
-
-    /// Remove Entity
-    public void Remove(int id) => _dbSet.Remove(GetById(id));
-
-    /// Update entity
-    public void Update(T t) => _dbSet.Update(t);
-
-    /// Save changes in database
-    public void Save() => _context.SaveChanges();
+    protected Task<IEnumerable<T>> QueryMany(string query, object parameters)
+    {
+      using (IDbConnection conn = Connection)
+      {
+        conn.Open();
+        return conn.QueryAsync<T>(query, parameters);
+      }
+    }
   }
 }

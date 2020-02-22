@@ -1,24 +1,55 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using Cashflow.Api.Infra.Entity;
-using Microsoft.EntityFrameworkCore;
 
 namespace Cashflow.Api.Infra.Repository
 {
-  /// Payment repository
   public class PaymentRepository : BaseRepository<Payment>, IPaymentRepository
   {
-    /// Constructor
-    public PaymentRepository(AppDbContext context) : base(context) { }
+    public PaymentRepository(DbConfig config) : base(config) { }
 
-    /// Get payments by user id  
-    public List<Payment> GetByUser(int userId)
+    public IEnumerable<Payment> GetByUser(int userId)
     {
-      return _context.Payment.Include(p => p.CreditCard).Where(p => p.UserId == userId).ToList();
+      return new List<Payment>();
     }
 
-    /// Get current date time
+    public Payment GetById(int id)
+    {
+      throw new NotImplementedException();
+    }
+
+    public IEnumerable<Payment> GetAll()
+    {
+      throw new NotImplementedException();
+    }
+
+    public IEnumerable<Payment> GetSome(Expression<Func<Payment, bool>> expressions)
+    {
+      throw new NotImplementedException();
+    }
+
+    public void Add(Payment t)
+    {
+      throw new NotImplementedException();
+    }
+
+    public void Update(Payment t)
+    {
+      throw new NotImplementedException();
+    }
+
+    public void Remove(int id)
+    {
+      throw new NotImplementedException();
+    }
+
+    public void Save()
+    {
+      throw new NotImplementedException();
+    }
+
     public DateTime CurrentDate => DateTime.Now;
   }
 }

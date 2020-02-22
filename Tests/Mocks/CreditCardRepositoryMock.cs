@@ -11,13 +11,13 @@ namespace Cashflow.Tests.Mocks
   {
     public void Add(CreditCard t) => CreditCards.Add(t);
 
-    public List<CreditCard> GetAll() => CreditCards;
+    public IEnumerable<CreditCard> GetAll() => CreditCards;
 
     public CreditCard GetById(int id) => CreditCards.FirstOrDefault(p => p.Id == id);
 
-    public List<CreditCard> GetByUserId(int userId) => CreditCards.Where(p => p.UserId == userId).ToList();
+    public IEnumerable<CreditCard> GetByUserId(int userId) => CreditCards.Where(p => p.UserId == userId).ToList();
 
-    public List<CreditCard> GetSome(Expression<Func<CreditCard, bool>> expressions)
+    public IEnumerable<CreditCard> GetSome(Expression<Func<CreditCard, bool>> expressions)
     {
       throw new NotImplementedException();
     }

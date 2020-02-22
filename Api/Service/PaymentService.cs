@@ -26,7 +26,7 @@ namespace Cashflow.Api.Service
     }
 
     /// Obter pagamentos por usuário
-    public List<Payment> GetByUser(int userId) => _paymentRepository.GetByUser(userId);
+    public IEnumerable<Payment> GetByUser(int userId) => _paymentRepository.GetByUser(userId);
 
     /// Obter os pagamentos futuros agrupados pelo mês
     public Dictionary<string, PaymentFutureResultModel> GetFuturePayments(int userId, DateTime forecastAt)
@@ -55,7 +55,7 @@ namespace Cashflow.Api.Service
       {
         var startDate = new DateTime(date.Year, date.Month, 1).AddMonths(1).AddDays(-1);
         var paymentsMonth = new List<PaymentFutureModel>();
-        payments.ForEach(p =>
+        foreach(var p in payments)
         {
           var paymentMonths = GetMonthsFromPayment(p);
           if (paymentMonths.Contains(date.ToString("MM/yyyy")) || (p.FixedPayment && p.FirstPayment < startDate))
@@ -116,7 +116,7 @@ namespace Cashflow.Api.Service
               || (paymentModel.IsCreditCard && !paymentsMonth.Any(x => x.Description == paymentModel.Description)))
               paymentsMonth.Add(paymentModel);
           }
-        });
+        }
         var resultModel = new PaymentFutureResultModel();
         resultModel.Payments = paymentsMonth;
         result.Add(date.ToString("MM/yyyy"), resultModel);

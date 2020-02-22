@@ -27,7 +27,7 @@ namespace Cashflow.Api.Controllers
     /// </summary>
     /// <returns></returns>
     [HttpGet]
-    public List<Payment> Get() => _service.GetByUser(UserId);
+    public IEnumerable<Payment> Get() => _service.GetByUser(UserId);
 
     /// <summary>
     /// Obter os pagamentos usuário logado

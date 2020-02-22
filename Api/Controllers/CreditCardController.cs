@@ -25,7 +25,7 @@ namespace Cashflow.Api.Controllers
     /// </summary>
     /// <returns></returns>
     [HttpGet]
-    public List<CreditCard> Get() => _service.GetByUser(UserId);
+    public IEnumerable<CreditCard> Get() => _service.GetByUser(UserId);
 
     /// <summary>
     /// Inserir um novo cartão de crédito para o usuário logado

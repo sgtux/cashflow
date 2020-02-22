@@ -25,7 +25,7 @@ namespace Cashflow.Api.Service
     /// <summary>
     /// Get all credit cards of the logged in user
     /// </summary>
-    public List<CreditCard> GetByUser(int userId) => _creditCardRepository.GetByUserId(userId);
+    public IEnumerable<CreditCard> GetByUser(int userId) => _creditCardRepository.GetByUserId(userId);
 
     /// <summary>
     /// Insert a new credit card for the logged in user

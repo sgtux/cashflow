@@ -1,10 +1,8 @@
 ﻿using System;
 using Cashflow.Api.Extensions;
-using Cashflow.Api.Infra;
 using Cashflow.Api.Shared;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -12,7 +10,6 @@ using Microsoft.OpenApi.Models;
 
 namespace Cashflow.Api
 {
-#pragma warning disable CS1591
   public class Startup
   {
     private IHostEnvironment _env;
@@ -39,15 +36,15 @@ namespace Cashflow.Api
       {
         connectionString = Configuration.GetConnectionString("FinanceDB");
         jwtKey = Configuration["FinanceJwtKey"];
-        services.AddDbContext<AppDbContext>(options =>
-        options.UseNpgsql(connectionString));
+        // services.AddDbContext<AppDbContext>(options =>
+        // options.UseNpgsql(connectionString));
       }
       else
       {
         connectionString = Environment.GetEnvironmentVariable("FinanceDB");
         jwtKey = Configuration["FinanceJwtKey"];
-        services.AddDbContext<AppDbContext>(options =>
-        options.UseNpgsql(connectionString));
+        // services.AddDbContext<AppDbContext>(options =>
+        // options.UseNpgsql(connectionString));
       }
 
       services.AddControllers();

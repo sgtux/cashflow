@@ -3,7 +3,9 @@ using System.Linq;
 using System.Security.Claims;
 using Cashflow.Api.Auth;
 using Cashflow.Api.Infra;
+using Cashflow.Api.Infra.Repository;
 using Cashflow.Api.Models;
+using Cashflow.Api.Service;
 using Cashflow.Api.Shared;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,15 +17,16 @@ namespace Cashflow.Api.Controllers
   [Route("api/token")]
   public class TokenController : Controller
   {
-    private AppDbContext _context;
     private AppConfiguration _config;
+
+    private AccountService _accountService;
 
     /// <summary>
     /// Constructor
     /// </summary>
-    public TokenController(AppDbContext context, AppConfiguration config)
+    public TokenController(AccountService accountService, AppConfiguration config)
     {
-      _context = context;
+      _accountService = accountService;
       _config = config;
     }
 
@@ -38,7 +41,7 @@ namespace Cashflow.Api.Controllers
       if (model is null || string.IsNullOrEmpty(model.Email) || string.IsNullOrEmpty(model.Password))
         return Unauthorized();
 
-      var user = _context.User.FirstOrDefault(p => p.Email == model.Email);
+      var user = _accountService.Login(model.Email, model.Password);
       if (user == null || user.Password != Utils.Sha1(model.Password))
         return Unauthorized();
 

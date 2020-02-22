@@ -14,11 +14,11 @@ namespace Cashflow.Tests.Mocks
       Users.Add(t);
     }
 
-    public List<User> GetAll() => Users;
+    public IEnumerable<User> GetAll() => Users;
 
     public User GetById(int id) => Users.FirstOrDefault(p => p.Id == id);
 
-    public List<User> GetSome(Expression<Func<User, bool>> expressions)
+    public IEnumerable<User> GetSome(Expression<Func<User, bool>> expressions)
     {
       throw new NotImplementedException();
     }

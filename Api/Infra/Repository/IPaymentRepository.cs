@@ -3,13 +3,10 @@ using Cashflow.Api.Infra.Entity;
 
 namespace Cashflow.Api.Infra.Repository
 {
-  /// Payment repository contract
   public interface IPaymentRepository : IRepository<Payment>
   {
-    /// Get payments by user id  
-    List<Payment> GetByUser(int userId);
+    IEnumerable<Payment> GetByUser(int userId);
 
-    /// Get current date time
     System.DateTime CurrentDate { get; }
   }
 }

@@ -11,10 +11,10 @@ namespace Cashflow.Api.Infra.Repository
     T GetById(int id);
 
     /// Get all entities
-    List<T> GetAll();
+    IEnumerable<T> GetAll();
 
     /// Get some entities
-    List<T> GetSome(Expression<Func <T, bool>> expressions);
+    IEnumerable<T> GetSome(Expression<Func <T, bool>> expressions);
 
     /// Insert entity
     void Add(T t);

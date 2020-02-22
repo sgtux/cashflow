@@ -1,21 +1,53 @@
-using System.Linq;
+using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 using Cashflow.Api.Infra.Entity;
 
 namespace Cashflow.Api.Infra.Repository
 {
-  /// User repository
   public class UserRepository : BaseRepository<User>, IUserRepository
   {
-    /// Constructor
-    public UserRepository(AppDbContext context) : base(context) { }
+    public UserRepository(DbConfig config) : base(config) { }
 
-    /// Verify if user exists
-    public bool UserExists(int userId) => _context.User.Any(p => p.Id == userId);
+    public bool UserExists(int userId) => userId > 0;
 
-    /// Find by name or email
-    public User FindByNameEmail(string name, string email) => _context.User.FirstOrDefault(p => p.Email == email || p.Name == name);
+    public User FindByNameEmail(string name, string email) => new User();
 
-    /// Find by email
-    public User FindByEmail(string email) => _context.User.FirstOrDefault(p => p.Email == email);
+    public User FindByEmail(string email) => new User();
+
+    public User GetById(int id)
+    {
+      throw new NotImplementedException();
+    }
+
+    public IEnumerable<User> GetAll()
+    {
+      throw new NotImplementedException();
+    }
+
+    public IEnumerable<User> GetSome(Expression<Func<User, bool>> expressions)
+    {
+      throw new NotImplementedException();
+    }
+
+    public void Add(User t)
+    {
+      throw new NotImplementedException();
+    }
+
+    public void Update(User t)
+    {
+      throw new NotImplementedException();
+    }
+
+    public void Remove(int id)
+    {
+      throw new NotImplementedException();
+    }
+
+    public void Save()
+    {
+      throw new NotImplementedException();
+    }
   }
 }

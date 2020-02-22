@@ -1,3 +1,4 @@
+using System.Linq;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Service;
 using Cashflow.Tests.Mocks;
@@ -18,7 +19,7 @@ namespace Cashflow.Tests
     [TestMethod]
     public void GetAll()
     {
-      var count = _service.GetByUser(1).Count;
+      var count = _service.GetByUser(1).Count();
       Assert.IsTrue(count > 0);
     }
 
