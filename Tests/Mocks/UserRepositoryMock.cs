@@ -1,7 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Infra.Repository;
 
@@ -9,37 +8,41 @@ namespace Cashflow.Tests.Mocks
 {
   public class UserRepositoryMock : BaseRepositoryMock, IUserRepository
   {
-    public void Add(User t)
+    public Task Add(User t)
     {
-      Users.Add(t);
+      return Task.Run(() => Users.Add(t));
     }
 
-    public IEnumerable<User> GetAll() => Users;
+    public Task<IEnumerable<User>> GetAll() => Task.Run(() => Users.AsEnumerable());
 
-    public User GetById(int id) => Users.FirstOrDefault(p => p.Id == id);
+    public Task<User> GetById(int id) => Task.Run(() => Users.FirstOrDefault(p => p.Id == id));
 
-    public IEnumerable<User> GetSome(Expression<Func<User, bool>> expressions)
+    public Task Remove(int id)
     {
-      throw new NotImplementedException();
+      return Task.Run(() =>
+      {
+        var user = Users.FirstOrDefault(p => p.Id == id);
+        if (user != null)
+          Users.Remove(user);
+      });
     }
 
-    public void Remove(int id)
+    public Task Update(User t)
     {
-      var user = Users.FirstOrDefault(p => p.Id == id);
-      if (user != null)
-        Users.Remove(user);
+      return Task.Run(() =>
+      {
+        var user = Users.FirstOrDefault(p => p.Id == t.Id);
+        user.Email = t.Email;
+        user.Password = t.Password;
+        user.CreatedAt = t.CreatedAt;
+        user.UpdatedAt = t.UpdatedAt;
+      });
     }
 
-    public void Save() { }
+    public Task<bool> Exists(long userId) => Task.Run(() => Users.Any(p => p.Id == userId));
 
-    public void Update(User t)
-    {
-      throw new NotImplementedException();
-    }
+    public Task<User> FindByNameEmail(string name, string email) => Task.Run(() => Users.FirstOrDefault(p => p.Email == email || p.Name == name));
 
-    public bool UserExists(int userId) => Users.Any(p => p.Id == userId);
-
-    public User FindByNameEmail(string name, string email) => Users.FirstOrDefault(p => p.Email == email || p.Name == name);
-    public User FindByEmail(string email) => Users.FirstOrDefault(p => p.Email == email);
+    public Task<User> FindByEmail(string email) => Task.Run(() => Users.FirstOrDefault(p => p.Email == email));
   }
 }
