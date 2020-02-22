@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using Cashflow.Api.Infra.Entity;
+using Cashflow.Api.Shared;
 
 namespace Cashflow.Api.Infra.Repository
 {
   public class PaymentRepository : BaseRepository<Payment>, IPaymentRepository
   {
-    public PaymentRepository(DbConfig config) : base(config) { }
+    public PaymentRepository(AppConfig config) : base(config) { }
 
     public IEnumerable<Payment> GetByUser(int userId)
     {

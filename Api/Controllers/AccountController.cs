@@ -16,9 +16,9 @@ namespace Cashflow.Api.Controllers
   {
     private AccountService _service;
 
-    private AppConfiguration _config;
+    private AppConfig _config;
 
-    public AccountController(AccountService service, AppConfiguration config)
+    public AccountController(AccountService service, AppConfig config)
     {
       _config = config;
       _service = service;

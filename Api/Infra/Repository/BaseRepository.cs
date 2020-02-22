@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
+using Cashflow.Api.Shared;
 using Dapper;
 using Npgsql;
 
@@ -10,26 +11,17 @@ namespace Cashflow.Api.Infra.Repository
   {
     private NpgsqlConnection _connection;
 
-    private DbConfig _dbConfig;
+    private string _connectionString;
 
-    public BaseRepository(DbConfig dbConfig) => _dbConfig = dbConfig;
+    protected BaseRepository(AppConfig config) => _connectionString = config.ConnectionString;
 
-    public IDbConnection Connection
+    private IDbConnection Connection
     {
       get
       {
         if (_connection == null)
-          _connection = new NpgsqlConnection(_dbConfig.ConnectionString);
+          _connection = new NpgsqlConnection(_connectionString);
         return _connection;
-      }
-    }
-
-    protected Task<T> FirstOrDefault(string query, object parameters) 
-    {
-      using (IDbConnection conn = Connection)
-      {
-        conn.Open();
-        return conn.QueryFirstOrDefaultAsync<T>(query, parameters);
       }
     }
 
@@ -42,7 +34,13 @@ namespace Cashflow.Api.Infra.Repository
       }
     }
 
-    protected Task<IEnumerable<T>> QueryMany(string query, object parameters)
+    protected Task<T> FirstOrDefault(string query, object parameters)
+    {
+      Connection.Open();
+      return Connection.QuerySingleAsync<T>(query, parameters);
+    }
+
+    protected Task<IEnumerable<T>> Many(string query, object parameters)
     {
       using (IDbConnection conn = Connection)
       {

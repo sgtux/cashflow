@@ -34,24 +34,20 @@ namespace Cashflow.Api
       string jwtKey = null;
       if (_env.IsDevelopment())
       {
-        connectionString = Configuration.GetConnectionString("FinanceDB");
-        jwtKey = Configuration["FinanceJwtKey"];
-        // services.AddDbContext<AppDbContext>(options =>
-        // options.UseNpgsql(connectionString));
+        connectionString = Configuration["ConnectionString"];
+        jwtKey = Configuration["JwtKey"];
       }
       else
       {
-        connectionString = Environment.GetEnvironmentVariable("FinanceDB");
-        jwtKey = Configuration["FinanceJwtKey"];
-        // services.AddDbContext<AppDbContext>(options =>
-        // options.UseNpgsql(connectionString));
+        connectionString = Environment.GetEnvironmentVariable("ConnectionString");
+        jwtKey = Environment.GetEnvironmentVariable("JwtKey");
       }
 
       services.AddControllers();
       services.ConfigureScopes();
       services.ConfigureAuthentication(jwtKey);
       services.AddRouting();
-      services.AddSingleton(typeof(AppConfiguration), new AppConfiguration(jwtKey));
+      services.AddSingleton(typeof(AppConfig), new AppConfig(jwtKey, connectionString));
 
       services.AddSwaggerGen(c =>
       {

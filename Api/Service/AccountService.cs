@@ -55,6 +55,7 @@ namespace Cashflow.Api.Service
 
     public User Login(string email, string password)
     {
+      password = Utils.Sha1(password);
       var user = _userRepository.FindByEmail(email);
       return user?.Password == password ? user : null;
     }

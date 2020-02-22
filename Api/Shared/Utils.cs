@@ -9,9 +9,8 @@ namespace Cashflow.Api.Shared
     /// Generate sha1 from input
     public static string Sha1(string input)
     {
-      SHA1 sha = new SHA1CryptoServiceProvider();
       byte[] data = System.Text.Encoding.ASCII.GetBytes(input);
-      byte[] hash = sha.ComputeHash(data);
+      byte[] hash = new SHA1CryptoServiceProvider().ComputeHash(data);
 
       StringBuilder sb = new StringBuilder();
       for (int i = 0; i < hash.Length; i++)

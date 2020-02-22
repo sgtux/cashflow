@@ -2,12 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using Cashflow.Api.Infra.Entity;
+using Cashflow.Api.Shared;
 
 namespace Cashflow.Api.Infra.Repository
 {
   public class CreditCardRepository : BaseRepository<CreditCard>, ICreditCardRepository
   {
-    public CreditCardRepository(DbConfig config) : base(config) { }
+    public CreditCardRepository(AppConfig config) : base(config) { }
 
     public void Add(CreditCard t)
     {
