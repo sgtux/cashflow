@@ -146,7 +146,7 @@ namespace Cashflow.Api.Service
       var paymentDb = _paymentRepository.GetById(payment.Id).Result;
       if (paymentDb is null || paymentDb.UserId != payment.UserId)
         ThrowValidationError("Pagamento não localizado.");
-      payment.MapperTo(paymentDb);
+      payment.Map(paymentDb);
       _paymentRepository.Update(paymentDb);
     }
 

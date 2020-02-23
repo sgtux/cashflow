@@ -6,18 +6,15 @@ using Newtonsoft.Json;
 
 namespace Cashflow.Api.Shared
 {
-  /// App exception handler
   public class ExceptionHandler
   {
     private readonly RequestDelegate next;
 
-    /// Constructor
     public ExceptionHandler(RequestDelegate next)
     {
       this.next = next;
     }
 
-    /// Invoked by middleware on exception
     public async Task Invoke(HttpContext context)
     {
       try
@@ -36,8 +33,12 @@ namespace Cashflow.Api.Shared
       HttpStatusCode statusCode = HttpStatusCode.InternalServerError;
 
       if (exception is ValidateException)
+      {
         statusCode = HttpStatusCode.BadRequest;
-      result = JsonConvert.SerializeObject(new { error = exception.Message });
+        result = JsonConvert.SerializeObject(new { error = exception.Message });
+      }
+      else
+        result = JsonConvert.SerializeObject(new { exception });
 
       context.Response.ContentType = "application/json";
       context.Response.StatusCode = (int)statusCode;

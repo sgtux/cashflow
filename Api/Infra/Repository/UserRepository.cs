@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Api.Infra.Resources.User;
 using Cashflow.Api.Infra.Entity;
+using Cashflow.Api.Infra.Resources.User;
 using Cashflow.Api.Shared;
 
 namespace Cashflow.Api.Infra.Repository
@@ -26,9 +26,9 @@ namespace Cashflow.Api.Infra.Repository
       return await Many(UserResources.All);
     }
 
-    public Task Add(User t)
+    public async Task Add(User t)
     {
-      throw new NotImplementedException();
+      await Execute(UserResources.Insert, t);
     }
 
     public Task Update(User t)

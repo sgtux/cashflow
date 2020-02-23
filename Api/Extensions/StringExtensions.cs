@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Api.Extensions
+namespace Cashflow.Api.Extensions
 {
   public static class StringExtensions
   {

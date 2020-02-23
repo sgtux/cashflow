@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using Cashflow.Api.Auth;
+using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Models;
 using Cashflow.Api.Service;
 using Cashflow.Api.Shared;
@@ -27,19 +29,21 @@ namespace Cashflow.Api.Controllers
     public IActionResult Get() => Ok(_service.GetById(UserId));
 
     [HttpPost]
-    public IActionResult Post([FromBody]AccountModel model)
+    public async Task<IActionResult> Post([FromBody]AccountModel model)
     {
-      var user = _service.Add(model);
-
-      var claims = new Dictionary<string, string>();
-      claims.Add(ClaimTypes.Sid, user.Id.ToString());
-
-      var token = new TokenModel()
+      var user = await _service.Add(model.Map<AccountModel, User>());
+      if (user.IsValid)
       {
-        Token = new JwtTokenBuilder(_config.JwtKey, claims).Build().Value
-      };
+        var claims = new Dictionary<string, string>();
+        claims.Add(ClaimTypes.Sid, user.Id.ToString());
 
-      return Ok(token);
+        var token = new TokenModel()
+        {
+          Token = new JwtTokenBuilder(_config.JwtKey, claims).Build().Value
+        };
+        return Ok(token);
+      }
+      return HandleBadRequest(user);
     }
   }
 }

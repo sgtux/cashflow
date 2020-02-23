@@ -4,6 +4,7 @@ using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Infra.Repository;
 using Cashflow.Api.Models;
 using Cashflow.Api.Shared;
+using Cashflow.Api.Validators;
 
 namespace Cashflow.Api.Service
 {
@@ -19,34 +20,31 @@ namespace Cashflow.Api.Service
       return new UserDataModel(user.Result);
     }
 
-    public async Task<UserDataModel> Add(AccountModel model)
+    public async Task<UserDataModel> Add(User model)
     {
-
-      if (string.IsNullOrEmpty(model.Email) || !model.Email.Contains("@") || model.Email.Length < 5)
-        ThrowValidationError("O email é inválido.");
-
-      if (string.IsNullOrEmpty(model.Name))
-        ThrowValidationError("O nome é obrigatório.");
-
-      if (string.IsNullOrEmpty(model.Password) || model.Password.Length < 4)
-        ThrowValidationError("Informe uma senha de pelo menos 4 dígitos.");
+      var result = new UserDataModel();
+      var validationResults = new UserValidator().Validate(model);
+      if(!validationResults.IsValid)
+      {
+        result.AddNotification(validationResults.Errors);
+        return result;
+      }
 
       User user = await _userRepository.FindByEmail(model.Email);
-
       if (user != null)
-        ThrowValidationError("O email informado já está sendo usado.");
+      {
+        result.AddNotification("The email is already being used.");
+        return result;
+      }
 
-      user = new User();
-      user.Name = model.Name;
-      user.Email = model.Email;
-      user.Password = Utils.Sha1(model.Password);
-      user.CreatedAt = DateTime.Now;
+      model.Password = Utils.Sha1(model.Password);
+      model.CreatedAt = DateTime.Now;
 
-      await _userRepository.Add(user);
-
+      await _userRepository.Add(model);
       user = await _userRepository.FindByEmail(model.Email);
+      user.Map(result);
 
-      return new UserDataModel(user);
+      return result;
     }
 
     public async Task<User> Login(string email, string password)

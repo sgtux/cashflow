@@ -2,13 +2,10 @@ using Cashflow.Api.Infra.Entity;
 
 namespace Cashflow.Api.Models
 {
-  /// User data model
-  public class UserDataModel
+  public class UserDataModel : ResultModel
   {
-    /// Constructor with no parameter
     public UserDataModel() { }
 
-    /// Mapping constructor
     public UserDataModel(User user)
     {
       Id = user.Id;
@@ -16,13 +13,10 @@ namespace Cashflow.Api.Models
       Email = user.Email;
     }
 
-    /// Identifier
     public int Id { get; set; }
 
-    /// Name
     public string Name { get; set; }
 
-    /// Email
     public string Email { get; set; }
   }
 }
