@@ -26,11 +26,13 @@ namespace Cashflow.Api.Controllers
 
     [Authorize]
     [HttpGet]
-    public IActionResult Get() => Ok(_service.GetById(UserId));
+    public async Task<IActionResult> Get() => Ok(await _service.GetById(UserId));
 
     [HttpPost]
     public async Task<IActionResult> Post([FromBody]AccountModel model)
     {
+      if (model is null)
+        return UnprocessableEntity();
       var user = await _service.Add(model.Map<AccountModel, User>());
       if (user.IsValid)
       {
@@ -43,7 +45,7 @@ namespace Cashflow.Api.Controllers
         };
         return Ok(token);
       }
-      return HandleBadRequest(user);
+      return HandleResult(user);
     }
   }
 }

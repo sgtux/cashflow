@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Threading;
 using System.Threading.Tasks;
+using Api.Infra.Resources;
 using Cashflow.Api.Extensions;
 using Cashflow.Api.Shared;
 using Dapper;
@@ -17,25 +18,33 @@ namespace Cashflow.Api.Infra.Repository
 
     protected BaseRepository(AppConfig config) => _connectionString = config.ConnectionString;
 
-    protected async Task Execute(string query, object parameters)
+    protected async Task Execute(ResourceBuilder resource, object parameters = null)
     {
-      query = await query.GetResource();
+      var query = await resource.Build();
       Log(query);
       using (var conn = Connection)
         await conn.ExecuteAsync(query, parameters);
     }
 
-    protected async Task<T> FirstOrDefault(string query, object parameters)
+    public async Task<U> ExecuteScalar<U>(ResourceBuilder resource, object parameters)
     {
-      query = await query.GetResource();
+      var query = await resource.Build();
       Log(query);
       using (var conn = Connection)
-        return await conn.QueryFirstOrDefaultAsync<T>(query, parameters);
+        return await conn.ExecuteScalarAsync<U>(query, parameters);
     }
 
-    protected async Task<IEnumerable<T>> Many(string query, object parameters = null)
+    protected async Task<T> FirstOrDefault(ResourceBuilder resource, object parameters)
     {
-      query = await query.GetResource();
+      var query = await resource.Build();
+      Log(query);
+      using (var conn = Connection)
+        return await conn.QuerySingleOrDefaultAsync<T>(query, parameters);
+    }
+
+    protected async Task<IEnumerable<T>> Many(ResourceBuilder resource, object parameters = null)
+    {
+      var query = await resource.Build();
       Log(query);
       using (var conn = Connection)
         return await conn.QueryAsync<T>(query, parameters);

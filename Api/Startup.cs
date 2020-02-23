@@ -69,6 +69,7 @@ namespace Cashflow.Api
       app.UseMiddleware(typeof(ExceptionHandler));
       app.UseAuthentication();
       app.UseRouting();
+      app.UseAuthorization();
       app.UseSwagger();
 
       app.UseSwaggerUI(c =>

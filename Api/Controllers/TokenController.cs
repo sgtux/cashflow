@@ -43,7 +43,7 @@ namespace Cashflow.Api.Controllers
         return Unauthorized();
 
       var user = await _accountService.Login(model.Email, model.Password);
-      if (user == null || user.Password != Utils.Sha1(model.Password))
+      if (user == null)
         return Unauthorized();
 
       var claims = new Dictionary<string, string>();

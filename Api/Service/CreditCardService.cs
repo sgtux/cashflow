@@ -1,7 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Infra.Repository;
+using Cashflow.Api.Models;
+using Cashflow.Api.Validators;
 
 namespace Cashflow.Api.Service
 {
@@ -25,53 +28,77 @@ namespace Cashflow.Api.Service
     /// <summary>
     /// Get all credit cards of the logged in user
     /// </summary>
-    public IEnumerable<CreditCard> GetByUser(int userId) => _creditCardRepository.GetByUserId(userId).Result;
+    public async Task<IEnumerable<CreditCard>> GetByUser(int userId) => await _creditCardRepository.GetByUserId(userId);
 
     /// <summary>
     /// Insert a new credit card for the logged in user
     /// </summary>
-    public void Add(string name, int userId)
+    public async Task<ResultModel> Add(CreditCard card)
     {
-      if (!_userRepository.Exists(userId).Result)
-        ThrowValidationError("Usuário não localizado.");
-      if (string.IsNullOrEmpty(name))
-        ThrowValidationError("O nome do cartão é obrigatório.");
-      _creditCardRepository.Add(new CreditCard()
+      var result = new ResultModel();
+      var validatorResult = new CreditCardValidator().Validate(card);
+      if (!validatorResult.IsValid)
       {
-        Name = name,
-        UserId = userId
-      });
+        result.AddNotification(validatorResult.Errors);
+        return result;
+      }
+
+      if (!await _userRepository.Exists(card.UserId))
+      {
+        result.AddNotification("User not found.");
+        return result;
+      }
+
+      await _creditCardRepository.Add(card);
+      return result;
     }
 
     /// <summary>
     /// Update credit card
     /// </summary>
-    public void Update(CreditCard card)
+    public async Task<ResultModel> Update(CreditCard card)
     {
-      if (string.IsNullOrEmpty(card.Name))
-        ThrowValidationError("O nome do cartão é obrigatório.");
+      var result = new ResultModel();
+      var validatorResult = new CreditCardValidator().Validate(card);
+      if (!validatorResult.IsValid)
+      {
+        result.AddNotification(validatorResult.Errors);
+        return result;
+      }
 
-      var dbCard = _creditCardRepository.GetByUserId(card.UserId).Result.FirstOrDefault(p => p.Id == card.Id);
+      var dbCard = (await _creditCardRepository.GetByUserId(card.UserId)).FirstOrDefault(p => p.Id == card.Id);
       if (dbCard is null)
-        ThrowValidationError("Cartão não localizado.");
+      {
+        result.AddNotification("Credit card not found.");
+        return result;
+      }
 
       dbCard.Name = card.Name;
-      _creditCardRepository.Update(dbCard);
+      await _creditCardRepository.Update(dbCard);
+      return result;
     }
 
     /// <summary>
     /// Remove a credit card
     /// </summary>
-    public void Remove(int id, int userId)
+    public async Task<ResultModel> Remove(int id, int userId)
     {
-      var card = _creditCardRepository.GetByUserId(userId).Result.FirstOrDefault(p => p.Id == id);
+      var result = new ResultModel();
+      var card = (await _creditCardRepository.GetByUserId(userId)).FirstOrDefault(p => p.Id == id);
       if (card is null)
-        ThrowValidationError("Cartão não localizado.");
+      {
+        result.AddNotification("Credit card not found.");
+        return result;
+      }
 
       if (_creditCardRepository.HasPayments(id).Result)
-        ThrowValidationError("O cartão possui pagamentos vinculados e não pode ser excluído.");
+      {
+        result.AddNotification("The card has linked payments and can't be deleted.");
+        return result;
+      }
 
-      _creditCardRepository.Remove(id);
+      await _creditCardRepository.Remove(id);
+      return result;
     }
   }
 }

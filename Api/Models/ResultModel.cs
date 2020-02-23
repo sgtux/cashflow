@@ -4,11 +4,11 @@ using FluentValidation.Results;
 
 namespace Cashflow.Api.Models
 {
-  public abstract class ResultModel
+  public class ResultModel
   {
     public List<string> Notifications { get; private set; }
 
-    protected ResultModel() => Notifications = new List<string>();
+    public ResultModel() => Notifications = new List<string>();
 
     public void AddNotification(string notification) => Notifications.Add(notification);
 

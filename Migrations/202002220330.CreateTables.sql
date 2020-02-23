@@ -1,7 +1,6 @@
 CREATE TABLE public."CreditCard" (
     "Id" integer NOT NULL,
     "Name" character varying(255) NOT NULL,
-    "Description" character varying(255),
     "UserId" integer NOT NULL
 );
 

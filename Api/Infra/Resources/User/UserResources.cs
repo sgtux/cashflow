@@ -1,10 +1,12 @@
+using Api.Infra.Resources;
+
 namespace Cashflow.Api.Infra.Resources.User
 {
   public static class UserResources
   {
-    public const string ByEmail = "User.GetByEmail.sql";
-    public const string ById = "User.GetById.sql";
-    public const string All = "User.GetAll.sql";
-    public const string Insert = "User.Insert.sql";
+    public static ResourceBuilder ByEmail => new ResourceBuilder("User.GetByEmail.sql");
+    public static ResourceBuilder ById => new ResourceBuilder("User.GetById.sql");
+    public static ResourceBuilder All => new ResourceBuilder("User.GetAll.sql");
+    public static ResourceBuilder Insert = new ResourceBuilder("User.Insert.sql");
   }
 }

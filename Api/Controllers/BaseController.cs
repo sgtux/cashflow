@@ -29,9 +29,12 @@ namespace Cashflow.Api.Controllers
     /// </summary>
     protected void ThrowValidationError(string error) => throw new ValidateException(error);
 
-    protected IActionResult HandleBadRequest(ResultModel resul)
+    protected IActionResult HandleResult(ResultModel result)
     {
-      return BadRequest(new { Errors = resul.Notifications });
+      if (result.IsValid)
+        return Ok(result);
+      else
+        return BadRequest(new { Errors = result.Notifications });
     }
   }
 }
