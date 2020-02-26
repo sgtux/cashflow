@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Models;
 using Cashflow.Api.Service;
@@ -27,35 +28,47 @@ namespace Cashflow.Api.Controllers
     /// </summary>
     /// <returns></returns>
     [HttpGet]
-    public IEnumerable<Payment> Get() => _service.GetByUser(UserId);
+    public async Task<IActionResult> Get() => HandleResult(await _service.GetByUser(UserId));
 
-    /// <summary>
-    /// Obter os pagamentos usuário logado
-    /// </summary>
-    /// <returns></returns>
-    [Route("FuturePayments")]
-    [HttpGet]
-    public Dictionary<string, PaymentFutureResultModel> GetFuturePayments([FromQuery]DateTime forecastAt) => _service.GetFuturePayments(UserId, forecastAt);
+    // /// <summary>
+    // /// Obter os pagamentos usuário logado
+    // /// </summary>
+    // /// <returns></returns>
+    // [Route("FuturePayments")]
+    // [HttpGet]
+    // public Dictionary<string, PaymentFutureResultModel> GetFuturePayments([FromQuery]DateTime forecastAt) => _service.GetFuturePayments(UserId, forecastAt);
 
     /// <summary>
     /// Inserir um novo pagamento para o usuário logado
     /// </summary>
     /// <param name="payment"></param>
     [HttpPost]
-    public void Post([FromBody]Payment payment) => _service.Add(payment, UserId);
+    public async Task<IActionResult> Post([FromBody]Payment payment)
+    {
+      if (payment is null)
+        return UnprocessableEntity();
+      payment.UserId = UserId;
+      return HandleResult(await _service.Add(payment));
+    }
 
     /// <summary>
     /// Atualizar um pagamento do usuário logado
     /// </summary>
     /// <param name="payment"></param>
     [HttpPut]
-    public void Put([FromBody]Payment payment) => _service.Update(payment, UserId);
+    public async Task<IActionResult> Put([FromBody]Payment payment)
+    {
+      if (payment is null)
+        return UnprocessableEntity();
+      payment.UserId = UserId;
+      return HandleResult(await _service.Update(payment));
+    }
 
     /// <summary>
     /// Remove um cartão de crédito do usuário logado
     /// </summary>
     /// <param name="id"></param>
     [HttpDelete("{id}")]
-    public void Delete(int id) => _service.Remove(id, UserId);
+    public async Task<IActionResult> Delete(int id) => HandleResult(await _service.Remove(id, UserId));
   }
 }

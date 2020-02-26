@@ -40,6 +40,12 @@
     <EmbeddedResource Include="Infra/Resources/CreditCard/GetByUser.sql" />
     <EmbeddedResource Include="Infra/Resources/CreditCard/Insert.sql" />
     <EmbeddedResource Include="Infra/Resources/CreditCard/Update.sql" />
+
+    <EmbeddedResource Include="Infra/Resources/Payment/Delete.sql" />
+    <EmbeddedResource Include="Infra/Resources/Payment/GetById.sql" />
+    <EmbeddedResource Include="Infra/Resources/Payment/GetByUser.sql" />
+    <EmbeddedResource Include="Infra/Resources/Payment/Insert.sql" />
+    <EmbeddedResource Include="Infra/Resources/Payment/Update.sql" />
   </ItemGroup>
 
 </Project>

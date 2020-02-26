@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Api.Infra.Resources.Payment;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Shared;
 
@@ -13,33 +13,21 @@ namespace Cashflow.Api.Infra.Repository
 
     public Task<IEnumerable<Payment>> GetByUser(int userId)
     {
-      throw new NotImplementedException();
+      return Query(PaymentResources.ByUser, new { UserId = userId });
     }
 
-    public Task<Payment> GetById(int id)
-    {
-      throw new NotImplementedException();
-    }
+    public Task<Payment> GetById(int id) => FirstOrDefault(PaymentResources.ById, new { Id = id });
 
     public Task<IEnumerable<Payment>> GetAll()
     {
       throw new NotImplementedException();
     }
 
-    public Task Add(Payment t)
-    {
-      throw new NotImplementedException();
-    }
+    public Task Add(Payment payment) => Execute(PaymentResources.Insert, payment);
 
-    public Task Update(Payment t)
-    {
-      throw new NotImplementedException();
-    }
+    public Task Update(Payment payment) => Execute(PaymentResources.Update, payment);
 
-    public Task Remove(int id)
-    {
-      throw new NotImplementedException();
-    }
+    public Task Remove(int id) => Execute(PaymentResources.Delete, new { Id = id });
 
     public DateTime CurrentDate => DateTime.Now;
   }

@@ -20,9 +20,9 @@ namespace Cashflow.Api.Service
       return new UserDataModel(user);
     }
 
-    public async Task<UserDataModel> Add(User model)
+    public async Task<ResultDataModel<UserDataModel>> Add(User model)
     {
-      var result = new UserDataModel();
+      var result = new ResultDataModel<UserDataModel>();
       var validationResults = new UserValidator().Validate(model);
       if (!validationResults.IsValid)
       {
@@ -44,16 +44,15 @@ namespace Cashflow.Api.Service
 
       await _userRepository.Add(model);
       user = await _userRepository.FindByEmail(model.Email);
-      user.Map(result);
+      user.Map(result.Data);
 
       return result;
     }
 
     public async Task<User> Login(string email, string password)
     {
-      password = Utils.Sha1(password);
       var user = await _userRepository.FindByEmail(Utils.Sha1(email));
-      return user?.Password == password ? user : null;
+      return user?.Password == Utils.Sha1(password) ? user : null;
     }
   }
 }

@@ -42,7 +42,7 @@ namespace Cashflow.Api.Infra.Repository
         return await conn.QuerySingleOrDefaultAsync<T>(query, parameters);
     }
 
-    protected async Task<IEnumerable<T>> Many(ResourceBuilder resource, object parameters = null)
+    protected async Task<IEnumerable<T>> Query(ResourceBuilder resource, object parameters = null)
     {
       var query = await resource.Build();
       Log(query);

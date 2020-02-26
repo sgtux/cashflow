@@ -8,31 +8,20 @@ using Cashflow.Api.Validators;
 
 namespace Cashflow.Api.Service
 {
-  /// <summary>
-  /// Credit card service
-  /// </summary>
   public class CreditCardService : BaseService
   {
     private ICreditCardRepository _creditCardRepository;
+
     private IUserRepository _userRepository;
 
-    /// <summary>
-    /// Constructor
-    /// </summary>
     public CreditCardService(ICreditCardRepository creditCardRepository, IUserRepository userRepository)
     {
       _creditCardRepository = creditCardRepository;
       _userRepository = userRepository;
     }
 
-    /// <summary>
-    /// Get all credit cards of the logged in user
-    /// </summary>
     public async Task<IEnumerable<CreditCard>> GetByUser(int userId) => await _creditCardRepository.GetByUserId(userId);
 
-    /// <summary>
-    /// Insert a new credit card for the logged in user
-    /// </summary>
     public async Task<ResultModel> Add(CreditCard card)
     {
       var result = new ResultModel();
@@ -53,9 +42,6 @@ namespace Cashflow.Api.Service
       return result;
     }
 
-    /// <summary>
-    /// Update credit card
-    /// </summary>
     public async Task<ResultModel> Update(CreditCard card)
     {
       var result = new ResultModel();
@@ -78,9 +64,6 @@ namespace Cashflow.Api.Service
       return result;
     }
 
-    /// <summary>
-    /// Remove a credit card
-    /// </summary>
     public async Task<ResultModel> Remove(int id, int userId)
     {
       var result = new ResultModel();

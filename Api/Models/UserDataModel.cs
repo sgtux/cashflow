@@ -2,7 +2,7 @@ using Cashflow.Api.Infra.Entity;
 
 namespace Cashflow.Api.Models
 {
-  public class UserDataModel : ResultModel
+  public class UserDataModel
   {
     public UserDataModel() { }
 
