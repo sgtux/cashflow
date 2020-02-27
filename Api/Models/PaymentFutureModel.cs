@@ -1,41 +1,29 @@
-using System.Collections.Generic;
-using System.Linq;
+using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Shared;
 
 namespace Cashflow.Api.Models
 {
-  /// Payment future model
   public class PaymentFutureModel
   {
 
-    /// Constructor
-    public PaymentFutureModel()
-    {
-      Items = new List<PaymentItemModel>();
-    }
-
-    /// Description
     public string Description { get; set; }
 
-    /// Cost
-    public decimal Cost => Items.Sum(p => p.Cost);
+    public bool Invoice { get; set; }
 
-    /// Plots
-    public int Plots { get; set; }
+    public int Number { get; set; }
 
-    /// Plots paid
-    public int PlotsPaid { get; set; }
+    public bool Paid { get; set; }
 
-    /// Type
+    public bool FixedPayment { get; set; }
+
+    public int QtdInstallments { get; set; }
+
+    public decimal Cost { get; set; }
+
     public TypePayment Type { get; set; }
 
-    /// Is credit card
-    public bool IsCreditCard { get; set; }
+    public CreditCard CreditCard { get; set; }
 
-    /// Month of the payments group
-    public string Month { get; set; }
-
-    /// Items
-    public List<PaymentItemModel> Items { get; set; }
+    public string MonthYear { get; set; }
   }
 }

@@ -75,8 +75,12 @@ namespace Cashflow.Api.Infra.Repository
       }
     }
 
-    public Task Remove(int id) => Execute(PaymentResources.Delete, new { Id = id });
-
+    public async Task Remove(int id)
+    {
+      await Execute(InstallmentResources.Delete, new { PaymentId = id });
+      await Execute(PaymentResources.Delete, new { Id = id });
+    }
+    
     public DateTime CurrentDate => DateTime.Now;
   }
 }

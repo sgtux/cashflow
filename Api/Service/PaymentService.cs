@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Infra.Repository;
@@ -21,102 +23,57 @@ namespace Cashflow.Api.Service
 
     public async Task<ResultModel> GetByUser(int userId) => new ResultDataModel<IEnumerable<Payment>>(await _paymentRepository.GetByUser(userId));
 
-    // public Dictionary<string, PaymentFutureResultModel> GetFuturePayments(int userId, DateTime forecastAt)
-    // {
-    //   var result = new Dictionary<string, PaymentFutureResultModel>();
-    //   var now = _paymentRepository.CurrentDate;
-    //   var dates = new List<DateTime>();
+    public async Task<Dictionary<string, PaymentFutureResultModel>> GetFuturePayments(int userId, DateTime forecastAt)
+    {
+      var result = new Dictionary<string, PaymentFutureResultModel>();
+      var now = _paymentRepository.CurrentDate;
+      var dates = new List<DateTime>();
 
-    //   if (forecastAt == default(DateTime) || forecastAt < now)
-    //     forecastAt = now.AddMonths(11);
-    //   else
-    //     forecastAt.AddMonths(1);
+      if (forecastAt == default(DateTime) || forecastAt < now)
+        forecastAt = now.AddMonths(11);
+      else
+        forecastAt.AddMonths(1);
 
-    //   var currentDate = now;
-    //   var months = 0;
-    //   while (forecastAt.Month != currentDate.Month || forecastAt.Year != currentDate.Year)
-    //   {
-    //     currentDate = now.AddMonths(months);
-    //     dates.Add(currentDate);
-    //     months++;
-    //   }
+      var currentDate = now;
+      var months = 0;
+      while (forecastAt.Month != currentDate.Month || forecastAt.Year != currentDate.Year)
+      {
+        currentDate = now.AddMonths(months);
+        dates.Add(currentDate);
+        months++;
+      }
 
-    //   var payments = _paymentRepository.GetByUser(userId).Result;
+      var payments = await _paymentRepository.GetByUser(userId);
+      var cards = await _creditCardRepository.GetByUserId(userId);
 
-    //   dates.OrderBy(p => p.Ticks).ToList().ForEach(date =>
-    //   {
-    //     var startDate = new DateTime(date.Year, date.Month, 1).AddMonths(1).AddDays(-1);
-    //     var paymentsMonth = new List<PaymentFutureModel>();
-    //     foreach(var p in payments)
-    //     {
-    //       var paymentMonths = GetMonthsFromPayment(p);
-    //       if (paymentMonths.Contains(date.ToString("MM/yyyy")) || (p.FixedPayment && p.FirstPayment < startDate))
-    //       {
-    //         string creditCardName = p.CreditCard?.Name;
-    //         PaymentFutureModel paymentModel = null;
-    //         if (!string.IsNullOrEmpty(creditCardName))
-    //         {
-    //           paymentModel = paymentsMonth.FirstOrDefault(x => x.Description == creditCardName);
-    //           if (paymentModel == null)
-    //           {
-    //             paymentModel = new PaymentFutureModel()
-    //             {
-    //               Description = creditCardName,
-    //               Type = TypePayment.Expense,
-    //               IsCreditCard = true,
-    //               Month = date.ToString("MM/yyyy")
-    //             };
-    //           }
-    //         }
-    //         else
-    //         {
-    //           paymentModel = new PaymentFutureModel()
-    //           {
-    //             Description = p.Description,
-    //             Type = p.Type,
-    //             Plots = p.Plots,
-    //             PlotsPaid = p.PlotsPaid,
-    //             IsCreditCard = false,
-    //             Month = date.ToString("MM/yyyy")
-    //           };
-    //         }
+      dates.OrderBy(p => p.Ticks).ToList().ForEach(date =>
+      {
+        var resultModel = new PaymentFutureResultModel();
 
-    //         var plotsPaid = 0;
-    //         if (!p.FixedPayment && !p.SinglePlot)
-    //         {
-    //           var diffYears = date.Year - p.FirstPayment.Year;
-    //           var diffMonths = date.Month - p.FirstPayment.Month;
-    //           plotsPaid = 1 + diffMonths + (diffYears * 12);
-    //         }
+        foreach (var payMonth in payments.Where(p => p.FixedPayment || (p.Installments?.Any(p => p.Date.Year == date.Year && p.Date.Month == date.Month) ?? false)))
+        {
+          var installment = payMonth.Installments.First(p => payMonth.FixedPayment || (p.Date.Year == date.Year && p.Date.Month == date.Month));
+          resultModel.Payments.Add(new PaymentFutureModel()
+          {
+            CreditCard = cards.FirstOrDefault(p => p.Id == payMonth.CreditCardId),
+            Description = payMonth.Description,
+            FixedPayment = payMonth.FixedPayment,
+            Invoice = payMonth.Invoice,
+            MonthYear = date.ToString("MM/yyyy"),
+            Number = installment.Number,
+            Paid = installment.Paid,
+            QtdInstallments = payMonth.Installments.Count,
+            Type = payMonth.Type,
+            Cost = installment.Cost
+          });
+        };
 
-    //         paymentModel.PlotsPaid = plotsPaid;
+        result.Add(date.ToString("MM/yyyy"), resultModel);
+        resultModel.AccumulatedCost = result.Values.Sum(p => p.CostIncome) - result.Values.Sum(p => p.CostExpense);
+      });
 
-    //         paymentModel.Items.Add(new PaymentItemModel()
-    //         {
-    //           PaymentId = p.Id,
-    //           Description = p.Description,
-    //           Cost = p.FixedPayment || p.SinglePlot ? p.Cost : p.Cost / p.Plots,
-    //           Plots = p.FixedPayment || p.SinglePlot ? 0 : p.Plots,
-    //           PlotsPaid = plotsPaid,
-    //           Type = p.Type,
-    //           CreditCard = creditCardName,
-    //           PaymentDate = date.ToString("dd/MM/yyyy"),
-    //           Month = date.ToString("MM/yyyy"),
-    //           Day = p.FirstPayment.Day
-    //         });
-    //         if (!paymentModel.IsCreditCard
-    //           || (paymentModel.IsCreditCard && !paymentsMonth.Any(x => x.Description == paymentModel.Description)))
-    //           paymentsMonth.Add(paymentModel);
-    //       }
-    //     }
-    //     var resultModel = new PaymentFutureResultModel();
-    //     resultModel.Payments = paymentsMonth;
-    //     result.Add(date.ToString("MM/yyyy"), resultModel);
-    //     resultModel.AcumulatedCost = result.Values.Sum(p => p.CostIncome) - result.Values.Sum(p => p.CostExpense);
-    //   });
-
-    //   return result;
-    // }
+      return result;
+    }
 
     /// <summary>
     /// Inserir um novo pagamento
@@ -165,37 +122,6 @@ namespace Cashflow.Api.Service
         await _paymentRepository.Remove(paymentId);
       return result;
     }
-
-    // private void ValidatePayment(Payment payment)
-    // {
-    //   if (payment is null)
-    //     ThrowValidationError("Pagamento inválido.");
-
-    //   if (payment.Cost <= 0)
-    //     ThrowValidationError("O valor deve ser maior que Zero.");
-
-    //   if (default(DateTime) == payment.FirstPayment)
-    //     ThrowValidationError("A data do primeiro pagamento é obrigatória.");
-
-    //   if (!payment.SinglePlot && !payment.FixedPayment)
-    //   {
-    //     if (payment.PlotsPaid > payment.Plots)
-    //       ThrowValidationError("O quantidade parcelas pagas não pode ser maior que o número de parcelas.");
-
-    //     if (payment.Plots <= 0)
-    //       ThrowValidationError("O pagamento deve ter pelo menos 1 parcela.");
-    //   }
-
-    //   int cardId = payment.CreditCard?.Id ?? 0;
-    //   if (cardId == 0)
-    //     cardId = payment.CreditCardId.HasValue ? payment.CreditCardId.Value : 0;
-    //   if (cardId > 0)
-    //   {
-    //     var card = _creditCardRepository.GetById(cardId).Result;
-    //     if (card is null || card.UserId != payment.UserId)
-    //       ThrowValidationError("Cartão não localizado.");
-    //   }
-    // }
 
     // private List<string> GetMonthsFromPayment(Payment p)
     // {

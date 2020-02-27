@@ -6,7 +6,7 @@ namespace Cashflow.Api.Infra.Entity
 
     public long PaymentId { get; set; }
 
-    public long Number { get; set; }
+    public int Number { get; set; }
 
     public decimal Cost { get; set; }
 

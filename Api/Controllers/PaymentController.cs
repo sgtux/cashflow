@@ -30,13 +30,16 @@ namespace Cashflow.Api.Controllers
     [HttpGet]
     public async Task<IActionResult> Get() => HandleResult(await _service.GetByUser(UserId));
 
-    // /// <summary>
-    // /// Obter os pagamentos usuário logado
-    // /// </summary>
-    // /// <returns></returns>
-    // [Route("FuturePayments")]
-    // [HttpGet]
-    // public Dictionary<string, PaymentFutureResultModel> GetFuturePayments([FromQuery]DateTime forecastAt) => _service.GetFuturePayments(UserId, forecastAt);
+    /// <summary>
+    /// Obter os pagamentos usuário logado
+    /// </summary>
+    /// <returns></returns>
+    [Route("FuturePayments")]
+    [HttpGet]
+    public async Task<Dictionary<string, PaymentFutureResultModel>> GetFuturePayments([FromQuery]DateTime endDate)
+    {
+      return await _service.GetFuturePayments(UserId, endDate);
+    }
 
     /// <summary>
     /// Inserir um novo pagamento para o usuário logado
