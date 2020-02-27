@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Threading;
@@ -48,6 +49,14 @@ namespace Cashflow.Api.Infra.Repository
       Log(query);
       using (var conn = Connection)
         return await conn.QueryAsync<T>(query, parameters);
+    }
+
+    protected async Task<IEnumerable<T>> Query<U>(ResourceBuilder resource, Func<T, U, T> map, object parameters = null)
+    {
+      var query = await resource.Build();
+      Log(query);
+      using (var conn = Connection)
+        return await conn.QueryAsync<T, U, T>(query, map, parameters);
     }
 
     public async Task<bool> Exists(long id)

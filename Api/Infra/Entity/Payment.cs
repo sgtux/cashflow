@@ -19,6 +19,6 @@ namespace Cashflow.Api.Infra.Entity
 
     public bool Invoice { get; set; }
 
-    public IEnumerable<Installment> Installments { get; set; }
+    public IList<Installment> Installments { get; set; }
   }
 }

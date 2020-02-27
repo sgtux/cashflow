@@ -46,6 +46,9 @@
     <EmbeddedResource Include="Infra/Resources/Payment/GetByUser.sql" />
     <EmbeddedResource Include="Infra/Resources/Payment/Insert.sql" />
     <EmbeddedResource Include="Infra/Resources/Payment/Update.sql" />
+
+    <EmbeddedResource Include="Infra/Resources/Installment/Insert.sql" />
+    <EmbeddedResource Include="Infra/Resources/Installment/Delete.sql" />
   </ItemGroup>
 
 </Project>

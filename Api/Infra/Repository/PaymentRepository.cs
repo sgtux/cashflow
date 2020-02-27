@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Api.Infra.Resources.Payment;
 using Cashflow.Api.Infra.Entity;
@@ -11,9 +12,22 @@ namespace Cashflow.Api.Infra.Repository
   {
     public PaymentRepository(AppConfig config) : base(config) { }
 
-    public Task<IEnumerable<Payment>> GetByUser(int userId)
+    public async Task<IEnumerable<Payment>> GetByUser(int userId)
     {
-      return Query(PaymentResources.ByUser, new { UserId = userId });
+      var list = new List<Payment>();
+      var result = await Query<Installment>(PaymentResources.ByUser, (p, i) =>
+      {
+        var pay = list.FirstOrDefault(x => x.Id == p.Id);
+        if (pay == null)
+        {
+          pay = p;
+          list.Add(p);
+          pay.Installments = new List<Installment>();
+        }
+        pay.Installments.Add(i);
+        return p;
+      }, new { UserId = userId });
+      return list;
     }
 
     public Task<Payment> GetById(int id) => FirstOrDefault(PaymentResources.ById, new { Id = id });
@@ -23,9 +37,28 @@ namespace Cashflow.Api.Infra.Repository
       throw new NotImplementedException();
     }
 
-    public Task Add(Payment payment) => Execute(PaymentResources.Insert, payment);
+    public async Task Add(Payment payment)
+    {
+      await Execute(PaymentResources.Insert, payment);
+      foreach (var i in payment.Installments)
+      {
+        i.PaymentId = payment.Id;
+        await Execute(InstallmentResources.Insert, i);
+      }
+    }
 
-    public Task Update(Payment payment) => Execute(PaymentResources.Update, payment);
+    public async Task Update(Payment payment)
+    {
+      await Execute(InstallmentResources.Delete, new { PaymentId = payment.Id });
+      await Execute(PaymentResources.Update, payment);
+      int number = 0;
+      foreach (var i in payment.Installments.OrderBy(p => p.Number))
+      {
+        i.Number = number;
+        i.PaymentId = payment.Id;
+        await Execute(InstallmentResources.Insert, i);
+      }
+    }
 
     public Task Remove(int id) => Execute(PaymentResources.Delete, new { Id = id });
 
