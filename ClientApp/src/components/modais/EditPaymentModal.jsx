@@ -12,12 +12,37 @@ import {
   InputLabel,
   Select,
   Checkbox,
-  MenuItem
+  MenuItem,
+  RadioGroup,
+  Radio,
+  List,
+  ListItem,
+  ListItemText,
+  CircularProgress,
+  GridList,
+  GridListTile,
+  GridListTileBar
 } from '@material-ui/core'
 
+import TextInputMask from 'react-masked-text'
+
 import IconTextInput from '../main/IconTextInput'
-import { getDateStringEg, getDateFromStringEg } from '../../helpers/utils'
+import InputMoney from '../inputs/InputMoney'
+
+import { dateToString, getDateFromStringEg, toReal, toDateFormat } from '../../helpers'
 import { creditCardService, paymentService } from '../../services/index'
+
+const styles = {
+  maskInput: {
+    color: '#666',
+    backgroundColor: 'white',
+    border: 'solid 0',
+    borderBottom: 'solid 1px #666',
+    margin: '10px',
+    width: '100px',
+    marginRight: '20px'
+  }
+}
 
 export default class EditPaymentModal extends React.Component {
 
@@ -26,64 +51,138 @@ export default class EditPaymentModal extends React.Component {
     this.state = {
       payment: {},
       description: '',
-      cards: [],
+      cards: this.props.cards,
       paymentType: 2,
       useCreditCard: false,
       fixedPayment: false,
-      singlePlot: false,
+      qtdInstallments: 10,
       card: [],
-      firstPayment: getDateStringEg(new Date())
+      costByInstallment: true,
+      costText: '',
+      installments: [],
+      firstPayment: '',
+      loading: false,
+      paidInstallments: []
     }
   }
 
   componentDidMount() {
-    creditCardService.get().then(res => this.setState({ cards: res, card: res[0] ? res[0].id : null }))
+    const {
+      description,
+      installments,
+      fixedPayment,
+      type,
+      creditCardId,
+      invoice
+    } = this.props.payment || {}
+
+    const firstInstallment = (installments || [])[0] || {}
+    const qtdInstallments = (installments || []).length || 1
+    const costs = (installments || []).map(p => p.cost)
+    const paidInstallments = (installments || []).filter(p => p.paid).map(p => p.number)
+
+    this.setState({
+      useCreditCard: creditCardId > 0,
+      description: description || '',
+      paymentType: type || 2,
+      card: creditCardId,
+      useCreditCard: creditCardId ? true : false,
+      showModal: true,
+      paidInstallments,
+      invoice
+    })
+    this.updateInstallments({
+      costByInstallment: false,
+      qtdInstallments,
+      costText: toReal(costs.length ? costs.reduce((a, b) => a + b) : 0),
+      fixedPayment,
+      paidInstallments,
+      firstPayment: dateToString(firstInstallment.date ? new Date(firstInstallment.date) : null),
+    })
+  }
+
+  updateInstallments(data) {
+    const { payment, paidInstallments, costByInstallment, qtdInstallments, costText, fixedPayment, firstPayment } = data
+    const installments = []
+    let cost = Number((costText || '').replace(/[^0-9,]/g, '').replace(',', '.') || 0)
+    if (cost > 0 && qtdInstallments > 0 && /^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/.test(firstPayment)) {
+      let day = Number(firstPayment.substr(0, 2))
+      let month = Number(firstPayment.substr(3, 2))
+      let year = Number(firstPayment.substr(6, 4))
+
+      if (!fixedPayment) {
+        let firstCost = cost
+        if (!costByInstallment) {
+          const total = cost
+          cost = parseFloat(Number(cost / qtdInstallments).toFixed(2))
+          const sum = parseFloat(Number(cost * qtdInstallments).toFixed(2))
+          firstCost = cost + (total > sum ? total - sum : sum - total)
+        }
+
+        for (let i = 1; i <= qtdInstallments; i++) {
+          if (month > 12) {
+            month = 1
+            year++
+          }
+          installments.push({
+            number: i,
+            cost: cost,
+            date: new Date(`${month}/${day}/${year}`),
+            paid: paidInstallments.indexOf(i) !== -1
+          })
+          month++
+        }
+        installments[0].cost = firstCost
+      }
+      else
+        installments.push({ number: 1, cost: cost, date: new Date(`${month}/${day}/${year}`) })
+    }
+
+    this.setState({
+      costByInstallment,
+      qtdInstallments,
+      costText,
+      firstPayment,
+      installments,
+      fixedPayment,
+      errorMessage: ''
+    })
+  }
+
+  paidChanged(installment, paid) {
+    installment.paid = paid
+    this.setState({ installments: this.state.installments })
   }
 
   save() {
-    const { singlePlot, fixedPayment, description, firstPayment, cost, paymentType, plots, card, useCreditCard, plotsPaid } = this.state
+    const { invoice, installments, fixedPayment, description, firstPayment, paymentType, card, useCreditCard } = this.state
 
     const payment = {}
     payment.id = this.props.payment.id
     payment.description = description
-    payment.firstPayment = getDateFromStringEg(firstPayment)
-    payment.cost = cost ? Number(cost) : 0
-    payment.singlePlot = singlePlot
     payment.type = paymentType
-    if (!singlePlot) {
-      payment.fixedPayment = fixedPayment
-      payment.plots = plots && !fixedPayment ? Number(plots) : 0
-      payment.plotsPaid = plotsPaid && !fixedPayment ? Number(plotsPaid) : 0
+    payment.installments = installments
+    payment.fixedPayment = fixedPayment
+    payment.invoice = invoice
+
+    if (!description || !installments.length) {
+      this.setState({ errorMessage: 'Preencha corretamente os campos.' })
+      return
     }
 
     if (useCreditCard)
       payment.creditCardId = card
 
+    this.setState({ loading: true })
+
     if (payment.id)
       paymentService.update(payment)
         .then(() => this.props.onFinish())
-        .catch(err => this.setState({ errorMessage: err.error }))
+        .catch(err => this.setState({ loading: false, errorMessage: err.error }))
     else
       paymentService.create(payment)
         .then(() => this.props.onFinish())
-        .catch(err => this.setState({ errorMessage: err.error }))
-  }
-
-  onEnter() {
-    const { description, singlePlot, firstPayment, fixedPayment, cost, type, plots, creditCardId, plotsPaid } = this.props.payment || {}
-    this.setState({
-      description: description || '',
-      firstPayment: getDateStringEg(firstPayment ? new Date(firstPayment) : new Date()),
-      cost: cost ? cost.toString() : '0',
-      paymentType: type || 2,
-      plots: plots ? plots.toString() : '1',
-      card: creditCardId,
-      useCreditCard: creditCardId ? true : false,
-      plotsPaid: plotsPaid ? plotsPaid.toString() : '0',
-      fixedPayment: fixedPayment ? true : false,
-      showModal: true,
-      singlePlot: singlePlot ? true : false,
-    })
+        .catch(err => this.setState({ loading: false, errorMessage: err.message }))
   }
 
   render() {
@@ -91,115 +190,147 @@ export default class EditPaymentModal extends React.Component {
       <Dialog
         open={this.props.open}
         onClose={() => this.props.onClose()}
-        onEnter={() => this.onEnter()}
         transitionDuration={300}
-        TransitionComponent={Zoom}>
+        TransitionComponent={Zoom}
+        maxWidth="lg"
+        fullWidth>
         <DialogTitle style={{ textAlign: 'center' }}>
-          {this.props.payment.id > 0 ? 'Edição' : 'Novo'}</DialogTitle>
+          {this.props.payment.id > 0 ? 'Editar Pagamento' : 'Novo Pagamento'}
+        </DialogTitle>
         <DialogContent>
-          <div style={{ textAlign: 'center' }} >
+          <div style={{ textAlign: 'start', color: '#666', fontFamily: '"Roboto", "Helvetica", "Arial", "sans-serif"' }} >
 
-            <IconTextInput
-              label="Descrição"
-              value={this.state.description}
-              onChange={(e) => this.setState({ description: e.value, errorMessage: '' })}
-            />
-            <FormControl style={{ marginLeft: '20px', marginTop: '10px' }}>
-              <InputLabel htmlFor="select-tipo">Tipo</InputLabel>
-              <Select
-                value={this.state.paymentType}
-                onChange={(e) => this.setState({ paymentType: e.target.value })}>
-                <MenuItem key={1} value={1}>Renda</MenuItem>
-                <MenuItem key={2} value={2}>Despesa</MenuItem>
-              </Select>
-            </FormControl>
-            <br />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={this.state.singlePlot}
-                  onChange={(e, c) => this.setState({ singlePlot: c })}
-                  color="primary"
-                />
-              }
-              label="Parcela única ?"
-            />
-            <br />
-            <div hidden={this.state.singlePlot}>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={this.state.fixedPayment}
-                    onChange={(e, c) => this.setState({ fixedPayment: c })}
-                    color="primary"
-                  />
-                }
-                label="Fixo mensal ?"
-              />
-              <br />
-              <div hidden={this.state.fixedPayment}>
+            <GridList cellHeight={300} cols={5}>
+              <GridListTile cols={3}>
+
                 <IconTextInput
-                  label="Quantidade de Parcelas"
-                  value={this.state.plots}
-                  type="number"
-                  onChange={(e) => this.setState({ plots: e.value.replace('.', ''), errorMessage: '' })}
+                  label="Descrição"
+                  value={this.state.description}
+                  onChange={e => this.setState({ description: e.value, errorMessage: '' })}
                 />
-                <IconTextInput style={{ marginLeft: '10px' }}
-                  label="Parcelas Pagas"
-                  value={this.state.plotsPaid}
-                  type="number"
-                  onChange={(e) => this.setState({ plotsPaid: e.value.replace('.', ''), errorMessage: '' })}
-                />
-              </div>
-            </div>
-            <div hidden={!this.state.cards.length}>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={this.state.useCreditCard}
-                    onChange={(e, c) => this.setState({ useCreditCard: c, card: this.state.cards[0].id })}
-                    color="primary"
-                  />
-                }
-                label="Cartão de crédito ?"
-              />
-            </div>
-            {
-              this.state.cards.length && this.state.useCreditCard ?
-                <FormControl style={{ marginLeft: '20px', marginTop: '10px' }}>
-                  <InputLabel htmlFor="select-tipo">Cartão de crédito</InputLabel>
-                  <Select style={{ width: '200px' }} value={this.state.card}
-                    onChange={(e) => this.setState({ card: e.target.value })}>
-                    {this.state.cards.map(p => <MenuItem key={p.id} value={p.id}>{p.name}</MenuItem>)}
+                <FormControl style={{ width: '200px', marginLeft: '20px', marginTop: '10px' }}>
+                  <InputLabel htmlFor="select-tipo">Tipo</InputLabel>
+                  <Select
+                    value={this.state.paymentType || 2}
+                    color="red"
+                    onChange={e => this.setState({ paymentType: e.target.value })}>
+                    <MenuItem key={1} value={1}><span style={{ color: 'green', fontWeight: 'bold' }}>RENDA</span></MenuItem>
+                    <MenuItem key={2} value={2}><span style={{ color: 'red', fontWeight: 'bold' }}>DESPESA</span></MenuItem>
                   </Select>
                 </FormControl>
-                : null
-            }
 
-            <div>
-              <IconTextInput
-                label="Valor Total"
-                value={this.state.cost}
-                type="number"
-                onChange={(e) => this.setState({ cost: e.value, errorMessage: '' })}
-              />
-              <TextField style={{ marginLeft: '10px', marginTop: '10px' }}
-                id="date"
-                label="Primeiro Pagamento"
-                type="month"
-                onChange={(e) => this.setState({ firstPayment: e.target.value })}
-                defaultValue={this.state.firstPayment}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
-            </div>
-            <span style={{ color: '#d55', marginTop: '10px' }}>{this.state.errorMessage}</span>
+                <div style={{ marginRight: '10px', marginTop: '10px', color: '#666' }}>
+                  <span>Valor:</span>
+                  <TextInputMask
+                    onChangeText={e => this.updateInstallments({ ...this.state, costText: e })}
+                    kind="money"
+                    value={this.state.costText}
+                    style={styles.maskInput} />
+                  <span>Data:</span>
+                  <TextInputMask
+                    onChangeText={e => this.updateInstallments({ ...this.state, firstPayment: e })}
+                    kind="datetime"
+                    value={this.state.firstPayment}
+                    options={{ format: 'dd/MM/YYYY' }}
+                    style={styles.maskInput} />
+                  <FormControlLabel label="Pagamento Fixo ?"
+                    control={<Checkbox
+                      checked={this.state.fixedPayment}
+                      onChange={(e, c) => this.updateInstallments({ ...this.state, fixedPayment: c })}
+                      color="primary"
+                    />} />
+                </div>
+
+                <div hidden={!this.state.cards.length}>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        defaultChecked={this.state.useCreditCard}
+                        onChange={(e, c) => this.setState({ useCreditCard: c, card: this.state.cards[0].id })}
+                        color="primary"
+                      />
+                    }
+                    label="Cartão de crédito"
+                  />
+                  {
+                    this.state.cards.length && this.state.useCreditCard ?
+                      <span>
+                        <FormControl style={{ marginLeft: '20px', marginRight: '20px' }}>
+                          <InputLabel htmlFor="select-tipo">Cartão de crédito</InputLabel>
+                          <Select style={{ width: '160px' }} value={this.state.card}
+                            onChange={e => this.setState({ card: e.target.value })}>
+                            {this.state.cards.map(p => <MenuItem key={p.id} value={p.id}>{p.name}</MenuItem>)}
+                          </Select>
+                        </FormControl>
+                        <FormControlLabel label="Fatura"
+                          control={<Checkbox
+                            defaultChecked={this.state.invoice}
+                            onChange={(e, c) => this.setState({ invoice: c })}
+                            color="primary"
+                          />} />
+                      </span>
+                      : null
+                  }
+                </div>
+
+                <div hidden={this.state.fixedPayment} style={{ color: '#666' }}>
+                  <FormControlLabel label="Valor por parcela"
+                    control={<Checkbox
+                      defaultChecked={this.state.costByInstallment}
+                      onChange={(e, c) => this.updateInstallments({ ...this.state, costByInstallment: c })}
+                      color="primary"
+                    />} />
+                  <span>Qtd. Parcelas:</span>
+                  <TextInputMask
+                    onChangeText={e => this.updateInstallments({ ...this.state, qtdInstallments: e })}
+                    kind="only-numbers"
+                    value={this.state.qtdInstallments}
+                    style={styles.maskInput} />
+                </div>
+
+                <div style={{ textAlign: 'center', color: '#d55', marginTop: '20px' }}>
+                  <span>{this.state.errorMessage}</span>
+                </div>
+
+              </GridListTile>
+              <GridListTile cols={2}>
+
+                <div hidden={!this.state.installments.length || this.state.fixedPayment}
+                  style={{ textAlign: 'center', marginTop: '20px' }}>
+                  <fieldset style={{ borderColor: '#ddd' }}>
+                    <legend style={{ fontSize: '16px' }}>PARCELAS</legend>
+                    <List component="nav" style={{ height: '240px', overflowY: 'scroll' }}>
+                      <ListItem style={{ padding: '0px', color: '#666', borderBottom: '1px solid #666' }}>
+                        <ListItemText style={{ fontSize: '10px' }} primary="N°"></ListItemText>
+                        <ListItemText primary="VALOR"></ListItemText>
+                        <ListItemText primary="DATA"></ListItemText>
+                        <ListItemText primary="PAGA?"></ListItemText>
+                      </ListItem>
+                      {this.state.installments.map((p, i) =>
+                        <ListItem style={{ padding: '0px', color: '#666', borderBottom: '1px solid #666' }} key={i}>
+                          <ListItemText primary={p.number}></ListItemText>
+                          <ListItemText primary={toReal(p.cost)}></ListItemText>
+                          <ListItemText primary={toDateFormat(p.date, 'dd/MM/yyyy')}></ListItemText>
+                          <Checkbox
+                            checked={p.paid}
+                            onChange={(e, c) => this.paidChanged(p, c)}
+                            color="primary"
+                          />
+                        </ListItem>
+                      )}
+                    </List>
+                  </fieldset>
+                </div>
+              </GridListTile>
+            </GridList>
           </div>
         </DialogContent>
         <DialogActions>
+          <div hidden={!this.state.loading}>
+            <CircularProgress size={30} />
+          </div>
           <Button onClick={() => this.props.onClose()} variant="raised" autoFocus>cancelar</Button>
-          <Button onClick={() => this.save()} color="primary" variant="raised" autoFocus>Salvar</Button>
+          <Button disabled={this.state.loading} onClick={() => this.save()} color="primary" variant="raised" autoFocus>salvar</Button>
         </DialogActions>
       </Dialog>
     )

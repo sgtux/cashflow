@@ -4,7 +4,6 @@ using System.Data;
 using System.Threading;
 using System.Threading.Tasks;
 using Api.Infra.Resources;
-using Cashflow.Api.Extensions;
 using Cashflow.Api.Shared;
 using Dapper;
 using Npgsql;
@@ -65,6 +64,14 @@ namespace Cashflow.Api.Infra.Repository
       Log(query);
       using (var conn = Connection)
         return await conn.ExecuteScalarAsync<long>(query, new { Id = id }) > 0;
+    }
+
+    public async Task<long> CurrentId()
+    {
+      var query = $"SELECT MAX(\"Id\") FROM \"{typeof(T).Name}\"";
+      Log(query);
+      using (var conn = Connection)
+        return await conn.ExecuteScalarAsync<long>(query);
     }
 
     private void Log(string query)

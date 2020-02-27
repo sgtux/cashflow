@@ -20,8 +20,8 @@ namespace Api.Infra.Resources
       if (stream == null)
       {
         if (Assembly.GetEntryAssembly().GetManifestResourceNames().Contains(resourceName))
-          throw new InvalidDataException("Resource not found.");
-        throw new InvalidDataException("Resource found but can't be loaded.");
+          throw new InvalidDataException($"Resource '{resourceName}' not found.");
+        throw new InvalidDataException($"Resource '{resourceName}' found but can't be loaded.");
       }
       using (var reader = new StreamReader(stream, Encoding.UTF8))
         return await reader.ReadToEndAsync();

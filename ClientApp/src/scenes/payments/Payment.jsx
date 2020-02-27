@@ -11,17 +11,18 @@ import {
   ListItemText,
   Tooltip,
   Button,
-  Typography,
-  TextField
+  Typography
 } from '@material-ui/core'
 
 import DeleteIcon from '@material-ui/icons/Delete'
 import CardIcon from '@material-ui/icons/CreditCardOutlined'
 
 import CardMain from '../../components/main/CardMain'
+import InputMoney from '../../components/inputs/InputMoney'
 import EditPaymentModal from '../../components/modais/EditPaymentModal'
-import { paymentService } from '../../services/index'
-import { toReal, getDateStringEg } from '../../helpers/utils'
+import { paymentService, creditCardService } from '../../services/index'
+import { toReal, dateToString } from '../../helpers'
+import IconTextInput from '../../components/main/IconTextInput'
 
 const styles = {
   noRecords: {
@@ -40,7 +41,7 @@ const styles = {
   }
 }
 
-const CreditCardComponent = (props) => {
+const CreditCardComponent = props => {
   if (!props.card)
     return null
   return (
@@ -61,17 +62,18 @@ export default class Payment extends React.Component {
       cards: [],
       payment: {},
       payments: [],
-      filteredPayments: [],
       paymentType: 2,
       useCreditCard: false,
       fixedPayment: false,
       card: null,
-      showModal: false
+      showModal: false,
+      filtro: ''
     }
   }
 
   componentDidMount() {
     this.refresh()
+    creditCardService.get().then(res => this.setState({ cards: res }))
   }
 
   refresh() {
@@ -81,6 +83,7 @@ export default class Payment extends React.Component {
         this.setState({
           loading: false,
           payments: res,
+          filtro: '',
           filteredPayments: res
         })
       }, 300)
@@ -94,25 +97,17 @@ export default class Payment extends React.Component {
   }
 
   openEditNew(p) {
-    const { description, firstPayment, fixedPayment, cost, type, plots, creditCardId, plotsPaid } = p || {}
+    const { description, firstPayment, fixedPayment, cost, type, creditCardId } = p || {}
     this.setState({
       payment: p || {},
       description: description || '',
-      firstPayment: getDateStringEg(firstPayment ? new Date(firstPayment) : new Date()),
+      firstPayment: dateToString(firstPayment),
       cost: cost ? cost.toString() : '0',
       paymentType: type || 2,
-      plots: plots ? plots.toString() : '1',
       card: creditCardId,
       useCreditCard: creditCardId ? true : false,
-      plotsPaid: plotsPaid ? plotsPaid.toString() : '0',
       fixedPayment: fixedPayment ? true : false,
       showModal: true
-    })
-  }
-
-  filter(text) {
-    this.setState({
-      filteredPayments: this.state.payments.filter(p => p.description.toUpperCase().includes(text.toUpperCase()))
     })
   }
 
@@ -122,25 +117,27 @@ export default class Payment extends React.Component {
   }
 
   render() {
+    const { payments, filtro } = this.state
     return (
       <CardMain title="Pagamentos" loading={this.state.loading}>
-        {this.state.payments.length ?
+        {payments.length ?
           <div>
             <div style={styles.divNewPayment}>
               <Button variant="raised" color="primary" onClick={() => this.openEditNew()}>
                 Adicionar Pagamento
-            </Button>
+              </Button>
             </div>
             <Paper style={{ marginTop: '20px' }}>
+
               <div style={{ textAlign: 'center' }}>
-                <TextField
-                  label="Filtrar"
-                  margin="dense"
-                  onChange={event => this.filter(event.target.value)}
+                <IconTextInput
+                  label="Filtro"
+                  onChange={e => this.setState({ filtro: e.value.toUpperCase() })}
                 />
               </div>
+
               <List dense={true}>
-                {this.state.filteredPayments.map(p =>
+                {payments.filter(p => !filtro || !p.description || p.description.toUpperCase().indexOf(filtro) !== -1).map(p =>
                   <ListItem button key={p.id}
                     onClick={() => this.openEditNew(p)}>
                     <ListItemAvatar>
@@ -165,7 +162,7 @@ export default class Payment extends React.Component {
                       style={{ width: '200px' }}
                       secondary={
                         <React.Fragment>
-                          {p.fixedPayment ? 'Fixo Mensal' : `${p.plotsPaid}/${p.plots}`}
+                          {p.fixedPayment ? 'Fixo Mensal' : `${p.installments.filter(p => p.paid).length}/${p.installments.length}`}
                           <CreditCardComponent card={p.creditCard} />
                         </React.Fragment>
                       }
@@ -185,10 +182,30 @@ export default class Payment extends React.Component {
           </div>
           :
           <div style={styles.noRecords}>
-            <span>Você não possui pagamentos cadastrados.</span>
+            <div>
+              <span>Você não possui pagamentos cadastrados.</span>
+            </div>
+
+            <div>
+              <InputMoney label="Valor"></InputMoney>
+            </div>
           </div>
         }
-        <EditPaymentModal onFinish={() => this.onFinish()} open={this.state.showModal} payment={this.state.payment} onClose={() => this.setState({ showModal: false })} />
+        <div style={styles.divNewPayment}>
+          <Button variant="raised" color="primary" onClick={() => this.openEditNew()}>
+            Adicionar Pagamento
+          </Button>
+        </div>
+        {
+          this.state.showModal ?
+            <EditPaymentModal
+              onFinish={() => this.onFinish()}
+              cards={this.state.cards}
+              open={this.state.showModal}
+              payment={this.state.payment}
+              onClose={() => this.setState({ showModal: false })} />
+            : null
+        }
       </CardMain>
     )
   }

@@ -34,12 +34,14 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Infra/Resources/User/GetByEmail.sql" />
+    <EmbeddedResource Include="Infra/Resources/User/GetById.sql" />
     <EmbeddedResource Include="Infra/Resources/User/Insert.sql" />
 
     <EmbeddedResource Include="Infra/Resources/CreditCard/Delete.sql" />
     <EmbeddedResource Include="Infra/Resources/CreditCard/GetByUser.sql" />
     <EmbeddedResource Include="Infra/Resources/CreditCard/Insert.sql" />
     <EmbeddedResource Include="Infra/Resources/CreditCard/Update.sql" />
+    <EmbeddedResource Include="Infra/Resources/CreditCard/HasPayments.sql" />
 
     <EmbeddedResource Include="Infra/Resources/Payment/Delete.sql" />
     <EmbeddedResource Include="Infra/Resources/Payment/GetById.sql" />

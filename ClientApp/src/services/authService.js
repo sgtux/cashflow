@@ -8,14 +8,14 @@ const login = user =>
     .then(res => {
       updateToken(res.token)
       return httpService.get('/account')
-    }).catch(err => { throw err })
+    })
 
 const createAccount = (account) =>
   httpService.postNotAuthenticated('/account', account)
     .then(res => {
       updateToken(res.token)
       return httpService.get('/account')
-    }).catch(err => { throw err })
+    })
 
 const logout = () => updateToken(null)
 

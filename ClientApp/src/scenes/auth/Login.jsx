@@ -51,7 +51,8 @@ class Login extends React.Component {
   }
 
   login(e) {
-    if (this.state.loading) return;
+    if (this.state.loading)
+      return
     this.setState({ loading: true })
     if (e)
       e.preventDefault()

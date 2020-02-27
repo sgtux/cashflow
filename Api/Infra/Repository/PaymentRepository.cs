@@ -30,7 +30,21 @@ namespace Cashflow.Api.Infra.Repository
       return list;
     }
 
-    public Task<Payment> GetById(int id) => FirstOrDefault(PaymentResources.ById, new { Id = id });
+    public async Task<Payment> GetById(int id)
+    {
+      Payment payment = null;
+      var result = await Query<Installment>(PaymentResources.ById, (p, i) =>
+      {
+        if (payment == null)
+        {
+          payment = p;
+          payment.Installments = new List<Installment>();
+        }
+        payment.Installments.Add(i);
+        return p;
+      }, new { Id = id });
+      return payment;
+    }
 
     public Task<IEnumerable<Payment>> GetAll()
     {
@@ -40,9 +54,10 @@ namespace Cashflow.Api.Infra.Repository
     public async Task Add(Payment payment)
     {
       await Execute(PaymentResources.Insert, payment);
+      var currentId = await CurrentId();
       foreach (var i in payment.Installments)
       {
-        i.PaymentId = payment.Id;
+        i.PaymentId = currentId;
         await Execute(InstallmentResources.Insert, i);
       }
     }

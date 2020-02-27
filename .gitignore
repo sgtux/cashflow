@@ -4,3 +4,4 @@ node_modules
 .vscode
 deploy.tar.gz
 Tests/coverage.opencover.xml
+Api/wwwroot
