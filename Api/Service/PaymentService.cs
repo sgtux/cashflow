@@ -84,7 +84,15 @@ namespace Cashflow.Api.Service
       var validatorResult = new PaymentValidator().Validate(payment);
       if (!validatorResult.IsValid)
         result.AddNotification(validatorResult.Errors);
-      else
+
+      if (payment.CreditCardId > 0)
+      {
+        var card = (await _creditCardRepository.GetByUserId(payment.UserId)).FirstOrDefault(p => p.Id == payment.CreditCardId.Value);
+        if (card == null || card.UserId != payment.UserId)
+          result.AddNotification("Credit card not found.");
+      }
+
+      if (result.IsValid)
         await _paymentRepository.Add(payment);
       return result;
     }
@@ -98,7 +106,15 @@ namespace Cashflow.Api.Service
       var validatorResult = new PaymentValidator().Validate(payment);
       if (!validatorResult.IsValid)
         result.AddNotification(validatorResult.Errors);
-      else
+
+      if (payment.CreditCardId > 0)
+      {
+        var card = (await _creditCardRepository.GetByUserId(payment.UserId)).FirstOrDefault(p => p.Id == payment.CreditCardId.Value);
+        if (card == null || card.UserId != payment.UserId)
+          result.AddNotification("Credit card not found.");
+      }
+
+      if (result.IsValid)
       {
         var paymentDb = await _paymentRepository.GetById(payment.Id);
         if (paymentDb is null || paymentDb.UserId != payment.UserId)

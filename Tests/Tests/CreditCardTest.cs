@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Threading.Tasks;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Service;
 using Cashflow.Tests.Mocks;
@@ -17,91 +18,73 @@ namespace Cashflow.Tests
     }
 
     [TestMethod]
-    public void GetAll()
+    public async Task GetAll()
     {
-      var count = _service.GetByUser(1).Count();
-      Assert.IsTrue(count > 0);
+      var result = await _service.GetByUser(1);
+      Assert.IsTrue(result.Count() > 0);
     }
 
     [TestMethod]
-    public void InsertCardWithNoName()
+    public async Task InsertCardWithNoName()
     {
-      AssertExceptionMessage(() =>
-      {
-        _service.Add("", 1);
-      }, "O nome do cartão é obrigatório.");
+      var result = await _service.Add(new CreditCard() { Name = "", UserId = 1 });
+      HasNotifications(result, "'Name' must not be empty.");
     }
 
     [TestMethod]
-    public void InsertCardWithUserThatNotExists()
+    public async Task InsertCardWithUserThatNotExists()
     {
-      AssertExceptionMessage(() =>
-      {
-        _service.Add("nome do cartão", 99);
-      }, "Usuário não localizado.");
+      var result = await _service.Add(new CreditCard() { Name = "nome do cartão", UserId = 999 });
+      HasNotifications(result, "User not found.");
     }
 
     [TestMethod]
-    public void InsertCardOK()
+    public async Task InsertCardOK()
     {
-      AssertExceptionMessage(() =>
-      {
-        _service.Add("nome do cartão", 2);
-      });
+      var result = await _service.Add(new CreditCard() { Name = "nome do cartão", UserId = 2 });
+      HasNotifications(result);
     }
 
     [TestMethod]
-    public void UpdateCardWithNoName()
+    public async Task UpdateCardWithNoName()
     {
-      AssertExceptionMessage(() =>
-      {
-        _service.Update(new CreditCard() { Name = "", UserId = 1 });
-      }, "O nome do cartão é obrigatório.");
+      var result = await _service.Update(new CreditCard() { Name = "", UserId = 1 });
+      HasNotifications(result, "'Name' must not be empty.");
     }
 
     [TestMethod]
-    public void UpdateCardWithUserThatNotExists()
+    public async Task UpdateCardWithUserThatNotExists()
     {
-      AssertExceptionMessage(() =>
-      {
-        _service.Update(new CreditCard() { Name = "nome do cartão", UserId = 99 });
-      }, "Cartão não localizado.");
+      var result = await _service.Update(new CreditCard() { Name = "nome do cartão", UserId = 99 });
+      HasNotifications(result, "Credit card not found.");
     }
 
     [TestMethod]
-    public void UpdateCardOK()
+    public async Task UpdateCardOK()
     {
-      AssertExceptionMessage(() =>
-      {
-        _service.Update(new CreditCard() { Name = "nome do cartão", UserId = 1, Id = 1 });
-      });
+      var result = await _service.Update(new CreditCard() { Name = "nome do cartão", UserId = 1, Id = 1 });
+      HasNotifications(result);
     }
 
     [TestMethod]
-    public void RemoveWithNotFound()
+    public async Task RemoveWithNotFound()
     {
-      AssertExceptionMessage(() =>
-      {
-        _service.Remove(99, 2);
-      }, "Cartão não localizado.");
+      var result = await _service.Remove(99, 2);
+      HasNotifications(result, "Credit card not found.");
     }
 
     [TestMethod]
-    public void RemoveWithPayments()
+    public async Task RemoveWithPayments()
     {
-      AssertExceptionMessage(() =>
-      {
-        _service.Remove(1, 1);
-      }, "O cartão possui pagamentos vinculados e não pode ser excluído.");
+      var result = await _service.Remove(1, 1);
+      HasNotifications(result, "The card has linked payments and can't be deleted.");
     }
 
     [TestMethod]
-    public void RemoveOK()
+    public async Task RemoveOK()
     {
-      AssertExceptionMessage(() =>
-      {
-        _service.Remove(2, 1);
-      });
+      var result = await _service.Remove(2, 1);
+      HasNotifications(result);
     }
   }
 }

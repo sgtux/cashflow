@@ -1,5 +1,8 @@
+using System.Threading.Tasks;
+using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Models;
 using Cashflow.Api.Service;
+using Cashflow.Api.Shared;
 using Cashflow.Tests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -17,37 +20,34 @@ namespace Cashflow.Tests
     }
 
     [TestMethod]
-    public void WithInvalidEmail()
+    public async Task WithInvalidEmail()
     {
       var model = new AccountModel()
       {
         Email = "mstest.mail.com",
         Name = "mstest",
-        Password = "1234"
+        Password = "123456"
       };
-      AssertExceptionMessage(() =>
-      {
-        _service.Add(model);
-      }, "O email é inválido.");
+      var result = await _service.Add(model.Map(new User()));
+
+      HasNotifications(result, "'Email' is not a valid email address.");
     }
 
     [TestMethod]
-    public void WithInvalidName()
+    public async Task WithInvalidName()
     {
       var model = new AccountModel()
       {
         Email = "mstest@mail.com",
         Name = "",
-        Password = "1234"
+        Password = "123456"
       };
-      AssertExceptionMessage(() =>
-      {
-        _service.Add(model);
-      }, "O nome é obrigatório.");
+      var result = await _service.Add(model.Map(new User()));
+      HasNotifications(result, "'Name' must not be empty.");
     }
 
     [TestMethod]
-    public void WithInvalidPassword()
+    public async Task WithInvalidPassword()
     {
       var model = new AccountModel()
       {
@@ -55,53 +55,33 @@ namespace Cashflow.Tests
         Name = "mstest",
         Password = "123"
       };
-      AssertExceptionMessage(() =>
-      {
-        _service.Add(model);
-      }, "Informe uma senha de pelo menos 4 dígitos.");
+      var result = await _service.Add(model.Map(new User()));
+      HasNotifications(result, "The length of 'Password' must be at least 6 characters. You entered 3 characters.");
     }
 
     [TestMethod]
-    public void WithEmailAlready()
+    public async Task WithEmailAlready()
     {
       var model = new AccountModel()
       {
         Email = "primeirousuario@mail.com",
         Name = "mstest",
-        Password = "1234"
+        Password = "123456"
       };
-      AssertExceptionMessage(() =>
-      {
-        _service.Add(model);
-      }, "O email informado já está sendo usado.");
+      var result = await _service.Add(model.Map(new User()));
+      HasNotifications(result, "The email is already being used.");
     }
 
-    public void WithNameAlready()
-    {
-      var model = new AccountModel()
-      {
-        Email = "primeirousuario@mail.com",
-        Name = "Primeiro Usuário",
-        Password = "1234"
-      };
-      AssertExceptionMessage(() =>
-      {
-        _service.Add(model);
-      }, "O nome informado já está sendo usado.");
-    }
-
-    public void CreateAccountOk()
+    public async Task CreateAccountOk()
     {
       var model = new AccountModel()
       {
         Email = "mstest@mail.com",
         Name = "Mstest",
-        Password = "1234"
+        Password = "123456"
       };
-      AssertExceptionMessage(() =>
-      {
-        _service.Add(model);
-      });
+      var result = await _service.Add(model.Map(new User()));
+      HasNotifications(result);
     }
   }
 }

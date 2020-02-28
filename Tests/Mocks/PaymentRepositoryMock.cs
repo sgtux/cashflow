@@ -10,7 +10,6 @@ namespace Cashflow.Tests.Mocks
 {
   public class PaymentRepositoryMock : BaseRepositoryMock, IPaymentRepository
   {
-    public DateTime CurrentDate => new DateTime(2019, 4, 1);
 
     public Task Add(Payment t) => Task.Run(() => Payments.Add(t));
 
