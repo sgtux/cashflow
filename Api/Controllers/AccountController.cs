@@ -11,41 +11,41 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Cashflow.Api.Controllers
 {
-  [Route("api/[controller]")]
-  public class AccountController : BaseController
-  {
-    private AccountService _service;
-
-    private AppConfig _config;
-
-    public AccountController(AccountService service, AppConfig config)
+    [Route("api/[controller]")]
+    public class AccountController : BaseController
     {
-      _config = config;
-      _service = service;
-    }
+        private AccountService _service;
 
-    [Authorize]
-    [HttpGet]
-    public async Task<IActionResult> Get() => Ok(await _service.GetById(UserId));
+        private AppConfig _config;
 
-    [HttpPost]
-    public async Task<IActionResult> Post([FromBody]AccountModel model)
-    {
-      if (model is null)
-        return UnprocessableEntity();
-      var result = await _service.Add(model.Map<AccountModel, User>());
-      if (result.IsValid)
-      {
-        var claims = new Dictionary<string, string>();
-        claims.Add(ClaimTypes.Sid, result.Data.Id.ToString());
-
-        var token = new TokenModel()
+        public AccountController(AccountService service, AppConfig config)
         {
-          Token = new JwtTokenBuilder(_config.JwtKey, claims).Build().Value
-        };
-        return Ok(token);
-      }
-      return HandleResult(result);
+            _config = config;
+            _service = service;
+        }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> Get() => Ok(await _service.GetById(UserId));
+
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody] AccountModel model)
+        {
+            if (model is null)
+                return UnprocessableEntity();
+            var result = await _service.Add(model.Map<AccountModel, User>());
+            if (result.IsValid)
+            {
+                var claims = new Dictionary<string, string>();
+                claims.Add(ClaimTypes.Sid, result.Data.Id.ToString());
+
+                var token = new TokenModel()
+                {
+                    Token = new JwtTokenBuilder(_config.SecretJwtKey, claims).Build().Value
+                };
+                return Ok(token);
+            }
+            return HandleResult(result);
+        }
     }
-  }
 }

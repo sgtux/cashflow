@@ -6,81 +6,96 @@ using System.Threading.Tasks;
 using Api.Infra.Resources;
 using Cashflow.Api.Shared;
 using Dapper;
-using Npgsql;
+using static System.Console;
 
 namespace Cashflow.Api.Infra.Repository
 {
-  public abstract class BaseRepository<T> where T : class
-  {
-    private string _connectionString;
-
-    private IDbConnection Connection => new NpgsqlConnection(_connectionString);
-
-    protected BaseRepository(AppConfig config) => _connectionString = config.ConnectionString;
-
-    protected async Task Execute(ResourceBuilder resource, object parameters = null)
+    public abstract class BaseRepository<T> where T : class
     {
-      var query = await resource.Build();
-      Log(query);
-      using (var conn = Connection)
-        await conn.ExecuteAsync(query, parameters);
-    }
+        private readonly IDbConnection _conn;
+        private readonly DatabaseContext _context;
 
-    public async Task<U> ExecuteScalar<U>(ResourceBuilder resource, object parameters)
-    {
-      var query = await resource.Build();
-      Log(query);
-      using (var conn = Connection)
-        return await conn.ExecuteScalarAsync<U>(query, parameters);
-    }
+        public IDbTransaction Transaction { get; private set; }
 
-    protected async Task<T> FirstOrDefault(ResourceBuilder resource, object parameters)
-    {
-      var query = await resource.Build();
-      Log(query);
-      using (var conn = Connection)
-        return await conn.QuerySingleOrDefaultAsync<T>(query, parameters);
-    }
+        protected BaseRepository(DatabaseContext context)
+        {
+            _context = context;
+            _conn = context.Connection;
+        }
 
-    protected async Task<IEnumerable<T>> Query(ResourceBuilder resource, object parameters = null)
-    {
-      var query = await resource.Build();
-      Log(query);
-      using (var conn = Connection)
-        return await conn.QueryAsync<T>(query, parameters);
-    }
+        protected async Task Execute(ResourceBuilder resource, object parameters = null, IDbTransaction transaction = null)
+        {
+            var query = await resource.Build();
+            Log(query);
+            await _conn.ExecuteAsync(query, parameters, transaction ?? Transaction);
+        }
 
-    protected async Task<IEnumerable<T>> Query<U>(ResourceBuilder resource, Func<T, U, T> map, object parameters = null)
-    {
-      var query = await resource.Build();
-      Log(query);
-      using (var conn = Connection)
-        return await conn.QueryAsync<T, U, T>(query, map, parameters);
-    }
+        protected void ExecuteSync(ResourceBuilder resource, object parameters = null, IDbTransaction transaction = null)
+        {
+            var query = resource.Build().Result;
+            Log(query);
+            _conn.Execute(query, parameters, transaction ?? Transaction);
+        }
 
-    public async Task<bool> Exists(long id)
-    {
-      var query = $"SELECT COUNT(1) FROM \"{typeof(T).Name}\" WHERE \"Id\" = @Id";
-      Log(query);
-      using (var conn = Connection)
-        return await conn.ExecuteScalarAsync<long>(query, new { Id = id }) > 0;
-    }
+        protected async Task<U> ExecuteScalar<U>(ResourceBuilder resource, object parameters, IDbTransaction transaction = null)
+        {
+            var query = await resource.Build();
+            Log(query);
+            return await _conn.ExecuteScalarAsync<U>(query, parameters, transaction ?? Transaction);
+        }
 
-    public async Task<long> CurrentId()
-    {
-      var query = $"SELECT MAX(\"Id\") FROM \"{typeof(T).Name}\"";
-      Log(query);
-      using (var conn = Connection)
-        return await conn.ExecuteScalarAsync<long>(query);
-    }
+        protected async Task<T> FirstOrDefault(ResourceBuilder resource, object parameters, IDbTransaction transaction = null)
+        {
+            var query = await resource.Build();
+            Log(query);
+            return await _conn.QuerySingleOrDefaultAsync<T>(query, parameters, transaction ?? Transaction);
+        }
 
-    private void Log(string query)
-    {
-      System.Diagnostics.Debug.WriteLine("");
-      System.Diagnostics.Debug.WriteLine("");
-      System.Diagnostics.Debug.WriteLine($"Thread {Thread.CurrentThread.ManagedThreadId} - Query:{query}");
-      System.Diagnostics.Debug.WriteLine("");
-      System.Diagnostics.Debug.WriteLine("");
+        protected async Task<IEnumerable<T>> Query(ResourceBuilder resource, object parameters = null, IDbTransaction transaction = null)
+        {
+            var query = await resource.Build();
+            Log(query);
+            return await _conn.QueryAsync<T>(query, parameters, transaction ?? Transaction);
+        }
+
+        protected async Task<IEnumerable<T>> Query<U>(ResourceBuilder resource, Func<T, U, T> map, object parameters = null, IDbTransaction transaction = null)
+        {
+            var query = await resource.Build();
+            Log(query);
+            return await _conn.QueryAsync<T, U, T>(query, map, parameters, transaction ?? Transaction);
+        }
+
+        public IDbTransaction BeginTransaction()
+        {
+            Transaction = _context.BeginTransaction();
+            return Transaction;
+        }
+
+        public void Commit() => _context.Commit();
+
+        public void Rollback() => _context.Rollback();
+
+        public async Task<bool> Exists(long id)
+        {
+            var query = $"SELECT COUNT(1) FROM \"{typeof(T).Name}\" WHERE \"Id\" = @Id";
+            Log(query);
+            return await _conn.ExecuteScalarAsync<long>(query, new { Id = id }) > 0;
+        }
+
+        public Task<long> NextId()
+        {
+            var query = $"SELECT MAX(\"Id\") FROM \"{typeof(T).Name}\"";
+            Log(query);
+            return _conn.ExecuteScalarAsync<long>(query);
+        }
+
+        private void Log(string query)
+        {
+            WriteLine("");
+            WriteLine("");
+            WriteLine($"ContextId: {_context.Id} - ThreadId: {Thread.CurrentThread.ManagedThreadId} - Query:{query}");
+            WriteLine("");
+            WriteLine("");
+        }
     }
-  }
 }

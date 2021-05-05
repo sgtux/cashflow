@@ -1,9 +1,9 @@
 namespace Cashflow.Api.Shared
 {
-  public enum TypePayment
-  {
-    Income = 1,
+    public enum TypePayment
+    {
+        Income = 1,
 
-    Expense = 2
-  }
+        Expense = 2
+    }
 }
