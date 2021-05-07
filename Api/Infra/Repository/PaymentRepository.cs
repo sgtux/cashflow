@@ -66,10 +66,7 @@ namespace Cashflow.Api.Infra.Repository
                 }
                 Commit();
             }
-            catch (Exception ex)
-            {
-                Rollback();
-            }
+            catch (Exception) { Rollback(); }
         }
 
         public async Task Update(Payment payment)
