@@ -3,8 +3,8 @@ using Cashflow.Api.Infra.Entity;
 
 namespace Cashflow.Api.Infra.Repository
 {
-  public interface IUserRepository : IRepository<User>
-  {
-    Task<User> FindByEmail(string email);
-  }
+    public interface IUserRepository : IRepository<User>
+    {
+        Task<User> FindByNickName(string nickName);
+    }
 }

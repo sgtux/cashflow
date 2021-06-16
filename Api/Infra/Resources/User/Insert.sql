@@ -1,4 +1,4 @@
 INSERT INTO "User" 
-    ("Name", "Email", "Password", "CreatedAt", "UpdatedAt")
+    ("NickName", "Password", "CreatedAt")
 VALUES
-    (@Name, @Email, @Password, @CreatedAt, @UpdatedAt)
+    (@NickName, @Password, @CreatedAt)

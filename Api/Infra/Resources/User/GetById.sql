@@ -1,9 +1,7 @@
 SELECT 
     "Id",
-    "Name",
-    "Email",
+    "NickName",
     "Password",
-    "CreatedAt",
-    "UpdatedAt"
+    "CreatedAt"
 FROM "User"
 WHERE "Id" = @Id

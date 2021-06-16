@@ -76,9 +76,6 @@ namespace Cashflow.Api.Service
             return result;
         }
 
-        /// <summary>
-        /// Inserir um novo pagamento
-        /// </summary>
         public async Task<ResultModel> Add(Payment payment)
         {
             var result = new ResultModel();
@@ -98,9 +95,6 @@ namespace Cashflow.Api.Service
             return result;
         }
 
-        /// <summary>
-        /// Atualizar um pagamento
-        /// </summary>
         public async Task<ResultModel> Update(Payment payment)
         {
             var result = new ResultModel();

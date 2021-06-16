@@ -4,3 +4,4 @@ SELECT
     "Password",
     "CreatedAt"
 FROM "User"
+WHERE "NickName" = @NickName

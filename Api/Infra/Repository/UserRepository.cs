@@ -11,7 +11,7 @@ namespace Cashflow.Api.Infra.Repository
     {
         public UserRepository(DatabaseContext conn) : base(conn) { }
 
-        public Task<User> FindByEmail(string email) => FirstOrDefault(UserResources.ByEmail, new { Email = email });
+        public Task<User> FindByNickName(string nickName) => FirstOrDefault(UserResources.ByNickName, new { NickName = nickName });
 
         public Task<User> GetById(int id) => FirstOrDefault(UserResources.ById, new { Id = id });
 

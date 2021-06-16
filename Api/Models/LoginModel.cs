@@ -1,11 +1,9 @@
 namespace Cashflow.Api.Models
 {
-  /// Login model
-  public class LoginModel
-  {
-    /// Email
-    public string Email { get; set; }
-    /// Password
-    public string Password { get; set; }
-  }
+    public class LoginModel
+    {
+        public string NickName { get; set; }
+
+        public string Password { get; set; }
+    }
 }

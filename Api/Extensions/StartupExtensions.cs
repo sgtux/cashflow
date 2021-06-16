@@ -14,10 +14,12 @@ namespace Cashflow.Api.Extensions
             services.AddScoped<AccountService>();
             services.AddScoped<PaymentService>();
             services.AddScoped<CreditCardService>();
+            services.AddScoped<SalaryService>();
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IPaymentRepository, PaymentRepository>();
             services.AddScoped<ICreditCardRepository, CreditCardRepository>();
+            services.AddScoped<ISalaryRepository, SalaryRepository>();
         }
 
         public static void ConfigureAuthentication(this IServiceCollection services, string jwtKey)
@@ -33,12 +35,7 @@ namespace Cashflow.Api.Extensions
             };
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(
-              options =>
-              {
-                  options.TokenValidationParameters = tokenValidationParameters;
-              }
-            );
+            .AddJwtBearer(options => options.TokenValidationParameters = tokenValidationParameters);
         }
     }
 }

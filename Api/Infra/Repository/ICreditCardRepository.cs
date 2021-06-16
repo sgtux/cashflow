@@ -4,10 +4,10 @@ using Cashflow.Api.Infra.Entity;
 
 namespace Cashflow.Api.Infra.Repository
 {
-  public interface ICreditCardRepository : IRepository<CreditCard>
-  {
-    Task<IEnumerable<CreditCard>> GetByUserId(int userId);
+    public interface ICreditCardRepository : IRepository<CreditCard>
+    {
+        Task<IEnumerable<CreditCard>> GetByUserId(int userId);
 
-    Task<bool> HasPayments(int cardId);
-  }
+        Task<bool> HasPayments(int cardId);
+    }
 }

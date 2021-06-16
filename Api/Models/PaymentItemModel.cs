@@ -2,37 +2,26 @@ using Cashflow.Api.Shared;
 
 namespace Cashflow.Api.Models
 {
-  /// Payment item model
-  public class PaymentItemModel
-  {
-    /// Payment identifier
-    public int PaymentId { get; set; }
+    public class PaymentItemModel
+    {
+        public int PaymentId { get; set; }
 
-    /// Description
-    public string Description { get; set; }
+        public string Description { get; set; }
 
-    /// Cost
-    public decimal Cost { get; set; }
+        public decimal Cost { get; set; }
 
-    /// Plots
-    public int Plots { get; set; }
+        public int Plots { get; set; }
 
-    /// Plots paid
-    public int PlotsPaid { get; set; }
+        public int PlotsPaid { get; set; }
 
-    /// Type
-    public TypePayment Type { get; set; }
+        public TypePayment Type { get; set; }
 
-    /// Credit card name
-    public string CreditCard { get; set; }
+        public string CreditCard { get; set; }
 
-    /// Pay date
-    public string PaymentDate { get; set; }
+        public string PaymentDate { get; set; }
 
-    /// Month
-    public string Month { get; set; }
+        public string Month { get; set; }
 
-    /// Pay day
-    public int Day { get; set; }
-  }
+        public int Day { get; set; }
+    }
 }

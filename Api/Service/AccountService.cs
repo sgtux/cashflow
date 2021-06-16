@@ -30,12 +30,10 @@ namespace Cashflow.Api.Service
                 return result;
             }
 
-            model.Email = Utils.Sha1(model.Email);
-
-            User user = await _userRepository.FindByEmail(model.Email);
+            User user = await _userRepository.FindByNickName(model.NickName);
             if (user != null)
             {
-                result.AddNotification("The email is already being used.");
+                result.AddNotification("Este NickName já está sendo usado.");
                 return result;
             }
 
@@ -43,15 +41,15 @@ namespace Cashflow.Api.Service
             model.CreatedAt = DateTime.Now;
 
             await _userRepository.Add(model);
-            user = await _userRepository.FindByEmail(model.Email);
+            user = await _userRepository.FindByNickName(model.NickName);
             user.Map(result.Data);
 
             return result;
         }
 
-        public async Task<User> Login(string email, string password)
+        public async Task<User> Login(string nickName, string password)
         {
-            var user = await _userRepository.FindByEmail(Utils.Sha1(email));
+            var user = await _userRepository.FindByNickName(nickName);
             return user?.Password == Utils.Sha1(password) ? user : null;
         }
     }

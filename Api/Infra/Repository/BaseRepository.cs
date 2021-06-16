@@ -30,13 +30,6 @@ namespace Cashflow.Api.Infra.Repository
             await _conn.ExecuteAsync(query, parameters, transaction ?? Transaction);
         }
 
-        protected void ExecuteSync(ResourceBuilder resource, object parameters = null, IDbTransaction transaction = null)
-        {
-            var query = resource.Build().Result;
-            Log(query);
-            _conn.Execute(query, parameters, transaction ?? Transaction);
-        }
-
         protected async Task<U> ExecuteScalar<U>(ResourceBuilder resource, object parameters, IDbTransaction transaction = null)
         {
             var query = await resource.Build();

@@ -23,19 +23,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Infra/Resources/User/GetByEmail.sql" />
-    <Content Remove="Infra/Resources/User/Insert.sql" />
-
-    <Content Remove="Infra/Resources/CreditCard/Delete.sql" />
-    <Content Remove="Infra/Resources/CreditCard/GetByUser.sql" />
-    <Content Remove="Infra/Resources/CreditCard/Insert.sql" />
-    <Content Remove="Infra/Resources/CreditCard/Update.sql" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Infra/Resources/User/GetByEmail.sql" />
+    <EmbeddedResource Include="Infra/Resources/User/GetByNickName.sql" />
     <EmbeddedResource Include="Infra/Resources/User/GetById.sql" />
     <EmbeddedResource Include="Infra/Resources/User/Insert.sql" />
+
+    <EmbeddedResource Include="Infra/Resources/Salary/Insert.sql" />
+    <EmbeddedResource Include="Infra/Resources/Salary/Delete.sql" />
+    <EmbeddedResource Include="Infra/Resources/Salary/GetByUser.sql" />
+    <EmbeddedResource Include="Infra/Resources/Salary/Update.sql" />
 
     <EmbeddedResource Include="Infra/Resources/CreditCard/Delete.sql" />
     <EmbeddedResource Include="Infra/Resources/CreditCard/GetByUser.sql" />

@@ -3,27 +3,26 @@ using Cashflow.Api.Shared;
 
 namespace Cashflow.Api.Models
 {
-  public class PaymentFutureModel
-  {
+    public class PaymentFutureModel
+    {
+        public string Description { get; set; }
 
-    public string Description { get; set; }
+        public bool Invoice { get; set; }
 
-    public bool Invoice { get; set; }
+        public int Number { get; set; }
 
-    public int Number { get; set; }
+        public bool Paid { get; set; }
 
-    public bool Paid { get; set; }
+        public bool FixedPayment { get; set; }
 
-    public bool FixedPayment { get; set; }
+        public int QtdInstallments { get; set; }
 
-    public int QtdInstallments { get; set; }
+        public decimal Cost { get; set; }
 
-    public decimal Cost { get; set; }
+        public TypePayment Type { get; set; }
 
-    public TypePayment Type { get; set; }
+        public CreditCard CreditCard { get; set; }
 
-    public CreditCard CreditCard { get; set; }
-
-    public string MonthYear { get; set; }
-  }
+        public string MonthYear { get; set; }
+    }
 }

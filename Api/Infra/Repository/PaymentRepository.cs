@@ -77,22 +77,22 @@ namespace Cashflow.Api.Infra.Repository
                 var payDb = await GetById(payment.Id);
                 if (payDb == null)
                     throw new Exception("Payment not found");
-                ExecuteSync(InstallmentResources.Delete, new { PaymentId = payment.Id });
-                ExecuteSync(PaymentResources.Update, payment);
+                await Execute(InstallmentResources.Delete, new { PaymentId = payment.Id });
+                await Execute(PaymentResources.Update, payment);
                 int number = 0;
                 foreach (var i in payment.Installments.OrderBy(p => p.Number))
                 {
                     i.Number = number;
                     i.PaymentId = payment.Id;
-                    ExecuteSync(InstallmentResources.Insert, i);
+                    await Execute(InstallmentResources.Insert, i);
                 }
                 payDb = await GetById(payment.Id);
                 Commit();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 Rollback();
-                throw ex;
+                throw;
             }
         }
 

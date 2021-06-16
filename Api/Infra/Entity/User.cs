@@ -3,20 +3,18 @@ using System.Collections.Generic;
 
 namespace Cashflow.Api.Infra.Entity
 {
-  public class User
-  {
-    public int Id { get; set; }
+    public class User
+    {
+        public int Id { get; set; }
 
-    public string Name { get; set; }
+        public string NickName { get; set; }
 
-    public string Email { get; set; }
+        public string Password { get; set; }
 
-    public string Password { get; set; }
+        public DateTime CreatedAt { get; set; }
 
-    public DateTime CreatedAt { get; set; }
+        public ICollection<Payment> Payments { get; set; }
 
-    public DateTime? UpdatedAt { get; set; }
-
-    public ICollection<Payment> Payments { get; set; }
-  }
+        public ICollection<Salary> Salaries { get; set; }
+    }
 }

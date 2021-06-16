@@ -3,18 +3,18 @@ using System.Threading.Tasks;
 
 namespace Cashflow.Api.Infra.Repository
 {
-  public interface IRepository<T> where T : class
-  {
-    Task<bool> Exists(long userId);
-    
-    Task<T> GetById(int id);
+    public interface IRepository<T> where T : class
+    {
+        Task<bool> Exists(long userId);
 
-    Task<IEnumerable<T>> GetAll();
+        Task<T> GetById(int id);
 
-    Task Add(T t);
+        Task<IEnumerable<T>> GetAll();
 
-    Task Update(T t);
+        Task Add(T t);
 
-    Task Remove(int id);
-  }
+        Task Update(T t);
+
+        Task Remove(int id);
+    }
 }

@@ -3,22 +3,22 @@ using Cashflow.Api.Shared;
 
 namespace Cashflow.Api.Infra.Entity
 {
-  public class Payment
-  {
-    public int Id { get; set; }
+    public class Payment
+    {
+        public int Id { get; set; }
 
-    public string Description { get; set; }
+        public string Description { get; set; }
 
-    public int UserId { get; set; }
+        public int UserId { get; set; }
 
-    public TypePayment Type { get; set; }
+        public TypePayment Type { get; set; }
 
-    public int? CreditCardId { get; set; }
+        public int? CreditCardId { get; set; }
 
-    public bool FixedPayment { get; set; }
+        public bool FixedPayment { get; set; }
 
-    public bool Invoice { get; set; }
+        public bool Invoice { get; set; }
 
-    public IList<Installment> Installments { get; set; }
-  }
+        public IList<Installment> Installments { get; set; }
+    }
 }

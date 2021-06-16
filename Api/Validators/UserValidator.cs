@@ -7,8 +7,7 @@ namespace Cashflow.Api.Validators
     {
         public UserValidator()
         {
-            RuleFor(user => user.Name).NotNull().NotEmpty().MinimumLength(4);
-            RuleFor(user => user.Email).EmailAddress();
+            RuleFor(user => user.NickName).NotNull().NotEmpty().MinimumLength(4);
             RuleFor(user => user.Password).NotNull().MinimumLength(6).When(user => user.Id == 0);
         }
     }

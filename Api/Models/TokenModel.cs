@@ -1,9 +1,7 @@
 namespace Cashflow.Api.Models
 {
-  /// Token model
-  public class TokenModel
-  {
-    /// Token value
-    public string Token { get; set; }
-  }
+    public class TokenModel
+    {
+        public string Token { get; set; }
+    }
 }
