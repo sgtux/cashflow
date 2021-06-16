@@ -1,0 +1,16 @@
+version: '2.2'
+
+services:
+    database:
+        environment:
+            - POSTGRES_PASSWORD=Postgres123
+        image: postgres
+        networks:
+            lan:
+                ipv4_address: 172.30.30.10  
+  
+networks:
+    lan:
+        ipam:
+            config:
+                - subnet: 172.30.30.0/24
