@@ -1,6 +1,9 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
 using FluentMigrator.Runner;
+using Cashflow.Migrations.DDL;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace Migrations
 {
@@ -8,47 +11,39 @@ namespace Migrations
     {
         static void Main(string[] args)
         {
+            var downMigrations = args.Contains("down") || args.Contains("--down");
             var serviceProvider = CreateServices();
 
-            // Put the database update into a scope to ensure
-            // that all resources will be disposed.
             using (var scope = serviceProvider.CreateScope())
             {
-                UpdateDatabase(scope.ServiceProvider);
+                UpdateDatabase(scope.ServiceProvider, downMigrations);
             }
         }
 
-        /// <summary>
-        /// Configure the dependency injection services
-        /// </summary>
         private static IServiceProvider CreateServices()
         {
+            string defaultConnectionString = "Host=172.30.30.10;Port=5432;Pooling=true;User Id=postgres;Password=Postgres123";
+            string connectionString = defaultConnectionString ?? Environment.GetEnvironmentVariable("DATABASE_CONNECTION_STRING");
             return new ServiceCollection()
-                // Add common FluentMigrator services
                 .AddFluentMigratorCore()
                 .ConfigureRunner(rb => rb
-                    // Add SQLite support to FluentMigrator
-                    // .Add()
-                    // Set the connection string
-                    .WithGlobalConnectionString("Data Source=test.db")
-                    // Define the assembly containing the migrations
-                    .ScanIn(typeof(AddLogTable).Assembly).For.Migrations())
-                // Enable logging to console in the FluentMigrator way
+                    .AddPostgres()
+                    .WithGlobalConnectionString(connectionString)
+                    .ScanIn(typeof(AddUserTable).Assembly).For.Migrations()
+                    .ScanIn(typeof(AddCreditCardTable).Assembly).For.Migrations())
                 .AddLogging(lb => lb.AddFluentMigratorConsole())
-                // Build the service provider
                 .BuildServiceProvider(false);
         }
 
-        /// <summary>
-        /// Update the database
-        /// </summary>
-        private static void UpdateDatabase(IServiceProvider serviceProvider)
+        private static void UpdateDatabase(IServiceProvider serviceProvider, bool downMigrations)
         {
-            // Instantiate the runner
+            var migrationsVersions = new List<int>() { 5, 4, 3, 2, 1, 0 };
             var runner = serviceProvider.GetRequiredService<IMigrationRunner>();
-
-            // Execute the migrations
-            runner.MigrateUp();
+            if (downMigrations)
+                foreach (var version in migrationsVersions)
+                    runner.MigrateDown(version);
+            else
+                runner.MigrateUp();
         }
     }
 }

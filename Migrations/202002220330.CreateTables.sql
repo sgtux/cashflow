@@ -1,3 +1,12 @@
+CREATE TABLE public."User" (
+    "Id" integer NOT NULL,
+    "Name" character varying(255) NOT NULL,
+    "Email" character varying(255) NOT NULL,
+    "Password" character varying(255) NOT NULL,
+    "CreatedAt" timestamp with time zone NOT NULL,
+    "UpdatedAt" timestamp with time zone
+);
+
 CREATE TABLE public."CreditCard" (
     "Id" integer NOT NULL,
     "Name" character varying(255) NOT NULL,
@@ -46,15 +55,6 @@ CREATE SEQUENCE public."Payment_id_seq"
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
-
-CREATE TABLE public."User" (
-    "Id" integer NOT NULL,
-    "Name" character varying(255) NOT NULL,
-    "Email" character varying(255) NOT NULL,
-    "Password" character varying(255) NOT NULL,
-    "CreatedAt" timestamp with time zone NOT NULL,
-    "UpdatedAt" timestamp with time zone
-);
 
 CREATE SEQUENCE public."User_id_seq"
     AS integer
