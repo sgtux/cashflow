@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { Email, Visibility, VisibilityOff } from '@material-ui/icons'
+import { Person, Visibility, VisibilityOff } from '@material-ui/icons'
 import {
   CardContent,
   Card,
@@ -57,7 +57,7 @@ class Login extends React.Component {
     if (e)
       e.preventDefault()
     authService.login({
-      email: this.state.email,
+      nickName: this.state.nickName,
       password: this.state.password
     }).then(user => {
       setTimeout(() => this.setState({ loading: false }), 500)
@@ -77,14 +77,13 @@ class Login extends React.Component {
           <form onSubmit={e => this.login(e)}>
             <CardContent>
               <IconTextInput
-                label="Email"
+                label="Nick Name"
                 required
-                email
                 disabled={this.state.loading}
-                name="email"
+                name="nickName"
                 onChange={this.onInputChange}
-                validChanged={valid => this.setState({ emailValid: valid })}
-                Icon={<Email />}
+                validChanged={valid => this.setState({ nickNameValid: valid })}
+                Icon={<Person />}
               />
               <IconTextInput
                 type={this.state.showPassword ? 'text' : 'password'}
@@ -104,7 +103,7 @@ class Login extends React.Component {
             <div hidden={this.state.loading}>
               <Button style={{ width: '250px' }}
                 variant="contained"
-                disabled={!this.state.emailValid || !this.state.passwordValid}
+                disabled={!this.state.nickNameValid || !this.state.passwordValid}
                 type="submit"
                 onClick={() => this.login()}
                 color="primary">Login</Button>

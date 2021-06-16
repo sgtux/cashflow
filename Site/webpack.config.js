@@ -4,6 +4,8 @@ const ProgressBar = require('progress-bar-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 
+const urlApi = process.env.URL_API || ''
+
 module.exports = {
   entry: './src/App.jsx',
   module: {
@@ -36,7 +38,10 @@ module.exports = {
       template: path.join(__dirname, 'public', 'index.html'),
       title: 'Cashflow'
     }),
-    new CleanWebpackPlugin()
+    new CleanWebpackPlugin(),
+    new webpack.DefinePlugin({
+      API_URL: JSON.stringify(urlApi),
+    })
   ],
   devServer: {
     contentBase: './public',

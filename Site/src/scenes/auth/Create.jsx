@@ -61,20 +61,12 @@ class Create extends React.Component {
         <Card style={styles.Card}>
           <CardContent>
             <IconTextInput
-              label="Name"
+              label="Nick Name"
               required
               minlength={5}
-              name="name"
+              name="nickName"
               onChange={this.onInputChange}
               Icon={<Person />}
-            />
-            <IconTextInput
-              label="Email"
-              email
-              required
-              name="email"
-              onChange={this.onInputChange}
-              Icon={<Email />}
             />
             <IconTextInput
               type={this.state.showPassword ? 'text' : 'password'}
@@ -89,7 +81,7 @@ class Create extends React.Component {
             <IconTextInput
               required
               type={this.state.showConfirm ? 'text' : 'password'}
-              label="Confirm"
+              label="Confirm Password"
               name="confirm"
               onChange={this.onInputChange}
               pattern={`^${this.state.password}$`}

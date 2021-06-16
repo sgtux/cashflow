@@ -21,9 +21,6 @@ class App extends React.Component {
   }
 }
 
-if (location.protocol === 'http:' && location.host.indexOf('localhost') === -1)
-  location.protocol = 'https:'
-
 ReactDOM.render(<App />, document.getElementById('app'))
 
 module.hot.accept()

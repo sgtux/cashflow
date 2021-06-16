@@ -18,7 +18,7 @@ const sendRequest = (method, url, headers, data) => {
   return axios({
     method: method,
     headers: headers,
-    url: url,
+    url: API_URL + url,
     data: data
   }).then(res => res.data)
     .catch(err => {
