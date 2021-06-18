@@ -15,12 +15,12 @@ namespace Cashflow.Api.Validators
         public SalaryValidator(ISalaryRepository repository)
         {
             _repository = repository;
-            RuleFor(s => s.StartDate).NotEqual(default(System.DateTime)).WithMessage("A Data de Início é inválida.");
-            RuleFor(s => s.EndDate).NotEqual(default(System.DateTime)).WithMessage("A Data Fim é inválida."); ;
-            RuleFor(s => s.Value).GreaterThan(0).WithMessage("O valor deve ser maior que zero");
-            RuleFor(s => s.EndDate <= s.StartDate).NotEqual(true).WithMessage("A Data Início não pode ser maior que a Data Fim.");
-            RuleFor(s => ValidateCurretSalary(s)).NotEqual(true).WithMessage("Tem outro salário vigente.");
-            RuleFor(s => ValidateIntervalDate(s)).NotEqual(true).WithMessage("Tem outro salário neste intervalo de datas.");
+            RuleFor(s => s.StartDate).NotEqual(default(System.DateTime)).WithMessage(ValidatorMessages.Salary.InvalidStartDate);
+            RuleFor(s => s.EndDate).NotEqual(default(System.DateTime)).WithMessage(ValidatorMessages.Salary.InvalidEndDate); ;
+            RuleFor(s => s.Value).GreaterThan(0).WithMessage(ValidatorMessages.Salary.ValueMustBeMoreThenZero);
+            RuleFor(s => s.EndDate <= s.StartDate).NotEqual(true).WithMessage(ValidatorMessages.Salary.EndDateMustBeMoreThenStartDate);
+            RuleFor(s => ValidateCurretSalary(s)).NotEqual(true).WithMessage(ValidatorMessages.Salary.AnotherCurrentSalary);
+            RuleFor(s => ValidateIntervalDate(s)).NotEqual(true).WithMessage(ValidatorMessages.Salary.AnotherSalaryInThisDateRange);
         }
 
         public bool ValidateCurretSalary(Salary salary)

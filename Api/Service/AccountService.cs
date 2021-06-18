@@ -23,26 +23,18 @@ namespace Cashflow.Api.Service
         public async Task<ResultDataModel<UserDataModel>> Add(User model)
         {
             var result = new ResultDataModel<UserDataModel>();
-            var validationResults = new UserValidator().Validate(model);
-            if (!validationResults.IsValid)
+            var validationResults = new UserValidator(_userRepository).Validate(model);
+            if (validationResults.IsValid)
             {
+                model.Password = Utils.Sha1(model.Password);
+                model.CreatedAt = DateTime.Now;
+
+                await _userRepository.Add(model);
+                var user = await _userRepository.FindByNickName(model.NickName);
+                user.Map(result.Data);
+            }
+            else
                 result.AddNotification(validationResults.Errors);
-                return result;
-            }
-
-            User user = await _userRepository.FindByNickName(model.NickName);
-            if (user != null)
-            {
-                result.AddNotification("Este NickName já está sendo usado.");
-                return result;
-            }
-
-            model.Password = Utils.Sha1(model.Password);
-            model.CreatedAt = DateTime.Now;
-
-            await _userRepository.Add(model);
-            user = await _userRepository.FindByNickName(model.NickName);
-            user.Map(result.Data);
 
             return result;
         }

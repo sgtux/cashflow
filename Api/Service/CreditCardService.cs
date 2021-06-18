@@ -25,42 +25,26 @@ namespace Cashflow.Api.Service
         public async Task<ResultModel> Add(CreditCard card)
         {
             var result = new ResultModel();
-            var validatorResult = new CreditCardValidator().Validate(card);
-            if (!validatorResult.IsValid)
-            {
+            var validatorResult = new CreditCardValidator(_creditCardRepository, _userRepository).Validate(card);
+
+            if (validatorResult.IsValid)
+                await _creditCardRepository.Add(card);
+            else
                 result.AddNotification(validatorResult.Errors);
-                return result;
-            }
 
-            if (!await _userRepository.Exists(card.UserId))
-            {
-                result.AddNotification("User not found.");
-                return result;
-            }
-
-            await _creditCardRepository.Add(card);
             return result;
         }
 
         public async Task<ResultModel> Update(CreditCard card)
         {
             var result = new ResultModel();
-            var validatorResult = new CreditCardValidator().Validate(card);
-            if (!validatorResult.IsValid)
-            {
+            var validatorResult = new CreditCardValidator(_creditCardRepository, _userRepository).Validate(card);
+
+            if (validatorResult.IsValid)
+                await _creditCardRepository.Update(card);
+            else
                 result.AddNotification(validatorResult.Errors);
-                return result;
-            }
 
-            var dbCard = (await _creditCardRepository.GetByUserId(card.UserId)).FirstOrDefault(p => p.Id == card.Id);
-            if (dbCard is null)
-            {
-                result.AddNotification("Credit card not found.");
-                return result;
-            }
-
-            dbCard.Name = card.Name;
-            await _creditCardRepository.Update(dbCard);
             return result;
         }
 
@@ -70,13 +54,13 @@ namespace Cashflow.Api.Service
             var card = (await _creditCardRepository.GetByUserId(userId)).FirstOrDefault(p => p.Id == id);
             if (card is null)
             {
-                result.AddNotification("Credit card not found.");
+                result.AddNotification(ValidatorMessages.CreditCard.NotFound);
                 return result;
             }
 
             if (_creditCardRepository.HasPayments(id).Result)
             {
-                result.AddNotification("The card has linked payments and can't be deleted.");
+                result.AddNotification(ValidatorMessages.CreditCard.BindedWithPayments);
                 return result;
             }
 

@@ -69,8 +69,6 @@ namespace Cashflow.Api.Infra.Repository
         {
             BeginTransaction();
             var payDb = await GetById(payment.Id);
-            if (payDb == null)
-                throw new Exception("Payment not found");
             await Execute(InstallmentResources.Delete, new { PaymentId = payment.Id });
             await Execute(PaymentResources.Update, payment);
             int number = 0;
@@ -81,7 +79,6 @@ namespace Cashflow.Api.Infra.Repository
                 await Execute(InstallmentResources.Insert, i);
             }
             payDb = await GetById(payment.Id);
-            Commit();
         }
 
         public async Task Remove(int id)

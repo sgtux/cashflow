@@ -33,6 +33,7 @@ namespace Cashflow.Api.Controllers
             if (payment is null)
                 return UnprocessableEntity();
             payment.UserId = UserId;
+            payment.Id = 0;
             return HandleResult(await _service.Add(payment));
         }
 

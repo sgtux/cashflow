@@ -15,16 +15,21 @@ namespace Cashflow.Api.Validators
         {
             _paymentRepository = paymentRepository;
             _creditCardRepository = creditCardRepository;
-            RuleFor(p => p.Description).NotEmpty().WithMessage("A descrição deve ser preenchida");
-            RuleFor(p => p.Installments).NotEmpty().WithMessage("O pagamento deve ter pelo menos 1 parcela.");
-            RuleFor(p => p.Type).IsInEnum().WithMessage("O tipo do pagamento é inválido.");
-            RuleFor(p => p.FixedPayment && p.Installments.Count() > 1).NotEqual(true)
-              .WithMessage("Pagamento fixo não pode ter mais de uma parcela.");
+            RuleFor(p => p.Description).NotEmpty().WithMessage(ValidatorMessages.Payment.DescriptionRequired);
+            RuleFor(p => p.Installments).NotEmpty().WithMessage(ValidatorMessages.Payment.InstallmentsRequired);
+            RuleFor(p => p.Type).IsInEnum().WithMessage(ValidatorMessages.Payment.PaymentTypeInvalid);
+            RuleFor(p => p).Must(ValidFixedPayment).When(p => p.FixedPayment).WithMessage(ValidatorMessages.Payment.FixedPaymentWithMoreThenOnePlot);
             RuleFor(p => p.Installments).SetValidator(new InstallmentPropertyValidator());
-            RuleFor(p => ValidateCreditCard(p)).NotEqual(false).WithMessage("Cartão de crédito não encontrado.");
+            RuleFor(p => p).Must(ValidCreditCard).WithMessage(ValidatorMessages.CreditCard.NotFound);
+            RuleFor(p => p).Must(ValidPayment).When(p => p.Id > 0).WithMessage(ValidatorMessages.Payment.NotFound);
         }
 
-        private bool ValidateCreditCard(Payment payment)
+        private bool ValidFixedPayment(Payment payment)
+        {
+            return payment.Installments.Count() == 1;
+        }
+
+        private bool ValidCreditCard(Payment payment)
         {
             if (payment.CreditCardId > 0)
             {
@@ -35,6 +40,12 @@ namespace Cashflow.Api.Validators
             else
                 payment.CreditCardId = null;
             return true;
+        }
+
+        private bool ValidPayment(Payment payment)
+        {
+            var paymentDb = _paymentRepository.GetById(payment.Id).Result;
+            return paymentDb?.UserId == payment.UserId;
         }
     }
 }

@@ -8,80 +8,75 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Cashflow.Tests
 {
-  [TestClass]
-  public class AccountTest : BaseTest
-  {
-    private AccountService _service;
-
-    [TestInitialize]
-    public void Init()
+    [TestClass]
+    public class AccountTest : BaseTest
     {
-      _service = new AccountService(new UserRepositoryMock());
-    }
+        private AccountService _service;
 
-    [TestMethod]
-    public async Task WithInvalidEmail()
-    {
-      var model = new AccountModel()
-      {
-        Email = "mstest.mail.com",
-        Name = "mstest",
-        Password = "123456"
-      };
-      var result = await _service.Add(model.Map(new User()));
+        [TestInitialize]
+        public void Init()
+        {
+            _service = new AccountService(new UserRepositoryMock());
+        }
 
-      HasNotifications(result, "'Email' is not a valid email address.");
-    }
+        [TestMethod]
+        public async Task WithInvalidNickName()
+        {
+            var model = new AccountModel()
+            {
+                NickName = "",
+                Password = "12345678"
+            };
+            var result = await _service.Add(model.Map(new User()));
+            HasNotifications(result, "O campo 'Nick Name' deve ter pelo menos 4 caracteres.");
+        }
 
-    [TestMethod]
-    public async Task WithInvalidName()
-    {
-      var model = new AccountModel()
-      {
-        Email = "mstest@mail.com",
-        Name = "",
-        Password = "123456"
-      };
-      var result = await _service.Add(model.Map(new User()));
-      HasNotifications(result, "'Name' must not be empty.");
-    }
+        [TestMethod]
+        public async Task WithInvalidPassword()
+        {
+            var model = new AccountModel()
+            {
+                NickName = "mstest",
+                Password = "123"
+            };
+            var result = await _service.Add(model.Map(new User()));
+            HasNotifications(result, "O campo 'Senha' deve ter pelo menos 8 caracteres.");
+        }
 
-    [TestMethod]
-    public async Task WithInvalidPassword()
-    {
-      var model = new AccountModel()
-      {
-        Email = "mstest@mail.com",
-        Name = "mstest",
-        Password = "123"
-      };
-      var result = await _service.Add(model.Map(new User()));
-      HasNotifications(result, "The length of 'Password' must be at least 6 characters. You entered 3 characters.");
-    }
+        [TestMethod]
+        public async Task WithNickNameAlreadyUsed()
+        {
+            var model = new AccountModel()
+            {
+                NickName = "Primeiro Usuário",
+                Password = "12345678"
+            };
+            var result = await _service.Add(model.Map(new User()));
+            HasNotifications(result, "O Nick Name informado já está sendo utilizado.");
+        }
 
-    [TestMethod]
-    public async Task WithEmailAlready()
-    {
-      var model = new AccountModel()
-      {
-        Email = "primeirousuario@mail.com",
-        Name = "mstest",
-        Password = "123456"
-      };
-      var result = await _service.Add(model.Map(new User()));
-      HasNotifications(result, "The email is already being used.");
-    }
+        [TestMethod]
+        public async Task WithNickNameOutOfPattern()
+        {
+            var model = new AccountModel()
+            {
+                NickName = "Primeiro Usuário",
+                Password = "12345678"
+            };
+            var result = await _service.Add(model.Map(new User()));
+            HasNotifications(result, "O Nick Name deve conter apenas números, letras ou os símbolos _$#@!&.");
+        }
 
-    public async Task CreateAccountOk()
-    {
-      var model = new AccountModel()
-      {
-        Email = "mstest@mail.com",
-        Name = "Mstest",
-        Password = "123456"
-      };
-      var result = await _service.Add(model.Map(new User()));
-      HasNotifications(result);
+        [TestMethod]
+        public async Task CreateAccountOk()
+        {
+            var model = new AccountModel()
+            {
+                NickName = "Mstest",
+                Password = "12345678"
+            };
+            var result = await _service.Add(model.Map(new User()));
+            HasNotifications(result);
+        }
     }
-  }
 }

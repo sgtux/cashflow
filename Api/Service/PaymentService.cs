@@ -1,12 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Infra.Repository;
 using Cashflow.Api.Models;
-using Cashflow.Api.Shared;
 using Cashflow.Api.Validators;
 
 namespace Cashflow.Api.Service
@@ -96,27 +94,16 @@ namespace Cashflow.Api.Service
                 result.AddNotification(validatorResult.Errors);
 
             if (result.IsValid)
-            {
-                var paymentDb = await _paymentRepository.GetById(payment.Id);
-                if (paymentDb is null || paymentDb.UserId != payment.UserId)
-                    result.AddNotification("Payment not found.");
-                else
-                {
-                    payment.Map(paymentDb);
-                    await _paymentRepository.Update(paymentDb);
-                }
-            }
+                await _paymentRepository.Update(payment);
             return result;
         }
 
         public async Task<ResultModel> Remove(int paymentId, int userId)
         {
             var result = new ResultModel();
-            var local = new AsyncLocal<object>();
-
             var payment = await _paymentRepository.GetById(paymentId);
             if (payment is null || payment.UserId != userId)
-                result.AddNotification("Payment not found.");
+                result.AddNotification(ValidatorMessages.Payment.NotFound);
             else
                 await _paymentRepository.Remove(paymentId);
             return result;
