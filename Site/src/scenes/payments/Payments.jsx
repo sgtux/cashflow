@@ -191,7 +191,7 @@ export default class Payments extends React.Component {
             Adicionar Pagamento
           </Button>
         </div>
-        {/* {
+        {
           this.state.showModal ?
             <EditPaymentModal
               onFinish={() => this.onFinish()}
@@ -200,7 +200,7 @@ export default class Payments extends React.Component {
               payment={this.state.payment}
               onClose={() => this.setState({ showModal: false })} />
             : null
-        } */}
+        }
       </CardMain>
     )
   }

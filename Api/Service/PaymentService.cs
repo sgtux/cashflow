@@ -79,16 +79,9 @@ namespace Cashflow.Api.Service
         public async Task<ResultModel> Add(Payment payment)
         {
             var result = new ResultModel();
-            var validatorResult = new PaymentValidator().Validate(payment);
+            var validatorResult = new PaymentValidator(_paymentRepository, _creditCardRepository).Validate(payment);
             if (!validatorResult.IsValid)
                 result.AddNotification(validatorResult.Errors);
-
-            if (payment.CreditCardId > 0)
-            {
-                var card = (await _creditCardRepository.GetByUserId(payment.UserId)).FirstOrDefault(p => p.Id == payment.CreditCardId.Value);
-                if (card == null || card.UserId != payment.UserId)
-                    result.AddNotification("Credit card not found.");
-            }
 
             if (result.IsValid)
                 await _paymentRepository.Add(payment);
@@ -98,16 +91,9 @@ namespace Cashflow.Api.Service
         public async Task<ResultModel> Update(Payment payment)
         {
             var result = new ResultModel();
-            var validatorResult = new PaymentValidator().Validate(payment);
+            var validatorResult = new PaymentValidator(_paymentRepository, _creditCardRepository).Validate(payment);
             if (!validatorResult.IsValid)
                 result.AddNotification(validatorResult.Errors);
-
-            if (payment.CreditCardId > 0)
-            {
-                var card = (await _creditCardRepository.GetByUserId(payment.UserId)).FirstOrDefault(p => p.Id == payment.CreditCardId.Value);
-                if (card == null || card.UserId != payment.UserId)
-                    result.AddNotification("Credit card not found.");
-            }
 
             if (result.IsValid)
             {

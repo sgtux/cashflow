@@ -194,7 +194,7 @@ export default class EditPaymentModal extends React.Component {
                   <InputLabel htmlFor="select-tipo">Tipo</InputLabel>
                   <Select
                     value={this.state.paymentType || 2}
-                    color="red"
+                    color="secondary"
                     onChange={e => this.setState({ paymentType: e.target.value })}>
                     <MenuItem key={1} value={1}><span style={{ color: 'green', fontWeight: 'bold' }}>RENDA</span></MenuItem>
                     <MenuItem key={2} value={2}><span style={{ color: 'red', fontWeight: 'bold' }}>DESPESA</span></MenuItem>
@@ -212,8 +212,7 @@ export default class EditPaymentModal extends React.Component {
                     onChangeText={e => this.updateInstallments({ ...this.state, firstPayment: e })}
                     kind="datetime"
                     value={this.state.firstPayment}
-                    options={{ format: 'dd/MM/YYYY' }}
-                    style={styles.maskInput} />
+                    options={{ format: 'dd/MM/YYYY' }} />
                   <FormControlLabel label="Pagamento Fixo ?"
                     control={<Checkbox
                       checked={this.state.fixedPayment}
@@ -310,7 +309,11 @@ export default class EditPaymentModal extends React.Component {
             <CircularProgress size={30} />
           </div>
           <Button onClick={() => this.props.onClose()} variant="contained" autoFocus>cancelar</Button>
-          <Button disabled={this.state.loading} onClick={() => this.save()} color="primary" variant="contained" autoFocus>salvar</Button>
+          <Button
+            disabled={this.state.loading}
+            onClick={() => this.save()}
+            color="primary"
+            variant="contained" autoFocus>salvar</Button>
         </DialogActions>
       </Dialog>
     )

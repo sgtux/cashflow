@@ -23,8 +23,7 @@ namespace Cashflow.Api
             services.ConfigureAuthentication(appConfig.SecretJwtKey);
             services.AddRouting();
             services.AddSingleton(appConfig);
-            services.AddSingleton(LogService.Create());
-            services.AddTransient(typeof(DatabaseContext));
+            services.ConfigureScopes();
 
             services.AddSwaggerGen(c =>
             {

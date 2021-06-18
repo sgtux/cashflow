@@ -6,9 +6,13 @@ namespace Cashflow.Api.Shared
     public class DatabaseContext
     {
         private static int _id;
+
         public readonly IDbConnection Connection;
+
         public readonly int Id;
+
         public IDbTransaction Transaction { get; private set; }
+
         public DatabaseContext(AppConfig config)
         {
             Id = ++_id;

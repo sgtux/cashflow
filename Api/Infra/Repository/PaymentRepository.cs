@@ -56,49 +56,37 @@ namespace Cashflow.Api.Infra.Repository
         public async Task Add(Payment payment)
         {
             BeginTransaction();
-            try
+            await Execute(PaymentResources.Insert, payment);
+            var currentId = await NextId();
+            foreach (var i in payment.Installments)
             {
-                await Execute(PaymentResources.Insert, payment);
-                var currentId = await NextId();
-                foreach (var i in payment.Installments)
-                {
-                    i.PaymentId = currentId;
-                    await Execute(InstallmentResources.Insert, i);
-                }
-                Commit();
+                i.PaymentId = currentId;
+                await Execute(InstallmentResources.Insert, i);
             }
-            catch (Exception) { Rollback(); }
         }
 
         public async Task Update(Payment payment)
         {
             BeginTransaction();
-            try
+            var payDb = await GetById(payment.Id);
+            if (payDb == null)
+                throw new Exception("Payment not found");
+            await Execute(InstallmentResources.Delete, new { PaymentId = payment.Id });
+            await Execute(PaymentResources.Update, payment);
+            int number = 0;
+            foreach (var i in payment.Installments.OrderBy(p => p.Number))
             {
-                var payDb = await GetById(payment.Id);
-                if (payDb == null)
-                    throw new Exception("Payment not found");
-                await Execute(InstallmentResources.Delete, new { PaymentId = payment.Id });
-                await Execute(PaymentResources.Update, payment);
-                int number = 0;
-                foreach (var i in payment.Installments.OrderBy(p => p.Number))
-                {
-                    i.Number = number;
-                    i.PaymentId = payment.Id;
-                    await Execute(InstallmentResources.Insert, i);
-                }
-                payDb = await GetById(payment.Id);
-                Commit();
+                i.Number = number;
+                i.PaymentId = payment.Id;
+                await Execute(InstallmentResources.Insert, i);
             }
-            catch (Exception)
-            {
-                Rollback();
-                throw;
-            }
+            payDb = await GetById(payment.Id);
+            Commit();
         }
 
         public async Task Remove(int id)
         {
+            BeginTransaction();
             await Execute(InstallmentResources.Delete, new { PaymentId = id });
             await Execute(PaymentResources.Delete, new { Id = id });
         }

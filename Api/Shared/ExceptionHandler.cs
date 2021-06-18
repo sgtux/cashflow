@@ -10,28 +10,22 @@ namespace Cashflow.Api.Shared
     {
         private readonly RequestDelegate _next;
 
-        private readonly DatabaseContext _databaseContext;
-
-        private readonly LogService _logService;
-
-        public ExceptionHandler(RequestDelegate next, DatabaseContext databaseContext, LogService logService)
+        public ExceptionHandler(RequestDelegate next)
         {
             _next = next;
-            _databaseContext = databaseContext;
-            _logService = logService;
         }
 
-        public async Task Invoke(HttpContext context)
+        public async Task Invoke(HttpContext context, DatabaseContext databaseContext, LogService logService)
         {
             try
             {
                 await _next(context);
-                _databaseContext.Commit();
+                databaseContext.Commit();
             }
             catch (Exception ex)
             {
-                _databaseContext.Rollback();
-                _logService.Error(ex.ToString());
+                databaseContext.Rollback();
+                logService.Error(ex.ToString());
                 await HandleExceptionAsync(context, ex);
             }
         }

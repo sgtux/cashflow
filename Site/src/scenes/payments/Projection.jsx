@@ -162,7 +162,7 @@ export default class Projection extends React.Component {
 
   render() {
     return (
-      <CardMain title="Pagamentos" loading={this.state.loading}>
+      <CardMain title="Projeção" loading={this.state.loading}>
         <Paper>
           <div style={{ marginLeft: '20px', marginBottom: '20px' }}>
             <InputMonth
