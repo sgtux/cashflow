@@ -1,11 +1,9 @@
 import React from 'react'
-import { Route, Switch, Link } from 'react-router-dom'
-import createHistory from 'history/createHashHistory'
-import CreditCards from '../../scenes/credit-cards/CreditCards'
-import Payment from '../../scenes/payments/Payment'
-import FuturePayment from '../../scenes/payments/Future'
+import { Route, Switch } from 'react-router-dom'
+import { createHashHistory } from 'history'
+import { CreditCards, Payments, Projection, Salary } from '../../scenes'
 
-const history = createHistory()
+const history = createHashHistory()
 const isAuthenticated = true
 const freeRoutes = ['/', '/about']
 
@@ -21,15 +19,14 @@ history.listen((location, action) => {
     currentPath = location.pathname
 })
 
-export default class AppRouter extends React.Component {
-  render() {
-    return (
-      <Switch>
-        <Route path="/" exact={true} component={Payment} />
-        <Route path="/my-payments" component={Payment} />
-        <Route path="/credit-cards" component={CreditCards} />
-        <Route path="/payment-future" component={FuturePayment} />
-      </Switch>
-    )
-  }
+export default function () {
+  return (
+    <Switch>
+      <Route path="/" exact={true} component={Projection} />
+      <Route path="/payments" component={Payments} />
+      <Route path="/credit-cards" component={CreditCards} />
+      <Route path="/projection" component={Projection} />
+      <Route path="/salary" component={Salary} />
+    </Switch>
+  )
 }

@@ -53,7 +53,7 @@ export const AlertModal = props => (
       </div>
     </DialogContent>
     <div style={{ marginBottom: '20px', textAlign: 'center' }}>
-      <Button size="large" color="primary" onClick={() => props.onClose()} variant="raised" autoFocus>ok</Button>
+      <Button size="large" color="primary" onClick={() => props.onClose()} variant="contained" autoFocus>ok</Button>
     </div>
   </Dialog>
 )

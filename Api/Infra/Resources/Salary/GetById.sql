@@ -5,5 +5,5 @@ SELECt
   "EndDate",
   "UserId"
 FROM "Salary"
-WHERE "UserId" = @UserId
+WHERE "Id" = @Id
 ORDER BY "StartDate"

@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Infra.Resources.User;
+using Cashflow.Api.Service;
 using Cashflow.Api.Shared;
 
 namespace Cashflow.Api.Infra.Repository
 {
     public class UserRepository : BaseRepository<User>, IUserRepository
     {
-        public UserRepository(DatabaseContext conn) : base(conn) { }
+        public UserRepository(DatabaseContext conn, LogService logService) : base(conn, logService) { }
 
         public Task<User> FindByNickName(string nickName) => FirstOrDefault(UserResources.ByNickName, new { NickName = nickName });
 

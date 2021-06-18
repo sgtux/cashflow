@@ -4,6 +4,7 @@ using System.Data;
 using System.Threading;
 using System.Threading.Tasks;
 using Api.Infra.Resources;
+using Cashflow.Api.Service;
 using Cashflow.Api.Shared;
 using Dapper;
 using static System.Console;
@@ -13,14 +14,18 @@ namespace Cashflow.Api.Infra.Repository
     public abstract class BaseRepository<T> where T : class
     {
         private readonly IDbConnection _conn;
+
         private readonly DatabaseContext _context;
+
+        private readonly LogService _logService;
 
         public IDbTransaction Transaction { get; private set; }
 
-        protected BaseRepository(DatabaseContext context)
+        protected BaseRepository(DatabaseContext context, LogService logService)
         {
             _context = context;
             _conn = context.Connection;
+            _logService = logService;
         }
 
         protected async Task Execute(ResourceBuilder resource, object parameters = null, IDbTransaction transaction = null)
@@ -82,13 +87,6 @@ namespace Cashflow.Api.Infra.Repository
             return _conn.ExecuteScalarAsync<long>(query);
         }
 
-        private void Log(string query)
-        {
-            WriteLine("");
-            WriteLine("");
-            WriteLine($"ContextId: {_context.Id} - ThreadId: {Thread.CurrentThread.ManagedThreadId} - Query:{query}");
-            WriteLine("");
-            WriteLine("");
-        }
+        private void Log(string query) => _logService.Info($"\n\nContextId: {_context.Id} - ThreadId: {Thread.CurrentThread.ManagedThreadId} - Query:{query}\n\n");
     }
 }

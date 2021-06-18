@@ -6,43 +6,25 @@ import {
   DialogContent,
   DialogActions,
   Zoom,
-  TextField,
   FormControl,
   FormControlLabel,
   InputLabel,
   Select,
   Checkbox,
   MenuItem,
-  RadioGroup,
-  Radio,
   List,
   ListItem,
   ListItemText,
   CircularProgress,
   GridList,
-  GridListTile,
-  GridListTileBar
+  GridListTile
 } from '@material-ui/core'
 
-import TextInputMask from 'react-masked-text'
-
 import IconTextInput from '../main/IconTextInput'
-import InputMoney from '../inputs/InputMoney'
+import { InputMoney, InputDate, InputNumbers } from '../inputs'
 
-import { dateToString, getDateFromStringEg, toReal, toDateFormat } from '../../helpers'
-import { creditCardService, paymentService } from '../../services/index'
-
-const styles = {
-  maskInput: {
-    color: '#666',
-    backgroundColor: 'white',
-    border: 'solid 0',
-    borderBottom: 'solid 1px #666',
-    margin: '10px',
-    width: '100px',
-    marginRight: '20px'
-  }
-}
+import { dateToString, toReal, toDateFormat } from '../../helpers'
+import { paymentService } from '../../services/index'
 
 export default class EditPaymentModal extends React.Component {
 
@@ -221,13 +203,12 @@ export default class EditPaymentModal extends React.Component {
 
                 <div style={{ marginRight: '10px', marginTop: '10px', color: '#666' }}>
                   <span>Valor:</span>
-                  <TextInputMask
+                  <InputMoney
                     onChangeText={e => this.updateInstallments({ ...this.state, costText: e })}
                     kind="money"
-                    value={this.state.costText}
-                    style={styles.maskInput} />
+                    value={this.state.costText} />
                   <span>Data:</span>
-                  <TextInputMask
+                  <InputDate
                     onChangeText={e => this.updateInstallments({ ...this.state, firstPayment: e })}
                     kind="datetime"
                     value={this.state.firstPayment}
@@ -281,11 +262,10 @@ export default class EditPaymentModal extends React.Component {
                       color="primary"
                     />} />
                   <span>Qtd. Parcelas:</span>
-                  <TextInputMask
+                  <InputNumbers
                     onChangeText={e => this.updateInstallments({ ...this.state, qtdInstallments: e })}
                     kind="only-numbers"
-                    value={this.state.qtdInstallments}
-                    style={styles.maskInput} />
+                    value={this.state.qtdInstallments} />
                 </div>
 
                 <div style={{ textAlign: 'center', color: '#d55', marginTop: '20px' }}>
@@ -329,8 +309,8 @@ export default class EditPaymentModal extends React.Component {
           <div hidden={!this.state.loading}>
             <CircularProgress size={30} />
           </div>
-          <Button onClick={() => this.props.onClose()} variant="raised" autoFocus>cancelar</Button>
-          <Button disabled={this.state.loading} onClick={() => this.save()} color="primary" variant="raised" autoFocus>salvar</Button>
+          <Button onClick={() => this.props.onClose()} variant="contained" autoFocus>cancelar</Button>
+          <Button disabled={this.state.loading} onClick={() => this.save()} color="primary" variant="contained" autoFocus>salvar</Button>
         </DialogActions>
       </Dialog>
     )

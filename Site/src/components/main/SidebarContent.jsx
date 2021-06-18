@@ -86,13 +86,14 @@ class SidebarContent extends React.Component {
           </ListItem>
           <Collapse in={this.state.opened === 'payments'} timeout={400} unmountOnExit>
             <List component="div" disablePadding>
-              <LinkListItem onClick={() => this.props.closeSidebar()} to="/my-payments" text="Meus Pagamentos" />
-              <LinkListItem onClick={() => this.props.closeSidebar()} to="/payment-month" text="Mês Atual" />
-              <LinkListItem onClick={() => this.props.closeSidebar()} to="/payment-future" text="Futuro" />
+              <LinkListItem onClick={() => this.props.closeSidebar()} to="/payments" text="Pagamentos" />
+              <LinkListItem onClick={() => this.props.closeSidebar()} to="/projection" text="Projeção" />
             </List>
           </Collapse>
           <Divider />
           <LinkListItem onClick={() => this.props.closeSidebar()} to="/credit-cards" text="Cartões de Crédito" />
+          <Divider />
+          <LinkListItem onClick={() => this.props.closeSidebar()} to="/salary" text="Salários" />
           <Divider />
         </List>
       </div>

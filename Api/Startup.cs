@@ -1,4 +1,5 @@
 ﻿using Cashflow.Api.Extensions;
+using Cashflow.Api.Service;
 using Cashflow.Api.Shared;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,6 +23,7 @@ namespace Cashflow.Api
             services.ConfigureAuthentication(appConfig.SecretJwtKey);
             services.AddRouting();
             services.AddSingleton(appConfig);
+            services.AddSingleton(LogService.Create());
             services.AddTransient(typeof(DatabaseContext));
 
             services.AddSwaggerGen(c =>

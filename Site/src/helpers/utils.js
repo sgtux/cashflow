@@ -1,7 +1,11 @@
 export const Months = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
 
-export const dateToString = (date) => {
-  date = date || new Date()
+export const dateToString = date => {
+  if (!date)
+    date = new Date()
+  else if (typeof (date) === 'string')
+    date = new Date(date)
+
   let day = date.getDate()
   day = day > 9 ? day : '0' + day
 
@@ -22,11 +26,13 @@ export const getDateFromStringEg = (value) => {
   return new Date(`${year}/${month}`)
 }
 
-export const toReal = (val) => {
+export const toReal = val => {
   return isNaN(val) ? val : `R$ ${Number(val)
     .toFixed(2).replace('.', ',')
     .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')}`
 }
+
+export const fromReal = val => typeof (val) === 'string' ? Number((val || '').replace(/[^0-9,]/g, '').replace(',', '.') || 0) : val
 
 export const isSameMonth = (d1, d2) => {
   const date1 = new Date(d1)

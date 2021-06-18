@@ -18,7 +18,10 @@ const styles = {
   },
   grow: {
     flexGrow: 2,
-    textTransform: 'uppercase'
+    textTransform: 'uppercase',
+    color: '#FFF',
+    fontFamily: 'FrederickaGreat',
+    fontSize: '40px'
   },
   menuButton: {
     marginLeft: -12,
@@ -83,8 +86,8 @@ class AppToolbar extends React.Component {
                   <Icons.Menu />
                 </IconButton>
             }
-            <Typography variant="title" color="inherit" style={styles.grow}>
-              Finanças
+            <Typography variant="h2" color="inherit" style={styles.grow}>
+              Fluxo de caixa (R$)
             </Typography>
             {/* <Button variant="fab" color="secondary" onClick={this.handleClick}>
               <img height="70" width="70" style={{ borderRadius: '50%' }}

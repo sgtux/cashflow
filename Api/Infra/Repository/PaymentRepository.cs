@@ -5,13 +5,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using Api.Infra.Resources.Payment;
 using Cashflow.Api.Infra.Entity;
+using Cashflow.Api.Service;
 using Cashflow.Api.Shared;
 
 namespace Cashflow.Api.Infra.Repository
 {
     public class PaymentRepository : BaseRepository<Payment>, IPaymentRepository
     {
-        public PaymentRepository(DatabaseContext conn) : base(conn) { }
+        public PaymentRepository(DatabaseContext conn, LogService logService) : base(conn, logService) { }
 
         public async Task<IEnumerable<Payment>> GetByUser(int userId)
         {

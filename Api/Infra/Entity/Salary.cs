@@ -13,5 +13,15 @@ namespace Cashflow.Api.Infra.Entity
         public DateTime StartDate { get; set; }
 
         public DateTime? EndDate { get; set; }
+
+        public void SetDays()
+        {
+            StartDate = new DateTime(StartDate.Year, StartDate.Month, 1);
+            if (EndDate != null)
+            {
+                var lastDayEnd = DateTime.DaysInMonth(EndDate.Value.Year, EndDate.Value.Month);
+                EndDate = new DateTime(EndDate.Value.Year, EndDate.Value.Month, lastDayEnd);
+            }
+        }
     }
 }

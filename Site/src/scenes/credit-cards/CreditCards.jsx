@@ -17,7 +17,7 @@ import {
 import DeleteIcon from '@material-ui/icons/Delete'
 import CardIcon from '@material-ui/icons/CreditCardOutlined'
 
-import CardMain from '../../components/main/CardMain'
+import { CardMain } from '../../components/main'
 import IconTextInput from '../../components/main/IconTextInput'
 
 import { creditCardService } from '../../services/index'
@@ -119,7 +119,7 @@ export default class CreditCards extends React.Component {
           </div>
         }
         <div style={styles.divNewCard}>
-          <Button variant="raised" color="primary" onClick={() => this.setState({ card: {} })}>
+          <Button variant="text" color="primary" onClick={() => this.setState({ card: {} })}>
             Adicionar Cartão
           </Button>
           <div style={{ marginTop: '20px' }} hidden={this.state.card === null}>
@@ -135,7 +135,7 @@ export default class CreditCards extends React.Component {
               <Button color="primary" onClick={() => this.setState({ card: null })}>
                 Cancelar
               </Button>
-              <Button variant="raised" color="primary"
+              <Button variant="contained" color="primary"
                 onClick={() => this.saveCard()}>
                 Salvar
               </Button>

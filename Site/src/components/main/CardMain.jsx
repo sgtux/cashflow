@@ -14,16 +14,16 @@ const styles = {
     marginBottom: '50px',
     marginLeft: '20px',
     marginRight: '20px',
-    padding: '10px'
+    padding: '10px',
+    fontFamily: 'Roboto Helvetica Arial sans-serif'
   }
 }
 
-export default (props) => {
+export function CardMain(props) {
   return (
     <Paper style={styles.paper}>
       <fieldset style={styles.legend}>
         <legend>{props.title}</legend>
-
         {
           props.loading ?
             <div style={{ textAlign: 'center', marginBottom: '10px', boxAlign: "center" }}>

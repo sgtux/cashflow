@@ -4,13 +4,14 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Api.Infra.Resources.CreditCard;
 using Cashflow.Api.Infra.Entity;
+using Cashflow.Api.Service;
 using Cashflow.Api.Shared;
 
 namespace Cashflow.Api.Infra.Repository
 {
     public class CreditCardRepository : BaseRepository<CreditCard>, ICreditCardRepository
     {
-        public CreditCardRepository(DatabaseContext conn) : base(conn) { }
+        public CreditCardRepository(DatabaseContext conn, LogService logService) : base(conn, logService) { }
 
         public Task Add(CreditCard card) => Execute(CreditCardResources.Insert, card);
 

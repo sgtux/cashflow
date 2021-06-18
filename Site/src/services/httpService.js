@@ -24,7 +24,8 @@ const sendRequest = (method, url, headers, data) => {
     .catch(err => {
       throw {
         message: err.response.data.message,
-        status: err.response.status
+        status: err.response.status,
+        messages: ((err.response || {}).data || {}).errors || []
       }
     })
 }
@@ -32,9 +33,9 @@ const sendRequest = (method, url, headers, data) => {
 const getHeaders = () => ({ Authorization: `Bearer ${getToken()}` })
 
 export default {
-  getNotAuthenticated: (url) => sendRequest('get', `/api${url}`),
+  getNotAuthenticated: url => sendRequest('get', `/api${url}`),
   postNotAuthenticated: (url, body) => sendRequest('post', `/api${url}`, null, body),
-  get: (url) => sendRequest('get', `/api${url}`, getHeaders()),
+  get: url => sendRequest('get', `/api${url}`, getHeaders()),
   post: (url, body) => sendRequest('post', `/api${url}`, getHeaders(), body),
   put: (url, body) => sendRequest('put', `/api${url}`, getHeaders(), body),
   delete: (url, body) => sendRequest('delete', `/api${url}`, getHeaders(), body)

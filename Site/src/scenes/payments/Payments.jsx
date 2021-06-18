@@ -17,8 +17,7 @@ import {
 import DeleteIcon from '@material-ui/icons/Delete'
 import CardIcon from '@material-ui/icons/CreditCardOutlined'
 
-import CardMain from '../../components/main/CardMain'
-import InputMoney from '../../components/inputs/InputMoney'
+import { CardMain } from '../../components/main'
 import EditPaymentModal from '../../components/modais/EditPaymentModal'
 import { paymentService, creditCardService } from '../../services/index'
 import { toReal, dateToString } from '../../helpers'
@@ -53,7 +52,7 @@ const CreditCardComponent = props => {
   )
 }
 
-export default class Payment extends React.Component {
+export default class Payments extends React.Component {
 
   constructor(props) {
     super(props)
@@ -123,7 +122,7 @@ export default class Payment extends React.Component {
         {payments.length ?
           <div>
             <div style={styles.divNewPayment}>
-              <Button variant="raised" color="primary" onClick={() => this.openEditNew()}>
+              <Button variant="contained" color="primary" onClick={() => this.openEditNew()}>
                 Adicionar Pagamento
               </Button>
             </div>
@@ -150,7 +149,7 @@ export default class Payment extends React.Component {
                       style={{ width: '200px' }}
                       secondary={
                         <React.Fragment>
-                          <Typography component="span" color={p.type === 1 ? 'primary' : 'secondary'}>
+                          <Typography component="h2" color={p.type === 1 ? 'primary' : 'secondary'}>
                             {p.type === 1 ? 'Renda' : 'Despesa'}
                           </Typography>
                           {p.firstPaymentFormatted}
@@ -185,18 +184,14 @@ export default class Payment extends React.Component {
             <div>
               <span>Você não possui pagamentos cadastrados.</span>
             </div>
-
-            <div>
-              <InputMoney label="Valor"></InputMoney>
-            </div>
           </div>
         }
         <div style={styles.divNewPayment}>
-          <Button variant="raised" color="primary" onClick={() => this.openEditNew()}>
+          <Button variant="contained" color="primary" onClick={() => this.openEditNew()}>
             Adicionar Pagamento
           </Button>
         </div>
-        {
+        {/* {
           this.state.showModal ?
             <EditPaymentModal
               onFinish={() => this.onFinish()}
@@ -205,7 +200,7 @@ export default class Payment extends React.Component {
               payment={this.state.payment}
               onClose={() => this.setState({ showModal: false })} />
             : null
-        }
+        } */}
       </CardMain>
     )
   }

@@ -11,7 +11,7 @@ import {
 } from '@material-ui/core'
 import CardIcon from '@material-ui/icons/CreditCardOutlined'
 
-import CardMain from '../../components/main/CardMain'
+import { CardMain } from '../../components/main'
 import InputMonth from '../../components/inputs/InputMonth'
 
 import { paymentService } from '../../services/index'
@@ -101,7 +101,7 @@ class Invoices extends React.Component {
   }
 }
 
-export default class Payment extends React.Component {
+export default class Projection extends React.Component {
 
   constructor(props) {
     super(props)

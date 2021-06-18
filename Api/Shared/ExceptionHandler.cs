@@ -1,31 +1,37 @@
 using System;
 using System.Net;
 using System.Threading.Tasks;
+using Cashflow.Api.Service;
 using Microsoft.AspNetCore.Http;
 
 namespace Cashflow.Api.Shared
 {
     public class ExceptionHandler
     {
-        private readonly RequestDelegate next;
-        private readonly DatabaseContext databaseContext;
+        private readonly RequestDelegate _next;
 
-        public ExceptionHandler(RequestDelegate next, DatabaseContext databaseContext)
+        private readonly DatabaseContext _databaseContext;
+
+        private readonly LogService _logService;
+
+        public ExceptionHandler(RequestDelegate next, DatabaseContext databaseContext, LogService logService)
         {
-            this.next = next;
-            this.databaseContext = databaseContext;
+            _next = next;
+            _databaseContext = databaseContext;
+            _logService = logService;
         }
 
         public async Task Invoke(HttpContext context)
         {
             try
             {
-                await next(context);
-                databaseContext.Commit();
+                await _next(context);
+                _databaseContext.Commit();
             }
             catch (Exception ex)
             {
-                databaseContext.Rollback();
+                _databaseContext.Rollback();
+                _logService.Error(ex.ToString());
                 await HandleExceptionAsync(context, ex);
             }
         }

@@ -1,1 +1,1 @@
-DELETE FROM "Salary" WHERE "Id" = @Id AND "UserId" = @UserId
+DELETE FROM "Salary" WHERE "Id" = @Id
