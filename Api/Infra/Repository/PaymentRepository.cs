@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Api.Infra.Resources.Payment;
 using Cashflow.Api.Infra.Entity;
+using Cashflow.Api.Models;
 using Cashflow.Api.Service;
 using Cashflow.Api.Shared;
 
@@ -30,6 +31,12 @@ namespace Cashflow.Api.Infra.Repository
                 return p;
             }, new { UserId = userId });
             return list;
+        }
+
+        public async Task<IEnumerable<PaymentType>> GetTypes()
+        {
+            var list = new List<Payment>();
+            return await Query<PaymentType>(PaymentResources.Types);
         }
 
         public async Task<Payment> GetById(int id)

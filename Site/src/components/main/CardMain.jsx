@@ -26,7 +26,7 @@ export function CardMain(props) {
         <legend>{props.title}</legend>
         {
           props.loading ?
-            <div style={{ textAlign: 'center', marginBottom: '10px', boxAlign: "center" }}>
+            <div style={{ textAlign: 'center', marginBottom: '10px', boxAlign: 'center' }}>
               <CircularProgress size={60} />
             </div>
             : props.children}

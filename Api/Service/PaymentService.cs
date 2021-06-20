@@ -22,7 +22,9 @@ namespace Cashflow.Api.Service
 
         public async Task<ResultModel> GetByUser(int userId) => new ResultDataModel<IEnumerable<Payment>>(await _paymentRepository.GetByUser(userId));
 
-        public async Task<Dictionary<string, PaymentFutureResultModel>> GetFuturePayments(int userId, DateTime forecastAt)
+        public async Task<ResultModel> GetTypes() => new ResultDataModel<IEnumerable<PaymentType>>(await _paymentRepository.GetTypes());
+
+        public async Task<Dictionary<string, PaymentFutureResultModel>> GetProjection(int userId, DateTime forecastAt)
         {
             var result = new Dictionary<string, PaymentFutureResultModel>();
             var now = _paymentRepository.CurrentDate;

@@ -6,7 +6,7 @@ import { HashRouter } from 'react-router-dom'
 
 import { Colors } from '../../helpers/themes'
 import Toobar from './Toolbar'
-import SidebarContent from './SidebarContent'
+import { SidebarContent } from './'
 import AppRouter from './AppRouter'
 import { Auth } from '../../scenes'
 import { AlertModal } from '../main/Modal'

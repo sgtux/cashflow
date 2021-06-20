@@ -8,6 +8,8 @@ namespace Cashflow.Api.Infra.Repository
     {
         Task<IEnumerable<Payment>> GetByUser(int userId);
 
+        Task<IEnumerable<PaymentType>> GetTypes();
+
         System.DateTime CurrentDate { get; }
     }
 }

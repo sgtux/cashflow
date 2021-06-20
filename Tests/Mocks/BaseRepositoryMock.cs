@@ -8,8 +8,12 @@ namespace Cashflow.Tests.Mocks
     public abstract class BaseRepositoryMock
     {
         private static List<Payment> _payments;
+
         private static List<CreditCard> _creditCards;
+
         private static List<User> _users;
+
+        private static List<PaymentType> _paymentTypes;
 
         public DateTime CurrentDate => new DateTime(2019, 4, 1);
 
@@ -80,6 +84,23 @@ namespace Cashflow.Tests.Mocks
                 if (_users == null)
                     _users = CreateUserMock();
                 return _users;
+            }
+        }
+
+        protected List<PaymentType> PaymentTypes
+        {
+            get
+            {
+                if (_paymentTypes == null)
+                    _paymentTypes = new List<PaymentType>()
+                    {
+                        new PaymentType(){ Id = 1, Description = "Despesa", In = false },
+                        new PaymentType(){ Id = 2, Description = "Renda", In = true },
+                        new PaymentType() {Id = 3, Description = "Ganho", In = false },
+                        new PaymentType(){ Id = 4, Description = "Crédito", In = true },
+                        new PaymentType() { Id = 5, Description = "Lucro", In = true },
+                    };
+                return _paymentTypes;
             }
         }
     }

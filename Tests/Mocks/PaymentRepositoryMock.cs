@@ -34,5 +34,7 @@ namespace Cashflow.Tests.Mocks
         public Task Update(Payment t) => Task.Run(() => { });
 
         public Task<bool> Exists(long userId) => Task.Run(() => Payments.Any(p => p.Id == userId));
+
+        public Task<IEnumerable<PaymentType>> GetTypes() => Task.Run(() => PaymentTypes.AsEnumerable());
     }
 }

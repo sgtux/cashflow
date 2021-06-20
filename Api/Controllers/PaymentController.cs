@@ -20,11 +20,14 @@ namespace Cashflow.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> Get() => HandleResult(await _service.GetByUser(UserId));
 
-        [Route("FuturePayments")]
+        [HttpGet("Types")]
+        public async Task<IActionResult> GetTypes() => HandleResult(await _service.GetTypes());
+
+        [Route("Projection")]
         [HttpGet]
-        public async Task<Dictionary<string, PaymentFutureResultModel>> GetFuturePayments([FromQuery] DateTime endDate)
+        public async Task<Dictionary<string, PaymentFutureResultModel>> GetProjection([FromQuery] DateTime endDate)
         {
-            return await _service.GetFuturePayments(UserId, endDate);
+            return await _service.GetProjection(UserId, endDate);
         }
 
         [HttpPost]

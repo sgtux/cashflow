@@ -170,5 +170,12 @@ namespace Cashflow.Tests
             var result = await _service.Remove(3, 1);
             HasNotifications(result);
         }
+
+        [TestMethod]
+        public async Task GetPaymentTypesOK()
+        {
+            var result = await _service.GetTypes();
+            HasNotifications(result);
+        }
     }
 }

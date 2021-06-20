@@ -8,6 +8,8 @@ namespace Api.Infra.Resources.Payment
 
         public static ResourceBuilder ByUser => new ResourceBuilder("Payment.GetByUser.sql");
 
+        public static ResourceBuilder Types => new ResourceBuilder("Payment.GetTypes.sql");
+
         public static ResourceBuilder Insert => new ResourceBuilder("Payment.Insert.sql");
 
         public static ResourceBuilder Update => new ResourceBuilder("Payment.Update.sql");

@@ -24,7 +24,7 @@ import IconTextInput from '../main/IconTextInput'
 import { InputMoney, InputDate, InputNumbers } from '../inputs'
 
 import { dateToString, toReal, toDateFormat } from '../../helpers'
-import { paymentService } from '../../services/index'
+import { paymentService } from '../../services'
 
 export default class EditPaymentModal extends React.Component {
 
@@ -58,6 +58,8 @@ export default class EditPaymentModal extends React.Component {
       invoice
     } = this.props.payment || {}
 
+    paymentService.getTypes().then(res => console.log(res))
+
     const firstInstallment = (installments || [])[0] || {}
     const qtdInstallments = (installments || []).length || 1
     const costs = (installments || []).map(p => p.cost)
@@ -83,8 +85,8 @@ export default class EditPaymentModal extends React.Component {
     })
   }
 
-  updateInstallments(data) {
-    const { payment, paidInstallments, costByInstallment, qtdInstallments, costText, fixedPayment, firstPayment } = data
+  updateInstallments(payment) {
+    const { paidInstallments, costByInstallment, qtdInstallments, costText, fixedPayment, firstPayment } = payment
     const installments = []
     let cost = Number((costText || '').replace(/[^0-9,]/g, '').replace(',', '.') || 0)
     if (cost > 0 && qtdInstallments > 0 && /^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/.test(firstPayment)) {
