@@ -17,7 +17,7 @@ namespace Cashflow.Api.Service
 
         public SalaryService(ISalaryRepository salaryRepository) => _salaryRepository = salaryRepository;
 
-        public async Task<ResultModel> GetByUser(int userId) => new ResultDataModel<IEnumerable<Salary>>(await _salaryRepository.GetByUserId(userId));
+        public async Task<ResultDataModel<IEnumerable<Salary>>> GetByUser(int userId) => new ResultDataModel<IEnumerable<Salary>>(await _salaryRepository.GetByUserId(userId));
 
         public async Task<ResultModel> Add(Salary salary)
         {
@@ -37,20 +37,11 @@ namespace Cashflow.Api.Service
             var result = new ResultModel();
             salary.SetDays();
             var validatorResult = new SalaryValidator(_salaryRepository).Validate(salary);
-            if (!validatorResult.IsValid)
+            if (validatorResult.IsValid)
+                await _salaryRepository.Update(salary);
+            else
                 result.AddNotification(validatorResult.Errors);
 
-            if (result.IsValid)
-            {
-                var salaryDb = await _salaryRepository.GetById(salary.Id);
-                if (salaryDb is null || salaryDb.UserId != salary.UserId)
-                    result.AddNotification("Salário não encontrado.");
-                else
-                {
-                    salary.Map(salaryDb);
-                    await _salaryRepository.Update(salaryDb);
-                }
-            }
             return result;
         }
 
@@ -60,7 +51,7 @@ namespace Cashflow.Api.Service
 
             var salary = await _salaryRepository.GetById(salaryId);
             if (salary is null || salary.UserId != userId)
-                result.AddNotification("Payment not found.");
+                result.AddNotification(ValidatorMessages.Salary.NotFound);
             else
                 await _salaryRepository.Remove(salaryId);
             return result;

@@ -53,5 +53,7 @@ namespace Cashflow.Api.Shared
             }
             return target;
         }
+
+        public static DateTime CreateEndDate(int year, int month) => new DateTime(year, month, DateTime.DaysInMonth(year, month));
     }
 }

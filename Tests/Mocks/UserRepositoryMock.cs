@@ -8,24 +8,13 @@ namespace Cashflow.Tests.Mocks
 {
     public class UserRepositoryMock : BaseRepositoryMock, IUserRepository
     {
-        public Task Add(User t)
-        {
-            return Task.Run(() => Users.Add(t));
-        }
+        public Task Add(User t) => Task.Run(() => Users.Add(t));
 
         public Task<IEnumerable<User>> GetAll() => Task.Run(() => Users.AsEnumerable());
 
         public Task<User> GetById(int id) => Task.Run(() => Users.FirstOrDefault(p => p.Id == id));
 
-        public Task Remove(int id)
-        {
-            return Task.Run(() =>
-            {
-                var user = Users.FirstOrDefault(p => p.Id == id);
-                if (user != null)
-                    Users.Remove(user);
-            });
-        }
+        public Task Remove(int id) => Task.Run(() => Users.Remove(Users.FirstOrDefault(p => p.Id == id)));
 
         public Task Update(User t)
         {

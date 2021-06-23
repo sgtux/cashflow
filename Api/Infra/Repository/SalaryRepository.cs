@@ -21,10 +21,7 @@ namespace Cashflow.Api.Infra.Repository
 
         public Task<IEnumerable<Salary>> GetByUserId(int userId) => Query(SalaryResources.ByUser, new { UserId = userId });
 
-        public Task<IEnumerable<Salary>> GetSome(Expression<Func<Salary, bool>> expressions)
-        {
-            throw new NotImplementedException();
-        }
+        public Task<IEnumerable<Salary>> GetSome(Expression<Func<Salary, bool>> expressions) => throw new NotImplementedException();
 
         public Task Remove(int id) => Execute(SalaryResources.Delete, new { Id = id });
 

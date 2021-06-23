@@ -49,17 +49,19 @@ namespace Cashflow.Api.Validators
 
         public class SalaryMessages
         {
-            public string InvalidStartDate = "A Data de Início é inválida.";
+            public string InvalidStartDate = "O campo Data Início é inválido.";
 
-            public string InvalidEndDate = "A Data Fim é inválida.";
+            public string InvalidEndDate = "O campo Data Fim é inválido.";
 
-            public string ValueMustBeMoreThenZero = "O valor deve ser maior que zero";
+            public string ValueMustBeMoreThenZero = "O campo Valor deve ser maior que zero.";
 
             public string EndDateMustBeMoreThenStartDate = "A Data Fim deve ser maior que a Data Início.";
 
             public string AnotherCurrentSalary = "Tem outro salário vigente.";
 
             public string AnotherSalaryInThisDateRange = "Tem outro salário neste intervalo de datas.";
+
+            public string NotFound = "Salário não encontrado.";
         }
     }
 }

@@ -11,6 +11,7 @@ namespace Cashflow.Tests
     public class CreditCardTest : BaseTest
     {
         private CreditCardService _service;
+
         [TestInitialize]
         public void Init()
         {
