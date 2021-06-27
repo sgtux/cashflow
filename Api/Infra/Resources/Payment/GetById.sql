@@ -11,7 +11,7 @@ SELECT
   i."Cost",
   i."Number",
   i."Date",
-  i."Paid"
+  i."PaidDate"
 FROM "Payment" p
 JOIN "Installment" i on p."Id" = i."PaymentId"
 WHERE p."Id" = @Id

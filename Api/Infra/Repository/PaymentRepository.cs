@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Api.Infra.Resources.Payment;
 using Cashflow.Api.Infra.Entity;
-using Cashflow.Api.Models;
 using Cashflow.Api.Service;
 using Cashflow.Api.Shared;
 

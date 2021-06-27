@@ -43,6 +43,7 @@
     <EmbeddedResource Include="Infra/Resources/Payment/Delete.sql" />
     <EmbeddedResource Include="Infra/Resources/Payment/GetById.sql" />
     <EmbeddedResource Include="Infra/Resources/Payment/GetByUser.sql" />
+    <EmbeddedResource Include="Infra/Resources/Payment/GetTypes.sql" />
     <EmbeddedResource Include="Infra/Resources/Payment/Insert.sql" />
     <EmbeddedResource Include="Infra/Resources/Payment/Update.sql" />
 

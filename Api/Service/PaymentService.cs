@@ -62,7 +62,7 @@ namespace Cashflow.Api.Service
                         Invoice = payMonth.Invoice,
                         MonthYear = date.ToString("MM/yyyy"),
                         Number = installment.Number,
-                        Paid = installment.Paid,
+                        PaidDate = installment.PaidDate,
                         QtdInstallments = payMonth.Installments.Count,
                         Type = payMonth.Type,
                         Cost = installment.Cost

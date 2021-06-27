@@ -1,3 +1,5 @@
+using System;
+
 namespace Cashflow.Api.Infra.Entity
 {
     public class Installment
@@ -10,8 +12,8 @@ namespace Cashflow.Api.Infra.Entity
 
         public decimal Cost { get; set; }
 
-        public System.DateTime Date { get; set; }
+        public DateTime Date { get; set; }
 
-        public bool Paid { get; set; }
+        public DateTime? PaidDate { get; set; }
     }
 }

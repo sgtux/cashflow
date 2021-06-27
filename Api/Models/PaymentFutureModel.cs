@@ -1,3 +1,4 @@
+using System;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Shared;
 
@@ -11,7 +12,7 @@ namespace Cashflow.Api.Models
 
         public int Number { get; set; }
 
-        public bool Paid { get; set; }
+        public DateTime? PaidDate { get; set; }
 
         public bool FixedPayment { get; set; }
 

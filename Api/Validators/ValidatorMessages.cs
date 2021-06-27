@@ -34,6 +34,18 @@ namespace Cashflow.Api.Validators
             public string PaymentTypeInvalid = "O tipo do pagamento é inválido.";
 
             public string FixedPaymentWithMoreThenOnePlot = "Pagamento fixo não pode ter mais de uma parcela.";
+
+            public string InstallmentWithInvalidValue = "Parcela com Valor inválido.";
+
+            public string InstallmentWithInvalidDate = "Parcela com Data de Vencimento inválida.";
+
+            public string InstallmentWithInvalidPaidDate = "Parcela com Data do Pagamento inválida.";
+
+            public string InstallmentWithMaxLengthExceded = "O número máximo de parcelas permitido é 72.";
+
+            public string InstallmentWithInvalidNumber = "Parcela com número inválido.";
+
+            public string InstallmentWithRepeatednNumbers = "Parcela com número repetido.";
         }
 
         public class CreditCardMessages
