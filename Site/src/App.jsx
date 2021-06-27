@@ -8,6 +8,7 @@ import { AppTheme } from './helpers/themes'
 import { Store } from './store'
 
 import './App.css'
+import 'react-toastify/dist/ReactToastify.css'
 
 class App extends React.Component {
   render() {

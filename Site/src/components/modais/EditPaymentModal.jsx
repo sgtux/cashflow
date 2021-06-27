@@ -23,7 +23,7 @@ import {
 import IconTextInput from '../main/IconTextInput'
 import { InputMoney, InputDate, InputNumbers } from '../inputs'
 
-import { dateToString, toReal, toDateFormat } from '../../helpers'
+import { dateToString, toReal, toDateFormat, toast } from '../../helpers'
 import { paymentService } from '../../services'
 
 export default class EditPaymentModal extends React.Component {
@@ -161,11 +161,17 @@ export default class EditPaymentModal extends React.Component {
 
     if (payment.id)
       paymentService.update(payment)
-        .then(() => this.props.onFinish())
+        .then(() => {
+          toast.success('Salvo com sucesso.')
+          this.props.onFinish()
+        })
         .catch(err => this.setState({ loading: false, errorMessage: err.error }))
     else
       paymentService.create(payment)
-        .then(() => this.props.onFinish())
+        .then(() => {
+          toast.success('Salvo com sucesso.')
+          this.props.onFinish()
+        })
         .catch(err => this.setState({ loading: false, errorMessage: err.message }))
   }
 
@@ -198,6 +204,7 @@ export default class EditPaymentModal extends React.Component {
                     value={this.state.paymentType || 2}
                     color="secondary"
                     onChange={e => this.setState({ paymentType: e.target.value })}>
+                    { }
                     <MenuItem key={1} value={1}><span style={{ color: 'green', fontWeight: 'bold' }}>RENDA</span></MenuItem>
                     <MenuItem key={2} value={2}><span style={{ color: 'red', fontWeight: 'bold' }}>DESPESA</span></MenuItem>
                   </Select>

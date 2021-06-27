@@ -1,4 +1,6 @@
 import axios from 'axios'
+import { toast } from '../helpers'
+
 import { STORAGE_KEYS } from '../helpers/storageKeys'
 
 let callbackTokenExpired = null
@@ -22,11 +24,15 @@ const sendRequest = (method, url, headers, data) => {
     data: data
   }).then(res => res.data)
     .catch(err => {
-      throw {
+      const result = {
         message: err.response.data.message,
         status: err.response.status,
         messages: ((err.response || {}).data || {}).errors || []
       }
+
+      result.messages.forEach(p => toast.error(p))
+
+      throw result
     })
 }
 

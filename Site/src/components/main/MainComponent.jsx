@@ -4,6 +4,8 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { HashRouter } from 'react-router-dom'
 
+import { ToastContainer } from 'react-toastify'
+
 import { Colors } from '../../helpers/themes'
 import Toobar from './Toolbar'
 import { SidebarContent } from './'
@@ -13,7 +15,7 @@ import { AlertModal } from '../main/Modal'
 import { hideAlert, userChanged } from '../../actions'
 import { registerCallbackUnauthorized } from '../../services/httpService'
 
-const mql = window.matchMedia(`(min-width: 1024px)`)
+const mql = window.matchMedia('(min-width: 1024px)')
 
 class MainComponent extends React.Component {
   constructor(props) {
@@ -63,6 +65,7 @@ class MainComponent extends React.Component {
               />
               <AppRouter />
             </Sidebar>
+            <ToastContainer />
           </HashRouter>
           :
           <Auth />

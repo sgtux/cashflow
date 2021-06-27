@@ -7,3 +7,5 @@ export {
   isSameMonth,
   toReal
 } from './utils'
+
+export { default as toast } from './toast'
