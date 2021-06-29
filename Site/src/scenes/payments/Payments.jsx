@@ -18,8 +18,8 @@ import DeleteIcon from '@material-ui/icons/Delete'
 import CardIcon from '@material-ui/icons/CreditCardOutlined'
 
 import { CardMain } from '../../components/main'
-import EditPaymentModal from '../../components/modais/EditPaymentModal'
-import { paymentService, creditCardService } from '../../services/index'
+import { EditPaymentModal } from '../../components/modais'
+import { paymentService, creditCardService } from '../../services'
 import { toReal, dateToString } from '../../helpers'
 import IconTextInput from '../../components/main/IconTextInput'
 
@@ -72,7 +72,10 @@ export default class Payments extends React.Component {
 
   componentDidMount() {
     this.refresh()
-    creditCardService.get().then(res => this.setState({ cards: res }))
+    creditCardService.get().then(res => {
+      console.log(res)
+      this.setState({ cards: res })
+    })
   }
 
   refresh() {
@@ -149,7 +152,7 @@ export default class Payments extends React.Component {
                       style={{ width: '200px' }}
                       secondary={
                         <React.Fragment>
-                          <Typography component="h2" color={p.type === 1 ? 'primary' : 'secondary'}>
+                          <Typography component="span" color={p.type === 1 ? 'primary' : 'secondary'}>
                             {p.type === 1 ? 'Renda' : 'Despesa'}
                           </Typography>
                           {p.firstPaymentFormatted}
@@ -197,7 +200,7 @@ export default class Payments extends React.Component {
               onFinish={() => this.onFinish()}
               cards={this.state.cards}
               open={this.state.showModal}
-              payment={this.state.payment}
+              selectedPayment={this.state.payment}
               onClose={() => this.setState({ showModal: false })} />
             : null
         }

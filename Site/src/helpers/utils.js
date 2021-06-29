@@ -47,3 +47,11 @@ export const getMonthYear = (date) => {
   const d = date.split('/')
   return `${Months[Number(d[0]) - 1]} - ${d[1]}`
 }
+
+export const debounce = (callback, delay) => {
+  let timer
+  return (...args) => {
+    clearTimeout(timer)
+    timer = setTimeout(() => callback(...args), delay)
+  }
+}
