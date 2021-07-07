@@ -1,12 +1,14 @@
 import React from 'react'
-import { List, ListItem, ListItemText, Checkbox } from '@material-ui/core'
-import { toDateFormat, toReal } from '../../../../helpers'
-import { InstallmentTable } from './styles'
+import { IconButton } from '@material-ui/core'
 
-export function InstallmentList({ installments, hide, paidChanged }) {
+import { EditOutlined as EditIcon } from '@material-ui/icons'
+
+import { toDateFormat, toReal } from '../../../../helpers'
+import { InstallmentTable, Container } from './styles'
+
+export function InstallmentList({ installments, hide, onEdit }) {
     return (
-        <div hidden={hide}
-            style={{ textAlign: 'center', marginTop: '20px' }}>
+        <Container hidden={hide}>
             <InstallmentTable>
                 <table>
                     <thead>
@@ -14,27 +16,27 @@ export function InstallmentList({ installments, hide, paidChanged }) {
                             <th>N°</th>
                             <th>VALOR</th>
                             <th>VENCIMENTO</th>
-                            <th>PAGA?</th>
+                            <th></th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         {installments.map((p, i) =>
-                            <tr>
+                            <tr key={i}>
                                 <td>{p.number}</td>
                                 <td>{toReal(p.cost)}</td>
                                 <td>{toDateFormat(p.date, 'dd/MM/yyyy')}</td>
+                                <td>{p.paidDate ? 'PAGO' : 'PENDENTE'}</td>
                                 <td>
-                                    <Checkbox
-                                        checked={!!p.paidDate}
-                                        onChange={(e, c) => paidChanged(p, c)}
-                                        color="primary"
-                                    />
+                                    <IconButton onClick={() => onEdit(p)} color="primary" aria-label="Edit">
+                                        <EditIcon />
+                                    </IconButton>
                                 </td>
                             </tr>
                         )}
                     </tbody>
                 </table>
             </InstallmentTable>
-        </div>
+        </Container>
     )
 }

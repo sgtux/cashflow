@@ -20,6 +20,12 @@ namespace Cashflow.Api.Service
             _creditCardRepository = creditCardRepository;
         }
 
+        public async Task<ResultModel> Get(int id, int userId)
+        {
+            var p = await _paymentRepository.GetById(id);
+            return new ResultDataModel<Payment>(p?.UserId == userId ? p : null);
+        }
+
         public async Task<ResultModel> GetByUser(int userId) => new ResultDataModel<IEnumerable<Payment>>(await _paymentRepository.GetByUser(userId));
 
         public async Task<ResultModel> GetTypes() => new ResultDataModel<IEnumerable<PaymentType>>(await _paymentRepository.GetTypes());

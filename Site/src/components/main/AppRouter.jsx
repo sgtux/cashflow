@@ -1,7 +1,7 @@
 import React from 'react'
 import { Route, Switch } from 'react-router-dom'
 import { createHashHistory } from 'history'
-import { CreditCards, Payments, Projection, Salary } from '../../scenes'
+import { CreditCards, Payments, Projection, Salary, EditPayment } from '../../scenes'
 
 const history = createHashHistory()
 const isAuthenticated = true
@@ -27,6 +27,7 @@ export default function () {
       <Route path="/credit-cards" component={CreditCards} />
       <Route path="/projection" component={Projection} />
       <Route path="/salary" component={Salary} />
+      <Route path="/edit-payment/:id" component={EditPayment} />
     </Switch>
   )
 }

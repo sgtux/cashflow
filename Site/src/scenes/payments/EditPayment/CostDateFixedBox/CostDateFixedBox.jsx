@@ -1,7 +1,9 @@
 import React from 'react'
 import { Checkbox, FormControlLabel } from '@material-ui/core'
+import ptBr from 'date-fns/locale/pt-BR'
+import DatePicker from 'react-datepicker'
 
-import { InputDate, InputMoney } from '../../../../components/inputs'
+import { InputMoney } from '../../../../components/inputs'
 
 export function CostDateFixedBox({ cost, costChanged, date, dateChanged, fixedPayment, fixedPaymentChanged }) {
     return (
@@ -12,11 +14,13 @@ export function CostDateFixedBox({ cost, costChanged, date, dateChanged, fixedPa
                 kind="money"
                 value={cost} />
             <span>Data:</span>
-            <InputDate
+            <DatePicker onChange={e => dateChanged(e)}
+                dateFormat="dd/MM/yyyy" locale={ptBr} selected={date} />
+            {/* <InputDate
                 onChangeText={e => dateChanged(e)}
                 kind="datetime"
                 value={date}
-                options={{ format: 'dd/MM/YYYY' }} />
+                options={{ format: 'dd/MM/YYYY' }} /> */}
             <FormControlLabel label="Pagamento Fixo ?"
                 control={<Checkbox
                     checked={fixedPayment}

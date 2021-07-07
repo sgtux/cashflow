@@ -1,11 +1,15 @@
 import styled from 'styled-components'
 
+export const Container = styled.div`
+    text-align: center;
+    margin-top: 20px;
+`
+
 export const InstallmentTable = styled.div`
     overflow-y: auto;
     max-height: 320px;
-    box-shadow: 0 0 3px black;
     margin: 5px;
-    border-radius: 10px;
+    font-size: 14px;
     & > table {
         border-collapse: collapse;
         width: 100%;

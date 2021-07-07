@@ -19,17 +19,17 @@ const styles = {
   }
 }
 
-export function CardMain(props) {
+export function CardMain({ title, loading, children }) {
   return (
     <Paper style={styles.paper}>
       <fieldset style={styles.legend}>
-        <legend>{props.title}</legend>
+        <legend>{title}</legend>
         {
-          props.loading ?
+          loading ?
             <div style={{ textAlign: 'center', marginBottom: '10px', boxAlign: 'center' }}>
               <CircularProgress size={60} />
             </div>
-            : props.children}
+            : children}
       </fieldset>
     </Paper>
   )

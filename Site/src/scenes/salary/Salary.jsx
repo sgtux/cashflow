@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import DatePicker from 'react-datepicker'
-import 'react-datepicker/dist/react-datepicker.css';
-import ptBr from 'date-fns/locale/pt-BR';
+import ptBr from 'date-fns/locale/pt-BR'
 
 import {
     Paper,

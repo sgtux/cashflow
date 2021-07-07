@@ -77,10 +77,8 @@ namespace Cashflow.Api.Infra.Repository
             var payDb = await GetById(payment.Id);
             await Execute(InstallmentResources.Delete, new { PaymentId = payment.Id });
             await Execute(PaymentResources.Update, payment);
-            int number = 0;
             foreach (var i in payment.Installments.OrderBy(p => p.Number))
             {
-                i.Number = number;
                 i.PaymentId = payment.Id;
                 await Execute(InstallmentResources.Insert, i);
             }

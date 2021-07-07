@@ -9,6 +9,7 @@ import { Store } from './store'
 
 import './App.css'
 import 'react-toastify/dist/ReactToastify.css'
+import 'react-datepicker/dist/react-datepicker.css';
 
 class App extends React.Component {
   render() {

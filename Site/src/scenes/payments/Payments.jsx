@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 import {
   Paper,
@@ -14,11 +15,13 @@ import {
   Typography
 } from '@material-ui/core'
 
-import DeleteIcon from '@material-ui/icons/Delete'
-import CardIcon from '@material-ui/icons/CreditCardOutlined'
+import {
+  Delete as DeleteIcon,
+  CreditCardOutlined as CardIcon,
+  EditOutlined as EditIcon
+} from '@material-ui/icons'
 
 import { CardMain } from '../../components/main'
-import { EditPaymentModal } from '../../components/modais'
 import { paymentService, creditCardService } from '../../services'
 import { toReal, dateToString } from '../../helpers'
 import IconTextInput from '../../components/main/IconTextInput'
@@ -72,15 +75,12 @@ export default class Payments extends React.Component {
 
   componentDidMount() {
     this.refresh()
-    creditCardService.get().then(res => {
-      console.log(res)
-      this.setState({ cards: res })
-    })
+    creditCardService.get().then(res => this.setState({ cards: res }))
   }
 
   refresh() {
     this.setState({ loading: true, errorMessage: '' })
-    paymentService.get().then(res => {
+    paymentService.getAll().then(res => {
       setTimeout(() => {
         this.setState({
           loading: false,
@@ -113,11 +113,6 @@ export default class Payments extends React.Component {
     })
   }
 
-  onFinish() {
-    this.setState({ showModal: false })
-    this.refresh()
-  }
-
   render() {
     const { payments, filtro } = this.state
     return (
@@ -125,9 +120,9 @@ export default class Payments extends React.Component {
         {payments.length ?
           <div>
             <div style={styles.divNewPayment}>
-              <Button variant="contained" color="primary" onClick={() => this.openEditNew()}>
-                Adicionar Pagamento
-              </Button>
+              <Link to="/edit-payment/0">
+                <Button variant="contained" color="primary">Adicionar Pagamento</Button>
+              </Link>
             </div>
             <Paper style={{ marginTop: '20px' }}>
 
@@ -140,8 +135,7 @@ export default class Payments extends React.Component {
 
               <List dense={true}>
                 {payments.filter(p => !filtro || !p.description || p.description.toUpperCase().indexOf(filtro) !== -1).map(p =>
-                  <ListItem button key={p.id}
-                    onClick={() => this.openEditNew(p)}>
+                  <ListItem key={p.id}>
                     <ListItemAvatar>
                       <Avatar>
                         <CardIcon />
@@ -170,6 +164,13 @@ export default class Payments extends React.Component {
                       }
                     />
                     <ListItemSecondaryAction>
+                      <Link to={`/edit-payment/${p.id}`}>
+                        <Tooltip title="Editar este pagamento">
+                          <IconButton color="primary" aria-label="Edit">
+                            <EditIcon />
+                          </IconButton>
+                        </Tooltip>
+                      </Link>
                       <Tooltip title="Remover este pagamento">
                         <IconButton color="secondary" aria-label="Delete"
                           onClick={() => this.removePayment(p.id)}>
@@ -188,21 +189,6 @@ export default class Payments extends React.Component {
               <span>Você não possui pagamentos cadastrados.</span>
             </div>
           </div>
-        }
-        <div style={styles.divNewPayment}>
-          <Button variant="contained" color="primary" onClick={() => this.openEditNew()}>
-            Adicionar Pagamento
-          </Button>
-        </div>
-        {
-          this.state.showModal ?
-            <EditPaymentModal
-              onFinish={() => this.onFinish()}
-              cards={this.state.cards}
-              open={this.state.showModal}
-              selectedPayment={this.state.payment}
-              onClose={() => this.setState({ showModal: false })} />
-            : null
         }
       </CardMain>
     )
