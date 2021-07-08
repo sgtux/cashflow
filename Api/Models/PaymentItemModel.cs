@@ -1,4 +1,4 @@
-using Cashflow.Api.Shared;
+using Cashflow.Api.Infra.Entity;
 
 namespace Cashflow.Api.Models
 {
@@ -14,7 +14,7 @@ namespace Cashflow.Api.Models
 
         public int PlotsPaid { get; set; }
 
-        public TypePayment Type { get; set; }
+        public PaymentType Type { get; set; }
 
         public string CreditCard { get; set; }
 

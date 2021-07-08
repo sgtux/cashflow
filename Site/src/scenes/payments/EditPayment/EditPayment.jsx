@@ -41,15 +41,13 @@ export function EditPayment() {
   const params = useParams()
 
   useEffect(() => {
+    paymentService.getTypes().then(res => setTypes(res))
+    creditCardService.get().then(res => setCards(res))
     paymentService.get(params.id)
       .then(res => {
 
         const payment = res || {}
         setId(payment.id)
-
-        paymentService.getTypes().then(res => setTypes(res))
-        creditCardService.get().then(res => setCards(res))
-
 
         const firstInstallment = (payment.installments || [])[0] || {}
         const qtdInstallments = (payment.installments || []).length || 1
@@ -57,7 +55,7 @@ export function EditPayment() {
 
         setUseCreditCard(!!payment.creditCardId)
         setDescription(payment.description || '')
-        setType(payment.type || 2)
+        setType((payment.type || {}).id || 2)
         setCard(payment.creditCardId)
         setInvoice(payment.invoice)
         setCostByInstallment(false)
@@ -115,7 +113,7 @@ export function EditPayment() {
 
   function save() {
 
-    const payment = { id, description: description, type, installments, fixedPayment, invoice }
+    const payment = { id, description: description, typeId: type, installments, fixedPayment, invoice }
 
     if (!description || !installments.length) {
       toast.error('Preencha corretamente os campos.')
@@ -128,10 +126,7 @@ export function EditPayment() {
     setLoading(true)
 
     paymentService.save(payment)
-      .then(() => {
-        toast.success('Salvo com sucesso.')
-        // Todo
-      })
+      .then(() => toast.success('Salvo com sucesso.'))
       .finally(() => setLoading(false))
   }
 

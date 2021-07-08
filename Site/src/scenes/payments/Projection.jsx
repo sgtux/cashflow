@@ -5,19 +5,18 @@ import {
   List,
   ListItem,
   ListItemText,
-  Typography,
   GridList,
   GridListTile
 } from '@material-ui/core'
 import CardIcon from '@material-ui/icons/CreditCardOutlined'
 
-import { CardMain, Invoices } from '../../components'
+import { CardMain, Invoices, MoneySpan } from '../../components'
 import InputMonth from '../../components/inputs/InputMonth'
 
 import { paymentService } from '../../services/index'
 
 import { toReal, getMonthYear } from '../../helpers/utils'
-import { Colors } from '../../helpers/themes'
+import { ArrowUp, ArrowDown, ContainerCosts, BoxCosts } from './styles'
 
 export default class Projection extends React.Component {
 
@@ -62,6 +61,9 @@ export default class Projection extends React.Component {
         setTimeout(() => {
           this.setState({ totalCost: total, loading: false, payments: res, dates })
         }, 300)
+        if (dates.length) {
+          this.hideShowMonth(dates[0])
+        }
       }).catch(err => this.setState({ loading: false, errorMessage: err.message, endDate }))
   }
 
@@ -82,7 +84,7 @@ export default class Projection extends React.Component {
     return (
       <CardMain title="Projeção" loading={this.state.loading}>
         <Paper>
-          <div style={{ marginLeft: '20px', marginBottom: '20px' }}>
+          <div style={{ margin: 20, paddingTop: 20 }}>
             <InputMonth
               month={this.state.endDate.month}
               year={this.state.endDate.year}
@@ -91,17 +93,20 @@ export default class Projection extends React.Component {
           </div>
           <List dense={true}>
             {this.state.dates.map((d, i) => {
-              const { payments, costExpense, costIncome, accumulatedCost, total } = this.state.payments[d]
+              const { payments, costExpense, costGain, accumulatedCost, total } = this.state.payments[d]
               return (<ListItem key={i}>
                 <ListItemText>
-                  <hr />
-                  <span onClick={() => this.hideShowMonth(d)}
-                    style={{
-                      cursor: 'pointer',
-                      fontSize: '16px',
-                      fontWeight: 'bold',
-                      color: '#666'
-                    }}>{getMonthYear(d)}</span>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span onClick={() => this.hideShowMonth(d)}
+                      style={{
+                        cursor: 'pointer',
+                        fontSize: '16px',
+                        fontWeight: 'bold',
+                        color: '#666'
+                      }}>{getMonthYear(d)}</span>
+                    {!this.state.hiddenMonths[d] && <MoneySpan bold gain={accumulatedCost > 0}>{toReal(accumulatedCost)}</MoneySpan>}
+                    {this.state.hiddenMonths[d] ? <ArrowUp onClick={() => this.hideShowMonth(d)} /> : <ArrowDown onClick={() => this.hideShowMonth(d)} />}
+                  </div>
 
                   <div hidden={!this.state.hiddenMonths[d]}>
                     <Invoices payments={payments.filter(p => p.invoice)} />
@@ -110,7 +115,8 @@ export default class Projection extends React.Component {
                         <ListItem key={j}>
                           <GridList cellHeight={20} cols={6} style={{ width: '100%' }}>
                             <GridListTile cols={3}>
-                              <span style={{ color: '#666', fontWeight: 'bold' }}>{p.description}</span>
+                              <span style={{ color: '#666' }}>{p.description}</span>
+                              <MoneySpan small gain={p.type.in}>({p.type.description})</MoneySpan>
                             </GridListTile>
                             <GridListTile cols={1}>
                               {
@@ -126,48 +132,29 @@ export default class Projection extends React.Component {
                               <span style={{ fontFamily: '"Roboto", "Helvetica", "Arial", "sans-serif"' }}>{p.fixedPayment ? '' : `${p.number}/${p.qtdInstallments}`}</span>
                             </GridListTile>
                             <GridListTile cols={1} style={{ textAlign: 'end' }}>
-                              <span style={{
-                                color: p.type === 2 ? Colors.AppRed : Colors.AppGreen,
-                                fontSize: '14px',
-                                marginRight: '10px'
-                              }}>
-                                {toReal(p.cost)}
-                              </span>
+                              <MoneySpan gain={p.type.in}>{toReal(p.cost)}</MoneySpan>
                             </GridListTile>
                           </GridList>
                         </ListItem>
                       )}
                     </List>
-                    <ListItemText style={{ textAlign: 'end', marginTop: '20px' }}>
-                      <Typography component="span"
-                        color={'secondary'}>
-                        {`${toReal(costExpense)}`}
-                      </Typography>
-                      <Typography component="span"
-                        color={'primary'}>
-                        {`${toReal(costIncome)}`}
-                      </Typography>
-                      <span style={{
-                        color: total < 0 ? Colors.AppRed : Colors.AppGreen,
-                        marginTop: '6px',
-                        padding: '3px',
-                        fontSize: '14px',
-                        fontWeight: 'bold'
-                      }}>
-                        {toReal(total)}
-                      </span>
-                    </ListItemText>
-                  </div>
-                  <div style={{ textAlign: 'center' }}>
-                    <span style={{
-                      color: accumulatedCost < 0 ? Colors.AppRed : Colors.AppGreen,
-                      marginTop: '6px',
-                      padding: '3px',
-                      fontWeight: 'bold',
-                      fontSize: '14px'
-                    }}>
-                      {toReal(accumulatedCost)}
-                    </span>
+                    <ContainerCosts>
+                      <BoxCosts>
+                        <span style={{ color: 'grey', marginRight: 20 }}>Gastos:</span>
+                        <MoneySpan>{toReal(costExpense)}</MoneySpan>
+                      </BoxCosts>
+                      <BoxCosts>
+                        <span style={{ color: 'grey', marginRight: 20 }}>Ganhos:</span>
+                        <MoneySpan gain>{toReal(costGain)}</MoneySpan>
+                      </BoxCosts>
+                      <BoxCosts>
+                        <span style={{ color: 'grey', marginRight: 20 }}>Líquido:</span>
+                        <MoneySpan gain={total > 0}>{toReal(total)}</MoneySpan>
+                      </BoxCosts>
+                    </ContainerCosts>
+                    <div style={{ textAlign: 'center' }}>
+                      {this.state.hiddenMonths[d] && <MoneySpan bold gain={accumulatedCost > 0}>{toReal(accumulatedCost)}</MoneySpan>}
+                    </div>
                   </div>
                   <hr />
                 </ListItemText>
@@ -177,15 +164,13 @@ export default class Projection extends React.Component {
           </List>
           <div style={{
             textAlign: 'center',
-            fontSize: '20px',
+            fontSize: '24px',
             marginBottom: '20px',
-            fontWeight: 'bold'
+            fontWeight: 'bold',
+            color: 'grey'
           }}>
-            <span>Total:</span>
-            <Typography component="span" style={{ fontSize: '30px', fontWeight: 'bold' }}
-              color={this.state.totalCost < 0 ? 'secondary' : 'primary'}>
-              {toReal(this.state.totalCost)}
-            </Typography>
+            <span>Total Acumulado:</span><br />
+            <MoneySpan bold bigger gain={this.state.totalCost > 0}>{toReal(this.state.totalCost)}</MoneySpan>
           </div>
         </Paper>
       </CardMain>

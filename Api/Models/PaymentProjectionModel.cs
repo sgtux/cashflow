@@ -1,10 +1,9 @@
 using System;
 using Cashflow.Api.Infra.Entity;
-using Cashflow.Api.Shared;
 
 namespace Cashflow.Api.Models
 {
-    public class PaymentFutureModel
+    public class PaymentProjectionModel
     {
         public string Description { get; set; }
 
@@ -20,7 +19,7 @@ namespace Cashflow.Api.Models
 
         public decimal Cost { get; set; }
 
-        public TypePayment Type { get; set; }
+        public PaymentType Type { get; set; }
 
         public CreditCard CreditCard { get; set; }
 

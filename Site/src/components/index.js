@@ -9,3 +9,5 @@ export {
 export { CardMain } from './main/CardMain'
 
 export { Invoices } from './Invoices/Invoices'
+
+export { MoneySpan } from './money'

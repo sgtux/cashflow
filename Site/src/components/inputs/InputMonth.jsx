@@ -12,7 +12,7 @@ class InputMonth extends React.Component {
   constructor(props) {
     super(props)
     const now = new Date()
-    const years = [now.getFullYear() - 1]
+    const years = [now.getFullYear()]
     for (let i = 1; i <= 5; i++)
       years.push(years[0] + i)
 

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Infra.Repository;
 using Cashflow.Api.Models;
+using Cashflow.Api.Shared;
 using Cashflow.Api.Validators;
 
 namespace Cashflow.Api.Service
@@ -12,12 +13,18 @@ namespace Cashflow.Api.Service
     public class PaymentService : BaseService
     {
         private IPaymentRepository _paymentRepository;
+
         private ICreditCardRepository _creditCardRepository;
 
-        public PaymentService(IPaymentRepository paymentRepository, ICreditCardRepository creditCardRepository)
+        private ISalaryRepository _salaryRepository;
+
+        public PaymentService(IPaymentRepository paymentRepository,
+            ICreditCardRepository creditCardRepository,
+            ISalaryRepository salaryRepository)
         {
             _paymentRepository = paymentRepository;
             _creditCardRepository = creditCardRepository;
+            _salaryRepository = salaryRepository;
         }
 
         public async Task<ResultModel> Get(int id, int userId)
@@ -30,9 +37,9 @@ namespace Cashflow.Api.Service
 
         public async Task<ResultModel> GetTypes() => new ResultDataModel<IEnumerable<PaymentType>>(await _paymentRepository.GetTypes());
 
-        public async Task<Dictionary<string, PaymentFutureResultModel>> GetProjection(int userId, DateTime forecastAt)
+        public async Task<Dictionary<string, PaymentProjectionResultModel>> GetProjection(int userId, DateTime forecastAt)
         {
-            var result = new Dictionary<string, PaymentFutureResultModel>();
+            var result = new Dictionary<string, PaymentProjectionResultModel>();
             var now = _paymentRepository.CurrentDate;
             var dates = new List<DateTime>();
 
@@ -51,16 +58,29 @@ namespace Cashflow.Api.Service
             }
 
             var payments = await _paymentRepository.GetByUser(userId);
+            var types = await _paymentRepository.GetTypes();
             var cards = await _creditCardRepository.GetByUserId(userId);
+            var salary = (await _salaryRepository.GetByUserId(userId)).FirstOrDefault(p => p.EndDate is null);
 
             dates.OrderBy(p => p.Ticks).ToList().ForEach(date =>
             {
-                var resultModel = new PaymentFutureResultModel();
+                var resultModel = new PaymentProjectionResultModel();
+                if (salary != null)
+                {
+                    resultModel.Payments.Add(new PaymentProjectionModel()
+                    {
+                        Description = "Salário",
+                        FixedPayment = true,
+                        MonthYear = date.ToString("MM/yyyy"),
+                        Type = types.First(p => p.Id == (int)PaymentTypeEnum.Gain),
+                        Cost = salary.Value
+                    });
+                }
 
                 foreach (var payMonth in payments.Where(p => p.FixedPayment || (p.Installments?.Any(p => p.Date.Year == date.Year && p.Date.Month == date.Month) ?? false)))
                 {
                     var installment = payMonth.Installments.First(p => payMonth.FixedPayment || (p.Date.Year == date.Year && p.Date.Month == date.Month));
-                    resultModel.Payments.Add(new PaymentFutureModel()
+                    resultModel.Payments.Add(new PaymentProjectionModel()
                     {
                         CreditCard = cards.FirstOrDefault(p => p.Id == payMonth.CreditCardId),
                         Description = payMonth.Description,
@@ -76,7 +96,7 @@ namespace Cashflow.Api.Service
                 };
 
                 result.Add(date.ToString("MM/yyyy"), resultModel);
-                resultModel.AccumulatedCost = result.Values.Sum(p => p.CostIncome) - result.Values.Sum(p => p.CostExpense);
+                resultModel.AccumulatedCost = result.Values.Sum(p => p.Total);
             });
 
             return result;

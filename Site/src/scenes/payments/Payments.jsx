@@ -146,8 +146,8 @@ export default class Payments extends React.Component {
                       style={{ width: '200px' }}
                       secondary={
                         <React.Fragment>
-                          <Typography component="span" color={p.type === 1 ? 'primary' : 'secondary'}>
-                            {p.type === 1 ? 'Renda' : 'Despesa'}
+                          <Typography component="span" color={p.type.in ? 'primary' : 'secondary'}>
+                            {p.type.description}
                           </Typography>
                           {p.firstPaymentFormatted}
                         </React.Fragment>

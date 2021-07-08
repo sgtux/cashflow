@@ -28,7 +28,7 @@ namespace Cashflow.Api.Controllers
 
         [Route("Projection")]
         [HttpGet]
-        public async Task<Dictionary<string, PaymentFutureResultModel>> GetProjection([FromQuery] DateTime endDate)
+        public async Task<Dictionary<string, PaymentProjectionResultModel>> GetProjection([FromQuery] DateTime endDate)
         {
             return await _service.GetProjection(UserId, endDate);
         }

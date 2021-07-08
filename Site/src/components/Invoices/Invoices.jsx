@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react'
 import {
     List,
     ListItem,
-    Typography,
     GridList,
     GridListTile
 } from '@material-ui/core'
 
 import { toReal } from '../../helpers/utils'
+
+import { InvoiceCost, InvoiceTotalCost, InvoiceCostSmall } from './styles'
 
 export function Invoices(props) {
 
@@ -16,22 +17,22 @@ export function Invoices(props) {
     const [total, setTotal] = useState(0)
 
     useEffect(() => {
-        const temp = []
+        const cardsTemp = []
         let totalTemp = 0
         props.payments.forEach(p => {
-            if (p.creditCard && !temp.find(x => x.id === p.creditCard.id))
-                temp.push(p.creditCard)
+            if (p.creditCard && !cardsTemp.find(x => x.id === p.creditCard.id))
+                cardsTemp.push(p.creditCard)
             totalTemp += p.cost
         })
-        temp.forEach(c => {
+        cardsTemp.forEach(c => {
             const pays = props.payments.filter(x => x.creditCard && x.creditCard.id === c.id)
             c.payments = pays
             c.cost = pays.length ? pays.map(p => p.cost).reduce((sum, p) => sum + p) : 0
         })
-        setCards(temp)
+        setCards(cardsTemp)
         setShowing(showing)
-        setTotal(total)
-    })
+        setTotal(totalTemp)
+    }, [])
 
     return (
         cards.length ?
@@ -55,39 +56,21 @@ export function Invoices(props) {
                                                 <span style={{ fontFamily: '"Roboto", "Helvetica", "Arial", "sans-serif"' }}>{p.fixedPayment ? '' : `${p.number}/${p.qtdInstallments}`}</span>
                                             </GridListTile>
                                             <GridListTile cols={1} style={{ textAlign: 'center' }}>
-                                                <Typography component="span" color={p.type === 1 ? 'primary' : 'secondary'}>
-                                                    {toReal(p.cost)}
-                                                </Typography>
+                                                <InvoiceCostSmall in={p.in}>{toReal(p.cost)}</InvoiceCostSmall>
                                             </GridListTile>
                                         </GridList>
                                     </ListItem>
                                 )}
                             </List>
                             <div style={{ textAlign: 'right' }}>
-                                <span style={{
-                                    fontSize: '12px',
-                                    color: Colors.AppRed,
-                                    marginTop: '6px',
-                                    padding: '3px',
-                                    fontWeight: 'bold'
-                                }}>
-                                    {toReal(c.cost)}
-                                </span>
+                                <InvoiceCost>{toReal(c.cost)}</InvoiceCost>
                             </div>
                             <hr />
                         </div>
                     )}
                 </div>
                 <div style={{ textAlign: 'right' }}>
-                    <span style={{
-                        fontSize: '14px',
-                        color: Colors.AppRed,
-                        marginTop: '6px',
-                        padding: '3px',
-                        fontWeight: 'bold'
-                    }}>
-                        {toReal(total)}
-                    </span>
+                    <InvoiceTotalCost>{toReal(total)}</InvoiceTotalCost>
                 </div>
             </fieldset>
             : null

@@ -2,7 +2,7 @@ SELECT
   p."Id",
   p."Description",
   p."UserId",
-  p."Type",
+  p."Type" "TypeId",
   p."CreditCardId",
   p."FixedPayment",
   p."Invoice",

@@ -14,9 +14,16 @@ namespace Cashflow.Api.Infra.Repository
     {
         public PaymentRepository(DatabaseContext conn, LogService logService) : base(conn, logService) { }
 
+        public async Task<IEnumerable<PaymentType>> GetTypes()
+        {
+            var list = new List<Payment>();
+            return await Query<PaymentType>(PaymentResources.Types);
+        }
+
         public async Task<IEnumerable<Payment>> GetByUser(int userId)
         {
             var list = new List<Payment>();
+            var types = await GetTypes();
             var result = await Query<Installment>(PaymentResources.ByUser, (p, i) =>
             {
                 var pay = list.FirstOrDefault(x => x.Id == p.Id);
@@ -24,6 +31,7 @@ namespace Cashflow.Api.Infra.Repository
                 {
                     pay = p;
                     list.Add(p);
+                    pay.Type = types.FirstOrDefault(t => t.Id == (int)p.TypeId);
                     pay.Installments = new List<Installment>();
                 }
                 pay.Installments.Add(i);
@@ -32,21 +40,17 @@ namespace Cashflow.Api.Infra.Repository
             return list;
         }
 
-        public async Task<IEnumerable<PaymentType>> GetTypes()
-        {
-            var list = new List<Payment>();
-            return await Query<PaymentType>(PaymentResources.Types);
-        }
-
         public async Task<Payment> GetById(int id)
         {
             Payment payment = null;
+            var types = await GetTypes();
             var result = await Query<Installment>(PaymentResources.ById, (p, i) =>
             {
                 if (payment == null)
                 {
                     payment = p;
                     payment.Installments = new List<Installment>();
+                    payment.Type = types.FirstOrDefault(t => t.Id == (int)p.TypeId);
                 }
                 payment.Installments.Add(i);
                 return p;
