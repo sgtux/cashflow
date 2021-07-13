@@ -7,7 +7,7 @@ import { HashRouter } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 
 import { Colors } from '../../helpers/themes'
-import Toobar from './Toolbar'
+import { AppToolbar } from './Toolbar'
 import { SidebarContent } from './'
 import AppRouter from './AppRouter'
 import { Auth } from '../../scenes'
@@ -59,7 +59,7 @@ class MainComponent extends React.Component {
               onSetOpen={open => this.setState({ sidebarIsOpen: open })}
               docked={this.state.sidebarDocked}
               styles={{ sidebar: { background: Colors.AppGreen } }}>
-              <Toobar
+              <AppToolbar
                 dockedMenu={this.state.sidebarDocked}
                 openSideBar={() => this.setState({ sidebarIsOpen: true })}
               />
