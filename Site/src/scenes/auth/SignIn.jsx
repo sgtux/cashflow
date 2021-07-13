@@ -1,7 +1,5 @@
 import React, { useState } from 'react'
-import PropTypes from 'prop-types'
 import { useDispatch } from 'react-redux'
-import { bindActionCreators } from 'redux'
 import { Person, Visibility, VisibilityOff } from '@material-ui/icons'
 import {
   CardContent,
@@ -33,7 +31,7 @@ const styles = {
   }
 }
 
-export function Login({ changeScene }) {
+export function SignInScreen({ changeScene }) {
 
   const [password, setPassword] = useState('')
   const [passwordValid, setPasswordValid] = useState('')

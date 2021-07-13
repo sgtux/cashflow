@@ -65,11 +65,11 @@ class MainComponent extends React.Component {
               />
               <AppRouter />
             </Sidebar>
-            <ToastContainer />
           </HashRouter>
           :
           <Auth />
         }
+        <ToastContainer />
         <AlertModal
           text='Sessão Expirada!'
           show={this.state.showModal}

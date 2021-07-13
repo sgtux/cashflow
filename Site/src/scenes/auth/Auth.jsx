@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { Login } from './Login'
-import Create from './Create'
+import { SignInScreen } from './SignIn'
+import { SignUpScreen } from './SignUp'
 
 export default function Auth() {
   const [isLogin, setIsLogin] = useState(true)
@@ -8,9 +8,9 @@ export default function Auth() {
     <div>
       {
         isLogin ?
-          <Login changeScene={() => setIsLogin(false)} />
+          <SignInScreen changeScene={() => setIsLogin(false)} />
           :
-          <Create changeScene={() => setIsLogin(true)} />
+          <SignUpScreen changeScene={() => setIsLogin(true)} />
       }
     </div>
   )

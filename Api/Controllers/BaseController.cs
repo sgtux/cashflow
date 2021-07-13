@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using Cashflow.Api.Models;
@@ -24,6 +25,12 @@ namespace Cashflow.Api.Controllers
                 return Ok(result);
             else
                 return BadRequest(new { Errors = result.Notifications });
+        }
+
+        protected IActionResult HandleUnauthorized(string text)
+        {
+            var errors = new List<string>() { text };
+            return Unauthorized(new { Errors = errors });
         }
     }
 }

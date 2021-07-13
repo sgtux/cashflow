@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Cashflow.Api.Controllers
 {
     [Route("api/token")]
-    public class TokenController : Controller
+    public class TokenController : BaseController
     {
         private AppConfig _config;
 
@@ -26,11 +26,11 @@ namespace Cashflow.Api.Controllers
         public async Task<IActionResult> Post([FromBody] LoginModel model)
         {
             if (model is null || string.IsNullOrEmpty(model.NickName) || string.IsNullOrEmpty(model.Password))
-                return Unauthorized();
+                return HandleUnauthorized("Usuário ou senha inválidos.");
 
             var user = await _accountService.Login(model.NickName, model.Password);
             if (user == null)
-                return Unauthorized();
+                return HandleUnauthorized("Usuário ou senha inválidos.");
 
             var claims = new Dictionary<string, string>();
             claims.Add(ClaimTypes.Sid, user.Id.ToString());
