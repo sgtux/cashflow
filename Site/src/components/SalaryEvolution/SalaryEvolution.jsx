@@ -3,21 +3,6 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 
 import { dateToString } from '../../helpers'
 
-const data = [
-    {
-        name: 'Page A',
-        value: 2400,
-    },
-    {
-        name: 'Page B',
-        value: 1398,
-    },
-    {
-        name: 'Page C',
-        value: 9800,
-    },
-];
-
 export function SalaryEvolution({ salaries }) {
 
     const [source, setSource] = useState([])

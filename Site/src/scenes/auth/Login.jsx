@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Person, Visibility, VisibilityOff } from '@material-ui/icons'
 import {
@@ -8,7 +8,6 @@ import {
   Card,
   Button,
   Zoom,
-  FormHelperText,
   CircularProgress
 } from '@material-ui/core'
 
@@ -34,100 +33,82 @@ const styles = {
   }
 }
 
-class Login extends React.Component {
+export function Login({ changeScene }) {
 
-  constructor(props) {
-    super(props)
-    this.state = {}
-    this.onInputChange = this.onInputChange.bind(this)
+  const [password, setPassword] = useState('')
+  const [passwordValid, setPasswordValid] = useState('')
+  const [nickName, setNickName] = useState(false)
+  const [nickNameValid, setNickNameValid] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
+  const [loading, setLoading] = useState(false)
+
+  const dispatch = useDispatch()
+
+
+  function onInputChange(e) {
+    if (e.name === 'nickName') {
+      setNickName(e.value)
+      setNickNameValid(e.valid)
+    } else if (e.name === 'password') {
+      setPassword(e.value)
+      setPasswordValid(e.valid)
+    }
   }
 
-  onInputChange(e) {
-    this.setState({
-      [e.name]: e.value,
-      [`${e.name}Valid`]: e.valid,
-      errorMessage: ''
-    })
-  }
-
-  login(e) {
-    if (this.state.loading)
+  function login(e) {
+    if (loading)
       return
-    this.setState({ loading: true })
+    setLoading(true)
     if (e)
       e.preventDefault()
-    authService.login({
-      nickName: this.state.nickName,
-      password: this.state.password
-    }).then(user => {
-      setTimeout(() => this.setState({ loading: false }), 500)
-      setTimeout(() => this.props.userChanged(user), 600)
-    }).catch(err => {
-      setTimeout(() => this.setState({
-        errorMessage: err.status === 401 ? 'Email ou Senha inválidos.' : err.message,
-        loading: false
-      }), 300)
-    })
+    authService.login({ nickName, password })
+      .then(user => dispatch(userChanged(user)))
+      .finally(() => setLoading(false))
   }
 
-  render() {
-    return (
-      <Zoom in={true}>
-        <Card style={styles.Card}>
-          <form onSubmit={e => this.login(e)}>
-            <CardContent>
-              <IconTextInput
-                label="Nick Name"
-                required
-                disabled={this.state.loading}
-                name="nickName"
-                onChange={this.onInputChange}
-                validChanged={valid => this.setState({ nickNameValid: valid })}
-                Icon={<Person />}
-              />
-              <IconTextInput
-                type={this.state.showPassword ? 'text' : 'password'}
-                label="Senha"
-                required
-                minlength={4}
-                onChange={this.onInputChange}
-                name="password"
-                disabled={this.state.loading}
-                Icon={this.state.showPassword ? <VisibilityOff /> : <Visibility />}
-                iconClick={() => this.setState({ showPassword: !this.state.showPassword })} />
-            </CardContent>
-            <br />
-            <div style={{ marginBottom: '10px' }} hidden={!this.state.loading}>
-              <CircularProgress />
-            </div>
-            <div hidden={this.state.loading}>
-              <Button style={{ width: '250px' }}
-                variant="contained"
-                disabled={!this.state.nickNameValid || !this.state.passwordValid}
-                type="submit"
-                onClick={() => this.login()}
-                color="primary">Login</Button>
-              <br /><br />
-              <Button style={{ width: '250px' }}
-                variant="outlined"
-                onClick={this.props.changeScene}
-                color="primary">Create Account</Button>
-              <FormHelperText style={{ textTransform: 'uppercase', textAlign: 'center', marginTop: '8px' }}
-                hidden={!this.state.errorMessage} error={true}>
-                {this.state.errorMessage}
-              </FormHelperText>
-            </div>
-          </form>
-        </Card>
-      </Zoom >
-    )
-  }
+  return (
+    <Zoom in={true}>
+      <Card style={styles.Card}>
+        <form onSubmit={e => login(e)}>
+          <CardContent>
+            <IconTextInput
+              label="Nick Name"
+              required
+              disabled={loading}
+              name="nickName"
+              onChange={e => onInputChange(e)}
+              Icon={<Person />}
+            />
+            <IconTextInput
+              type={showPassword ? 'text' : 'password'}
+              label="Senha"
+              required
+              minlength={4}
+              onChange={e => onInputChange(e)}
+              name="password"
+              disabled={loading}
+              Icon={showPassword ? <VisibilityOff /> : <Visibility />}
+              iconClick={() => setShowPassword(!showPassword)} />
+          </CardContent>
+          <br />
+          <div style={{ marginBottom: '10px' }} hidden={!loading}>
+            <CircularProgress />
+          </div>
+          <div hidden={loading}>
+            <Button style={{ width: '250px' }}
+              variant="contained"
+              disabled={!nickNameValid || !passwordValid}
+              type="submit"
+              onClick={() => login()}
+              color="primary">Login</Button>
+            <br /><br />
+            <Button style={{ width: '250px' }}
+              variant="outlined"
+              onClick={changeScene}
+              color="primary">Create Account</Button>
+          </div>
+        </form>
+      </Card>
+    </Zoom>
+  )
 }
-
-Login.propTypes = {
-  changeScene: PropTypes.func
-}
-
-const mapDispatchToProps = dispatch => bindActionCreators({ userChanged }, dispatch)
-
-export default connect(null, mapDispatchToProps)(Login)

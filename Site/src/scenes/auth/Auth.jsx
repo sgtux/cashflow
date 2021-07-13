@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import Login from './Login'
+import { Login } from './Login'
 import Create from './Create'
 
 export default function Auth() {
