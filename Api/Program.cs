@@ -1,8 +1,7 @@
-﻿using Cashflow.Api;
-using Microsoft.AspNetCore;
+﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
-namespace FinanceApi
+namespace Cashflow.Api
 {
     public class Program
     {

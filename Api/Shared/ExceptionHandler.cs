@@ -1,5 +1,7 @@
 using System;
+using System.Diagnostics;
 using System.Net;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Cashflow.Api.Service;
 using Microsoft.AspNetCore.Http;
@@ -24,28 +26,21 @@ namespace Cashflow.Api.Shared
             }
             catch (Exception ex)
             {
+                var error = ex.ToString();
+                Debug.WriteLine(error);
+                Console.Write(error);
                 databaseContext.Rollback();
-                logService.Error(ex.ToString());
+                logService.Error(error);
                 await HandleExceptionAsync(context, ex);
             }
         }
 
         private static Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
-            string result = null;
-            HttpStatusCode statusCode = HttpStatusCode.InternalServerError;
-
-            // if (exception is ValidateException)
-            // {
-            //     statusCode = HttpStatusCode.BadRequest;
-            //     result = JsonConvert.SerializeObject(new { error = exception.Message });
-            // }
-            // else
-            //     result = JsonConvert.SerializeObject(new { exception });
-
+            var result = new { Errors = new[] { "Erro interno no servidor, procure o administrador do sistema." } };
             context.Response.ContentType = "application/json";
-            context.Response.StatusCode = (int)statusCode;
-            return context.Response.WriteAsync(result);
+            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            return context.Response.WriteAsync(JsonSerializer.Serialize(result));
         }
     }
 }

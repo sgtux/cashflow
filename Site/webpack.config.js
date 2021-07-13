@@ -36,7 +36,8 @@ module.exports = {
     new ProgressBar(),
     new HtmlWebpackPlugin({
       template: path.join(__dirname, 'public', 'index.html'),
-      title: 'Cashflow'
+      title: 'Cashflow',
+      favicon: path.join(__dirname, 'public', 'app.ico')
     }),
     new CleanWebpackPlugin(),
     new webpack.DefinePlugin({

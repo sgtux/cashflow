@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Shared;
 
@@ -30,7 +31,7 @@ namespace Cashflow.Tests.Mocks
                     CreditCardId = 1,
                     Description = "First Payment",
                     FixedPayment = true,
-                    Type = TypePayment.Expense,
+                    Type = PaymentTypes.FirstOrDefault(p => p.Id == (int)PaymentTypeEnum.Expense),
                     Installments = new List<Installment>()
                     {
                         new Installment() { Id = 1, Cost = 1500, Date = CurrentDate }

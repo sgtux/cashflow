@@ -2,7 +2,7 @@ using FluentMigrator;
 
 namespace Cashflow.Migrations.DDL
 {
-    [Migration(202106141823)]
+    [Migration(202106230200)]
     public class InsertPaymentTypes : Migration
     {
         public override void Up()

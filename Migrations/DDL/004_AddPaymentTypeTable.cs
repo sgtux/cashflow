@@ -9,7 +9,8 @@ namespace Cashflow.Migrations.DDL
         {
             Create.Table("PaymentType")
                 .WithColumn("Id").AsInt32().PrimaryKey()
-                .WithColumn("Description").AsString(100).NotNullable();
+                .WithColumn("Description").AsString(100).NotNullable()
+                .WithColumn("In").AsBoolean().NotNullable();
         }
 
         public override void Down()

@@ -18,8 +18,6 @@ namespace Cashflow.Api.Controllers
             }
         }
 
-        protected void ThrowValidationError(string error) => throw new ValidateException(error);
-
         protected IActionResult HandleResult(ResultModel result)
         {
             if (result.IsValid)

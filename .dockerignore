@@ -1,0 +1,11 @@
+.scannerwork
+Api/bin
+Api/obj
+Api/wwwroot
+App
+logs
+Migrations
+Site/node_modules
+Site/dist
+Tests
+deploy.tar.gz

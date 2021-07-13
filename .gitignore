@@ -7,4 +7,6 @@ Tests/coverage.opencover.xml
 Api/wwwroot
 .scannerwork
 logs
+dist
+
 App

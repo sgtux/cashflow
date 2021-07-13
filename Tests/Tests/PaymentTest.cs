@@ -19,7 +19,7 @@ namespace Cashflow.Tests
         [TestInitialize]
         public void Init()
         {
-            _service = new PaymentService(new PaymentRepositoryMock(), new CreditCardRepositoryMock());
+            _service = new PaymentService(new PaymentRepositoryMock(), new CreditCardRepositoryMock(), new SalaryRepositoryMock());
         }
 
         private Payment DefaultPayment
@@ -33,7 +33,8 @@ namespace Cashflow.Tests
                     CreditCardId = 1,
                     Description = "First Payment",
                     FixedPayment = true,
-                    Type = TypePayment.Expense,
+                    Type = new PaymentType() { Id = (int)PaymentTypeEnum.Expense },
+                    TypeId = PaymentTypeEnum.Expense,
                     Installments = new List<Installment>()
                     {
                       new Installment() { Number = 1, Id = 1, Cost = 1500, Date = new DateTime(2020, 1, 1) }
