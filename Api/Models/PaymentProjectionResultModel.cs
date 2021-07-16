@@ -18,7 +18,7 @@ namespace Cashflow.Api.Models
 
         public decimal CostContributions => Payments.Where(p => p.Type.Id == (int)PaymentTypeEnum.Contributions).Sum(p => p.Cost);
 
-        public decimal Total => (CostDividends + CostGain) - (CostExpense - CostContributions);
+        public decimal Total => (CostDividends + CostGain) - (CostExpense + CostContributions);
 
         public decimal AccumulatedCost { get; set; }
     }

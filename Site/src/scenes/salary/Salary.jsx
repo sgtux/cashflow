@@ -16,7 +16,7 @@ import {
 
 import DeleteIcon from '@material-ui/icons/Delete'
 
-import { CardMain, ErrorMessages } from '../../components/main'
+import { MainContainer, ErrorMessages } from '../../components/main'
 import { InputMoney, SalaryEvolution } from '../../components'
 
 import { fromReal, dateToString, toReal } from '../../helpers/utils'
@@ -97,7 +97,7 @@ export default function Salary() {
     }
 
     return (
-        <CardMain title="Salários" loading={loading}>
+        <MainContainer title="Salários" loading={loading}>
             {salaries.length > 0 ?
                 <Paper>
                     <List dense={true}>
@@ -161,6 +161,6 @@ export default function Salary() {
                 <Divider />
                 <SalaryEvolution salaries={salaries} />
             </div>
-        </CardMain>
+        </MainContainer>
     )
 }

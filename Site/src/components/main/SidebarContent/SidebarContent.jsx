@@ -49,7 +49,9 @@ export function SidebarContent({ closeSidebar }) {
   return (
     <div>
       <div style={styles.symbolDiv}>
-        <span style={styles.symbolSpan}>R$</span>
+        <span style={styles.symbolSpan}>
+          <img src="app.ico" height="80" width="80" style={{ marginTop: 20 }} />
+        </span>
       </div>
       <List>
         <Divider />

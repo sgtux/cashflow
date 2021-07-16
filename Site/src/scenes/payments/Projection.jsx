@@ -10,7 +10,7 @@ import {
 } from '@material-ui/core'
 import CardIcon from '@material-ui/icons/CreditCardOutlined'
 
-import { CardMain, Invoices, MoneySpan } from '../../components'
+import { MainContainer, Invoices, MoneySpan } from '../../components'
 import InputMonth from '../../components/inputs/InputMonth'
 
 import { paymentService } from '../../services/index'
@@ -82,7 +82,7 @@ export default class Projection extends React.Component {
 
   render() {
     return (
-      <CardMain title="Projeção" loading={this.state.loading}>
+      <MainContainer title="Projeção" loading={this.state.loading}>
         <Paper>
           <div style={{ margin: 20, paddingTop: 20 }}>
             <InputMonth
@@ -173,7 +173,7 @@ export default class Projection extends React.Component {
             <MoneySpan bold bigger gain={this.state.totalCost > 0}>{toReal(this.state.totalCost)}</MoneySpan>
           </div>
         </Paper>
-      </CardMain>
+      </MainContainer>
     )
   }
 }

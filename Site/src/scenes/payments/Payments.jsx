@@ -21,7 +21,7 @@ import {
   EditOutlined as EditIcon
 } from '@material-ui/icons'
 
-import { CardMain } from '../../components/main'
+import { MainContainer } from '../../components/main'
 import { paymentService, creditCardService } from '../../services'
 import { toReal, dateToString } from '../../helpers'
 import IconTextInput from '../../components/main/IconTextInput'
@@ -116,7 +116,7 @@ export default class Payments extends React.Component {
   render() {
     const { payments, filtro } = this.state
     return (
-      <CardMain title="Pagamentos" loading={this.state.loading}>
+      <MainContainer title="Pagamentos" loading={this.state.loading}>
         {payments.length ?
           <div>
             <div style={styles.divNewPayment}>
@@ -185,12 +185,15 @@ export default class Payments extends React.Component {
           </div>
           :
           <div style={styles.noRecords}>
-            <div>
+            <div style={{ marginBottom: 40 }}>
               <span>Você não possui pagamentos cadastrados.</span>
             </div>
+            <Link to="/edit-payment/0">
+              <Button variant="contained" color="primary">Adicionar Pagamento</Button>
+            </Link>
           </div>
         }
-      </CardMain>
+      </MainContainer>
     )
   }
 }

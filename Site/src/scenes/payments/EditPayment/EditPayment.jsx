@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useHistory } from 'react-router-dom'
 import {
   Button,
   CircularProgress,
@@ -10,7 +10,7 @@ import {
 import { InstallmentList } from './InstallmentList/InstallmentList'
 import { InstallmentSetBox } from './InstallmnetSetBox/InstallmentSetBox'
 import { CreditCardBox } from './CreditCardBox/CreditCardBox'
-import { CardMain } from '../../../components/main'
+import { MainContainer } from '../../../components/main'
 import IconTextInput from '../../../components/main/IconTextInput'
 
 import { toReal, toast, fromReal } from '../../../helpers'
@@ -37,8 +37,10 @@ export function EditPayment() {
   const [id, setId] = useState(0)
   const [cards, setCards] = useState([])
   const [editInstallment, setEditInstallment] = useState()
+  const [installmentsUpdated, setInstallmentsUpdated] = useState(false)
 
   const params = useParams()
+  const history = useHistory()
 
   useEffect(() => {
     paymentService.getTypes().then(res => setTypes(res))
@@ -55,7 +57,7 @@ export function EditPayment() {
 
         setUseCreditCard(!!payment.creditCardId)
         setDescription(payment.description || '')
-        setType((payment.type || {}).id || 2)
+        setType((payment.type || {}).id || 1)
         setCard(payment.creditCardId)
         setInvoice(payment.invoice)
         setCostByInstallment(false)
@@ -64,6 +66,8 @@ export function EditPayment() {
         setFixedPayment(payment.fixedPayment)
         setFirstPayment(firstInstallment.date ? new Date(firstInstallment.date) : null)
         setInstallments(payment.installments || [])
+        if (payment.id)
+          setInstallmentsUpdated(true)
       })
       .catch(ex => console.log(ex))
   }, [])
@@ -73,7 +77,11 @@ export function EditPayment() {
       setCard(cards[0].id)
   }, [useCreditCard])
 
-  function generateInstallments() {
+  useEffect(() => {
+    setInstallmentsUpdated(false)
+  }, [costByInstallment, firstPayment, qtdInstallments, costText, fixedPayment])
+
+  function updateInstallments() {
     const installments = []
     let cost = fromReal(costText)
     if (cost > 0 && qtdInstallments > 0 && qtdInstallments <= 72 && firstPayment) {
@@ -85,7 +93,7 @@ export function EditPayment() {
         let firstCost = cost
         if (!costByInstallment) {
           const total = cost
-          cost = parseFloat(Number(cost / qtdInstallments).toFixed(2))
+          cost = parseFloat(Number(parseInt((cost / qtdInstallments) * 100) / 100).toFixed(2))
           const sum = parseFloat(Number(cost * qtdInstallments).toFixed(2))
           firstCost = cost + (total > sum ? total - sum : sum - total)
         }
@@ -108,6 +116,7 @@ export function EditPayment() {
         installments.push({ number: 1, cost: cost, date: new Date(`${month}/${day}/${year}`) })
 
       setInstallments(installments)
+      setInstallmentsUpdated(true)
     }
   }
 
@@ -126,7 +135,11 @@ export function EditPayment() {
     setLoading(true)
 
     paymentService.save(payment)
-      .then(() => toast.success('Salvo com sucesso.'))
+      .then(() => {
+        toast.success('Salvo com sucesso.')
+        if (!id)
+          history.push('/payments')
+      })
       .finally(() => setLoading(false))
   }
 
@@ -145,7 +158,7 @@ export function EditPayment() {
   }
 
   return (
-    <CardMain title={id ? 'Edição' : 'Novo'} loading={loading}>
+    <MainContainer title={id ? 'Edição' : 'Novo'} loading={loading}>
       <div style={{ textAlign: 'start', fontSize: 14, color: '#666', fontFamily: '"Roboto", "Helvetica", "Arial", "sans-serif"' }} >
 
         <GridList cellHeight={350} cols={5}>
@@ -187,7 +200,7 @@ export function EditPayment() {
               qtdInstallmentsChanged={v => setQtdInstallments(v)}
             />
             <br />
-            <Button onClick={() => generateInstallments()} variant="contained" autoFocus>gerar parcelas</Button>
+            <Button disabled={installmentsUpdated} onClick={() => updateInstallments()} variant="contained" autoFocus>atualizar parcelas</Button>
 
             {editInstallment && <EditInstallment installment={editInstallment} onCancel={() => setEditInstallment()} onSave={p => installmentChanged(p)} />}
 
@@ -206,7 +219,7 @@ export function EditPayment() {
 
       <div style={{ display: 'flex', justifyContent: 'end' }}>
         <Link to="/payments">
-          <Button onClick={() => { }} variant="contained" autoFocus>voltar para Pagamentos</Button>
+          <Button onClick={() => { }} variant="contained" autoFocus>Lista de Pagamentos</Button>
         </Link>
 
         <Button
@@ -214,9 +227,10 @@ export function EditPayment() {
           disabled={loading}
           onClick={() => save()}
           color="primary"
+          disabled={!installmentsUpdated}
           variant="contained" autoFocus>salvar</Button>
       </div>
 
-    </CardMain>
+    </MainContainer>
   )
 }

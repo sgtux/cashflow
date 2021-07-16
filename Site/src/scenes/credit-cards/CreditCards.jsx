@@ -17,7 +17,7 @@ import {
 import DeleteIcon from '@material-ui/icons/Delete'
 import CardIcon from '@material-ui/icons/CreditCardOutlined'
 
-import { CardMain } from '../../components/main'
+import { MainContainer } from '../../components/main'
 import IconTextInput from '../../components/main/IconTextInput'
 
 import { creditCardService } from '../../services/index'
@@ -85,7 +85,7 @@ export default class CreditCards extends React.Component {
 
   render() {
     return (
-      <CardMain title="Cartões de crédito" loading={this.state.loading}>
+      <MainContainer title="Cartões de crédito" loading={this.state.loading}>
         {this.state.cards.length > 0 ?
           <Paper>
             <List dense={true}>
@@ -143,7 +143,7 @@ export default class CreditCards extends React.Component {
             <span style={{ color: '#d55', marginTop: '10px' }}>{this.state.errorMessage}</span>
           </div>
         </div>
-      </CardMain>
+      </MainContainer>
     )
   }
 }

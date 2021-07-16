@@ -6,7 +6,7 @@ export {
     InputMonth
 } from './inputs'
 
-export { CardMain } from './main/CardMain'
+export { MainContainer } from './main'
 
 export { Invoices } from './Invoices/Invoices'
 

@@ -13,14 +13,9 @@ export function CostDateFixedBox({ cost, costChanged, date, dateChanged, fixedPa
                 onChangeText={e => costChanged(e)}
                 kind="money"
                 value={cost} />
-            <span>Data:</span>
+            <span style={{ marginRight: 10 }}>Data:</span>
             <DatePicker onChange={e => dateChanged(e)}
                 dateFormat="dd/MM/yyyy" locale={ptBr} selected={date} />
-            {/* <InputDate
-                onChangeText={e => dateChanged(e)}
-                kind="datetime"
-                value={date}
-                options={{ format: 'dd/MM/YYYY' }} /> */}
             <FormControlLabel label="Pagamento Fixo ?"
                 control={<Checkbox
                     checked={fixedPayment}

@@ -1,6 +1,8 @@
 import React from 'react'
 import { Paper, CircularProgress } from '@material-ui/core';
 
+import { ContainerLoader } from './styles'
+
 const styles = {
   legend: {
     color: '#666',
@@ -19,17 +21,20 @@ const styles = {
   }
 }
 
-export function CardMain({ title, loading, children }) {
+export function MainContainer({ title, loading, children }) {
   return (
     <Paper style={styles.paper}>
       <fieldset style={styles.legend}>
         <legend>{title}</legend>
         {
-          loading ?
-            <div style={{ textAlign: 'center', marginBottom: '10px', boxAlign: 'center' }}>
-              <CircularProgress size={60} />
+          loading &&
+          <ContainerLoader>
+            <div>
+              <CircularProgress size={50} />
             </div>
-            : children}
+          </ContainerLoader>
+        }
+        {children}
       </fieldset>
     </Paper>
   )
