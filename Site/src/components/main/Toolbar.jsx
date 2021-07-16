@@ -1,5 +1,5 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { AppBar, Toolbar, Button } from '@material-ui/core/'
 import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
@@ -29,6 +29,9 @@ export function AppToolbar({ openSideBar, dockedMenu }) {
 
   const dispatch = useDispatch()
 
+  const appState = useSelector(state => state.appState)
+  console.log(appState.user.nickName)
+
   function logout() {
     authService.logout()
     dispatch(userChanged(null))
@@ -49,7 +52,8 @@ export function AppToolbar({ openSideBar, dockedMenu }) {
           }
           <Typography variant="h2" color="inherit" style={styles.grow}>
             Fluxo de caixa (R$)
-            </Typography>
+          </Typography>
+          {appState.user.nickName}
           <Button color="secondary" onClick={() => logout()}>
             <Icons.ExitToApp style={{ color: '#FFF' }} />
           </Button>
