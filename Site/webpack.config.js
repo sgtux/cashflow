@@ -37,7 +37,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: path.join(__dirname, 'public', 'index.html'),
       title: 'Cashflow',
-      favicon: path.join(__dirname, 'public', 'app.ico')
+      favicon: path.join(__dirname, 'public', 'favicon.ico')
     }),
     new CleanWebpackPlugin(),
     new webpack.DefinePlugin({

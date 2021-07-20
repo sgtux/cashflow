@@ -132,7 +132,7 @@ export default class CreditCards extends React.Component {
             />
             <br />
             <div style={{ marginTop: '20px' }}>
-              <Button color="primary" onClick={() => this.setState({ card: null })}>
+              <Button color="primary" onClick={() => this.setState({ card: null, cardName: '' })}>
                 Cancelar
               </Button>
               <Button variant="contained" color="primary"

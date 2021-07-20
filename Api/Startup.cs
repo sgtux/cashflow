@@ -28,6 +28,7 @@ namespace Cashflow.Api
             app.UseMiddleware(typeof(ExceptionHandler));
 
             app.UseHttpsRedirection();
+            app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseRouting();
 
