@@ -70,21 +70,21 @@ namespace Cashflow.Api.Service
                     resultModel.Payments.Add(new PaymentProjectionModel()
                     {
                         Description = "Salário",
-                        FixedPayment = true,
+                        Monthly = true,
                         MonthYear = date.ToString("MM/yyyy"),
                         Type = types.First(p => p.Id == (int)PaymentTypeEnum.Gain),
                         Cost = salary.Value
                     });
                 }
 
-                foreach (var payMonth in payments.Where(p => p.FixedPayment || (p.Installments?.Any(p => p.Date.Year == date.Year && p.Date.Month == date.Month) ?? false)))
+                foreach (var payMonth in payments.Where(p => p.Monthly || (p.Installments?.Any(p => p.Date.Year == date.Year && p.Date.Month == date.Month) ?? false)))
                 {
-                    var installment = payMonth.Installments.First(p => payMonth.FixedPayment || (p.Date.Year == date.Year && p.Date.Month == date.Month));
+                    var installment = payMonth.Installments.First(p => payMonth.Monthly || (p.Date.Year == date.Year && p.Date.Month == date.Month));
                     resultModel.Payments.Add(new PaymentProjectionModel()
                     {
                         CreditCard = cards.FirstOrDefault(p => p.Id == payMonth.CreditCardId),
                         Description = payMonth.Description,
-                        FixedPayment = payMonth.FixedPayment,
+                        Monthly = payMonth.Monthly,
                         Invoice = payMonth.Invoice,
                         MonthYear = date.ToString("MM/yyyy"),
                         Number = installment.Number,

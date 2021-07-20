@@ -14,7 +14,7 @@ namespace Cashflow.Migrations.DDL
         public override void Down()
         {
             Delete.Column("PaidDate").FromTable("Installment");
-            Alter.Table("Installment").AddColumn("Paid").AsBoolean();
+            Alter.Table("Installment").AddColumn("Paid").AsBoolean().WithDefaultValue(false);
         }
     }
 }

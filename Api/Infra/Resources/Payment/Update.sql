@@ -4,6 +4,7 @@ SET
   "UserId" = @UserId,
   "Type" = @TypeId,
   "CreditCardId" = @CreditCardId,
-  "FixedPayment" = @FixedPayment,
+  "Paid" = @Paid,
+  "Condition" = @Condition,
   "Invoice" = @Invoice
 WHERE "Id" = @Id

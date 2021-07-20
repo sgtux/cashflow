@@ -33,7 +33,7 @@ namespace Cashflow.Api.Validators
 
             public string PaymentTypeInvalid = "O tipo do pagamento é inválido.";
 
-            public string FixedPaymentWithMoreThenOnePlot = "Pagamento fixo não pode ter mais de uma parcela.";
+            public string PaymentCoditionInvalid = "A condição do pagamento é inválida.";
 
             public string InstallmentWithInvalidValue = "Parcela com Valor inválido.";
 

@@ -4,7 +4,8 @@ SELECT
   p."UserId",
   p."Type" "TypeId",
   p."CreditCardId",
-  p."FixedPayment",
+  p."Condition",
+  p."Paid",
   p."Invoice",
   i."Id",
   i."PaymentId",
@@ -14,5 +15,4 @@ SELECT
   i."PaidDate"
 FROM "Payment" p
 JOIN "Installment" i ON p."Id" = i."PaymentId"
-JOIN "PaymentType" t ON t."Id" = p."Type"
 WHERE p."UserId" = @UserId

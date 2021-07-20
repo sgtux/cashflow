@@ -20,7 +20,7 @@ namespace Cashflow.Api.Validators
             RuleFor(p => p.Description).NotEmpty().WithMessage(ValidatorMessages.Payment.DescriptionRequired);
             RuleFor(p => p.Installments).NotEmpty().WithMessage(ValidatorMessages.Payment.InstallmentsRequired);
             RuleFor(p => p.TypeId).IsInEnum().WithMessage(ValidatorMessages.Payment.PaymentTypeInvalid);
-            RuleFor(p => p).Must(ValidFixedPayment).When(p => p.FixedPayment).WithMessage(ValidatorMessages.Payment.FixedPaymentWithMoreThenOnePlot);
+            RuleFor(p => p.Condition).IsInEnum().WithMessage(ValidatorMessages.Payment.PaymentCoditionInvalid);
             RuleFor(p => p).Must(ValidCreditCard).WithMessage(ValidatorMessages.CreditCard.NotFound);
             RuleFor(p => p).Must(ValidPayment).When(p => p.Id > 0).WithMessage(ValidatorMessages.Payment.NotFound);
             RuleFor(p => p.Installments).Custom(ValidateInstallments);
@@ -48,11 +48,6 @@ namespace Cashflow.Api.Validators
                 if (list.Count > 72)
                     context.AddFailure(ValidatorMessages.Payment.InstallmentWithMaxLengthExceded);
             }
-        }
-
-        private bool ValidFixedPayment(Payment payment)
-        {
-            return payment.Installments.Count() == 1;
         }
 
         private bool ValidCreditCard(Payment payment)

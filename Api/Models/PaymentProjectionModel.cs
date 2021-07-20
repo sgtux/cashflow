@@ -13,7 +13,7 @@ namespace Cashflow.Api.Models
 
         public DateTime? PaidDate { get; set; }
 
-        public bool FixedPayment { get; set; }
+        public bool Monthly { get; set; }
 
         public int QtdInstallments { get; set; }
 

@@ -15,12 +15,16 @@ namespace Cashflow.Api.Infra.Entity
 
         public PaymentTypeEnum TypeId { get; set; }
 
-        public int? CreditCardId { get; set; }
+        public PaymentConditionEnum Condition { get; set; }
 
-        public bool FixedPayment { get; set; }
+        public int? CreditCardId { get; set; }
 
         public bool Invoice { get; set; }
 
+        public bool Paid { get; set; }
+
         public IList<Installment> Installments { get; set; }
+
+        public bool Monthly => Condition == PaymentConditionEnum.Monthly;
     }
 }

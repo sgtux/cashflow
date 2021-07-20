@@ -24,7 +24,7 @@ namespace Migrations
         {
             string connectionString = Environment.GetEnvironmentVariable("DATABASE_URL");
             if (string.IsNullOrWhiteSpace(connectionString))
-                throw new Exception("Environment DATABASE_URL not found.");
+                throw new Exception("Environment variable DATABASE_URL was not found.");
             return new ServiceCollection()
                 .AddFluentMigratorCore()
                 .ConfigureRunner(rb => rb

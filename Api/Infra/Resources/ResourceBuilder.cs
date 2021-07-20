@@ -9,6 +9,7 @@ namespace Api.Infra.Resources
     public class ResourceBuilder
     {
         private string resourceName;
+
         public ResourceBuilder(string name)
         {
             resourceName = $"Cashflow.Api.Infra.Resources.{name}";
