@@ -1,7 +1,6 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import Sidebar from 'react-sidebar'
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
 import { HashRouter } from 'react-router-dom'
 
 import { ToastContainer } from 'react-toastify'
@@ -12,74 +11,63 @@ import { SidebarContent } from './'
 import AppRouter from './AppRouter'
 import { Auth } from '../../scenes'
 import { AlertModal } from '../main/Modal'
-import { hideAlert, userChanged } from '../../actions'
+import { userChanged } from '../../actions'
 import { registerCallbackUnauthorized } from '../../services/httpService'
 
-const mql = window.matchMedia('(min-width: 1024px)')
+export function MainComponent() {
 
-class MainComponent extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      sidebarDocked: mql.matches,
-      sidebarIsOpen: false,
-      showModal: false
-    }
-    this.mediaQueryChanged = this.mediaQueryChanged.bind(this)
+  const [sidebarDocked, setSidebarDocked] = useState(false)
+  const [sidebarIsOpen, setSidebarIsOpen] = useState(false)
+  const [showModal, setShowModal] = useState(false)
+  let mql = null
+
+  const { user } = useSelector(state => state.appState)
+
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (mql === null)
+      mql = window.matchMedia('(min-width: 1024px)')
+    mediaQueryChanged()
+    mql.addListener(mediaQueryChanged)
+    registerCallbackUnauthorized(() => setShowModal(true))
+    return () => mql.removeListener(mediaQueryChanged)
+  }, [])
+
+  function mediaQueryChanged() {
+    setSidebarDocked(mql.matches)
   }
 
-  componentWillMount() {
-    mql.addListener(this.mediaQueryChanged)
-    registerCallbackUnauthorized(() => {
-      this.setState({ showModal: true })
-    })
+  function logout() {
+    setShowModal(false)
+    dispatch(userChanged(null))
   }
 
-  componentWillUnmount() {
-    mql.removeListener(this.mediaQueryChanged)
-  }
-
-  mediaQueryChanged() {
-    this.setState({ sidebarDocked: mql.matches })
-  }
-
-  logout() {
-    this.setState({ showModal: false })
-    this.props.userChanged(null)
-  }
-
-  render() {
-    return (
-      <div>
-        {this.props.user ?
-          <HashRouter>
-            <Sidebar
-              sidebar={<SidebarContent closeSidebar={() => this.setState({ sidebarIsOpen: false })} />}
-              open={this.state.sidebarIsOpen}
-              onSetOpen={open => this.setState({ sidebarIsOpen: open })}
-              docked={this.state.sidebarDocked}
-              styles={{ sidebar: { background: Colors.AppGreen } }}>
-              <AppToolbar
-                dockedMenu={this.state.sidebarDocked}
-                openSideBar={() => this.setState({ sidebarIsOpen: true })}
-              />
-              <AppRouter />
-            </Sidebar>
-          </HashRouter>
-          :
-          <Auth />
-        }
-        <ToastContainer />
-        <AlertModal
-          text='Sessão Expirada!'
-          show={this.state.showModal}
-          onClose={() => this.logout()} />
-      </div>
-    )
-  }
+  return (
+    <div>
+      {user ?
+        <HashRouter>
+          <Sidebar
+            sidebar={<SidebarContent closeSidebar={() => setSidebarIsOpen(false)} />}
+            open={sidebarIsOpen}
+            onSetOpen={open => setSidebarIsOpen(open)}
+            docked={sidebarDocked}
+            styles={{ sidebar: { background: Colors.AppGreen } }}>
+            <AppToolbar
+              dockedMenu={sidebarDocked}
+              openSideBar={() => setSidebarIsOpen(true)}
+            />
+            <AppRouter />
+          </Sidebar>
+        </HashRouter>
+        :
+        <Auth />
+      }
+      <ToastContainer />
+      <AlertModal
+        text='Sessão Expirada!'
+        show={showModal}
+        onClose={() => logout()} />
+    </div>
+  )
 }
-
-const mapStateToProps = state => ({ user: state.appState.user, modal: state.modalState })
-const mapDispatchToProps = dispatch => bindActionCreators({ hideAlert, userChanged }, dispatch)
-
-export default connect(mapStateToProps, mapDispatchToProps)(MainComponent)

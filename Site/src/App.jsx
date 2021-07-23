@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import { MuiThemeProvider } from '@material-ui/core'
-import MainComponent from './components/main/MainComponent'
+import { MainComponent } from './components/main/MainComponent'
 
 import { AppTheme } from './helpers/themes'
 import { Store } from './store'
