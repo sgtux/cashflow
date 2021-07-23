@@ -41,7 +41,7 @@ namespace Cashflow.Api.Controllers
 
                 var token = new TokenModel()
                 {
-                    Token = new JwtTokenBuilder(_config.SecretJwtKey, claims).Build().Value
+                    Token = new JwtTokenBuilder(_config.SecretJwtKey, _config.CookieExpiresInMinutes, claims).Build().Value
                 };
                 return Ok(token);
             }

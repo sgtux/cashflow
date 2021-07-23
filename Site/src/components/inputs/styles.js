@@ -8,7 +8,6 @@ const DefaultInput = styled(TextInputMask)`
     border-bottom: solid 1px #666;
     margin: 10px;
     width: 100px;
-    margin-right: 20px;
     font-family: Roboto Helvetica Arial sans-serif;
 `
 

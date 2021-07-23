@@ -61,6 +61,7 @@ export function SignInScreen({ changeScene }) {
       e.preventDefault()
     authService.login({ nickName, password })
       .then(user => dispatch(userChanged(user)))
+      .catch(() => { })
       .finally(() => setLoading(false))
   }
 

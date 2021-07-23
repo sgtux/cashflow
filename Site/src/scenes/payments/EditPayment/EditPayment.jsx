@@ -13,10 +13,10 @@ import { CreditCardBox } from './CreditCardBox/CreditCardBox'
 import { MainContainer } from '../../../components/main'
 import IconTextInput from '../../../components/main/IconTextInput'
 
-import { toReal, toast, fromReal } from '../../../helpers'
+import { toReal, toast, fromReal, PaymentCondition } from '../../../helpers'
 import { paymentService, creditCardService } from '../../../services'
 import { PaymentTypeBox } from './PaymentTypeBox/PaymentTypeBox'
-import { CostDateFixedBox } from './CostDateFixedBox/CostDateFixedBox'
+import { CostDateConditionBox } from './CostDateConditionBox/CostDateConditionBox'
 import { EditInstallment } from './EditInstallment/EditInstallment'
 
 export function EditPayment() {
@@ -24,7 +24,7 @@ export function EditPayment() {
   const [description, setDescription] = useState('')
   const [type, setType] = useState(2)
   const [useCreditCard, setUseCreditCard] = useState(false)
-  const [fixedPayment, setFixedPayment] = useState(false)
+  const [condition, setCondition] = useState(1)
   const [qtdInstallments, setQtdInstallments] = useState(10)
   const [card, setCard] = useState(0)
   const [costByInstallment, setCostByInstallment] = useState(false)
@@ -38,6 +38,7 @@ export function EditPayment() {
   const [cards, setCards] = useState([])
   const [editInstallment, setEditInstallment] = useState()
   const [installmentsUpdated, setInstallmentsUpdated] = useState(false)
+  const [formIsValid, setFormIsValid] = useState(false)
 
   const params = useParams()
   const history = useHistory()
@@ -45,6 +46,7 @@ export function EditPayment() {
   useEffect(() => {
     paymentService.getTypes().then(res => setTypes(res))
     creditCardService.get().then(res => setCards(res))
+
     paymentService.get(params.id)
       .then(res => {
 
@@ -63,7 +65,8 @@ export function EditPayment() {
         setCostByInstallment(false)
         setQtdInstallments(qtdInstallments)
         setCostText(toReal(costs.length ? costs.reduce((a, b) => a + b) : 0))
-        setFixedPayment(payment.fixedPayment)
+        if (payment.condition)
+          setCondition(payment.condition)
         setFirstPayment(firstInstallment.date ? new Date(firstInstallment.date) : null)
         setInstallments(payment.installments || [])
         if (payment.id)
@@ -73,13 +76,24 @@ export function EditPayment() {
   }, [])
 
   useEffect(() => {
+    const installmentValid = condition !== PaymentCondition.Installment || installmentsUpdated
+    setFormIsValid(!!description && installmentValid && firstPayment)
+  }, [description, condition, installmentsUpdated, firstPayment])
+
+  useEffect(() => {
     if (cards.length)
       setCard(cards[0].id)
   }, [useCreditCard])
 
   useEffect(() => {
-    setInstallmentsUpdated(false)
-  }, [costByInstallment, firstPayment, qtdInstallments, costText, fixedPayment])
+    if (condition !== PaymentCondition.Installment)
+      updateInstallments()
+  }, [costText, condition, firstPayment])
+
+  useEffect(() => {
+    if (condition === PaymentCondition.Installment)
+      setInstallmentsUpdated(false)
+  }, [costByInstallment, firstPayment, qtdInstallments, costText, condition])
 
   function updateInstallments() {
     const installments = []
@@ -89,7 +103,7 @@ export function EditPayment() {
       let month = firstPayment.getMonth() + 1
       let year = firstPayment.getFullYear()
 
-      if (!fixedPayment) {
+      if (condition === PaymentCondition.Installment) {
         let firstCost = cost
         if (!costByInstallment) {
           const total = cost
@@ -122,12 +136,7 @@ export function EditPayment() {
 
   function save() {
 
-    const payment = { id, description: description, typeId: type, installments, fixedPayment, invoice }
-
-    if (!description || !installments.length) {
-      toast.error('Preencha corretamente os campos.')
-      return
-    }
+    const payment = { id, description: description, typeId: type, installments, condition, invoice }
 
     if (useCreditCard)
       payment.creditCardId = card
@@ -158,10 +167,10 @@ export function EditPayment() {
   }
 
   return (
-    <MainContainer title={id ? 'Edição' : 'Novo'} loading={loading}>
+    <MainContainer title={'Pagamento' || description} loading={loading}>
       <div style={{ textAlign: 'start', fontSize: 14, color: '#666', fontFamily: '"Roboto", "Helvetica", "Arial", "sans-serif"' }} >
 
-        <GridList cellHeight={350} cols={5}>
+        <GridList cellHeight={380} cols={5}>
           <GridListTile cols={3}>
 
             <IconTextInput
@@ -175,13 +184,26 @@ export function EditPayment() {
                 paymentTypeChanged={e => setType(e)} />
             }
 
-            <CostDateFixedBox cost={costText}
+            <CostDateConditionBox cost={costText}
               costChanged={e => setCostText(e)}
               date={firstPayment}
               dateChanged={e => setFirstPayment(e)}
-              fixedPayment={fixedPayment}
-              fixedPaymentChanged={e => setFixedPayment(e)}
+              condition={condition}
+              conditionChanged={e => setCondition(Number(e))}
             />
+
+            <InstallmentSetBox hide={condition !== PaymentCondition.Installment}
+              costByInstallment={costByInstallment}
+              qtdInstallments={qtdInstallments}
+              costByInstallmentChanged={checked => setCostByInstallment(checked)}
+              qtdInstallmentsChanged={v => setQtdInstallments(v)}
+            />
+            <br />
+            <div hidden={condition !== PaymentCondition.Installment}>
+              <Button disabled={installmentsUpdated} onClick={() => updateInstallments()} variant="contained" autoFocus>atualizar parcelas</Button>
+
+              {editInstallment && <EditInstallment installment={editInstallment} onCancel={() => setEditInstallment()} onSave={p => installmentChanged(p)} />}
+            </div>
 
             <CreditCardBox
               cards={cards}
@@ -193,21 +215,10 @@ export function EditPayment() {
               invoiceChanged={c => setInvoice(c)}
             />
 
-            <InstallmentSetBox hide={fixedPayment}
-              costByInstallment={costByInstallment}
-              qtdInstallments={qtdInstallments}
-              costByInstallmentChanged={checked => setCostByInstallment(checked)}
-              qtdInstallmentsChanged={v => setQtdInstallments(v)}
-            />
-            <br />
-            <Button disabled={installmentsUpdated} onClick={() => updateInstallments()} variant="contained" autoFocus>atualizar parcelas</Button>
-
-            {editInstallment && <EditInstallment installment={editInstallment} onCancel={() => setEditInstallment()} onSave={p => installmentChanged(p)} />}
-
           </GridListTile>
           <GridListTile cols={2}>
             <InstallmentList installments={installments}
-              hide={!installments.length || fixedPayment}
+              hide={condition !== PaymentCondition.Installment || !installments.length}
               onEdit={p => setEditInstallment(p)}
             />
           </GridListTile>
@@ -227,7 +238,7 @@ export function EditPayment() {
           disabled={loading}
           onClick={() => save()}
           color="primary"
-          disabled={!installmentsUpdated}
+          disabled={!formIsValid}
           variant="contained" autoFocus>salvar</Button>
       </div>
 

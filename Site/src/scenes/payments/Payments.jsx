@@ -23,7 +23,7 @@ import {
 
 import { MainContainer } from '../../components/main'
 import { paymentService, creditCardService } from '../../services'
-import { toReal, dateToString } from '../../helpers'
+import { toReal, dateToString, PaymentCondition } from '../../helpers'
 import IconTextInput from '../../components/main/IconTextInput'
 
 const styles = {
@@ -149,19 +149,28 @@ export default class Payments extends React.Component {
                           <Typography component="span" color={p.type.in ? 'primary' : 'secondary'}>
                             {p.type.description}
                           </Typography>
-                          {p.firstPaymentFormatted}
                         </React.Fragment>
                       }
                     />
                     <ListItemText
-                      primary={toReal(p.cost)}
-                      style={{ width: '200px' }}
-                      secondary={
-                        <React.Fragment>
-                          {p.fixedPayment ? 'Fixo Mensal' : `${p.installments.filter(p => p.paid).length}/${p.installments.length}`}
-                          <CreditCardComponent card={p.creditCard} />
-                        </React.Fragment>
-                      }
+                      style={{ width: '100px' }}
+                      secondary={p.firstPaymentFormatted}
+                    />
+                    <ListItemText
+                      style={{ width: '100px' }}
+                      secondary={toReal(p.total)}
+                    />
+                    <ListItemText
+                      style={{ width: '100px' }}
+                      secondary={p.conditionText}
+                    />
+                    <ListItemText
+                      style={{ width: '100px' }}
+                      secondary={p.creditCardText}
+                    />
+                    <ListItemText
+                      style={{ width: '100px' }}
+                      secondary={p.condition === PaymentCondition.Installment ? `${p.paidInstallments}/${p.installments.length}` : ''}
                     />
                     <ListItemSecondaryAction>
                       <Link to={`/edit-payment/${p.id}`}>

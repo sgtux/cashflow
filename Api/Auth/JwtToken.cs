@@ -3,17 +3,12 @@ using System.IdentityModel.Tokens.Jwt;
 
 namespace Cashflow.Api.Auth
 {
-  public sealed class JwtToken
-  {
-    private JwtSecurityToken token;
-
-    internal JwtToken(JwtSecurityToken token)
+    public sealed class JwtToken
     {
-      this.token = token;
+        private JwtSecurityToken token;
+
+        public JwtToken(JwtSecurityToken token) => this.token = token;
+
+        public string Value => new JwtSecurityTokenHandler().WriteToken(token);
     }
-
-    public DateTime ValidTo => token.ValidTo;
-
-    public string Value => new JwtSecurityTokenHandler().WriteToken(token);
-  }
 }

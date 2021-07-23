@@ -12,7 +12,11 @@ namespace Cashflow.Api.Infra.Repository
 {
     public class PaymentRepository : BaseRepository<Payment>, IPaymentRepository
     {
-        public PaymentRepository(DatabaseContext conn, LogService logService) : base(conn, logService) { }
+        private ICreditCardRepository _creditCardRepository;
+        public PaymentRepository(DatabaseContext conn, LogService logService, ICreditCardRepository creditCardRepository) : base(conn, logService)
+        {
+            _creditCardRepository = creditCardRepository;
+        }
 
         public async Task<IEnumerable<PaymentType>> GetTypes()
         {
@@ -24,12 +28,15 @@ namespace Cashflow.Api.Infra.Repository
         {
             var list = new List<Payment>();
             var types = await GetTypes();
+            var cards = await _creditCardRepository.GetByUserId(userId);
             var result = await Query<Installment>(PaymentResources.ByUser, (p, i) =>
             {
                 var pay = list.FirstOrDefault(x => x.Id == p.Id);
                 if (pay == null)
                 {
                     pay = p;
+                    if (p.CreditCardId.HasValue)
+                        p.CreditCard = cards.FirstOrDefault(c => c.Id == p.CreditCardId.Value);
                     list.Add(p);
                     pay.Type = types.FirstOrDefault(t => t.Id == (int)p.TypeId);
                     pay.Installments = new List<Installment>();
@@ -37,7 +44,7 @@ namespace Cashflow.Api.Infra.Repository
                 pay.Installments.Add(i);
                 return p;
             }, new { UserId = userId });
-            return list;
+            return list.OrderBy(p => p.Description);
         }
 
         public async Task<Payment> GetById(int id)
@@ -55,6 +62,12 @@ namespace Cashflow.Api.Infra.Repository
                 payment.Installments.Add(i);
                 return p;
             }, new { Id = id });
+            if (payment != null)
+            {
+                var cards = await _creditCardRepository.GetByUserId(payment.UserId);
+                if (payment.CreditCardId.HasValue)
+                    payment.CreditCard = cards.FirstOrDefault(c => c.Id == payment.CreditCardId.Value);
+            }
             return payment;
         }
 

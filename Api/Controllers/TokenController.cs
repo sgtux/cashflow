@@ -34,7 +34,7 @@ namespace Cashflow.Api.Controllers
 
             var claims = new Dictionary<string, string>();
             claims.Add(ClaimTypes.Sid, user.Id.ToString());
-            var token = new JwtTokenBuilder(_config.SecretJwtKey, claims).Build();
+            var token = new JwtTokenBuilder(_config.SecretJwtKey, _config.CookieExpiresInMinutes, claims).Build();
             return Ok(new { token = token.Value });
         }
     }

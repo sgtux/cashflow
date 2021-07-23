@@ -3,7 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using FluentMigrator.Runner;
 using Cashflow.Migrations.DDL;
 using System.Linq;
-using System.Collections.Generic;
 
 namespace Migrations
 {

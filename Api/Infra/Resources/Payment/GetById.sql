@@ -5,7 +5,6 @@ SELECT
   p."Type" "TypeId",
   p."CreditCardId",
   p."Condition",
-  p."Paid",
   p."Invoice",
   i."Id",
   i."PaymentId",
