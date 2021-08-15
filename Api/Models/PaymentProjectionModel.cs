@@ -1,5 +1,7 @@
 using System;
+using Cashflow.Api.Extensions;
 using Cashflow.Api.Infra.Entity;
+using Cashflow.Api.Shared;
 
 namespace Cashflow.Api.Models
 {
@@ -10,6 +12,10 @@ namespace Cashflow.Api.Models
         public bool Invoice { get; set; }
 
         public int Number { get; set; }
+
+        public PaymentConditionEnum Condition { get; set; }
+
+        public string ConditionText => Condition.GetDescription();
 
         public DateTime? PaidDate { get; set; }
 

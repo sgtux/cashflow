@@ -16,7 +16,8 @@ import InputMonth from '../../components/inputs/InputMonth'
 import { paymentService } from '../../services/index'
 
 import { toReal, getMonthYear } from '../../helpers/utils'
-import { ArrowUp, ArrowDown, ContainerCosts, BoxCosts } from './styles'
+import { PaymentCondition } from '../../helpers'
+import { ArrowUp, ArrowDown, ContainerCosts, BoxCosts, PaidSpan } from './styles'
 
 export default class Projection extends React.Component {
 
@@ -129,7 +130,10 @@ export default class Projection extends React.Component {
                               }
                             </GridListTile>
                             <GridListTile cols={1} style={{ textAlign: 'center' }}>
-                              <span style={{ fontFamily: '"Roboto", "Helvetica", "Arial", "sans-serif"' }}>{p.fixedPayment ? '' : `${p.number}/${p.qtdInstallments}`}</span>
+                              <span style={{ fontFamily: '"Roboto", "Helvetica", "Arial", "sans-serif"' }}>
+                                {p.condition === PaymentCondition.Installment ? `${p.number}/${p.qtdInstallments}` : ''}
+                              </span>
+                              {p.paidDate && <PaidSpan>PAGA</PaidSpan>}
                             </GridListTile>
                             <GridListTile cols={1} style={{ textAlign: 'end' }}>
                               <MoneySpan gain={p.type.in}>{toReal(p.cost)}</MoneySpan>

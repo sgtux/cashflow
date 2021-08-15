@@ -47,3 +47,12 @@ export const BoxCosts = styled.div`
     align-items: end;
     align-self: end;
 `
+
+export const PaidSpan = styled.span`
+    color: #fff;
+    font-size: 10px;
+    margin-left: 6px;
+    background-color: #21b721;
+    padding: 4px;
+    border-radius: 6px;
+`

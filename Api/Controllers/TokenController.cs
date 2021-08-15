@@ -16,10 +16,13 @@ namespace Cashflow.Api.Controllers
 
         private AccountService _accountService;
 
-        public TokenController(AccountService accountService, AppConfig config)
+        private PaymentService _paymentService;
+
+        public TokenController(AppConfig config, AccountService accountService, PaymentService paymentService)
         {
-            _accountService = accountService;
             _config = config;
+            _accountService = accountService;
+            _paymentService = paymentService;
         }
 
         [HttpPost]
@@ -31,6 +34,8 @@ namespace Cashflow.Api.Controllers
             var user = await _accountService.Login(model.NickName, model.Password);
             if (user == null)
                 return HandleUnauthorized("Usuário ou senha inválidos.");
+
+            await _paymentService.UpdateMonthlyPayments(user.Id);
 
             var claims = new Dictionary<string, string>();
             claims.Add(ClaimTypes.Sid, user.Id.ToString());

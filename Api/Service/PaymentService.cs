@@ -86,6 +86,7 @@ namespace Cashflow.Api.Service
                         Description = payMonth.Description,
                         Monthly = payMonth.Monthly,
                         Invoice = payMonth.Invoice,
+                        Condition = payMonth.Condition,
                         MonthYear = date.ToString("MM/yyyy"),
                         Number = installment.Number,
                         PaidDate = installment.PaidDate,
@@ -110,7 +111,10 @@ namespace Cashflow.Api.Service
                 result.AddNotification(validatorResult.Errors);
 
             if (result.IsValid)
+            {
+                UpdateMonthlyPayment(payment);
                 await _paymentRepository.Add(payment);
+            }
             return result;
         }
 
@@ -122,7 +126,10 @@ namespace Cashflow.Api.Service
                 result.AddNotification(validatorResult.Errors);
 
             if (result.IsValid)
+            {
+                UpdateMonthlyPayment(payment);
                 await _paymentRepository.Update(payment);
+            }
             return result;
         }
 
@@ -135,6 +142,47 @@ namespace Cashflow.Api.Service
             else
                 await _paymentRepository.Remove(paymentId);
             return result;
+        }
+
+        public async Task UpdateMonthlyPayments(int userId)
+        {
+            foreach (var payment in (await _paymentRepository.GetByUser(userId)).Where(p => p.Monthly))
+                if (FillMonthly(payment))
+                    await _paymentRepository.Update(payment);
+        }
+
+        private void UpdateMonthlyPayment(Payment payment) => FillMonthly(payment);
+
+        private bool FillMonthly(Payment payment)
+        {
+            var updated = false;
+            var referenceInstallment = payment.Installments.OrderBy(p => p.Date).First();
+            var month = referenceInstallment.Date.Month;
+            var year = referenceInstallment.Date.Year;
+            var now = _paymentRepository.CurrentDate;
+
+            while (year < now.Year || (month <= now.Month && year == now.Year))
+            {
+                if (!payment.Installments.Any(p => p.Date.Year == year && p.Date.Month == month))
+                {
+                    payment.Installments.Add(new Installment()
+                    {
+                        Cost = referenceInstallment.Cost,
+                        Date = new DateTime(year, month, referenceInstallment.Date.Day),
+                        PaymentId = payment.Id
+                    });
+                    updated = true;
+                }
+
+                month++;
+                if (month > 12)
+                {
+                    month = 1;
+                    year++;
+                }
+            }
+
+            return updated;
         }
     }
 }

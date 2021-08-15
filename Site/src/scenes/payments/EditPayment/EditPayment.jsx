@@ -17,7 +17,7 @@ import { toReal, toast, fromReal, PaymentCondition } from '../../../helpers'
 import { paymentService, creditCardService } from '../../../services'
 import { PaymentTypeBox } from './PaymentTypeBox/PaymentTypeBox'
 import { CostDateConditionBox } from './CostDateConditionBox/CostDateConditionBox'
-import { EditInstallment } from './EditInstallment/EditInstallment'
+import { EditInstallmentModal } from './EditInstallmentModal/EditInstallmentModal'
 
 export function EditPayment() {
 
@@ -44,6 +44,7 @@ export function EditPayment() {
   const history = useHistory()
 
   useEffect(() => {
+    setLoading(true)
     paymentService.getTypes().then(res => setTypes(res))
     creditCardService.get().then(res => setCards(res))
 
@@ -64,15 +65,22 @@ export function EditPayment() {
         setInvoice(payment.invoice)
         setCostByInstallment(false)
         setQtdInstallments(qtdInstallments)
-        setCostText(toReal(costs.length ? costs.reduce((a, b) => a + b) : 0))
+
+        if (payment.condition === PaymentCondition.Installment)
+          setCostText(toReal(costs.length ? costs.reduce((a, b) => a + b) : 0))
+        else
+          setCostText(toReal(costs[0] || 0))
+
         if (payment.condition)
           setCondition(payment.condition)
+
         setFirstPayment(firstInstallment.date ? new Date(firstInstallment.date) : null)
         setInstallments(payment.installments || [])
         if (payment.id)
           setInstallmentsUpdated(true)
       })
       .catch(ex => console.log(ex))
+      .finally(() => setLoading(false))
   }, [])
 
   useEffect(() => {
@@ -91,7 +99,7 @@ export function EditPayment() {
   }, [costText, condition, firstPayment])
 
   useEffect(() => {
-    if (condition === PaymentCondition.Installment)
+    if (!editInstallment && condition === PaymentCondition.Installment)
       setInstallmentsUpdated(false)
   }, [costByInstallment, firstPayment, qtdInstallments, costText, condition])
 
@@ -163,7 +171,9 @@ export function EditPayment() {
       temp.push(e)
     })
     setInstallments(temp)
-    setEditInstallment(null)
+    const costs = (installments || []).map(p => p.cost)
+    setCostText(toReal(costs.length ? costs.reduce((a, b) => a + b) : 0))
+    setTimeout(() => setEditInstallment(null), 200)
   }
 
   return (
@@ -202,7 +212,7 @@ export function EditPayment() {
             <div hidden={condition !== PaymentCondition.Installment}>
               <Button disabled={installmentsUpdated} onClick={() => updateInstallments()} variant="contained" autoFocus>atualizar parcelas</Button>
 
-              {editInstallment && <EditInstallment installment={editInstallment} onCancel={() => setEditInstallment()} onSave={p => installmentChanged(p)} />}
+              {editInstallment && <EditInstallmentModal installment={editInstallment} onCancel={() => setEditInstallment()} onSave={p => installmentChanged(p)} />}
             </div>
 
             <CreditCardBox

@@ -72,7 +72,8 @@ namespace Cashflow.Api.Infra.Repository
 
         public IDbTransaction BeginTransaction()
         {
-            Transaction = _context.BeginTransaction();
+            if (Transaction == null)
+                Transaction = _context.BeginTransaction();
             return Transaction;
         }
 
