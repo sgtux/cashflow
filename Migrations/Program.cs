@@ -22,9 +22,9 @@ namespace Migrations
 
         private static IServiceProvider CreateServices()
         {
-            string connectionString = Environment.GetEnvironmentVariable("DATABASE_URL");
+            string connectionString = Environment.GetEnvironmentVariable("DATABASE_CONNECTION_STRING");
             if (string.IsNullOrWhiteSpace(connectionString))
-                throw new Exception("Environment DATABASE_URL not found.");
+                throw new Exception("Environment DATABASE_CONNECTION_STRING not found.");
             return new ServiceCollection()
                 .AddFluentMigratorCore()
                 .ConfigureRunner(rb => rb

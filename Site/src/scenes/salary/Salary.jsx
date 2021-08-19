@@ -42,7 +42,6 @@ const styles = {
 export default function Salary() {
 
     const [salaries, setSalaries] = useState([])
-    const [errors, setErrors] = useState()
     const [salary, setSalary] = useState()
     const [loading, setLoading] = useState()
     const [startDate, setStartDate] = useState()
@@ -56,7 +55,7 @@ export default function Salary() {
     useEffect(() => {
         if ((salary || {}).id) {
             setStartDate(new Date(salary.startDate))
-            setEndDate(new Date(salary.endDate))
+            setEndDate(salary.endDate ? new Date(salary.endDate) : undefined)
             setValue(toReal(salary.value))
         } else {
             setStartDate()
@@ -67,14 +66,9 @@ export default function Salary() {
 
     function saveSalary() {
         setLoading(true)
-        setErrors()
         salaryService.save({ id: salary.id, value: fromReal(value), startDate, endDate })
             .then(() => refresh())
-            .catch(err => {
-                setLoading(false)
-                console.log(err)
-                setErrors(err.messages)
-            })
+            .catch(() => setLoading(false))
     }
 
     function refresh() {
@@ -155,7 +149,6 @@ export default function Salary() {
                         <Button variant="contained" color="primary"
                             onClick={() => saveSalary()}>Salvar</Button>
                     </div>
-                    <ErrorMessages errors={errors} />
                 </div>
                 <br />
                 <Divider />

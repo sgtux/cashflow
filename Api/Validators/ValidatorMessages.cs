@@ -73,6 +73,8 @@ namespace Cashflow.Api.Validators
 
             public string AnotherSalaryInThisDateRange = "Tem outro salário neste intervalo de datas.";
 
+            public string CurrentSalaryMonth = "Em um salário vigênte a Data Início não pode ser maior que o mês atual.";
+
             public string NotFound = "Salário não encontrado.";
         }
     }

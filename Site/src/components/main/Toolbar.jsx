@@ -30,7 +30,6 @@ export function AppToolbar({ openSideBar, dockedMenu }) {
   const dispatch = useDispatch()
 
   const appState = useSelector(state => state.appState)
-  console.log(appState.user.nickName)
 
   function logout() {
     authService.logout()

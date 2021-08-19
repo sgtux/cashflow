@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Cashflow.Api.Infra.Entity;
@@ -16,18 +17,25 @@ namespace Cashflow.Api.Validators
         {
             _repository = repository;
             RuleFor(s => s.StartDate).NotEqual(default(System.DateTime)).WithMessage(ValidatorMessages.Salary.InvalidStartDate);
-            RuleFor(s => s.EndDate).NotEqual(default(System.DateTime)).WithMessage(ValidatorMessages.Salary.InvalidEndDate); ;
+            RuleFor(s => s.EndDate).NotEqual(default(System.DateTime)).WithMessage(ValidatorMessages.Salary.InvalidEndDate);
             RuleFor(s => s.Value).GreaterThan(0).WithMessage(ValidatorMessages.Salary.ValueMustBeMoreThenZero);
             RuleFor(s => s.EndDate <= s.StartDate).NotEqual(true).WithMessage(ValidatorMessages.Salary.EndDateMustBeMoreThenStartDate);
             RuleFor(s => s).Must(SalaryExists).When(p => p.Id > 0).WithMessage(ValidatorMessages.Salary.NotFound);
             RuleFor(s => ValidateCurretSalary(s)).NotEqual(true).WithMessage(ValidatorMessages.Salary.AnotherCurrentSalary);
             RuleFor(s => ValidateIntervalDate(s)).NotEqual(true).WithMessage(ValidatorMessages.Salary.AnotherSalaryInThisDateRange);
+            RuleFor(s => ValidateCurrentSalaryMonth(s)).NotEqual(true).WithMessage(ValidatorMessages.Salary.CurrentSalaryMonth);
         }
 
         private bool ValidateCurretSalary(Salary salary)
         {
             LoadSalaries(salary);
             return salary.EndDate is null && _salaries.Any(p => p.EndDate is null && p.Id != salary.Id);
+        }
+
+        private bool ValidateCurrentSalaryMonth(Salary salary)
+        {
+            var now = DateTime.Now;
+            return salary.EndDate is null && !(salary.StartDate.Month <= now.Month && salary.StartDate.Year <= now.Year);
         }
 
         private bool ValidateIntervalDate(Salary salary)

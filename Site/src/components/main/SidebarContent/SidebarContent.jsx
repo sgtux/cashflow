@@ -50,7 +50,7 @@ export function SidebarContent({ closeSidebar }) {
     <div>
       <div style={styles.symbolDiv}>
         <span style={styles.symbolSpan}>
-          <img src="app.ico" height="80" width="80" style={{ marginTop: 20 }} />
+          <img src="favicon.ico" height="80" width="80" style={{ marginTop: 20 }} />
         </span>
       </div>
       <List>
