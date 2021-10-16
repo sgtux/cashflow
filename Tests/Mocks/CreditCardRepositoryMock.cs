@@ -14,13 +14,13 @@ namespace Cashflow.Tests.Mocks
 
         public Task<IEnumerable<CreditCard>> GetAll() => Task.Run(() => CreditCards.AsEnumerable());
 
-        public Task<CreditCard> GetById(int id) => Task.Run(() => CreditCards.FirstOrDefault(p => p.Id == id));
+        public Task<CreditCard> GetById(long id) => Task.Run(() => CreditCards.FirstOrDefault(p => p.Id == id));
 
         public Task<IEnumerable<CreditCard>> GetByUserId(int userId) => Task.Run(() => CreditCards.Where(p => p.UserId == userId).AsEnumerable());
 
         public Task<bool> HasPayments(int cardId) => Task.Run(() => Payments.Any(p => p.CreditCardId == cardId));
 
-        public Task Remove(int id)
+        public Task Remove(long id)
         {
             return Task.Run(() =>
             {

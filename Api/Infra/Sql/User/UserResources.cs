@@ -1,6 +1,4 @@
-using Api.Infra.Resources;
-
-namespace Cashflow.Api.Infra.Resources.User
+namespace Cashflow.Api.Infra.Sql.User
 {
     public static class UserResources
     {

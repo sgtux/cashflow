@@ -10,6 +10,8 @@ namespace Cashflow.Api.Validators
 
         public static SalaryMessages Salary = new SalaryMessages();
 
+        public static DailyExpensesMessages DailyExpenses = new DailyExpensesMessages();
+
         public class UserMessages
         {
             public string NickNameRequired = "O campo 'Nick Name' deve ter pelo menos 4 caracteres.";
@@ -74,6 +76,19 @@ namespace Cashflow.Api.Validators
             public string AnotherSalaryInThisDateRange = "Tem outro salário neste intervalo de datas.";
 
             public string NotFound = "Salário não encontrado.";
+        }
+
+        public class DailyExpensesMessages
+        {
+            public string InvalidDate = "A data é obrigatória.";
+
+            public string InvalidShopName = "O Estabelecimento é inválido.";
+
+            public string InvalidItemsCount = "É necessário informar pelo menos 1 item.";
+
+            public string ItemsWithInvalidPrice = "Há itens com preço inválido.";
+
+            public string ItemsWithInvalidName = "Há itens com o nome inválido.";
         }
     }
 }

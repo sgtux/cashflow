@@ -1,4 +1,4 @@
-namespace Api.Infra.Resources.Payment
+namespace Cashflow.Api.Infra.Sql.Payment
 {
     public class InstallmentResources
     {

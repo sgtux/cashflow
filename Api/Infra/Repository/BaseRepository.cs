@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Data;
 using System.Threading;
 using System.Threading.Tasks;
-using Api.Infra.Resources;
+using Cashflow.Api.Infra.Sql;
 using Cashflow.Api.Service;
 using Cashflow.Api.Shared;
 using Dapper;
-using static System.Console;
 
 namespace Cashflow.Api.Infra.Repository
 {

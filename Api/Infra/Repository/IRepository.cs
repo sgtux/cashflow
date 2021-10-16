@@ -5,9 +5,9 @@ namespace Cashflow.Api.Infra.Repository
 {
     public interface IRepository<T> where T : class
     {
-        Task<bool> Exists(long userId);
+        Task<bool> Exists(long id);
 
-        Task<T> GetById(int id);
+        Task<T> GetById(long id);
 
         Task<IEnumerable<T>> GetAll();
 
@@ -15,6 +15,6 @@ namespace Cashflow.Api.Infra.Repository
 
         Task Update(T t);
 
-        Task Remove(int id);
+        Task Remove(long id);
     }
 }

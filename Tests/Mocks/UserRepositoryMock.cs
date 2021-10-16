@@ -12,9 +12,9 @@ namespace Cashflow.Tests.Mocks
 
         public Task<IEnumerable<User>> GetAll() => Task.Run(() => Users.AsEnumerable());
 
-        public Task<User> GetById(int id) => Task.Run(() => Users.FirstOrDefault(p => p.Id == id));
+        public Task<User> GetById(long id) => Task.Run(() => Users.FirstOrDefault(p => p.Id == id));
 
-        public Task Remove(int id) => Task.Run(() => Users.Remove(Users.FirstOrDefault(p => p.Id == id)));
+        public Task Remove(long id) => Task.Run(() => Users.Remove(Users.FirstOrDefault(p => p.Id == id)));
 
         public Task Update(User t)
         {

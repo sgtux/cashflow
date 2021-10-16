@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
-using Api.Infra.Resources.Payment;
+using Cashflow.Api.Infra.Sql.Payment;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Service;
 using Cashflow.Api.Shared;
@@ -47,7 +47,7 @@ namespace Cashflow.Api.Infra.Repository
             return list.OrderBy(p => p.Description);
         }
 
-        public async Task<Payment> GetById(int id)
+        public async Task<Payment> GetById(long id)
         {
             Payment payment = null;
             var types = await GetTypes();
@@ -91,7 +91,6 @@ namespace Cashflow.Api.Infra.Repository
         public async Task Update(Payment payment)
         {
             BeginTransaction();
-            var payDb = await GetById(payment.Id);
             await Execute(InstallmentResources.Delete, new { PaymentId = payment.Id });
             await Execute(PaymentResources.Update, payment);
             foreach (var i in payment.Installments.OrderBy(p => p.Number))
@@ -99,10 +98,9 @@ namespace Cashflow.Api.Infra.Repository
                 i.PaymentId = payment.Id;
                 await Execute(InstallmentResources.Insert, i);
             }
-            payDb = await GetById(payment.Id);
         }
 
-        public async Task Remove(int id)
+        public async Task Remove(long id)
         {
             BeginTransaction();
             await Execute(InstallmentResources.Delete, new { PaymentId = id });

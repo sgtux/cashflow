@@ -1,4 +1,4 @@
-namespace Api.Infra.Resources.Salary
+namespace Cashflow.Api.Infra.Sql.Salary
 {
     public static class SalaryResources
     {

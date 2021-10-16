@@ -14,11 +14,11 @@ namespace Cashflow.Tests.Mocks
 
         public Task<IEnumerable<Salary>> GetAll() => throw new System.NotImplementedException();
 
-        public Task<Salary> GetById(int id) => Task.Run(() => Salaries.FirstOrDefault(p => p.Id == id));
+        public Task<Salary> GetById(long id) => Task.Run(() => Salaries.FirstOrDefault(p => p.Id == id));
 
         public Task<IEnumerable<Salary>> GetByUserId(int userId) => Task.Run(() => Salaries.Where(p => p.UserId == userId));
 
-        public Task Remove(int id) => Task.Run(() => Salaries.Remove(Salaries.First(p => p.Id == id)));
+        public Task Remove(long id) => Task.Run(() => Salaries.Remove(Salaries.First(p => p.Id == id)));
 
         public Task Update(Salary t)
         {

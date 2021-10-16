@@ -1,4 +1,4 @@
-namespace Api.Infra.Resources.CreditCard
+namespace Cashflow.Api.Infra.Sql.CreditCard
 {
     public static class CreditCardResources
     {

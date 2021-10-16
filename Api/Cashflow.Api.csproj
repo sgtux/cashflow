@@ -18,37 +18,39 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.4" />
   </ItemGroup>
   
-  <PropertyGroup>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <NoWarn>$(NoWarn);1591</NoWarn>
-  </PropertyGroup>
-
   <ItemGroup>
-    <EmbeddedResource Include="Infra/Resources/User/GetByNickName.sql" />
-    <EmbeddedResource Include="Infra/Resources/User/GetById.sql" />
-    <EmbeddedResource Include="Infra/Resources/User/Insert.sql" />
+    <EmbeddedResource Include="Infra/Sql/User/GetByNickName.sql" />
+    <EmbeddedResource Include="Infra/Sql/User/GetById.sql" />
+    <EmbeddedResource Include="Infra/Sql/User/Insert.sql" />
 
-    <EmbeddedResource Include="Infra/Resources/Salary/Insert.sql" />
-    <EmbeddedResource Include="Infra/Resources/Salary/Delete.sql" />
-    <EmbeddedResource Include="Infra/Resources/Salary/GetById.sql" />
-    <EmbeddedResource Include="Infra/Resources/Salary/GetByUser.sql" />
-    <EmbeddedResource Include="Infra/Resources/Salary/Update.sql" />
+    <EmbeddedResource Include="Infra/Sql/Salary/Insert.sql" />
+    <EmbeddedResource Include="Infra/Sql/Salary/Delete.sql" />
+    <EmbeddedResource Include="Infra/Sql/Salary/GetById.sql" />
+    <EmbeddedResource Include="Infra/Sql/Salary/GetByUser.sql" />
+    <EmbeddedResource Include="Infra/Sql/Salary/Update.sql" />
 
-    <EmbeddedResource Include="Infra/Resources/CreditCard/Delete.sql" />
-    <EmbeddedResource Include="Infra/Resources/CreditCard/GetByUser.sql" />
-    <EmbeddedResource Include="Infra/Resources/CreditCard/Insert.sql" />
-    <EmbeddedResource Include="Infra/Resources/CreditCard/Update.sql" />
-    <EmbeddedResource Include="Infra/Resources/CreditCard/HasPayments.sql" />
+    <EmbeddedResource Include="Infra/Sql/CreditCard/Delete.sql" />
+    <EmbeddedResource Include="Infra/Sql/CreditCard/GetByUser.sql" />
+    <EmbeddedResource Include="Infra/Sql/CreditCard/Insert.sql" />
+    <EmbeddedResource Include="Infra/Sql/CreditCard/Update.sql" />
+    <EmbeddedResource Include="Infra/Sql/CreditCard/HasPayments.sql" />
 
-    <EmbeddedResource Include="Infra/Resources/Payment/Delete.sql" />
-    <EmbeddedResource Include="Infra/Resources/Payment/GetById.sql" />
-    <EmbeddedResource Include="Infra/Resources/Payment/GetByUser.sql" />
-    <EmbeddedResource Include="Infra/Resources/Payment/GetTypes.sql" />
-    <EmbeddedResource Include="Infra/Resources/Payment/Insert.sql" />
-    <EmbeddedResource Include="Infra/Resources/Payment/Update.sql" />
+    <EmbeddedResource Include="Infra/Sql/Payment/Delete.sql" />
+    <EmbeddedResource Include="Infra/Sql/Payment/GetById.sql" />
+    <EmbeddedResource Include="Infra/Sql/Payment/GetByUser.sql" />
+    <EmbeddedResource Include="Infra/Sql/Payment/GetTypes.sql" />
+    <EmbeddedResource Include="Infra/Sql/Payment/Insert.sql" />
+    <EmbeddedResource Include="Infra/Sql/Payment/Update.sql" />
 
-    <EmbeddedResource Include="Infra/Resources/Installment/Insert.sql" />
-    <EmbeddedResource Include="Infra/Resources/Installment/Delete.sql" />
+    <EmbeddedResource Include="Infra/Sql/Installment/Insert.sql" />
+    <EmbeddedResource Include="Infra/Sql/Installment/Delete.sql" />
+
+    <EmbeddedResource Include="Infra/Sql/DailyExpenses/Delete.sql" />
+    <EmbeddedResource Include="Infra/Sql/DailyExpenses/DeleteItems.sql" />
+    <EmbeddedResource Include="Infra/Sql/DailyExpenses/GetByUser.sql" />
+    <EmbeddedResource Include="Infra/Sql/DailyExpenses/Insert.sql" />
+    <EmbeddedResource Include="Infra/Sql/DailyExpenses/InsertItem.sql" />
+    <EmbeddedResource Include="Infra/Sql/DailyExpenses/Update.sql" />
   </ItemGroup>
 
 </Project>

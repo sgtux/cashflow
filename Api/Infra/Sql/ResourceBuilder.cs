@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Api.Infra.Resources
+namespace Cashflow.Api.Infra.Sql
 {
     public class ResourceBuilder
     {
@@ -12,7 +12,7 @@ namespace Api.Infra.Resources
 
         public ResourceBuilder(string name)
         {
-            resourceName = $"Cashflow.Api.Infra.Resources.{name}";
+            resourceName = $"Cashflow.Api.Infra.Sql.{name}";
         }
 
         public async Task<string> Build()

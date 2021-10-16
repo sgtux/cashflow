@@ -15,13 +15,13 @@ namespace Cashflow.Tests.Mocks
 
         public Task<IEnumerable<Payment>> GetAll() => Task.Run(() => Payments.AsEnumerable());
 
-        public Task<Payment> GetById(int id) => Task.Run(() => Payments.FirstOrDefault(p => p.Id == id));
+        public Task<Payment> GetById(long id) => Task.Run(() => Payments.FirstOrDefault(p => p.Id == id));
 
         public Task<IEnumerable<Payment>> GetByUser(int userId) => Task.Run(() => Payments.Where(p => p.UserId == userId));
 
         public IEnumerable<Payment> GetSome(Expression<Func<Payment, bool>> expressions) => throw new NotImplementedException();
 
-        public Task Remove(int id)
+        public Task Remove(long id)
         {
             return Task.Run(() =>
             {

@@ -1,0 +1,1 @@
+DELETE FROM "DailyExpensesItems" WHERE "DailyExpensesId" = @DailyExpensesId

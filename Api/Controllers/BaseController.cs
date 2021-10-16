@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using Cashflow.Api.Models;
-using Cashflow.Api.Shared;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cashflow.Api.Controllers

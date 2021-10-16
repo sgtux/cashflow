@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Api.Infra.Resources.CreditCard;
+using Cashflow.Api.Infra.Sql.CreditCard;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Service;
 using Cashflow.Api.Shared;
@@ -17,7 +17,7 @@ namespace Cashflow.Api.Infra.Repository
 
         public Task<IEnumerable<CreditCard>> GetAll() => throw new NotImplementedException();
 
-        public Task<CreditCard> GetById(int id) => throw new NotImplementedException();
+        public Task<CreditCard> GetById(long id) => throw new NotImplementedException();
 
         public Task<IEnumerable<CreditCard>> GetByUserId(int userId) => Query(CreditCardResources.ByUser, new { UserId = userId });
 
@@ -31,7 +31,7 @@ namespace Cashflow.Api.Infra.Repository
             return await ExecuteScalar<int>(CreditCardResources.HasPayments, new { Id = cardId }) > 0;
         }
 
-        public Task Remove(int id) => Execute(CreditCardResources.Delete, new { Id = id });
+        public Task Remove(long id) => Execute(CreditCardResources.Delete, new { Id = id });
 
         public Task Update(CreditCard card) => Execute(CreditCardResources.Update, card);
     }

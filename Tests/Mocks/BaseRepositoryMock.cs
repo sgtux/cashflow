@@ -18,6 +18,8 @@ namespace Cashflow.Tests.Mocks
 
         private static List<Salary> _salaries;
 
+        private static List<DailyExpenses> _dailyExpenses;
+
         public DateTime CurrentDate => new DateTime(2019, 4, 1);
 
         private List<Payment> CreatePaymentsMock()
@@ -30,7 +32,6 @@ namespace Cashflow.Tests.Mocks
                     UserId = 1,
                     CreditCardId = 1,
                     Description = "First Payment",
-                    FixedPayment = true,
                     Type = PaymentTypes.FirstOrDefault(p => p.Id == (int)PaymentTypeEnum.Expense),
                     Installments = new List<Installment>()
                     {
@@ -91,6 +92,25 @@ namespace Cashflow.Tests.Mocks
             };
         }
 
+        private List<DailyExpenses> CreateDailyExpensesMock()
+        {
+            return new List<DailyExpenses>()
+            {
+                new DailyExpenses()
+                {
+                    Id = 1,
+                    UserId = 1,
+                    ShopName = "Computer Shop",
+                    Date = new DateTime(2019, 5, 1),
+                    Items = new List<DailyExpensesItem> ()
+                    {
+                        new DailyExpensesItem() { DailyExpensesId = 1, ItemName = "Mouse", Price = 80 },
+                        new DailyExpensesItem() { DailyExpensesId = 2, ItemName = "Processor", Price = 589.62M }
+                    }
+                }
+            };
+        }
+
         private DateTime CreateEndDate(int year, int month) => new DateTime(year, month, DateTime.DaysInMonth(year, month));
 
         protected List<Payment> Payments
@@ -147,6 +167,16 @@ namespace Cashflow.Tests.Mocks
                 if (_salaries == null)
                     _salaries = CreateSalariesMock();
                 return _salaries;
+            }
+        }
+
+        protected List<DailyExpenses> DailyExpenses
+        {
+            get
+            {
+                if (_dailyExpenses == null)
+                    _dailyExpenses = CreateDailyExpensesMock();
+                return _dailyExpenses;
             }
         }
     }
