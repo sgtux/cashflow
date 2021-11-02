@@ -1,5 +1,5 @@
 UPDATE "DailyExpenses"
 SET
-  "DailyName" = @DailyName,
+  "ShopName" = @ShopName,
   "Date" = @Date
 WHERE "Id" = @Id

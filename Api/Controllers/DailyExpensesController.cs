@@ -17,7 +17,10 @@ namespace Cashflow.Api.Controllers
         public DailyExpensesController(DailyExpensesService service) => _service = service;
 
         [HttpGet]
-        public async Task<ResultDataModel<IEnumerable<DailyExpenses>>> Get() => await _service.GetByUser(UserId);
+        public async Task<ResultDataModel<IEnumerable<DailyExpenses>>> GetByUser() => await _service.GetByUser(UserId);
+
+        [HttpGet("{id}")]
+        public async Task<ResultDataModel<DailyExpenses>> Get(long id) => await _service.GetById(id, UserId);
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] DailyExpenses dailyExpenses)

@@ -1,4 +1,4 @@
-INSERT INTO "DailyExpensesItems"
-  ("ItemName", "Price", "DailyExpensesId")
+INSERT INTO "DailyExpensesItem"
+  ("ItemName", "Price", "Amount", "DailyExpensesId")
 VALUES
-  (@ItemName, @Price, @DailyExpensesId)
+  (@ItemName, @Price, @Amount, @DailyExpensesId)

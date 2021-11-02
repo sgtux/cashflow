@@ -65,7 +65,7 @@ export function SidebarContent({ closeSidebar }) {
         <Divider />
         <LinkListItem onClick={() => closeSidebar()} to="/salary" text="Salários" />
         <Divider />
-        <LinkListItem onClick={() => closeSidebar()} to="/Daily-purshases" text="Compras de Mercado" />
+        <LinkListItem onClick={() => closeSidebar()} to="/daily-expenses" text="Despesas Diárias" />
         <Divider />
       </List>
     </div>

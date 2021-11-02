@@ -1,1 +1,1 @@
-DELETE FROM "DailyExpensesItems" WHERE "DailyExpensesId" = @DailyExpensesId
+DELETE FROM "DailyExpensesItem" WHERE "DailyExpensesId" = @DailyExpensesId

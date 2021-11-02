@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Cashflow.Api.Infra.Entity
 {
@@ -14,5 +15,7 @@ namespace Cashflow.Api.Infra.Entity
         public int UserId { get; set; }
 
         public List<DailyExpensesItem> Items { get; set; }
+
+        public decimal TotalPrice => Items.Select(p => p.TotalPrice).Sum();
     }
 }

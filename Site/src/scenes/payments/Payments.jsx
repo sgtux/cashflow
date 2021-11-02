@@ -43,18 +43,6 @@ const styles = {
   }
 }
 
-const CreditCardComponent = props => {
-  if (!props.card)
-    return null
-  return (
-    <span>
-      <br />
-      <CardIcon />
-      <span style={{ marginTop: '-20px' }}>{props.card.name}</span>
-    </span>
-  )
-}
-
 export default class Payments extends React.Component {
 
   constructor(props) {

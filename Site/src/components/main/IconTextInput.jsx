@@ -67,7 +67,7 @@ class IconTextInput extends React.Component {
       <FormControl style={this.props.style}>
         <TextField error={this.state.hasError && this.state.lostFocus}
           disabled={this.props.disabled}
-          style={{ marginTop: '10px' }}
+          style={{ marginTop: (this.props.style || {}).marginTop || '10px' }}
           value={this.state.text}
           multiline={this.props.multiline}
           rowsMax={this.props.rowsMax}

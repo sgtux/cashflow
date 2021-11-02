@@ -11,6 +11,7 @@ namespace Cashflow.Migrations.DDL
                 .WithColumn("Id").AsInt32().PrimaryKey().Identity()
                 .WithColumn("ItemName").AsString(255).NotNullable()
                 .WithColumn("Price").AsDecimal(10, 2).NotNullable()
+                .WithColumn("Amount").AsInt32().NotNullable()
                 .WithColumn("DailyExpensesId").AsInt32().NotNullable();
 
             Create.ForeignKey()

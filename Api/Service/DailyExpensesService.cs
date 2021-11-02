@@ -15,6 +15,12 @@ namespace Cashflow.Api.Service
 
         public async Task<ResultDataModel<IEnumerable<DailyExpenses>>> GetByUser(int userId) => new ResultDataModel<IEnumerable<DailyExpenses>>(await _dailyExpensesRepository.GetByUser(userId));
 
+        public async Task<ResultDataModel<DailyExpenses>> GetById(long id, int userId)
+        {
+            var p = await _dailyExpensesRepository.GetById(id);
+            return new ResultDataModel<DailyExpenses>(p?.UserId == userId ? p : null);
+        }
+
         public async Task<ResultModel> Add(DailyExpenses dailyExpenses)
         {
             var result = new ResultModel();

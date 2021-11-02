@@ -1,4 +1,4 @@
 INSERT INTO "DailyExpenses"
-  ("DailyName", "Date", "UserId") 
+  ("ShopName", "Date", "UserId") 
 VALUES
-  (@DailyName, @Date, @UserId)
+  (@ShopName, @Date, @UserId)

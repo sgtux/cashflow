@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-    Checkbox,
     FormControlLabel,
     FormControl,
     FormLabel,
@@ -31,7 +30,6 @@ export function CostDateConditionBox({ cost, costChanged, date, dateChanged, con
                     <FormControlLabel value={3} control={<Radio color="primary" />} label="Parcelado" />
                 </RadioGroup>
             </FormControl>
-
         </div>
     )
 }

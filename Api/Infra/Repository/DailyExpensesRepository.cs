@@ -26,16 +26,24 @@ namespace Cashflow.Api.Infra.Repository
 
         public async Task<IEnumerable<DailyExpenses>> GetByUser(int userId)
         {
-            return await Query<DailyExpensesItem>(DailyExpensesResources.ByUser, (p, i) =>
+            var list = new List<DailyExpenses>();
+            await Query<DailyExpensesItem>(DailyExpensesResources.ByUser, (p, i) =>
             {
-                if (p.Id == i.DailyExpensesId)
+                var expense = list.FirstOrDefault(x => x.Id == p.Id);
+                if (expense == null)
                 {
-                    if (p.Items == null)
-                        p.Items = new List<DailyExpensesItem>();
-                    p.Items.Add(i);
+                    expense = p;
+                    p.Items = new List<DailyExpensesItem>();
+                    list.Add(p);
                 }
+
+                if (i.DailyExpensesId == expense.Id)
+                    expense.Items.Add(i);
+
                 return p;
             }, new { UserId = userId });
+
+            return list;
         }
 
         public Task<System.Collections.Generic.IEnumerable<DailyExpenses>> GetAll()
@@ -45,17 +53,21 @@ namespace Cashflow.Api.Infra.Repository
 
         public async Task<DailyExpenses> GetById(long id)
         {
+            DailyExpenses dailyExpenses = null;
             var list = await Query<DailyExpensesItem>(DailyExpensesResources.ById, (p, i) =>
             {
-                if (p.Id == i.DailyExpensesId)
+                if (dailyExpenses == null)
                 {
-                    if (p.Items == null)
-                        p.Items = new List<DailyExpensesItem>();
-                    p.Items.Add(i);
+                    dailyExpenses = p;
+                    dailyExpenses.Items = new List<DailyExpensesItem>();
                 }
+
+                if (i.DailyExpensesId == dailyExpenses.Id)
+                    dailyExpenses.Items.Add(i);
+
                 return p;
             }, new { Id = id });
-            return list.FirstOrDefault();
+            return dailyExpenses;
         }
 
         public async Task Remove(long id)

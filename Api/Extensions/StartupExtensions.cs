@@ -16,12 +16,14 @@ namespace Cashflow.Api.Extensions
             services.AddScoped<PaymentService>();
             services.AddScoped<CreditCardService>();
             services.AddScoped<SalaryService>();
+            services.AddScoped<DailyExpensesService>();
             services.AddScoped<LogService>();
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IPaymentRepository, PaymentRepository>();
             services.AddScoped<ICreditCardRepository, CreditCardRepository>();
             services.AddScoped<ISalaryRepository, SalaryRepository>();
+            services.AddScoped<IDailyExpensesRepository, DailyExpensesRepository>();
 
             services.AddScoped<DatabaseContext>();
         }

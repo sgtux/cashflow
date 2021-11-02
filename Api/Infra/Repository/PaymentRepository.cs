@@ -29,7 +29,7 @@ namespace Cashflow.Api.Infra.Repository
             var list = new List<Payment>();
             var types = await GetTypes();
             var cards = await _creditCardRepository.GetByUserId(userId);
-            var result = await Query<Installment>(PaymentResources.ByUser, (p, i) =>
+            await Query<Installment>(PaymentResources.ByUser, (p, i) =>
             {
                 var pay = list.FirstOrDefault(x => x.Id == p.Id);
                 if (pay == null)
@@ -51,7 +51,7 @@ namespace Cashflow.Api.Infra.Repository
         {
             Payment payment = null;
             var types = await GetTypes();
-            var result = await Query<Installment>(PaymentResources.ById, (p, i) =>
+            await Query<Installment>(PaymentResources.ById, (p, i) =>
             {
                 if (payment == null)
                 {

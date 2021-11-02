@@ -37,10 +37,10 @@ namespace Cashflow.Api.Shared
 
         private static Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
-            var result = new { Errors = new[] { "Erro interno no servidor, procure o administrador do sistema." } };
+            var serverErrorMessage = "Erro interno no servidor, procure o administrador do sistema.";
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-            return context.Response.WriteAsync(JsonSerializer.Serialize(result));
+            return context.Response.WriteAsync(JsonSerializer.Serialize(new { errors = new[] { serverErrorMessage } }));
         }
     }
 }
