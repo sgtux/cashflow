@@ -22,12 +22,15 @@ import {
 import { MainContainer } from '../../components/main'
 
 import { dailyExpensesService } from '../../services'
-import { toReal, dateToString, toast } from '../../helpers'
+import { toReal, dateToString } from '../../helpers'
+
+import { DailyExpensesDetailModal } from './daily-expenses-detail-modal/DailyExpensesDetailModal'
 
 export function DailyExpenses() {
 
     const [dailyExpenses, setDailyExpenses] = useState([])
     const [loading, setLoading] = useState(false)
+    const [dailyExpenseDetail, setDailyExpenseDetail] = useState({})
 
     useEffect(() => {
         refresh()
@@ -77,7 +80,8 @@ export function DailyExpenses() {
                                     />
                                     <ListItemSecondaryAction>
                                         <Tooltip title="Visualizar">
-                                            <IconButton color="primary" aria-label="Edit">
+                                            <IconButton color="primary" aria-label="Edit"
+                                                onClick={() => setDailyExpenseDetail(p)}>
                                                 <VisibilityRounded />
                                             </IconButton>
                                         </Tooltip>
@@ -99,6 +103,9 @@ export function DailyExpenses() {
                             )}
                         </List>
                     </Paper>
+                    <DailyExpensesDetailModal
+                        onClose={() => setDailyExpenseDetail({})}
+                        dailyExpense={dailyExpenseDetail} />
                 </div>
                 :
                 <div style={{ textTransform: 'none', fontSize: '18px', textAlign: 'center' }}>
