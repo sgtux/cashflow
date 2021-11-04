@@ -11,7 +11,7 @@ import {
 import CardIcon from '@material-ui/icons/CreditCardOutlined'
 
 import { MainContainer, Invoices, MoneySpan } from '../../components'
-import InputMonth from '../../components/inputs/InputMonth'
+import { InputMonth } from '../../components/inputs'
 
 import { paymentService } from '../../services/index'
 
@@ -87,8 +87,8 @@ export default class Projection extends React.Component {
         <Paper>
           <div style={{ margin: 20, paddingTop: 20 }}>
             <InputMonth
-              month={this.state.endDate.month}
-              year={this.state.endDate.year}
+              selectedMonth={this.state.endDate.month}
+              selectedYear={this.state.endDate.year}
               label="Previsão até"
               onChange={v => this.refresh(v)} />
           </div>

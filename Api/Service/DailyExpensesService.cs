@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Infra.Repository;
@@ -13,7 +15,20 @@ namespace Cashflow.Api.Service
 
         public DailyExpensesService(IDailyExpensesRepository dailyExpensesRepository) => _dailyExpensesRepository = dailyExpensesRepository;
 
-        public async Task<ResultDataModel<IEnumerable<DailyExpenses>>> GetByUser(int userId) => new ResultDataModel<IEnumerable<DailyExpenses>>(await _dailyExpensesRepository.GetByUser(userId));
+        public async Task<ResultDataModel<IEnumerable<DailyExpenses>>> GetByUser(int userId, int month, int year)
+        {
+            var now = DateTime.Now;
+
+            if (month > 12 || month < 1)
+                month = now.Month;
+
+            if (year > now.Year + 5 || year < now.Year - 5)
+                year = now.Year;
+
+            var list = await _dailyExpensesRepository.GetByUser(userId);
+            list = list.Where(p => p.Date.Month == month && p.Date.Year == year);
+            return new ResultDataModel<IEnumerable<DailyExpenses>>(list);
+        }
 
         public async Task<ResultDataModel<DailyExpenses>> GetById(long id, int userId)
         {

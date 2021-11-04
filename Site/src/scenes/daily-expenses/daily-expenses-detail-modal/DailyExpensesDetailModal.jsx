@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 
 import {
     Dialog,
@@ -14,11 +14,6 @@ import {
 import { dateToString, toReal } from '../../../helpers'
 
 export function DailyExpensesDetailModal({ onClose, dailyExpense }) {
-
-    useEffect(() => {
-        if (dailyExpense.id)
-            console.log(dailyExpense)
-    }, [dailyExpense])
 
     return (
         <Dialog

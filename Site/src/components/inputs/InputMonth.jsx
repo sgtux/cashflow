@@ -1,60 +1,42 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   InputLabel,
-  MenuItem,
-  Select
+  Select,
+  MenuItem
 } from '@material-ui/core'
-import PropTypes from 'prop-types'
 
 import { Months } from '../../helpers/utils'
 
-class InputMonth extends React.Component {
-  constructor(props) {
-    super(props)
-    const now = new Date()
-    const years = [now.getFullYear()]
-    for (let i = 1; i <= 5; i++)
-      years.push(years[0] + i)
+export function InputMonth({ startYear, onChange, selectedMonth, selectedYear, label }) {
 
-    this.state = {
-      years,
-    }
-  }
+  const [years, setYears] = useState([])
 
-  valueChanged(month, year) {
-    this.setState({ month, year })
-    if (this.props.onChange)
-      this.props.onChange({ month, year })
-  }
+  useEffect(() => {
 
-  render() {
-    return (
-      <span>
-        <div>
-          <InputLabel style={{ height: '8px', fontSize: '10px' }}>{this.props.label}</InputLabel>
-        </div>
-        <Select
-          value={this.props.month}
-          style={{ width: '130px' }}
-          onChange={(e) => this.valueChanged(e.target.value, this.props.year)}>
-          {Months.map((p, i) => <MenuItem key={i} value={i + 1}>{p}</MenuItem>)}
-        </Select>
-        <Select
-          value={this.props.year}
-          style={{ width: '80px', marginLeft: '10px' }}
-          onChange={(e) => this.valueChanged(this.props.month, e.target.value)}>
-          {this.state.years.map((p, i) => <MenuItem key={i} value={p}>{p}</MenuItem>)}
-        </Select>
-      </span>
-    )
-  }
+    const currentYear = new Date().getFullYear()
+    const temp = startYear && !isNaN(startYear) ? [Number(startYear)] : [currentYear]
+    for (let i = 1; i < 5; i++)
+      temp.push(temp[0] + i)
+    setYears(temp)
+  }, [])
+
+  return (
+    <span>
+      <div>
+        <InputLabel style={{ height: '8px', fontSize: '10px' }}>{label}</InputLabel>
+      </div>
+      <Select
+        value={selectedMonth}
+        style={{ width: '130px' }}
+        onChange={e => onChange(e.target.value, selectedYear)}>
+        {Months.map((p, i) => <MenuItem key={i} value={i + 1}>{p}</MenuItem>)}
+      </Select>
+      <Select
+        value={selectedYear}
+        style={{ width: '80px', marginLeft: '10px' }}
+        onChange={e => onChange(selectedYear, e.target.value)}>
+        {years.map((p, i) => <MenuItem key={i} value={p}>{p}</MenuItem>)}
+      </Select>
+    </span>
+  )
 }
-
-
-InputMonth.propTypes = {
-  month: PropTypes.number.isRequired,
-  year: PropTypes.number.isRequired,
-  label: PropTypes.string
-}
-
-export default InputMonth
