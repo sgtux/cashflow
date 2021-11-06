@@ -34,7 +34,7 @@ export function InputMonth({ startYear, onChange, selectedMonth, selectedYear, l
       <Select
         value={selectedYear}
         style={{ width: '80px', marginLeft: '10px' }}
-        onChange={e => onChange(selectedYear, e.target.value)}>
+        onChange={e => onChange(selectedMonth, e.target.value)}>
         {years.map((p, i) => <MenuItem key={i} value={p}>{p}</MenuItem>)}
       </Select>
     </span>

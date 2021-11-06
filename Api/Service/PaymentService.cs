@@ -37,20 +37,22 @@ namespace Cashflow.Api.Service
 
         public async Task<ResultModel> GetTypes() => new ResultDataModel<IEnumerable<PaymentType>>(await _paymentRepository.GetTypes());
 
-        public async Task<Dictionary<string, PaymentProjectionResultModel>> GetProjection(int userId, DateTime forecastAt)
+        public async Task<Dictionary<string, PaymentProjectionResultModel>> GetProjection(int userId, int month, int year)
         {
             var result = new Dictionary<string, PaymentProjectionResultModel>();
             var now = _paymentRepository.CurrentDate;
             var dates = new List<DateTime>();
 
-            if (forecastAt == default(DateTime) || forecastAt < now)
-                forecastAt = now.AddMonths(11);
+            var baseDate = new DateTime(year, month, 1);
+
+            if (baseDate == default(DateTime) || baseDate < now)
+                baseDate = now.AddMonths(11);
             else
-                forecastAt.AddMonths(1);
+                baseDate.AddMonths(1);
 
             var currentDate = now;
             var months = 0;
-            while (forecastAt.Month != currentDate.Month || forecastAt.Year != currentDate.Year)
+            while (baseDate.Month != currentDate.Month || baseDate.Year != currentDate.Year)
             {
                 currentDate = now.AddMonths(months);
                 dates.Add(currentDate);

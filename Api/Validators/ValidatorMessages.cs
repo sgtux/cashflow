@@ -82,7 +82,7 @@ namespace Cashflow.Api.Validators
         {
             public string InvalidDate = "A data é obrigatória.";
 
-            public string InvalidShopName = "O Estabelecimento é inválido.";
+            public string InvalidShopName = "O estabelecimento é inválido.";
 
             public string InvalidItemsCount = "É necessário informar pelo menos 1 item.";
 

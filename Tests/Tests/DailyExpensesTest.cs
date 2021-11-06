@@ -40,7 +40,7 @@ namespace Cashflow.Tests
             var expense = ValidDailyExpenses;
             expense.ShopName = string.Empty;
             var result = await _service.Add(expense);
-            HasNotifications(result, "O campo 'Nick Name' deve ter pelo menos 4 caracteres.");
+            HasNotifications(result, "O estabelecimento é inválido.");
         }
     }
 }
