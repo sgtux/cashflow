@@ -77,19 +77,17 @@ export function EditDailyExpenses() {
     }
 
     function addItem() {
-        setItemName('')
-        setItemPrice('')
-        setItemAmount('')
-        let temp = items
-        temp.push({ itemName, price: fromReal(itemPrice), amount: itemAmount })
+        let temp = items.concat([{ itemName, price: fromReal(itemPrice), amount: itemAmount }])
         let i = 1
         temp.forEach(p => p.id = i++)
         setItems(temp)
+        setItemName('')
+        setItemPrice('')
+        setItemAmount('')
     }
 
     function removeItem(id) {
-        let temp = items
-        temp = temp.filter(p => p.id !== id)
+        let temp = items.filter(p => p.id !== id)
         let i = 1
         temp.forEach(p => p.id = i++)
         setItems(temp)
