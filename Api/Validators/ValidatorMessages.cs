@@ -2,6 +2,10 @@ namespace Cashflow.Api.Validators
 {
     public static class ValidatorMessages
     {
+        public static string FieldIsRequired(string fieldName) => string.Format("O campo '{0}' é obrigatório.", fieldName);
+
+        public static string NotFound(string name) => string.Format("{0} não encontrado.", name);
+
         public static UserMessages User = new UserMessages();
 
         public static PaymentMessages Payment = new PaymentMessages();
