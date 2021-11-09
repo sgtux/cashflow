@@ -53,7 +53,9 @@ export function SignUpScreen({ changeScene }) {
     }
   }
 
-  function send() {
+  function send(e) {
+    if (e)
+      e.preventDefault()
     setLoading(true)
     authService.createAccount({ nickName, password, confirm })
       .then(res => dispatch(userChanged(res)))
@@ -98,8 +100,8 @@ export function SignUpScreen({ changeScene }) {
         <br />
         <Button style={{ width: '250px' }}
           variant="contained"
-          onClick={() => send()}
-          disabled={!nickNameValid || !passwordValid || !confirmValid}
+          onClick={e => send(e)}
+          disabled={loading || !nickNameValid || !passwordValid || !confirmValid}
           color="primary">Send</Button>
         <br /><br />
         <div style={{ marginBottom: '10px' }} hidden={!loading}>
