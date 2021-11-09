@@ -54,11 +54,11 @@ export function SignInScreen({ changeScene }) {
   }
 
   function login(e) {
+    if (e)
+      e.preventDefault()
     if (loading)
       return
     setLoading(true)
-    if (e)
-      e.preventDefault()
     authService.login({ nickName, password })
       .then(user => dispatch(userChanged(user)))
       .catch(() => { })
@@ -98,7 +98,7 @@ export function SignInScreen({ changeScene }) {
               variant="contained"
               disabled={!nickNameValid || !passwordValid}
               type="submit"
-              onClick={() => login()}
+              onClick={e => login(e)}
               color="primary">Login</Button>
             <br /><br />
             <Button style={{ width: '250px' }}
