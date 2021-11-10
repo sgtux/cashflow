@@ -31,8 +31,8 @@ export function DailyExpensesDetailModal({ onClose, dailyExpense }) {
                 </div>
             </DialogTitle>
             <DialogContent>
-                <div style={{ color: 'gray' }}>
-                    {dateToString(dailyExpense.date)}
+                <div style={{ marginLeft: 16, color: 'gray' }}>
+                    <span style={{ fontWeight: 'bold' }}>Data: </span>{dateToString(dailyExpense.date)}
                 </div>
                 {
                     dailyExpense.items &&

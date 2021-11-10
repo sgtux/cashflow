@@ -31,6 +31,9 @@ namespace Cashflow.Api.Validators
 
             if (list.Any(p => string.IsNullOrWhiteSpace(p.ItemName)))
                 context.AddFailure(ValidatorMessages.DailyExpenses.ItemsWithInvalidName);
+
+            if (list.Any(p => p.Amount <= 0 || p.Amount > 1000))
+                context.AddFailure(ValidatorMessages.DailyExpenses.ItemsWithInvalidAmount);
         }
     }
 }

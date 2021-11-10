@@ -16,6 +16,7 @@ import {
 
 import {
     Delete as DeleteIcon,
+    Edit as EditIcon
 } from '@material-ui/icons'
 
 import { MainContainer } from '../../../components/main'
@@ -93,6 +94,14 @@ export function EditDailyExpenses() {
         setItems(temp)
     }
 
+    function editItem(item) {
+        let temp = items.filter(p => p.id !== item.id)
+        setItems(temp)
+        setItemName(item.itemName)
+        setItemPrice(toReal(item.price))
+        setItemAmount(item.amount)
+    }
+
     return (
         <MainContainer title="Despesas Diárias" loading={loading}>
             <IconTextInput
@@ -150,6 +159,12 @@ export function EditDailyExpenses() {
                                     secondary={p.amount}
                                 />
                                 <ListItemSecondaryAction>
+                                    <Tooltip title="Editar este item">
+                                        <IconButton color="primary" aria-label="Edit"
+                                            onClick={() => editItem(p)}>
+                                            <EditIcon />
+                                        </IconButton>
+                                    </Tooltip>
                                     <Tooltip title="Remover este item">
                                         <IconButton color="secondary" aria-label="Delete"
                                             onClick={() => removeItem(p.id)}>

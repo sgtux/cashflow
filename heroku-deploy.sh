@@ -11,7 +11,7 @@ HEROKU_VERSION=$GIT_COMMIT
 
 cd Api
 rm -rf obj bin
-tar -zcvf deploy.tar.gz *
+tar -zcf deploy.tar.gz *
 cd ..
 mv Api/deploy.tar.gz .
 URL_BLOB=`curl -s -n -X POST https://api.heroku.com/apps/$HEROKU_APP_NAME/sources \
