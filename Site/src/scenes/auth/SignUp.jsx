@@ -68,7 +68,7 @@ export function SignUpScreen({ changeScene }) {
       <Card style={styles.Card}>
         <CardContent>
           <IconTextInput
-            label="Nick Name"
+            label="Apelido"
             required
             minlength={5}
             name="nickName"
@@ -78,7 +78,7 @@ export function SignUpScreen({ changeScene }) {
           <IconTextInput
             type={showPassword ? 'text' : 'password'}
             required
-            label="Password"
+            label="Senha"
             name="password"
             onChange={e => onInputChange(e)}
             minlength={4}
@@ -88,7 +88,7 @@ export function SignUpScreen({ changeScene }) {
           <IconTextInput
             required
             type={showConfirm ? 'text' : 'password'}
-            label="Confirm Password"
+            label="Confirme a Senha"
             name="confirm"
             onChange={e => onInputChange(e)}
             pattern={`^${password}$`}
@@ -102,7 +102,7 @@ export function SignUpScreen({ changeScene }) {
           variant="contained"
           onClick={e => send(e)}
           disabled={loading || !nickNameValid || !passwordValid || !confirmValid}
-          color="primary">Send</Button>
+          color="primary">Enviar</Button>
         <br /><br />
         <div style={{ marginBottom: '10px' }} hidden={!loading}>
           <CircularProgress />
@@ -110,7 +110,7 @@ export function SignUpScreen({ changeScene }) {
         <div hidden={loading}>
           <Button variant="outlined"
             onClick={changeScene}
-            style={{ width: '250px' }} color="primary">back to Login</Button>
+            style={{ width: '250px' }} color="primary">Voltar</Button>
         </div>
       </Card>
     </Zoom>
