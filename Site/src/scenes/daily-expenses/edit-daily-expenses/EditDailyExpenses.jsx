@@ -78,7 +78,7 @@ export function EditDailyExpenses() {
     }
 
     function addItem() {
-        let temp = items.concat([{ itemName, price: fromReal(itemPrice), amount: itemAmount }])
+        let temp = items.concat([{ itemName, price: fromReal(itemPrice), amount: parseInt(itemAmount) }])
         let i = 1
         temp.forEach(p => p.id = i++)
         setItems(temp)
