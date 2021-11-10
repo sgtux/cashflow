@@ -71,7 +71,7 @@ export function SignInScreen({ changeScene }) {
         <form onSubmit={e => login(e)}>
           <CardContent>
             <IconTextInput
-              label="Nick Name"
+              label="Apelido"
               required
               disabled={loading}
               name="nickName"
@@ -99,12 +99,12 @@ export function SignInScreen({ changeScene }) {
               disabled={!nickNameValid || !passwordValid}
               type="submit"
               onClick={e => login(e)}
-              color="primary">Login</Button>
+              color="primary">Entrar</Button>
             <br /><br />
             <Button style={{ width: '250px' }}
               variant="outlined"
               onClick={changeScene}
-              color="primary">Create Account</Button>
+              color="primary">Criar Conta</Button>
           </div>
         </form>
       </Card>
