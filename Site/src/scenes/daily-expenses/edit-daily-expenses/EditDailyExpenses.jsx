@@ -127,7 +127,7 @@ export function EditDailyExpenses() {
                         style={{ marginLeft: 10 }}
                         label="Quantidade"
                         value={itemAmount}
-                        onChange={e => setItemAmount(e.value)}
+                        onChange={e => setItemAmount((e.value || '').replace(/[^0-9]/g, ''))}
                     />
                     <div style={{ marginTop: 20 }}>
                         <span style={{ fontSize: 16 }}>Valor:</span>
