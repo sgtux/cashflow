@@ -42,8 +42,10 @@ export function SignUpScreen({ changeScene }) {
 
   function onInputChange(e) {
     if (e.name == 'nickName') {
-      setNickName(e.value)
-      setNickNameValid(e.valid)
+      if (/^[a-zA-Z0-9_$#@!&]{1,}$/.test(e.value || '')) {
+        setNickName(e.value)
+        setNickNameValid(e.valid)
+      }
     } else if (e.name == 'password') {
       setPassword(e.value)
       setPasswordValid(e.valid)
@@ -72,6 +74,7 @@ export function SignUpScreen({ changeScene }) {
             required
             minlength={5}
             name="nickName"
+            value={nickName}
             onChange={e => onInputChange(e)}
             Icon={<Person />}
           />
