@@ -32,25 +32,16 @@ export function PaymentMonth({ monthYear, paymentMonth, hideShowMonth, show }) {
         </div>
 
         <div hidden={!show}>
-          <Invoices payments={paymentMonth.payments.filter(p => p.invoice)} />
+          <Invoices payments={paymentMonth.payments.filter(p => (p.creditCard || {}).id)} />
           <List dense={true}>
-            {paymentMonth.payments.filter(p => !p.invoice).map((p, j) =>
+            {paymentMonth.payments.filter(p => !(p.creditCard || {}).id).map((p, j) =>
               <ListItem key={j}>
                 <GridList cellHeight={20} cols={6} style={{ width: '100%' }}>
                   <GridListTile cols={3}>
                     <span style={{ color: '#666' }}>{p.description}</span>
                     <MoneySpan small gain={p.type.in}>({p.type.description})</MoneySpan>
                   </GridListTile>
-                  <GridListTile cols={1}>
-                    {
-                      p.creditCard ?
-                        <div style={{ display: 'flex' }}>
-                          <CardIcon style={{ color: '#666' }} />
-                          <span style={{ fontSize: '10px', color: '#666', marginLeft: '6px', fontWeight: 'bold', marginTop: '4px' }}>{p.creditCard.name}</span>
-                        </div>
-                        : null
-                    }
-                  </GridListTile>
+                  <GridListTile cols={1}></GridListTile>
                   <GridListTile cols={1} style={{ textAlign: 'center' }}>
                     <span style={{ fontFamily: '"Roboto", "Helvetica", "Arial", "sans-serif"' }}>
                       {p.condition === PaymentCondition.Installment ? `${p.number}/${p.qtdInstallments}` : ''}

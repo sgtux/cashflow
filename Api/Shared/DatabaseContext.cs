@@ -30,11 +30,15 @@ namespace Cashflow.Api.Shared
         public void Commit()
         {
             Transaction?.Commit();
+            if (Connection?.State == ConnectionState.Open)
+                Connection.Close();
         }
 
         public void Rollback()
         {
             Transaction?.Rollback();
+            if (Connection?.State == ConnectionState.Open)
+                Connection.Close();
         }
     }
 }

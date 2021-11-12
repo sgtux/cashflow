@@ -53,7 +53,7 @@ export function Invoices(props) {
                                                 <span>{p.description}</span>
                                             </GridListTile>
                                             <GridListTile cols={1} style={{ textAlign: 'center' }}>
-                                                <span style={{ fontFamily: '"Roboto", "Helvetica", "Arial", "sans-serif"' }}>{p.fixedPayment ? '' : `${p.number}/${p.qtdInstallments}`}</span>
+                                                <span style={{ fontFamily: '"Roboto", "Helvetica", "Arial", "sans-serif"' }}>{p.monthly ? '' : `${p.number}/${p.qtdInstallments}`}</span>
                                             </GridListTile>
                                             <GridListTile cols={1} style={{ textAlign: 'center' }}>
                                                 <InvoiceCostSmall in={p.in}>{toReal(p.cost)}</InvoiceCostSmall>

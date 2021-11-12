@@ -13,5 +13,5 @@ RUN apk add nodejs yarn && \
 FROM mcr.microsoft.com/dotnet/aspnet:5.0
 WORKDIR /app
 COPY --from=build /app ./
-COPY --from=site /source/wwwroot ./wwwroot
+COPY --from=site /Api/wwwroot ./wwwroot
 CMD ASPNETCORE_URLS=http://*:$PORT dotnet Cashflow.Api.dll
