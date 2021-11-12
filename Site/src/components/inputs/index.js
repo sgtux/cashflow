@@ -1,2 +1,2 @@
-export { InputMoney, InputDate, InputNumbers } from './styles'
+export { InputMoney, InputDate, InputNumbers, DatePickerInput } from './styles'
 export { InputMonth } from './InputMonth'

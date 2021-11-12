@@ -59,7 +59,7 @@ namespace Cashflow.Api.Service
                 months++;
             }
 
-            var payments = await _paymentRepository.GetByUser(userId);
+            var payments = (await _paymentRepository.GetByUser(userId)).Where(p => p.Active);
             var types = await _paymentRepository.GetTypes();
             var cards = await _creditCardRepository.GetByUserId(userId);
             var salary = (await _salaryRepository.GetByUserId(userId)).FirstOrDefault(p => p.EndDate is null);
@@ -87,7 +87,6 @@ namespace Cashflow.Api.Service
                         CreditCard = cards.FirstOrDefault(p => p.Id == payMonth.CreditCardId),
                         Description = payMonth.Description,
                         Monthly = payMonth.Monthly,
-                        Invoice = payMonth.Invoice,
                         Condition = payMonth.Condition,
                         MonthYear = date.ToString("MM/yyyy"),
                         Number = installment.Number,

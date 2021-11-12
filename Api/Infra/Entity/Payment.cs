@@ -27,17 +27,17 @@ namespace Cashflow.Api.Infra.Entity
 
         public CreditCard CreditCard { get; set; }
 
-        public bool Invoice { get; set; }
-
-        public string CreditCardText => CreditCard != null ? Invoice ? $"{CreditCard.Name} (Fatura)" : CreditCard.Name : "";
+        public string CreditCardText => CreditCard?.Name ?? string.Empty;
 
         public bool Paid { get; set; }
+
+        public bool Active { get; set; }
 
         public IList<Installment> Installments { get; set; }
 
         public int PaidInstallments => Installments?.Where(p => p.PaidDate.HasValue).Count() ?? 0;
 
-        public decimal Total => Installments?.Sum(p => p.Cost) ?? 0;
+        public decimal Total => Monthly ? (Installments?.FirstOrDefault()?.Cost ?? 0) : Installments?.Sum(p => p.Cost) ?? 0;
 
         public string FirstPaymentFormatted => Installments?.OrderBy(p => p.Number).FirstOrDefault()?.Date.ToString("dd/MM/yyyy");
     }

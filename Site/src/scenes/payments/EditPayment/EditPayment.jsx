@@ -2,28 +2,28 @@ import React, { useState, useEffect } from 'react'
 import { useParams, Link, useHistory } from 'react-router-dom'
 import {
   Button,
-  CircularProgress,
   GridList,
-  GridListTile
+  GridListTile,
+  FormControlLabel,
+  Checkbox
 } from '@material-ui/core'
 
 import { InstallmentList } from './InstallmentList/InstallmentList'
 import { InstallmentSetBox } from './InstallmnetSetBox/InstallmentSetBox'
-import { CreditCardBox } from './CreditCardBox/CreditCardBox'
+import { ConditionCreditCardBox } from './ConditionCreditCardBox/ConditionCreditCardBox'
 import { MainContainer } from '../../../components/main'
 import IconTextInput from '../../../components/main/IconTextInput'
 
 import { toReal, toast, fromReal, PaymentCondition } from '../../../helpers'
 import { paymentService, creditCardService } from '../../../services'
 import { PaymentTypeBox } from './PaymentTypeBox/PaymentTypeBox'
-import { CostDateConditionBox } from './CostDateConditionBox/CostDateConditionBox'
+import { CostDateBox } from './CostDateBox/CostDateBox'
 import { EditInstallmentModal } from './EditInstallmentModal/EditInstallmentModal'
 
 export function EditPayment() {
 
   const [description, setDescription] = useState('')
   const [type, setType] = useState(2)
-  const [useCreditCard, setUseCreditCard] = useState(false)
   const [condition, setCondition] = useState(1)
   const [qtdInstallments, setQtdInstallments] = useState(10)
   const [card, setCard] = useState(0)
@@ -32,13 +32,13 @@ export function EditPayment() {
   const [installments, setInstallments] = useState([])
   const [firstPayment, setFirstPayment] = useState('')
   const [loading, setLoading] = useState(false)
-  const [invoice, setInvoice] = useState(false)
   const [types, setTypes] = useState([])
   const [id, setId] = useState(0)
   const [cards, setCards] = useState([])
   const [editInstallment, setEditInstallment] = useState()
   const [installmentsUpdated, setInstallmentsUpdated] = useState(false)
   const [formIsValid, setFormIsValid] = useState(false)
+  const [active, setActive] = useState(true)
 
   const params = useParams()
   const history = useHistory()
@@ -58,11 +58,10 @@ export function EditPayment() {
         const qtdInstallments = (payment.installments || []).length || 1
         const costs = (payment.installments || []).map(p => p.cost)
 
-        setUseCreditCard(!!payment.creditCardId)
         setDescription(payment.description || '')
         setType((payment.type || {}).id || 1)
         setCard(payment.creditCardId)
-        setInvoice(payment.invoice)
+        setActive(params.id == 0 || payment.active)
         setCostByInstallment(false)
         setQtdInstallments(qtdInstallments)
 
@@ -87,11 +86,6 @@ export function EditPayment() {
     const installmentValid = condition !== PaymentCondition.Installment || installmentsUpdated
     setFormIsValid(!!description && installmentValid && firstPayment)
   }, [description, condition, installmentsUpdated, firstPayment])
-
-  useEffect(() => {
-    if (cards.length)
-      setCard(cards[0].id)
-  }, [useCreditCard])
 
   useEffect(() => {
     if (condition !== PaymentCondition.Installment)
@@ -144,10 +138,15 @@ export function EditPayment() {
 
   function save() {
 
-    const payment = { id, description: description, typeId: type, installments, condition, invoice }
-
-    if (useCreditCard)
-      payment.creditCardId = card
+    const payment = {
+      id,
+      description: description,
+      typeId: type,
+      installments,
+      condition,
+      creditCardId: card,
+      active
+    }
 
     setLoading(true)
 
@@ -177,7 +176,7 @@ export function EditPayment() {
   }
 
   return (
-    <MainContainer title={'Pagamento' || description} loading={loading}>
+    <MainContainer title="Pagamento" loading={loading}>
       <div style={{ textAlign: 'start', fontSize: 14, color: '#666', fontFamily: '"Roboto", "Helvetica", "Arial", "sans-serif"' }} >
 
         <GridList cellHeight={380} cols={5}>
@@ -194,12 +193,18 @@ export function EditPayment() {
                 paymentTypeChanged={e => setType(e)} />
             }
 
-            <CostDateConditionBox cost={costText}
+            <ConditionCreditCardBox
+              cards={cards}
+              condition={condition}
+              conditionChanged={e => setCondition(Number(e))}
+              card={card}
+              cardChanged={e => setCard(e)}
+            />
+
+            <CostDateBox cost={costText}
               costChanged={e => setCostText(e)}
               date={firstPayment}
               dateChanged={e => setFirstPayment(e)}
-              condition={condition}
-              conditionChanged={e => setCondition(Number(e))}
             />
 
             <InstallmentSetBox hide={condition !== PaymentCondition.Installment}
@@ -208,22 +213,21 @@ export function EditPayment() {
               costByInstallmentChanged={checked => setCostByInstallment(checked)}
               qtdInstallmentsChanged={v => setQtdInstallments(v)}
             />
-            <br />
+
+            <div style={{ marginBottom: 10 }}>
+              <FormControlLabel label="Ativo"
+                control={<Checkbox
+                  checked={active}
+                  onChange={(e, c) => setActive(c)}
+                  color="primary"
+                />} />
+            </div>
+
             <div hidden={condition !== PaymentCondition.Installment}>
               <Button disabled={installmentsUpdated} onClick={() => updateInstallments()} variant="contained" autoFocus>atualizar parcelas</Button>
 
               {editInstallment && <EditInstallmentModal installment={editInstallment} onCancel={() => setEditInstallment()} onSave={p => installmentChanged(p)} />}
             </div>
-
-            <CreditCardBox
-              cards={cards}
-              useCreditCard={useCreditCard}
-              useCreditCardChanged={e => setUseCreditCard(e)}
-              card={card}
-              cardChanged={e => setCard(e)}
-              invoice={invoice}
-              invoiceChanged={c => setInvoice(c)}
-            />
 
           </GridListTile>
           <GridListTile cols={2}>
@@ -233,9 +237,6 @@ export function EditPayment() {
             />
           </GridListTile>
         </GridList>
-      </div>
-      <div hidden={!loading}>
-        <CircularProgress size={30} />
       </div>
 
       <div style={{ display: 'flex', justifyContent: 'end' }}>

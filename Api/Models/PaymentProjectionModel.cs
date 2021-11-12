@@ -9,8 +9,6 @@ namespace Cashflow.Api.Models
     {
         public string Description { get; set; }
 
-        public bool Invoice { get; set; }
-
         public int Number { get; set; }
 
         public PaymentConditionEnum Condition { get; set; }

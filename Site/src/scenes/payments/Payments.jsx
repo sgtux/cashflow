@@ -141,25 +141,28 @@ export default class Payments extends React.Component {
                       }
                     />
                     <ListItemText
-                      style={{ width: '100px' }}
+                      style={{ width: '20px' }}
                       secondary={p.firstPaymentFormatted}
                     />
                     <ListItemText
-                      style={{ width: '100px' }}
+                      style={{ width: '40px' }}
                       secondary={toReal(p.total)}
                     />
                     <ListItemText
-                      style={{ width: '100px' }}
+                      style={{ width: '20px' }}
                       secondary={p.conditionText}
                     />
                     <ListItemText
-                      style={{ width: '100px' }}
+                      style={{ width: '40px' }}
                       secondary={p.creditCardText}
                     />
                     <ListItemText
-                      style={{ width: '100px' }}
+                      style={{ width: '30px' }}
                       secondary={p.condition === PaymentCondition.Installment ? `${p.paidInstallments}/${p.installments.length}` : ''}
                     />
+                    <ListItemText style={{ width: '40px', color: 'gray' }}>
+                      <span hidden={p.active}>Inativo</span>
+                    </ListItemText>
                     <ListItemSecondaryAction>
                       <Link to={`/edit-payment/${p.id}`}>
                         <Tooltip title="Editar este pagamento">
