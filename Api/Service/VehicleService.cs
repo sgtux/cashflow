@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Infra.Repository;
@@ -36,6 +37,8 @@ namespace Cashflow.Api.Service
             var p = await _vehicleRepository.GetById(id);
             return new ResultDataModel<Vehicle>(p?.UserId == userId ? p : null);
         }
+
+        public async Task<ResultModel> GetByUserId(int userId) => new ResultDataModel<IEnumerable<Vehicle>>(await _vehicleRepository.GetByUserId(userId));
 
         public async Task<ResultModel> Update(Vehicle vehicle)
         {
