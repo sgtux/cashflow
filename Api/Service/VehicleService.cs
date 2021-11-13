@@ -52,5 +52,17 @@ namespace Cashflow.Api.Service
 
             return result;
         }
+
+        public async Task<ResultModel> Delete(int id, int userId)
+        {
+            var result = new ResultModel();
+
+            var vehicle = await _vehicleRepository.GetById(id);
+            if (vehicle?.UserId != userId)
+                result.AddNotification(ValidatorMessages.NotFound("Veículo"));
+            else
+                await _vehicleRepository.Remove(id);
+            return result;
+        }
     }
 }
