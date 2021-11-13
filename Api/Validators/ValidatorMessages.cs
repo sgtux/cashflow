@@ -89,6 +89,8 @@ namespace Cashflow.Api.Validators
             public string ItemsWithInvalidPrice = "Há itens com preço inválido.";
 
             public string ItemsWithInvalidName = "Há itens com o nome inválido.";
+
+            public string ItemsWithInvalidAmount = "O valor 'Quantidade' no item deve estar entre 1 e 1000.";
         }
     }
 }

@@ -16,6 +16,7 @@ import {
 
 import {
     Delete as DeleteIcon,
+    Edit as EditIcon
 } from '@material-ui/icons'
 
 import { MainContainer } from '../../../components/main'
@@ -77,22 +78,28 @@ export function EditDailyExpenses() {
     }
 
     function addItem() {
+        let temp = items.concat([{ itemName, price: fromReal(itemPrice), amount: parseInt(itemAmount) }])
+        let i = 1
+        temp.forEach(p => p.id = i++)
+        setItems(temp)
         setItemName('')
         setItemPrice('')
         setItemAmount('')
-        let temp = items
-        temp.push({ itemName, price: fromReal(itemPrice), amount: itemAmount })
+    }
+
+    function removeItem(id) {
+        let temp = items.filter(p => p.id !== id)
         let i = 1
         temp.forEach(p => p.id = i++)
         setItems(temp)
     }
 
-    function removeItem(id) {
-        let temp = items
-        temp = temp.filter(p => p.id !== id)
-        let i = 1
-        temp.forEach(p => p.id = i++)
+    function editItem(item) {
+        let temp = items.filter(p => p.id !== item.id)
         setItems(temp)
+        setItemName(item.itemName)
+        setItemPrice(toReal(item.price))
+        setItemAmount(item.amount)
     }
 
     return (
@@ -120,7 +127,7 @@ export function EditDailyExpenses() {
                         style={{ marginLeft: 10 }}
                         label="Quantidade"
                         value={itemAmount}
-                        onChange={e => setItemAmount(e.value)}
+                        onChange={e => setItemAmount((e.value || '').replace(/[^0-9]/g, ''))}
                     />
                     <div style={{ marginTop: 20 }}>
                         <span style={{ fontSize: 16 }}>Valor:</span>
@@ -152,6 +159,12 @@ export function EditDailyExpenses() {
                                     secondary={p.amount}
                                 />
                                 <ListItemSecondaryAction>
+                                    <Tooltip title="Editar este item">
+                                        <IconButton color="primary" aria-label="Edit"
+                                            onClick={() => editItem(p)}>
+                                            <EditIcon />
+                                        </IconButton>
+                                    </Tooltip>
                                     <Tooltip title="Remover este item">
                                         <IconButton color="secondary" aria-label="Delete"
                                             onClick={() => removeItem(p.id)}>

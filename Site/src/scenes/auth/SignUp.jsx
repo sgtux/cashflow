@@ -42,8 +42,10 @@ export function SignUpScreen({ changeScene }) {
 
   function onInputChange(e) {
     if (e.name == 'nickName') {
-      setNickName(e.value)
-      setNickNameValid(e.valid)
+      if (/^[a-zA-Z0-9_$#@!&]{1,}$/.test(e.value || '')) {
+        setNickName(e.value)
+        setNickNameValid(e.valid)
+      }
     } else if (e.name == 'password') {
       setPassword(e.value)
       setPasswordValid(e.valid)
@@ -53,7 +55,9 @@ export function SignUpScreen({ changeScene }) {
     }
   }
 
-  function send() {
+  function send(e) {
+    if (e)
+      e.preventDefault()
     setLoading(true)
     authService.createAccount({ nickName, password, confirm })
       .then(res => dispatch(userChanged(res)))
@@ -66,17 +70,18 @@ export function SignUpScreen({ changeScene }) {
       <Card style={styles.Card}>
         <CardContent>
           <IconTextInput
-            label="Nick Name"
+            label="Apelido"
             required
             minlength={5}
             name="nickName"
+            value={nickName}
             onChange={e => onInputChange(e)}
             Icon={<Person />}
           />
           <IconTextInput
             type={showPassword ? 'text' : 'password'}
             required
-            label="Password"
+            label="Senha"
             name="password"
             onChange={e => onInputChange(e)}
             minlength={4}
@@ -86,7 +91,7 @@ export function SignUpScreen({ changeScene }) {
           <IconTextInput
             required
             type={showConfirm ? 'text' : 'password'}
-            label="Confirm Password"
+            label="Confirme a Senha"
             name="confirm"
             onChange={e => onInputChange(e)}
             pattern={`^${password}$`}
@@ -98,9 +103,9 @@ export function SignUpScreen({ changeScene }) {
         <br />
         <Button style={{ width: '250px' }}
           variant="contained"
-          onClick={() => send()}
-          disabled={!nickNameValid || !passwordValid || !confirmValid}
-          color="primary">Send</Button>
+          onClick={e => send(e)}
+          disabled={loading || !nickNameValid || !passwordValid || !confirmValid}
+          color="primary">Enviar</Button>
         <br /><br />
         <div style={{ marginBottom: '10px' }} hidden={!loading}>
           <CircularProgress />
@@ -108,7 +113,7 @@ export function SignUpScreen({ changeScene }) {
         <div hidden={loading}>
           <Button variant="outlined"
             onClick={changeScene}
-            style={{ width: '250px' }} color="primary">back to Login</Button>
+            style={{ width: '250px' }} color="primary">Voltar</Button>
         </div>
       </Card>
     </Zoom>
