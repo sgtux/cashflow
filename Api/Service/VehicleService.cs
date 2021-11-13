@@ -18,7 +18,6 @@ namespace Cashflow.Api.Service
             _userRepository = userRepository;
         }
 
-
         public async Task<ResultModel> Add(Vehicle vehicle)
         {
             var result = new ResultModel();
@@ -30,6 +29,12 @@ namespace Cashflow.Api.Service
                 result.AddNotification(validatorResult.Errors);
 
             return result;
+        }
+
+        public async Task<ResultModel> GetById(int id, int userId)
+        {
+            var p = await _vehicleRepository.GetById(id);
+            return new ResultDataModel<Vehicle>(p?.UserId == userId ? p : null);
         }
     }
 }

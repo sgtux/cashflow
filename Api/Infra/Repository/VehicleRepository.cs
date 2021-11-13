@@ -19,10 +19,7 @@ namespace Cashflow.Api.Infra.Repository
             throw new NotImplementedException();
         }
 
-        public Task<Vehicle> GetById(long id)
-        {
-            throw new NotImplementedException();
-        }
+        public Task<Vehicle> GetById(long id) => FirstOrDefault(VehicleResources.ById, new { Id = id });
 
         public Task<IEnumerable<CreditCard>> GetByUserId(int userId)
         {
