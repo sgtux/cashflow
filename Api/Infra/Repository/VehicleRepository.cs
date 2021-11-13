@@ -18,10 +18,7 @@ namespace Cashflow.Api.Infra.Repository
 
         public Task<IEnumerable<Vehicle>> GetByUserId(int userId) => Query(VehicleResources.ByUser, new { UserId = userId });
 
-        public Task Remove(long id)
-        {
-            throw new NotImplementedException();
-        }
+        public Task Remove(long id) => Execute(VehicleResources.Delete, new { Id = id });
 
         public Task Update(Vehicle vehicle) => Execute(VehicleResources.Update, vehicle);
     }

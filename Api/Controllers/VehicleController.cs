@@ -38,5 +38,8 @@ namespace Cashflow.Api.Controllers
             vehicle.Id = id;
             return HandleResult(await _service.Update(vehicle));
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id) => HandleResult(await _service.Delete(id, UserId));
     }
 }
