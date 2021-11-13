@@ -14,11 +14,6 @@ namespace Cashflow.Api.Infra.Repository
 
         public Task Add(Vehicle vehicle) => Execute(VehicleResources.Insert, vehicle);
 
-        public Task<IEnumerable<Vehicle>> GetAll()
-        {
-            throw new NotImplementedException();
-        }
-
         public Task<Vehicle> GetById(long id) => FirstOrDefault(VehicleResources.ById, new { Id = id });
 
         public Task<IEnumerable<CreditCard>> GetByUserId(int userId)
@@ -31,9 +26,6 @@ namespace Cashflow.Api.Infra.Repository
             throw new NotImplementedException();
         }
 
-        public Task Update(Vehicle t)
-        {
-            throw new NotImplementedException();
-        }
+        public Task Update(Vehicle vehicle) => Execute(VehicleResources.Update, vehicle);
     }
 }

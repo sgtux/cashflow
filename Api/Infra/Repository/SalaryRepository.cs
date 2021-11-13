@@ -15,8 +15,6 @@ namespace Cashflow.Api.Infra.Repository
 
         public Task Add(Salary salary) => Execute(SalaryResources.Insert, salary);
 
-        public Task<IEnumerable<Salary>> GetAll() => throw new NotImplementedException();
-
         public Task<Salary> GetById(long id) => FirstOrDefault(SalaryResources.ById, new { Id = id });
 
         public Task<IEnumerable<Salary>> GetByUserId(int userId) => Query(SalaryResources.ByUser, new { UserId = userId });

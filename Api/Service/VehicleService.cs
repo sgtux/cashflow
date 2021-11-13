@@ -36,5 +36,18 @@ namespace Cashflow.Api.Service
             var p = await _vehicleRepository.GetById(id);
             return new ResultDataModel<Vehicle>(p?.UserId == userId ? p : null);
         }
+
+        public async Task<ResultModel> Update(Vehicle vehicle)
+        {
+            var result = new ResultModel();
+            var validatorResult = new VehicleValidator(_vehicleRepository, _userRepository).Validate(vehicle);
+
+            if (validatorResult.IsValid)
+                await _vehicleRepository.Update(vehicle);
+            else
+                result.AddNotification(validatorResult.Errors);
+
+            return result;
+        }
     }
 }

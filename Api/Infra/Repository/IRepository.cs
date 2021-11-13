@@ -9,8 +9,6 @@ namespace Cashflow.Api.Infra.Repository
 
         Task<T> GetById(long id);
 
-        Task<IEnumerable<T>> GetAll();
-
         Task Add(T t);
 
         Task Update(T t);

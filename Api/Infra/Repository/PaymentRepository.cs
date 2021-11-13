@@ -71,11 +71,6 @@ namespace Cashflow.Api.Infra.Repository
             return payment;
         }
 
-        public Task<IEnumerable<Payment>> GetAll()
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task Add(Payment payment)
         {
             BeginTransaction();

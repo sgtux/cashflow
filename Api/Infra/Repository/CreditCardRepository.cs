@@ -15,8 +15,6 @@ namespace Cashflow.Api.Infra.Repository
 
         public Task Add(CreditCard card) => Execute(CreditCardResources.Insert, card);
 
-        public Task<IEnumerable<CreditCard>> GetAll() => throw new NotImplementedException();
-
         public Task<CreditCard> GetById(long id) => throw new NotImplementedException();
 
         public Task<IEnumerable<CreditCard>> GetByUserId(int userId) => Query(CreditCardResources.ByUser, new { UserId = userId });

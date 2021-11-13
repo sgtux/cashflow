@@ -25,5 +25,15 @@ namespace Cashflow.Api.Controllers
             vehicle.UserId = UserId;
             return HandleResult(await _service.Add(vehicle));
         }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put(int id, [FromBody] Vehicle vehicle)
+        {
+            if (vehicle is null)
+                return UnprocessableEntity();
+            vehicle.UserId = UserId;
+            vehicle.Id = id;
+            return HandleResult(await _service.Update(vehicle));
+        }
     }
 }

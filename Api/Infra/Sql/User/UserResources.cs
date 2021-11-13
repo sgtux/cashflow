@@ -6,8 +6,6 @@ namespace Cashflow.Api.Infra.Sql.User
 
         public static ResourceBuilder ById => new ResourceBuilder("User.GetById.sql");
 
-        public static ResourceBuilder All => new ResourceBuilder("User.GetAll.sql");
-
         public static ResourceBuilder Insert = new ResourceBuilder("User.Insert.sql");
     }
 }

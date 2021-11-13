@@ -18,9 +18,6 @@ namespace Cashflow.Api.Validators
             RuleFor(c => c).Must(VehicleExists).When(c => c.Id > 0).WithMessage(ValidatorMessages.NotFound("Veículo"));
         }
 
-        public bool VehicleExists(Vehicle vehicle)
-        {
-            return _vehicleRepository.GetById(vehicle.Id).Result != null;
-        }
+        public bool VehicleExists(Vehicle vehicle) => _vehicleRepository.GetById(vehicle.Id).Result?.UserId == vehicle.UserId;
     }
 }
