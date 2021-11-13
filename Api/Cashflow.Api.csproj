@@ -54,6 +54,7 @@
     <EmbeddedResource Include="Infra/Sql/DailyExpenses/Update.sql" />
 
     <EmbeddedResource Include="Infra/Sql/Vehicle/GetById.sql" />
+    <EmbeddedResource Include="Infra/Sql/Vehicle/GetByUser.sql" />
     <EmbeddedResource Include="Infra/Sql/Vehicle/Insert.sql" />
     <EmbeddedResource Include="Infra/Sql/Vehicle/Update.sql" />
   </ItemGroup>

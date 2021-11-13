@@ -17,6 +17,9 @@ namespace Cashflow.Api.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id) => HandleResult(await _service.GetById(id, UserId));
 
+        [HttpGet]
+        public async Task<IActionResult> GetByUser(int id) => HandleResult(await _service.GetByUserId(UserId));
+
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Vehicle vehicle)
         {

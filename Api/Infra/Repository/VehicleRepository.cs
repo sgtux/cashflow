@@ -16,10 +16,7 @@ namespace Cashflow.Api.Infra.Repository
 
         public Task<Vehicle> GetById(long id) => FirstOrDefault(VehicleResources.ById, new { Id = id });
 
-        public Task<IEnumerable<CreditCard>> GetByUserId(int userId)
-        {
-            throw new NotImplementedException();
-        }
+        public Task<IEnumerable<Vehicle>> GetByUserId(int userId) => Query(VehicleResources.ByUser, new { UserId = userId });
 
         public Task Remove(long id)
         {

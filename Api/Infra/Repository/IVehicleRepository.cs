@@ -6,6 +6,6 @@ namespace Cashflow.Api.Infra.Repository
 {
     public interface IVehicleRepository : IRepository<Vehicle>
     {
-        Task<IEnumerable<CreditCard>> GetByUserId(int userId);
+        Task<IEnumerable<Vehicle>> GetByUserId(int userId);
     }
 }
