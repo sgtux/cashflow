@@ -5,5 +5,7 @@ namespace Cashflow.Api.Infra.Sql.Vehicle
         public static ResourceBuilder ById => new ResourceBuilder("Vehicle.GetById.sql");
 
         public static ResourceBuilder Insert => new ResourceBuilder("Vehicle.Insert.sql");
+
+        public static ResourceBuilder Update => new ResourceBuilder("Vehicle.Update.sql");
     }
 }
