@@ -7,7 +7,6 @@ import {
   GridList,
   GridListTile
 } from '@material-ui/core'
-import CardIcon from '@material-ui/icons/CreditCardOutlined'
 
 import { toReal } from '../../../helpers/utils'
 import { Invoices, MoneySpan } from '../../../components'
