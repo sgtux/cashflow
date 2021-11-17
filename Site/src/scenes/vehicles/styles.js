@@ -21,6 +21,6 @@ export const VehicleTable = styled.div`
         padding-top: 4px;
     }
     & tr:nth-child(even) {
-        background-color: #ededed;
+        background-color: #ddd;
     }
 `
