@@ -1,3 +1,5 @@
 export { ErrorMessages } from './ErrorMessages'
 export { MainContainer } from './MainContainer/MainContainer'
 export { SidebarContent } from './SidebarContent/SidebarContent'
+export { default as IconTextInput } from './IconTextInput'
+export { ConfirmModal } from './Modal'

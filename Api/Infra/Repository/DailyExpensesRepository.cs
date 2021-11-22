@@ -46,11 +46,6 @@ namespace Cashflow.Api.Infra.Repository
             return list;
         }
 
-        public Task<System.Collections.Generic.IEnumerable<DailyExpenses>> GetAll()
-        {
-            throw new System.NotImplementedException();
-        }
-
         public async Task<DailyExpenses> GetById(long id)
         {
             DailyExpenses dailyExpenses = null;

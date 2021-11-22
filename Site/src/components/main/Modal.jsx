@@ -57,3 +57,25 @@ export const AlertModal = props => (
     </div>
   </Dialog>
 )
+
+export const ConfirmModal = ({ show, text, onClose, onConfirm }) => (
+  <Dialog
+    open={show}
+    onClose={onClose}
+    aria-labelledby="alert-dialog-title"
+    aria-describedby="alert-dialog-description"
+    transitionDuration={250}
+    TransitionComponent={Zoom}>
+    <DialogTitle id="alert-dialog-title" style={{ textAlign: 'center' }}>
+    </DialogTitle>
+    <DialogContent>
+      <div style={styles.message}>
+        {text}
+      </div>
+    </DialogContent>
+    <div style={{ marginBottom: '20px', textAlign: 'center' }}>
+      <Button size="large" color="primary" onClick={() => onClose()} autoFocus>não</Button>
+      <Button size="large" color="primary" onClick={() => onConfirm()} variant="contained" autoFocus>sim</Button>
+    </div>
+  </Dialog>
+)

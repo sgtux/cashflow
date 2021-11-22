@@ -1,4 +1,4 @@
-SELECt 
+SELECT
   "Id",
   "Name",
   "UserId"
