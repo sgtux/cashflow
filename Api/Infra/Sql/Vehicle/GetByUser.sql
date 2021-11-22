@@ -4,3 +4,4 @@ SELECT
     "UserId"
 FROM "Vehicle"
 WHERE "UserId" = @UserId
+ORDER BY "Id"

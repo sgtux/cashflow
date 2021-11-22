@@ -61,6 +61,11 @@ export function Vehicles() {
             .catch(() => setLoading(false))
     }
 
+    function edit(item) {
+        setVehicle(item)
+        setDescription(item.description)
+    }
+
     return (
         <MainContainer title="Veículos" loading={loading}>
             <Container>
@@ -78,7 +83,7 @@ export function Vehicles() {
                                     <td>{p.id}</td>
                                     <td>{p.description}</td>
                                     <td>
-                                        <IconButton onClick={() => setVehicle(p)} color="primary" aria-label="Edit">
+                                        <IconButton onClick={() => edit(p)} color="primary" aria-label="Edit">
                                             <EditIcon />
                                         </IconButton>
                                     </td>
