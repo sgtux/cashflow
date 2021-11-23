@@ -21,5 +21,14 @@ namespace Cashflow.Api.Controllers
                 return UnprocessableEntity();
             return HandleResult(await _service.Add(fuelExpenses, UserId));
         }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put(int id, [FromBody] FuelExpenses fuelExpenses)
+        {
+            if (fuelExpenses is null)
+                return UnprocessableEntity();
+            fuelExpenses.Id = id;
+            return HandleResult(await _service.Update(fuelExpenses, UserId));
+        }
     }
 }
