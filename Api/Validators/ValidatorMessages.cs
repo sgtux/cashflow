@@ -22,6 +22,8 @@ namespace Cashflow.Api.Validators
 
         public static DailyExpensesMessages DailyExpenses = new DailyExpensesMessages();
 
+        public static VehicleMessages Vehicle = new VehicleMessages();
+
         public class UserMessages
         {
             public string NickNameRequired = "O campo 'Nick Name' deve ter pelo menos 4 caracteres.";
@@ -101,6 +103,11 @@ namespace Cashflow.Api.Validators
             public string ItemsWithInvalidName = "Há itens com o nome inválido.";
 
             public string ItemsWithInvalidAmount = "O valor 'Quantidade' no item deve estar entre 1 e 1000.";
+        }
+
+        public class VehicleMessages
+        {
+            public string HasFuelExpenses = "O veículo possui despesas cadastradas e não pode ser removido.";
         }
     }
 }

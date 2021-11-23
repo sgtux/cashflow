@@ -23,9 +23,6 @@ namespace Cashflow.Api.Infra.Repository
 
         public Task Update(FuelExpenses t) => Execute(FuelExpensesResources.Update, t);
 
-        public Task Remove(long id)
-        {
-            throw new NotImplementedException();
-        }
+        public Task Remove(long id) => Execute(FuelExpensesResources.Delete, new { Id = id });
     }
 }

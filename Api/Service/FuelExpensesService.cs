@@ -43,5 +43,24 @@ namespace Cashflow.Api.Service
 
             return result;
         }
+
+        public async Task<ResultModel> Remove(int id, int userId)
+        {
+            var result = new ResultModel();
+
+            var fuelExpenses = await _fuelExpensesRepository.GetById(id);
+            if (fuelExpenses is null)
+            {
+                result.AddNotification(ValidatorMessages.NotFound("Despesa de Combustível"));
+                return result;
+            }
+
+            var vehicle = await _vehicleRepository.GetById(fuelExpenses.VehicleId);
+            if (vehicle is null || vehicle.UserId != userId)
+                result.AddNotification(ValidatorMessages.NotFound("Despesa de Combustível"));
+            else
+                await _fuelExpensesRepository.Remove(id);
+            return result;
+        }
     }
 }

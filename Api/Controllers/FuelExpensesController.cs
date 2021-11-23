@@ -30,5 +30,8 @@ namespace Cashflow.Api.Controllers
             fuelExpenses.Id = id;
             return HandleResult(await _service.Update(fuelExpenses, UserId));
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id) => HandleResult(await _service.Remove(id, UserId));
     }
 }
