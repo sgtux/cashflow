@@ -30,5 +30,18 @@ namespace Cashflow.Api.Service
 
             return result;
         }
+
+        public async Task<ResultModel> Update(FuelExpenses fuelExpenses, int userId)
+        {
+            var result = new ResultModel();
+            var validatorResult = new FuelExpensesValidator(_vehicleRepository, _fuelExpensesRepository, userId).Validate(fuelExpenses);
+
+            if (validatorResult.IsValid)
+                await _fuelExpensesRepository.Update(fuelExpenses);
+            else
+                result.AddNotification(validatorResult.Errors);
+
+            return result;
+        }
     }
 }
