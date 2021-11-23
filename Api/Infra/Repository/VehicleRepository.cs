@@ -5,6 +5,7 @@ using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Service;
 using Cashflow.Api.Shared;
 using Cashflow.Api.Infra.Sql.Vehicle;
+using System.Linq;
 
 namespace Cashflow.Api.Infra.Repository
 {
@@ -14,9 +15,41 @@ namespace Cashflow.Api.Infra.Repository
 
         public Task Add(Vehicle vehicle) => Execute(VehicleResources.Insert, vehicle);
 
-        public Task<Vehicle> GetById(long id) => FirstOrDefault(VehicleResources.ById, new { Id = id });
+        public async Task<Vehicle> GetById(long id)
+        {
+            Vehicle vehicle = null;
+            await Query<FuelExpenses>(VehicleResources.ById, (x, y) =>
+            {
+                if (vehicle == null)
+                {
+                    vehicle = x;
+                    vehicle.FuelExpenses = new List<FuelExpenses>();
+                }
+                if (y != null)
+                    vehicle.FuelExpenses.Add(y);
+                return x;
+            }, new { Id = id });
+            return vehicle;
+        }
 
-        public Task<IEnumerable<Vehicle>> GetByUserId(int userId) => Query(VehicleResources.ByUser, new { UserId = userId });
+        public async Task<IEnumerable<Vehicle>> GetByUserId(int userId)
+        {
+            var list = new List<Vehicle>();
+            await Query<FuelExpenses>(VehicleResources.ByUser, (x, y) =>
+            {
+                var vehicle = list.FirstOrDefault(p => p.Id == x.Id);
+                if (vehicle == null)
+                {
+                    vehicle = x;
+                    vehicle.FuelExpenses = new List<FuelExpenses>();
+                    list.Add(vehicle);
+                }
+                if (y != null)
+                    vehicle.FuelExpenses.Add(y);
+                return x;
+            }, new { UserId = userId });
+            return list;
+        }
 
         public Task Remove(long id) => Execute(VehicleResources.Delete, new { Id = id });
 
