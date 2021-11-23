@@ -58,6 +58,8 @@
     <EmbeddedResource Include="Infra/Sql/Vehicle/GetByUser.sql" />
     <EmbeddedResource Include="Infra/Sql/Vehicle/Insert.sql" />
     <EmbeddedResource Include="Infra/Sql/Vehicle/Update.sql" />
+
+    <EmbeddedResource Include="Infra/Sql/FuelExpenses/Insert.sql" />
   </ItemGroup>
 
 </Project>

@@ -6,6 +6,10 @@ namespace Cashflow.Api.Validators
 
         public static string FieldMaxLength(string fieldName, int length) => string.Format("O campo '{0}' deve ter no máximo {1} caracteres.", fieldName, length);
 
+        public static string MinValue(string fieldName, int value) => string.Format("O valor mínimo para o campo '{0}' é {1}.", fieldName, value);
+
+        public static string MaxValue(string fieldName, int value) => string.Format("O valor máximo para o campo '{0}' é {1}.", fieldName, value);
+
         public static string NotFound(string name) => string.Format("{0} não encontrado.", name);
 
         public static UserMessages User = new UserMessages();
