@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Infra.Repository;
@@ -58,10 +59,13 @@ namespace Cashflow.Api.Service
             var result = new ResultModel();
 
             var vehicle = await _vehicleRepository.GetById(id);
-            if (vehicle?.UserId != userId)
+            if (vehicle is null || vehicle.UserId != userId)
                 result.AddNotification(ValidatorMessages.NotFound("Veículo"));
+            else if (vehicle.FuelExpenses.Any())
+                result.AddNotification(ValidatorMessages.Vehicle.HasFuelExpenses);
             else
                 await _vehicleRepository.Remove(id);
+                
             return result;
         }
     }
