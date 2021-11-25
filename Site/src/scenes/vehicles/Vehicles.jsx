@@ -7,15 +7,19 @@ import { vehicleService } from '../../services'
 import {
     IconButton,
     Button,
+    Tooltip
 } from '@material-ui/core'
 
 import {
     Delete as DeleteIcon,
     Edit as EditIcon,
-    Motorcycle as MotorcycleIcon
+    Motorcycle as MotorcycleIcon,
+    LocalGasStation
 } from '@material-ui/icons'
 
 import { MainContainer, IconTextInput, ConfirmModal } from '../../components/main'
+
+import { EditVehicleModal } from './EditVehicleModal/EditVehicleModal'
 
 export function Vehicles() {
 
@@ -25,6 +29,7 @@ export function Vehicles() {
     const [description, setDescription] = useState('')
     const [vehicle, setVehicle] = useState(null)
     const [removeId, setRemoveId] = useState(0)
+    const [editVehicle, setEditVehicle] = useState(null)
 
     useEffect(() => {
         setLoading(true)
@@ -75,6 +80,9 @@ export function Vehicles() {
                             <tr>
                                 <th>Id</th>
                                 <th>Descrição</th>
+                                <th>Percorrido (KM)</th>
+                                <th>Média (KM/L)</th>
+                                <th>Ações</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -82,12 +90,17 @@ export function Vehicles() {
                                 <tr key={i}>
                                     <td>{p.id}</td>
                                     <td>{p.description}</td>
+                                    <td>{p.miliageTraveled}</td>
+                                    <td>{p.milagePerLiter}</td>
                                     <td>
+                                        <IconButton onClick={() => setEditVehicle(p)} color="primary" aria-label="Edit">
+                                            <Tooltip title="Abastecimentos">
+                                                <LocalGasStation />
+                                            </Tooltip>
+                                        </IconButton>
                                         <IconButton onClick={() => edit(p)} color="primary" aria-label="Edit">
                                             <EditIcon />
                                         </IconButton>
-                                    </td>
-                                    <td>
                                         <IconButton onClick={() => setRemoveId(p.id)} color="secondary" aria-label="Delete">
                                             <DeleteIcon />
                                         </IconButton>
@@ -123,6 +136,8 @@ export function Vehicles() {
                 onClose={() => setRemoveId(0)}
                 onConfirm={() => remove()}
                 text="Desejá realmente remover este veículo?" />
+            <EditVehicleModal vehicle={editVehicle}
+                onCancel={() => { setEditVehicle(null); refresh() }} />
         </MainContainer>
     )
 }

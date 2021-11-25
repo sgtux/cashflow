@@ -12,6 +12,7 @@ namespace Cashflow.Migrations.DDL
                 .WithColumn("Miliage").AsInt32().NotNullable()
                 .WithColumn("ValueSupplied").AsDecimal(10, 2).NotNullable()
                 .WithColumn("PricePerLiter").AsDecimal(10, 2).NotNullable()
+                .WithColumn("Date").AsDateTime().NotNullable()
                 .WithColumn("VehicleId").AsInt32().NotNullable();
 
             Create.ForeignKey()
