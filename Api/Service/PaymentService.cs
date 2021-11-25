@@ -18,13 +18,22 @@ namespace Cashflow.Api.Service
 
         private ISalaryRepository _salaryRepository;
 
+        private IDailyExpensesRepository _dailyExpensesRepository;
+
+        private IVehicleRepository _vehicleRepository;
+
         public PaymentService(IPaymentRepository paymentRepository,
             ICreditCardRepository creditCardRepository,
-            ISalaryRepository salaryRepository)
+            ISalaryRepository salaryRepository,
+            IDailyExpensesRepository dailyExpensesRepository,
+            IVehicleRepository vehicleRepository
+            )
         {
             _paymentRepository = paymentRepository;
             _creditCardRepository = creditCardRepository;
             _salaryRepository = salaryRepository;
+            _dailyExpensesRepository = dailyExpensesRepository;
+            _vehicleRepository = vehicleRepository;
         }
 
         public async Task<ResultModel> Get(int id, int userId)
@@ -63,6 +72,8 @@ namespace Cashflow.Api.Service
             var types = await _paymentRepository.GetTypes();
             var cards = await _creditCardRepository.GetByUserId(userId);
             var salary = (await _salaryRepository.GetByUserId(userId)).FirstOrDefault(p => p.EndDate is null);
+            var vehicles = await _vehicleRepository.GetByUserId(userId);
+            var allDailyExpenses = await _dailyExpensesRepository.GetByUser(userId);
 
             dates.OrderBy(p => p.Ticks).ToList().ForEach(date =>
             {
@@ -76,6 +87,37 @@ namespace Cashflow.Api.Service
                         MonthYear = date.ToString("MM/yyyy"),
                         Type = types.First(p => p.Id == (int)PaymentTypeEnum.Gain),
                         Cost = salary.Value
+                    });
+                }
+
+                foreach (var item in vehicles)
+                {
+                    var fuelExpenses = item.FuelExpenses.Where(p => p.Date.Month == date.Month && p.Date.Year == date.Year);
+                    if (fuelExpenses.Any())
+                    {
+                        resultModel.Payments.Add(new PaymentProjectionModel()
+                        {
+                            Description = $"Gastos em Combustível ({item.Description})",
+                            Monthly = false,
+                            Condition = PaymentConditionEnum.Cash,
+                            MonthYear = date.ToString("MM/yyyy"),
+                            Type = types.First(p => p.Id == (int)PaymentTypeEnum.Expense),
+                            Cost = fuelExpenses.Sum(p => p.ValueSupplied)
+                        });
+                    }
+                }
+
+                var dailyExpenses = allDailyExpenses.Where(p => p.Date.Month == date.Month && p.Date.Year == date.Year);
+                if (dailyExpenses.Any())
+                {
+                    resultModel.Payments.Add(new PaymentProjectionModel()
+                    {
+                        Description = $"Despesas Diárias",
+                        Monthly = false,
+                        Condition = PaymentConditionEnum.Cash,
+                        MonthYear = date.ToString("MM/yyyy"),
+                        Type = types.First(p => p.Id == (int)PaymentTypeEnum.Expense),
+                        Cost = dailyExpenses.Sum(p => p.TotalPrice)
                     });
                 }
 

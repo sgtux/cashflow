@@ -2,7 +2,8 @@ SELECT
     "Miliage",
     "ValueSupplied",
     "PricePerLiter",
-    "VehicleId"
+    "VehicleId",
+    "Date"
 FROM
     "FuelExpenses"
 WHERE
