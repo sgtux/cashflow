@@ -14,8 +14,8 @@ namespace Cashflow.Api.Infra.Entity
 
         public List<FuelExpenses> FuelExpenses { get; set; }
 
-        public decimal MiliageTraveled => FuelExpenses.Max(p => p.Miliage) - FuelExpenses.Min(p => p.Miliage);
+        public decimal MiliageTraveled => FuelExpenses.Any() ? FuelExpenses.Max(p => p.Miliage) - FuelExpenses.Min(p => p.Miliage) : 0;
 
-        public decimal MilagePerLiter => Math.Round(MiliageTraveled / FuelExpenses.Sum(p => p.LitersSupplied), 2);
+        public decimal MilagePerLiter => FuelExpenses.Any() ? Math.Round(MiliageTraveled / FuelExpenses.Sum(p => p.LitersSupplied), 2) : 0;
     }
 }
