@@ -1,3 +1,5 @@
+using System;
+
 namespace Cashflow.Api.Infra.Entity
 {
     public class FuelExpenses
@@ -10,6 +12,10 @@ namespace Cashflow.Api.Infra.Entity
 
         public decimal PricePerLiter { get; set; }
 
+        public DateTime Date { get; set; }
+
         public int VehicleId { get; set; }
+
+        public decimal LitersSupplied => ValueSupplied / PricePerLiter;
     }
 }

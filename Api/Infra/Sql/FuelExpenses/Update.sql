@@ -3,6 +3,7 @@ SET
   "Miliage" = @Miliage,
   "ValueSupplied" = @ValueSupplied,
   "PricePerLiter" = @PricePerLiter,
-  "VehicleId" = @VehicleId 
+  "VehicleId" = @VehicleId,
+  "Date" = @Date
 WHERE
   "Id" = @Id
