@@ -20,6 +20,8 @@ namespace Cashflow.Tests.Mocks
 
         private static List<DailyExpenses> _dailyExpenses;
 
+        private static List<Vehicle> _vehicles;
+
         public DateTime CurrentDate => new DateTime(2019, 4, 1);
 
         private List<Payment> CreatePaymentsMock()
@@ -111,6 +113,24 @@ namespace Cashflow.Tests.Mocks
             };
         }
 
+        private List<Vehicle> CreateVehicleMock()
+        {
+            return new List<Vehicle>()
+            {
+                new Vehicle()
+                {
+                    Id = 1,
+                    UserId = 1,
+                    Description = "Moto",
+                    FuelExpenses = new List<FuelExpenses> ()
+                    {
+                        new FuelExpenses() { Id = 1, Date = new DateTime(2020, 10,  1), Miliage = 100, PricePerLiter = 10, ValueSupplied = 30, VehicleId = 1 },
+                        new FuelExpenses() { Id = 2, Date = new DateTime(2020, 10,  1), Miliage = 100, PricePerLiter = 10, ValueSupplied = 30, VehicleId = 1 },
+                    }
+                }
+            };
+        }
+
         private DateTime CreateEndDate(int year, int month) => new DateTime(year, month, DateTime.DaysInMonth(year, month));
 
         protected List<Payment> Payments
@@ -140,6 +160,16 @@ namespace Cashflow.Tests.Mocks
                 if (_users == null)
                     _users = CreateUserMock();
                 return _users;
+            }
+        }
+
+        protected List<Vehicle> Vehicles
+        {
+            get
+            {
+                if (_vehicles == null)
+                    _vehicles = CreateVehicleMock();
+                return _vehicles;
             }
         }
 
