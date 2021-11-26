@@ -21,7 +21,7 @@ namespace Cashflow.Api.Controllers
         public async Task<IActionResult> Post([FromBody] Salary salary)
         {
             if (salary is null)
-                return UnprocessableEntity();
+                return HandleUnprocessableEntity();
             salary.UserId = UserId;
             return HandleResult(await _service.Add(salary));
         }
@@ -30,7 +30,7 @@ namespace Cashflow.Api.Controllers
         public async Task<IActionResult> Put([FromBody] Salary salary)
         {
             if (salary is null)
-                return UnprocessableEntity();
+                return HandleUnprocessableEntity();
             salary.UserId = UserId;
             return HandleResult(await _service.Update(salary));
         }

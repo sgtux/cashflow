@@ -26,24 +26,26 @@ namespace Cashflow.Api.Controllers
 
         [Authorize]
         [HttpGet]
-        public async Task<IActionResult> Get() => Ok(await _service.GetById(UserId));
+        public async Task<IActionResult> Get() => HandleResult(await _service.GetById(UserId));
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] AccountModel model)
         {
             if (model is null)
-                return UnprocessableEntity();
+                return HandleUnprocessableEntity();
             var result = await _service.Add(model.Map<AccountModel, User>());
             if (result.IsValid)
             {
                 var claims = new Dictionary<string, string>();
                 claims.Add(ClaimTypes.Sid, result.Data.Id.ToString());
 
-                var token = new TokenModel()
+                var token = new AccountResultModel()
                 {
+                    Id = result.Data.Id,
+                    NickName = result.Data.NickName,
                     Token = new JwtTokenBuilder(_config.SecretJwtKey, _config.CookieExpiresInMinutes, claims).Build().Value
                 };
-                return Ok(token);
+                return HandleResult(new ResultDataModel<AccountResultModel>() { Data = token });
             }
             return HandleResult(result);
         }

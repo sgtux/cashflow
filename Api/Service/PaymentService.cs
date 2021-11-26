@@ -36,19 +36,19 @@ namespace Cashflow.Api.Service
             _vehicleRepository = vehicleRepository;
         }
 
-        public async Task<ResultModel> Get(int id, int userId)
+        public async Task<ResultDataModel<Payment>> Get(int id, int userId)
         {
             var p = await _paymentRepository.GetById(id);
             return new ResultDataModel<Payment>(p?.UserId == userId ? p : null);
         }
 
-        public async Task<ResultModel> GetByUser(int userId) => new ResultDataModel<IEnumerable<Payment>>(await _paymentRepository.GetByUser(userId));
+        public async Task<ResultDataModel<IEnumerable<Payment>>> GetByUser(int userId) => new ResultDataModel<IEnumerable<Payment>>(await _paymentRepository.GetByUser(userId));
 
-        public async Task<ResultModel> GetTypes() => new ResultDataModel<IEnumerable<PaymentType>>(await _paymentRepository.GetTypes());
+        public async Task<ResultDataModel<IEnumerable<PaymentType>>> GetTypes() => new ResultDataModel<IEnumerable<PaymentType>>(await _paymentRepository.GetTypes());
 
-        public async Task<Dictionary<string, PaymentProjectionResultModel>> GetProjection(int userId, int month, int year)
+        public async Task<ResultDataModel<Dictionary<string, PaymentProjectionResultModel>>> GetProjection(int userId, int month, int year)
         {
-            var result = new Dictionary<string, PaymentProjectionResultModel>();
+            var result = new ResultDataModel<Dictionary<string, PaymentProjectionResultModel>>();
             var now = _paymentRepository.CurrentDate;
             var dates = new List<DateTime>();
 
@@ -139,8 +139,8 @@ namespace Cashflow.Api.Service
                     });
                 };
 
-                result.Add(date.ToString("MM/yyyy"), resultModel);
-                resultModel.AccumulatedCost = result.Values.Sum(p => p.Total);
+                result.Data.Add(date.ToString("MM/yyyy"), resultModel);
+                resultModel.AccumulatedCost = result.Data.Values.Sum(p => p.Total);
             });
 
             return result;

@@ -28,16 +28,13 @@ namespace Cashflow.Api.Controllers
 
         [Route("Projection")]
         [HttpGet]
-        public async Task<Dictionary<string, PaymentProjectionResultModel>> GetProjection([FromQuery] int month, [FromQuery] int year)
-        {
-            return await _service.GetProjection(UserId, month, year);
-        }
+        public async Task<IActionResult> GetProjection([FromQuery] int month, [FromQuery] int year) => HandleResult(await _service.GetProjection(UserId, month, year));
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Payment payment)
         {
             if (payment is null)
-                return UnprocessableEntity();
+                return HandleUnprocessableEntity();
             payment.UserId = UserId;
             payment.Id = 0;
             return HandleResult(await _service.Add(payment));
@@ -47,7 +44,7 @@ namespace Cashflow.Api.Controllers
         public async Task<IActionResult> Put([FromBody] Payment payment)
         {
             if (payment is null)
-                return UnprocessableEntity();
+                return HandleUnprocessableEntity();
             payment.UserId = UserId;
             return HandleResult(await _service.Update(payment));
         }

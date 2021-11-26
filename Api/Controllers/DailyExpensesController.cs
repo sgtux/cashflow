@@ -17,16 +17,16 @@ namespace Cashflow.Api.Controllers
         public DailyExpensesController(DailyExpensesService service) => _service = service;
 
         [HttpGet]
-        public async Task<ResultDataModel<IEnumerable<DailyExpenses>>> GetByUser([FromQuery] int month, [FromQuery] int year) => await _service.GetByUser(UserId, month, year);
+        public async Task<IActionResult> GetByUser([FromQuery] int month, [FromQuery] int year) => HandleResult(await _service.GetByUser(UserId, month, year));
 
         [HttpGet("{id}")]
-        public async Task<ResultDataModel<DailyExpenses>> Get(long id) => await _service.GetById(id, UserId);
+        public async Task<IActionResult> Get(long id) => HandleResult(await _service.GetById(id, UserId));
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] DailyExpenses dailyExpenses)
         {
             if (dailyExpenses is null)
-                return UnprocessableEntity();
+                return HandleUnprocessableEntity();
             dailyExpenses.UserId = UserId;
             return HandleResult(await _service.Add(dailyExpenses));
         }
@@ -35,7 +35,7 @@ namespace Cashflow.Api.Controllers
         public async Task<IActionResult> Put([FromBody] DailyExpenses dailyExpenses)
         {
             if (dailyExpenses is null)
-                return UnprocessableEntity();
+                return HandleUnprocessableEntity();
             dailyExpenses.UserId = UserId;
             return HandleResult(await _service.Update(dailyExpenses));
         }

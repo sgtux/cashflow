@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Cashflow.Api.Auth;
@@ -28,19 +29,26 @@ namespace Cashflow.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] LoginModel model)
         {
-            if (model is null || string.IsNullOrEmpty(model.NickName) || string.IsNullOrEmpty(model.Password))
-                return HandleUnauthorized("Usuário ou senha inválidos.");
+            if (model is null)
+                return HandleUnprocessableEntity();
 
-            var user = await _accountService.Login(model.NickName, model.Password);
-            if (user == null)
-                return HandleUnauthorized("Usuário ou senha inválidos.");
+            var result = await _accountService.Login(model.NickName, model.Password);
 
-            await _paymentService.UpdateMonthlyPayments(user.Id);
+            if (!result.IsValid)
+                return HandleUnauthorized(result.Notifications.First());
+
+            await _paymentService.UpdateMonthlyPayments(result.Data.Id);
 
             var claims = new Dictionary<string, string>();
-            claims.Add(ClaimTypes.Sid, user.Id.ToString());
-            var token = new JwtTokenBuilder(_config.SecretJwtKey, _config.CookieExpiresInMinutes, claims).Build();
-            return Ok(new { token = token.Value });
+            claims.Add(ClaimTypes.Sid, result.Data.Id.ToString());
+
+            var token = new AccountResultModel()
+            {
+                Id = result.Data.Id,
+                NickName = result.Data.NickName,
+                Token = new JwtTokenBuilder(_config.SecretJwtKey, _config.CookieExpiresInMinutes, claims).Build().Value
+            };
+            return Ok(new ResultDataModel<AccountResultModel>() { Data = token });
         }
     }
 }

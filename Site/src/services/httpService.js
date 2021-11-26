@@ -5,7 +5,7 @@ import { STORAGE_KEYS } from '../helpers/storageKeys'
 
 let callbackTokenExpired = null
 
-export const registerCallbackUnauthorized = (callback) => callbackTokenExpired = callback
+export const registerCallbackUnauthorized = callback => callbackTokenExpired = callback
 
 axios.interceptors.response.use(response => response, err => {
   const { request, status } = err.response
@@ -22,7 +22,7 @@ const sendRequest = (method, url, headers, data) => {
     headers: headers,
     url: API_URL + url,
     data: data
-  }).then(res => res.data)
+  }).then(res => res.data.data)
     .catch(err => {
       const result = {
         message: err.response.data.message,
