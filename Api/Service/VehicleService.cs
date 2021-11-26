@@ -33,13 +33,13 @@ namespace Cashflow.Api.Service
             return result;
         }
 
-        public async Task<ResultModel> GetById(int id, int userId)
+        public async Task<ResultDataModel<Vehicle>> GetById(int id, int userId)
         {
             var p = await _vehicleRepository.GetById(id);
             return new ResultDataModel<Vehicle>(p?.UserId == userId ? p : null);
         }
 
-        public async Task<ResultModel> GetByUserId(int userId) => new ResultDataModel<IEnumerable<Vehicle>>(await _vehicleRepository.GetByUserId(userId));
+        public async Task<ResultDataModel<IEnumerable<Vehicle>>> GetByUserId(int userId) => new ResultDataModel<IEnumerable<Vehicle>>(await _vehicleRepository.GetByUserId(userId));
 
         public async Task<ResultModel> Update(Vehicle vehicle)
         {
@@ -65,7 +65,7 @@ namespace Cashflow.Api.Service
                 result.AddNotification(ValidatorMessages.Vehicle.HasFuelExpenses);
             else
                 await _vehicleRepository.Remove(id);
-                
+
             return result;
         }
     }

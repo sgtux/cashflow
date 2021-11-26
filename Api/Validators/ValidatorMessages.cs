@@ -35,6 +35,8 @@ namespace Cashflow.Api.Validators
             public string NotFound = "Usuário não encontrado.";
 
             public string NickNamePattern = "O Nick Name deve conter apenas números, letras ou os símbolos _$#@!&.";
+
+            public string LoginFailed = "Usuário ou senha inválidos.";
         }
 
         public class PaymentMessages

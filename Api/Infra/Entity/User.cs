@@ -12,9 +12,5 @@ namespace Cashflow.Api.Infra.Entity
         public string Password { get; set; }
 
         public DateTime CreatedAt { get; set; }
-
-        public ICollection<Payment> Payments { get; set; }
-
-        public ICollection<Salary> Salaries { get; set; }
     }
 }

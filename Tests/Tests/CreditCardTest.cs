@@ -22,7 +22,7 @@ namespace Cashflow.Tests
         public async Task GetAll()
         {
             var result = await _service.GetByUser(1);
-            Assert.IsTrue(result.Count() > 0);
+            Assert.IsTrue(result.Data.Count() > 0);
         }
 
         [TestMethod]
