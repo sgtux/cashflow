@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import DatePicker from 'react-datepicker'
 import ptBr from 'date-fns/locale/pt-BR'
-import { Link, useParams, useHistory } from 'react-router-dom'
+import { Link, useParams, useNavigate } from 'react-router-dom'
 
 import {
     Paper,
@@ -40,7 +40,7 @@ export function EditDailyExpenses() {
     const [formIsValid, setFormIsValid] = useState(false)
 
     const params = useParams()
-    const history = useHistory()
+    const navigate = useNavigate()
 
     useEffect(() => {
         if (Number(params.id) > 0) {
@@ -48,7 +48,7 @@ export function EditDailyExpenses() {
             dailyExpensesService.get(params.id)
                 .then(res => {
                     if (!res) {
-                        history.push('/daily-expenses')
+                        navigate('/daily-expenses')
                         return
                     }
                     setId(res.id)
@@ -72,7 +72,7 @@ export function EditDailyExpenses() {
     function save() {
         setLoading(true)
         dailyExpensesService.save({ id, shopName, date, items })
-            .then(() => history.push('/daily-expenses'))
+            .then(() => navigate('/daily-expenses'))
             .catch(err => console.log(err))
             .finally(() => setLoading(false))
     }

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, Switch } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import { createHashHistory } from 'history'
 import {
   CreditCards,
@@ -30,16 +30,16 @@ history.listen((location, action) => {
 
 export default function () {
   return (
-    <Switch>
-      <Route path="/" exact={true} component={Projection} />
-      <Route path="/payments" component={Payments} />
-      <Route path="/credit-cards" component={CreditCards} />
-      <Route path="/projection" component={Projection} />
-      <Route path="/salary" component={Salary} />
-      <Route path="/edit-payment/:id" component={EditPayment} />
-      <Route path="/daily-expenses" component={DailyExpenses} />
-      <Route path="/edit-daily-expenses/:id" component={EditDailyExpenses} />
-      <Route path="/vehicles" component={Vehicles} />
-    </Switch>
+    <Routes>
+      <Route path="/" exact={true} element={<Projection />} />
+      <Route path="/payments" element={<Payments />} />
+      <Route path="/credit-cards" element={<CreditCards />} />
+      <Route path="/projection" element={<Projection />} />
+      <Route path="/salary" element={<Salary />} />
+      <Route path="/edit-payment/:id" element={<EditPayment />} />
+      <Route path="/daily-expenses" element={<DailyExpenses />} />
+      <Route path="/edit-daily-expenses/:id" element={<EditDailyExpenses />} />
+      <Route path="/vehicles" element={<Vehicles />} />
+    </Routes>
   )
 }

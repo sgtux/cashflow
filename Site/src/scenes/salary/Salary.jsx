@@ -39,7 +39,7 @@ const styles = {
     }
 }
 
-export default function Salary() {
+export function Salary() {
 
     const [salaries, setSalaries] = useState([])
     const [errors, setErrors] = useState()
@@ -81,7 +81,7 @@ export default function Salary() {
         setLoading(true)
         setSalary(null)
         salaryService.get()
-            .then(res => setSalaries(res.data))
+            .then(res => setSalaries(res))
             .catch(err => console.log(err))
             .finally(() => setLoading(false))
     }

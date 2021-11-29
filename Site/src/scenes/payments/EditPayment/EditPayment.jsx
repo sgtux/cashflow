@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useParams, Link, useHistory } from 'react-router-dom'
+import { useParams, Link, useNavigate } from 'react-router-dom'
 import {
   Button,
   GridList,
@@ -41,7 +41,7 @@ export function EditPayment() {
   const [active, setActive] = useState(true)
 
   const params = useParams()
-  const history = useHistory()
+  const navigate = useNavigate()
 
   useEffect(() => {
     setLoading(true)
@@ -154,7 +154,7 @@ export function EditPayment() {
       .then(() => {
         toast.success('Salvo com sucesso.')
         if (!id)
-          history.push('/payments')
+          navigate('/payments')
       })
       .finally(() => setLoading(false))
   }

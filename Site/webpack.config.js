@@ -45,8 +45,7 @@ module.exports = {
     })
   ],
   devServer: {
-    contentBase: './public',
-    hot: true,
+    static: './public',
     proxy: {
       '/api': 'http://localhost:5000'
     }

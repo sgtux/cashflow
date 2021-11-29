@@ -1,4 +1,4 @@
-import { createMuiTheme } from '@material-ui/core/styles'
+import { createTheme } from '@material-ui/core/styles'
 
 export const Colors = {
   AppGreen: '#4b9372',
@@ -6,7 +6,7 @@ export const Colors = {
   AppRed: '#bb2222'
 }
 
-export const AppTheme = createMuiTheme({
+export const AppTheme = createTheme({
   palette: {
     primary: { main: Colors.AppGreen },
     secondary: { main: Colors.AppRed }

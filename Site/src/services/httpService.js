@@ -22,7 +22,7 @@ const sendRequest = (method, url, headers, data) => {
     headers: headers,
     url: API_URL + url,
     data: data
-  }).then(res => res.data)
+  }).then(res => res.data.data)
     .catch(err => {
       const result = {
         message: err.response.data.message,
