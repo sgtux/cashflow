@@ -26,7 +26,7 @@ export function PaymentMonth({ monthYear, paymentMonth, hideShowMonth, show }) {
               fontWeight: 'bold',
               color: '#666'
             }}>{monthYear}</span>
-          {show && <MoneySpan bold gain={paymentMonth.accumulatedCost > 0}>{toReal(paymentMonth.accumulatedCost)}</MoneySpan>}
+          {!show && <MoneySpan bold gain={paymentMonth.accumulatedCost > 0}>{toReal(paymentMonth.accumulatedCost)}</MoneySpan>}
           {show ? <ArrowUp onClick={() => hideShowMonth()} /> : <ArrowDown onClick={() => hideShowMonth()} />}
         </div>
 

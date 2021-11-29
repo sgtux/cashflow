@@ -11,11 +11,10 @@ import {
 import { toReal, fromReal, dateToString } from '../../../helpers'
 import { vehicleService } from '../../../services'
 import { InputMoney, InputText } from '../../../components/inputs'
-import { IconTextInput } from '../../../components/main'
 
 import { FuelExpensesTable } from './styles'
 
-const MAX_MILIAGE = 10000000
+const MAX_VALUE = 999999999
 
 export function EditVehicleModal({ vehicle, onCancel }) {
 
@@ -40,8 +39,12 @@ export function EditVehicleModal({ vehicle, onCancel }) {
     }
 
     useEffect(() => {
-        if (miliage > MAX_MILIAGE)
-            setMiliage(MAX_MILIAGE + '')
+        if (miliage > MAX_VALUE)
+            setMiliage(MAX_VALUE + '')
+        if (fromReal(pricePerLiter) > MAX_VALUE)
+            setPricePerLiter(MAX_VALUE + '')
+        if (fromReal(valueSupplied) > MAX_VALUE)
+            setValueSupplied(MAX_VALUE + '')
         setFormIsValid(miliage > 0 && fromReal(pricePerLiter) > 0 && fromReal(valueSupplied) > 0 && date)
     }, [miliage, pricePerLiter, date, valueSupplied])
 
