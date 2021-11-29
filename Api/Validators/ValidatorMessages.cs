@@ -4,6 +4,8 @@ namespace Cashflow.Api.Validators
     {
         public static string FieldIsRequired(string fieldName) => string.Format("O campo '{0}' é obrigatório.", fieldName);
 
+        public static string FieldMinLength(string fieldName, int length) => string.Format("O campo '{0}' deve ter pelo menos {1} caracteres.", fieldName, length);
+
         public static string FieldMaxLength(string fieldName, int length) => string.Format("O campo '{0}' deve ter no máximo {1} caracteres.", fieldName, length);
 
         public static string MinValue(string fieldName, int value) => string.Format("O valor mínimo para o campo '{0}' é {1}.", fieldName, value);
@@ -26,11 +28,7 @@ namespace Cashflow.Api.Validators
 
         public class UserMessages
         {
-            public string NickNameRequired = "O campo 'Nick Name' deve ter pelo menos 4 caracteres.";
-
             public string NickNameAlreadyInUse = "O Nick Name informado já está sendo utilizado.";
-
-            public string PasswordRequired = "O campo 'Senha' deve ter pelo menos 8 caracteres.";
 
             public string NotFound = "Usuário não encontrado.";
 
