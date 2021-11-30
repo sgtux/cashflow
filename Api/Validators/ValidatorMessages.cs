@@ -4,7 +4,13 @@ namespace Cashflow.Api.Validators
     {
         public static string FieldIsRequired(string fieldName) => string.Format("O campo '{0}' é obrigatório.", fieldName);
 
+        public static string FieldMinLength(string fieldName, int length) => string.Format("O campo '{0}' deve ter pelo menos {1} caracteres.", fieldName, length);
+
         public static string FieldMaxLength(string fieldName, int length) => string.Format("O campo '{0}' deve ter no máximo {1} caracteres.", fieldName, length);
+
+        public static string MinValue(string fieldName, int value) => string.Format("O valor mínimo para o campo '{0}' é {1}.", fieldName, value);
+
+        public static string MaxValue(string fieldName, int value) => string.Format("O valor máximo para o campo '{0}' é {1}.", fieldName, value);
 
         public static string NotFound(string name) => string.Format("{0} não encontrado.", name);
 
@@ -18,17 +24,17 @@ namespace Cashflow.Api.Validators
 
         public static DailyExpensesMessages DailyExpenses = new DailyExpensesMessages();
 
+        public static VehicleMessages Vehicle = new VehicleMessages();
+
         public class UserMessages
         {
-            public string NickNameRequired = "O campo 'Nick Name' deve ter pelo menos 4 caracteres.";
-
             public string NickNameAlreadyInUse = "O Nick Name informado já está sendo utilizado.";
-
-            public string PasswordRequired = "O campo 'Senha' deve ter pelo menos 8 caracteres.";
 
             public string NotFound = "Usuário não encontrado.";
 
             public string NickNamePattern = "O Nick Name deve conter apenas números, letras ou os símbolos _$#@!&.";
+
+            public string LoginFailed = "Usuário ou senha inválidos.";
         }
 
         public class PaymentMessages
@@ -97,6 +103,11 @@ namespace Cashflow.Api.Validators
             public string ItemsWithInvalidName = "Há itens com o nome inválido.";
 
             public string ItemsWithInvalidAmount = "O valor 'Quantidade' no item deve estar entre 1 e 1000.";
+        }
+
+        public class VehicleMessages
+        {
+            public string HasFuelExpenses = "O veículo possui despesas cadastradas e não pode ser removido.";
         }
     }
 }

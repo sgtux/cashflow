@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -58,6 +58,11 @@
     <EmbeddedResource Include="Infra/Sql/Vehicle/GetByUser.sql" />
     <EmbeddedResource Include="Infra/Sql/Vehicle/Insert.sql" />
     <EmbeddedResource Include="Infra/Sql/Vehicle/Update.sql" />
+
+    <EmbeddedResource Include="Infra/Sql/FuelExpenses/Delete.sql" />
+    <EmbeddedResource Include="Infra/Sql/FuelExpenses/GetById.sql" />
+    <EmbeddedResource Include="Infra/Sql/FuelExpenses/Insert.sql" />
+    <EmbeddedResource Include="Infra/Sql/FuelExpenses/Update.sql" />
   </ItemGroup>
 
 </Project>

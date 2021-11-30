@@ -20,7 +20,7 @@ namespace Cashflow.Api.Service
             _userRepository = userRepository;
         }
 
-        public async Task<IEnumerable<CreditCard>> GetByUser(int userId) => await _creditCardRepository.GetByUserId(userId);
+        public async Task<ResultDataModel<IEnumerable<CreditCard>>> GetByUser(int userId) => new ResultDataModel<IEnumerable<CreditCard>>(await _creditCardRepository.GetByUserId(userId));
 
         public async Task<ResultModel> Add(CreditCard card)
         {

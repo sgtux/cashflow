@@ -9,15 +9,11 @@ namespace Cashflow.Api.Shared
     {
         public static string Sha1(string input)
         {
-            byte[] data = System.Text.Encoding.ASCII.GetBytes(input);
-            byte[] hash = new SHA1CryptoServiceProvider().ComputeHash(data);
-
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < hash.Length; i++)
-            {
-                sb.Append(hash[i].ToString("X2"));
-            }
-            return sb.ToString();
+            var enc = Encoding.GetEncoding(0);
+            byte[] buffer = enc.GetBytes(input);
+            var sha1 = SHA1.Create();
+            var hash = BitConverter.ToString(sha1.ComputeHash(buffer)).Replace("-", "");
+            return hash;
         }
 
         public static U Map<T, U>(this T source)

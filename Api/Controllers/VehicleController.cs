@@ -24,7 +24,7 @@ namespace Cashflow.Api.Controllers
         public async Task<IActionResult> Post([FromBody] Vehicle vehicle)
         {
             if (vehicle is null)
-                return UnprocessableEntity();
+                return HandleUnprocessableEntity();
             vehicle.UserId = UserId;
             return HandleResult(await _service.Add(vehicle));
         }
@@ -33,7 +33,7 @@ namespace Cashflow.Api.Controllers
         public async Task<IActionResult> Put(int id, [FromBody] Vehicle vehicle)
         {
             if (vehicle is null)
-                return UnprocessableEntity();
+                return HandleUnprocessableEntity();
             vehicle.UserId = UserId;
             vehicle.Id = id;
             return HandleResult(await _service.Update(vehicle));

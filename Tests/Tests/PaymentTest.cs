@@ -19,7 +19,7 @@ namespace Cashflow.Tests
         [TestInitialize]
         public void Init()
         {
-            _service = new PaymentService(new PaymentRepositoryMock(), new CreditCardRepositoryMock(), new SalaryRepositoryMock());
+            _service = new PaymentService(new PaymentRepositoryMock(), new CreditCardRepositoryMock(), new SalaryRepositoryMock(), new DailyExpensesRepositoryMock(), new VehicleRepositoryMock());
         }
 
         private Payment DefaultPayment

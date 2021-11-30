@@ -16,13 +16,13 @@ namespace Cashflow.Api.Controllers
         public CreditCardController(CreditCardService service) => _service = service;
 
         [HttpGet]
-        public async Task<IEnumerable<CreditCard>> Get() => await _service.GetByUser(UserId);
+        public async Task<IActionResult> Get() => HandleResult(await _service.GetByUser(UserId));
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] CreditCard card)
         {
             if (card is null)
-                return UnprocessableEntity();
+                return HandleUnprocessableEntity();
             card.UserId = UserId;
             return HandleResult(await _service.Add(card));
         }
@@ -31,7 +31,7 @@ namespace Cashflow.Api.Controllers
         public async Task<IActionResult> Put([FromBody] CreditCard card)
         {
             if (card is null)
-                return UnprocessableEntity();
+                return HandleUnprocessableEntity();
             card.UserId = UserId;
             return HandleResult(await _service.Update(card));
         }

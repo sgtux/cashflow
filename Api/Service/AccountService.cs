@@ -14,10 +14,10 @@ namespace Cashflow.Api.Service
 
         public AccountService(IUserRepository repository) => _userRepository = repository;
 
-        public async Task<UserDataModel> GetById(int userId)
+        public async Task<ResultModel> GetById(int userId)
         {
             var user = await _userRepository.GetById(userId);
-            return new UserDataModel(user);
+            return new ResultDataModel<UserDataModel>(new UserDataModel(user));
         }
 
         public async Task<ResultDataModel<UserDataModel>> Add(User model)
@@ -39,10 +39,26 @@ namespace Cashflow.Api.Service
             return result;
         }
 
-        public async Task<User> Login(string nickName, string password)
+        public async Task<ResultDataModel<UserDataModel>> Login(string nickName, string password)
         {
+            var result = new ResultDataModel<UserDataModel>();
+
+            if (string.IsNullOrEmpty(nickName) || string.IsNullOrEmpty(password))
+            {
+                result.AddNotification(ValidatorMessages.User.LoginFailed);
+                return result;
+            }
+
             var user = await _userRepository.FindByNickName(nickName);
-            return user?.Password == Utils.Sha1(password) ? user : null;
+            if (user == null || user.Password != Utils.Sha1(password))
+            {
+                result.AddNotification(ValidatorMessages.User.LoginFailed);
+                return result;
+            }
+
+            result.Data = new UserDataModel(user);
+
+            return result;
         }
     }
 }

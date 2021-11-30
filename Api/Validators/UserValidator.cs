@@ -12,8 +12,8 @@ namespace Cashflow.Api.Validators
         public UserValidator(IUserRepository userRepository)
         {
             _userRepository = userRepository;
-            RuleFor(u => u.NickName).MinimumLength(4).WithMessage(ValidatorMessages.User.NickNameRequired);
-            RuleFor(u => u.Password).MinimumLength(8).WithMessage(ValidatorMessages.User.PasswordRequired);
+            RuleFor(u => u.NickName).MinimumLength(4).WithMessage(ValidatorMessages.FieldMinLength("Nick Name", 4));
+            RuleFor(u => u.Password).MinimumLength(8).WithMessage(ValidatorMessages.FieldMinLength("Senha", 8));
             RuleFor(u => u).Must(ValidNickNameInUse).WithMessage(ValidatorMessages.User.NickNameAlreadyInUse);
             RuleFor(u => u).Must(ValidNickNamePattern).WithMessage(ValidatorMessages.User.NickNamePattern);
         }

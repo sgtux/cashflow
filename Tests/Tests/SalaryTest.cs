@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Cashflow.Api.Infra.Entity;
+using Cashflow.Api.Models;
 using Cashflow.Api.Service;
 using Cashflow.Api.Shared;
 using Cashflow.Tests.Mocks;

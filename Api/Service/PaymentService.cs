@@ -18,28 +18,37 @@ namespace Cashflow.Api.Service
 
         private ISalaryRepository _salaryRepository;
 
+        private IDailyExpensesRepository _dailyExpensesRepository;
+
+        private IVehicleRepository _vehicleRepository;
+
         public PaymentService(IPaymentRepository paymentRepository,
             ICreditCardRepository creditCardRepository,
-            ISalaryRepository salaryRepository)
+            ISalaryRepository salaryRepository,
+            IDailyExpensesRepository dailyExpensesRepository,
+            IVehicleRepository vehicleRepository
+            )
         {
             _paymentRepository = paymentRepository;
             _creditCardRepository = creditCardRepository;
             _salaryRepository = salaryRepository;
+            _dailyExpensesRepository = dailyExpensesRepository;
+            _vehicleRepository = vehicleRepository;
         }
 
-        public async Task<ResultModel> Get(int id, int userId)
+        public async Task<ResultDataModel<Payment>> Get(int id, int userId)
         {
             var p = await _paymentRepository.GetById(id);
             return new ResultDataModel<Payment>(p?.UserId == userId ? p : null);
         }
 
-        public async Task<ResultModel> GetByUser(int userId) => new ResultDataModel<IEnumerable<Payment>>(await _paymentRepository.GetByUser(userId));
+        public async Task<ResultDataModel<IEnumerable<Payment>>> GetByUser(int userId) => new ResultDataModel<IEnumerable<Payment>>(await _paymentRepository.GetByUser(userId));
 
-        public async Task<ResultModel> GetTypes() => new ResultDataModel<IEnumerable<PaymentType>>(await _paymentRepository.GetTypes());
+        public async Task<ResultDataModel<IEnumerable<PaymentType>>> GetTypes() => new ResultDataModel<IEnumerable<PaymentType>>(await _paymentRepository.GetTypes());
 
-        public async Task<Dictionary<string, PaymentProjectionResultModel>> GetProjection(int userId, int month, int year)
+        public async Task<ResultDataModel<Dictionary<string, PaymentProjectionResultModel>>> GetProjection(int userId, int month, int year)
         {
-            var result = new Dictionary<string, PaymentProjectionResultModel>();
+            var result = new ResultDataModel<Dictionary<string, PaymentProjectionResultModel>>();
             var now = _paymentRepository.CurrentDate;
             var dates = new List<DateTime>();
 
@@ -63,6 +72,8 @@ namespace Cashflow.Api.Service
             var types = await _paymentRepository.GetTypes();
             var cards = await _creditCardRepository.GetByUserId(userId);
             var salary = (await _salaryRepository.GetByUserId(userId)).FirstOrDefault(p => p.EndDate is null);
+            var vehicles = await _vehicleRepository.GetByUserId(userId);
+            var allDailyExpenses = await _dailyExpensesRepository.GetByUser(userId);
 
             dates.OrderBy(p => p.Ticks).ToList().ForEach(date =>
             {
@@ -76,6 +87,37 @@ namespace Cashflow.Api.Service
                         MonthYear = date.ToString("MM/yyyy"),
                         Type = types.First(p => p.Id == (int)PaymentTypeEnum.Gain),
                         Cost = salary.Value
+                    });
+                }
+
+                foreach (var item in vehicles)
+                {
+                    var fuelExpenses = item.FuelExpenses.Where(p => p.Date.Month == date.Month && p.Date.Year == date.Year);
+                    if (fuelExpenses.Any())
+                    {
+                        resultModel.Payments.Add(new PaymentProjectionModel()
+                        {
+                            Description = $"Gastos em Combustível ({item.Description})",
+                            Monthly = false,
+                            Condition = PaymentConditionEnum.Cash,
+                            MonthYear = date.ToString("MM/yyyy"),
+                            Type = types.First(p => p.Id == (int)PaymentTypeEnum.Expense),
+                            Cost = fuelExpenses.Sum(p => p.ValueSupplied)
+                        });
+                    }
+                }
+
+                var dailyExpenses = allDailyExpenses.Where(p => p.Date.Month == date.Month && p.Date.Year == date.Year);
+                if (dailyExpenses.Any())
+                {
+                    resultModel.Payments.Add(new PaymentProjectionModel()
+                    {
+                        Description = $"Despesas Diárias",
+                        Monthly = false,
+                        Condition = PaymentConditionEnum.Cash,
+                        MonthYear = date.ToString("MM/yyyy"),
+                        Type = types.First(p => p.Id == (int)PaymentTypeEnum.Expense),
+                        Cost = dailyExpenses.Sum(p => p.TotalPrice)
                     });
                 }
 
@@ -97,8 +139,8 @@ namespace Cashflow.Api.Service
                     });
                 };
 
-                result.Add(date.ToString("MM/yyyy"), resultModel);
-                resultModel.AccumulatedCost = result.Values.Sum(p => p.Total);
+                result.Data.Add(date.ToString("MM/yyyy"), resultModel);
+                resultModel.AccumulatedCost = result.Data.Values.Sum(p => p.Total);
             });
 
             return result;

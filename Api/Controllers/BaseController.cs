@@ -31,5 +31,11 @@ namespace Cashflow.Api.Controllers
             var errors = new List<string>() { text };
             return Unauthorized(new { Errors = errors });
         }
+
+        protected IActionResult HandleUnprocessableEntity()
+        {
+            var errors = new List<string>() { "Não foi possível processar a requisição" };
+            return UnprocessableEntity(new { Errors = errors });
+        }
     }
 }
