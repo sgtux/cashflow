@@ -28,7 +28,9 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
-- task: VSTest@2
+- task: DotNetCoreCLI@2
   inputs:
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    command: 'test'
+    projects: '**/*[Tt]ests/*.csproj'
+    arguments: '/p:CollectCoverage=true /p:CoverletOutputFormat=opencover --configuration $(BuildConfiguration)'
+    testRunTitle: 'Test Coverage'
