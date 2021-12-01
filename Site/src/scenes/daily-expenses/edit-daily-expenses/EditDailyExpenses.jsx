@@ -21,7 +21,7 @@ import {
 
 import { MainContainer } from '../../../components/main'
 import IconTextInput from '../../../components/main/IconTextInput'
-import { InputMoney } from '../../../components/inputs'
+import { InputMoney, DatePickerContainer, DatePickerInput } from '../../../components/inputs'
 import { toReal, fromReal } from '../../../helpers'
 
 import { dailyExpensesService } from '../../../services'
@@ -109,11 +109,11 @@ export function EditDailyExpenses() {
                 value={shopName}
                 onChange={e => setShopName(e.value)}
             />
-            <div style={{ marginTop: 20 }}>
+            <DatePickerContainer style={{ marginTop: 20 }}>
                 <span style={{ fontSize: 16, marginRight: 10 }}>Data:</span>
-                <DatePicker onChange={e => setDate(e)}
+                <DatePicker onChange={e => setDate(e)} customInput={<DatePickerInput />}
                     dateFormat="dd/MM/yyyy" locale={ptBr} selected={date} />
-            </div>
+            </DatePickerContainer>
             <Paper style={{ marginTop: 20 }}>
                 <fieldset>
                     <legend style={{ fontSize: 14, color: 'gray' }}>Itens:</legend>

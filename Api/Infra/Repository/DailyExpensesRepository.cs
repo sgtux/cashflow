@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Cashflow.Api.Contracts;
 using Cashflow.Api.Infra.Entity;
+using Cashflow.Api.Infra.Filters;
 using Cashflow.Api.Infra.Sql.DailyExpenses;
 using Cashflow.Api.Service;
 using Cashflow.Api.Shared;
@@ -24,10 +26,10 @@ namespace Cashflow.Api.Infra.Repository
             }
         }
 
-        public async Task<IEnumerable<DailyExpenses>> GetByUser(int userId)
+        public async Task<IEnumerable<DailyExpenses>> GetSome(BaseFilter filter)
         {
             var list = new List<DailyExpenses>();
-            await Query<DailyExpensesItem>(DailyExpensesResources.ByUser, (p, i) =>
+            await Query<DailyExpensesItem>(DailyExpensesResources.Some, (p, i) =>
             {
                 var expense = list.FirstOrDefault(x => x.Id == p.Id);
                 if (expense == null)
@@ -41,7 +43,7 @@ namespace Cashflow.Api.Infra.Repository
                     expense.Items.Add(i);
 
                 return p;
-            }, new { UserId = userId });
+            }, filter);
 
             return list;
         }

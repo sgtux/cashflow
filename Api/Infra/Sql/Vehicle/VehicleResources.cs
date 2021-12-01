@@ -4,7 +4,7 @@ namespace Cashflow.Api.Infra.Sql.Vehicle
     {
         public static ResourceBuilder ById => new ResourceBuilder("Vehicle.GetById.sql");
 
-        public static ResourceBuilder ByUser => new ResourceBuilder("Vehicle.GetByUser.sql");
+        public static ResourceBuilder Some => new ResourceBuilder("Vehicle.GetSome.sql");
 
         public static ResourceBuilder Delete => new ResourceBuilder("Vehicle.Delete.sql");
 

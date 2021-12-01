@@ -5,6 +5,8 @@ using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Service;
 using Cashflow.Api.Shared;
 using Cashflow.Api.Infra.Sql.Vehicle;
+using Cashflow.Api.Contracts;
+using Cashflow.Api.Infra.Filters;
 
 namespace Cashflow.Api.Infra.Repository
 {
@@ -19,5 +21,7 @@ namespace Cashflow.Api.Infra.Repository
         public Task Update(FuelExpenses t) => Execute(FuelExpensesResources.Update, t);
 
         public Task Remove(long id) => Execute(FuelExpensesResources.Delete, new { Id = id });
+
+        public Task<IEnumerable<FuelExpenses>> GetSome(BaseFilter filter) => throw new NotImplementedException();
     }
 }

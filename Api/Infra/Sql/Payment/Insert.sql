@@ -1,4 +1,4 @@
 INSERT INTO "Payment" 
-  ("Description", "UserId", "Type", "CreditCardId", "Condition", "Active")
+  ("Description", "UserId", "Type", "CreditCardId", "Condition", "InactiveAt")
 VALUES
-  (@Description, @UserId, @TypeId, @CreditCardId, @Condition, @Active)
+  (@Description, @UserId, @TypeId, @CreditCardId, @Condition, @InactiveAt)

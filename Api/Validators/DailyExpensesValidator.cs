@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
+using Cashflow.Api.Contracts;
 using Cashflow.Api.Infra.Entity;
-using Cashflow.Api.Infra.Repository;
 using FluentValidation;
 
 namespace Cashflow.Api.Validators

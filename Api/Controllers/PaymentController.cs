@@ -26,8 +26,7 @@ namespace Cashflow.Api.Controllers
         [HttpGet("Types")]
         public async Task<IActionResult> GetTypes() => HandleResult(await _service.GetTypes());
 
-        [Route("Projection")]
-        [HttpGet]
+        [HttpGet("Projection")]
         public async Task<IActionResult> GetProjection([FromQuery] int month, [FromQuery] int year) => HandleResult(await _service.GetProjection(UserId, month, year));
 
         [HttpPost]

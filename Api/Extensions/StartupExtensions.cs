@@ -1,4 +1,5 @@
 using System.Text;
+using Cashflow.Api.Contracts;
 using Cashflow.Api.Infra.Repository;
 using Cashflow.Api.Service;
 using Cashflow.Api.Shared;

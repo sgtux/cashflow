@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
+using Cashflow.Api.Contracts;
 using Cashflow.Api.Infra.Entity;
-using Cashflow.Api.Infra.Repository;
+using Cashflow.Api.Infra.Filters;
 using FluentValidation;
 
 namespace Cashflow.Api.Validators
@@ -47,7 +48,7 @@ namespace Cashflow.Api.Validators
         private void LoadSalaries(Salary salary)
         {
             if (_salaries is null)
-                _salaries = _repository.GetByUserId(salary.UserId).Result;
+                _salaries = _repository.GetSome(new BaseFilter() { UserId = salary.UserId }).Result;
         }
     }
 }

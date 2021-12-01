@@ -17,7 +17,7 @@ import {
 import DeleteIcon from '@material-ui/icons/Delete'
 
 import { MainContainer, ErrorMessages } from '../../components/main'
-import { InputMoney, SalaryEvolution } from '../../components'
+import { InputMoney, SalaryEvolution, DatePickerContainer, DatePickerInput } from '../../components'
 
 import { fromReal, dateToString, toReal } from '../../helpers/utils'
 import { salaryService } from '../../services'
@@ -56,7 +56,7 @@ export function Salary() {
     useEffect(() => {
         if ((salary || {}).id) {
             setStartDate(new Date(salary.startDate))
-            setEndDate(new Date(salary.endDate))
+            setEndDate(salary.endDate ? new Date(salary.endDate) : undefined)
             setValue(toReal(salary.value))
         } else {
             setStartDate()
@@ -143,9 +143,9 @@ export function Salary() {
                 <div style={{ marginTop: '20px' }} hidden={salary}>
                     <Button variant="text" color="primary" onClick={() => setSalary({})}>Adicionar Salário</Button>
                 </div>
-                <div style={{ marginTop: '20px' }} hidden={!salary}>
-                    Data Início: <DatePicker onChange={e => setStartDate(e)} dateFormat="dd/MM/yyyy" locale={ptBr} selected={startDate} /><br />
-                    Data Fim: <DatePicker onChange={e => setEndDate(e)} dateFormat="dd/MM/yyyy" locale={ptBr} selected={endDate} /><br />
+                <DatePickerContainer style={{ marginTop: '20px' }} hidden={!salary}>
+                    Data Início: <DatePicker customInput={<DatePickerInput />} onChange={e => setStartDate(e)} dateFormat="dd/MM/yyyy" locale={ptBr} selected={startDate} /><br />
+                    Data Fim: <DatePicker customInput={<DatePickerInput />} onChange={e => setEndDate(e)} dateFormat="dd/MM/yyyy" locale={ptBr} selected={endDate} /><br />
                     Valor: <InputMoney
                         onChangeText={e => setValue(e)}
                         kind="money"
@@ -156,7 +156,7 @@ export function Salary() {
                             onClick={() => saveSalary()}>Salvar</Button>
                     </div>
                     <ErrorMessages errors={errors} />
-                </div>
+                </DatePickerContainer>
                 <br />
                 <Divider />
                 <SalaryEvolution salaries={salaries} />

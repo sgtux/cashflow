@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Cashflow.Api.Contracts;
 using Cashflow.Api.Infra.Entity;
-using Cashflow.Api.Infra.Repository;
+using Cashflow.Api.Infra.Filters;
 using Cashflow.Api.Models;
 using Cashflow.Api.Validators;
 
@@ -13,7 +14,7 @@ namespace Cashflow.Api.Service
 
         public SalaryService(ISalaryRepository salaryRepository) => _salaryRepository = salaryRepository;
 
-        public async Task<ResultDataModel<IEnumerable<Salary>>> GetByUser(int userId) => new ResultDataModel<IEnumerable<Salary>>(await _salaryRepository.GetByUserId(userId));
+        public async Task<ResultDataModel<IEnumerable<Salary>>> GetByUser(int userId) => new ResultDataModel<IEnumerable<Salary>>(await _salaryRepository.GetSome(new BaseFilter() { UserId = userId }));
 
         public async Task<ResultModel> Add(Salary salary)
         {

@@ -17,7 +17,7 @@ const styles = {
   },
   symbolSpan: {
     color: '#FFF',
-    fontFamily: 'FrederickaGreat',
+    fontFamily: 'Cash Currency',
     fontSize: '60px'
   },
   subMainText: {
@@ -54,6 +54,8 @@ export function SidebarContent({ closeSidebar }) {
         </span>
       </div>
       <List>
+        <Divider />
+        <LinkListItem onClick={() => closeSidebar()} to="/" text="Home" />
         <Divider />
         <LinkListItem onClick={() => closeSidebar()} to="/payments" text="Pagamentos" />
         <Divider />

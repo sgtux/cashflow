@@ -16,7 +16,7 @@ const styles = {
     flexGrow: 2,
     textTransform: 'uppercase',
     color: '#FFF',
-    fontFamily: 'FrederickaGreat',
+    fontFamily: 'cash-currency',
     fontSize: '40px'
   },
   menuButton: {

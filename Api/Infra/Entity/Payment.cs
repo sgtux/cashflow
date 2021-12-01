@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Cashflow.Api.Extensions;
@@ -19,6 +20,8 @@ namespace Cashflow.Api.Infra.Entity
 
         public PaymentConditionEnum Condition { get; set; }
 
+        public decimal BaseCost { get; set; }
+
         public string ConditionText => Condition.GetDescription();
 
         public bool Monthly => Condition == PaymentConditionEnum.Monthly;
@@ -31,13 +34,15 @@ namespace Cashflow.Api.Infra.Entity
 
         public bool Paid { get; set; }
 
-        public bool Active { get; set; }
+        public DateTime? InactiveAt { get; set; }
+
+        public bool Active => !InactiveAt.HasValue;
 
         public IList<Installment> Installments { get; set; }
 
         public int PaidInstallments => Installments?.Where(p => p.PaidDate.HasValue).Count() ?? 0;
 
-        public decimal Total => Monthly ? (Installments?.FirstOrDefault()?.Cost ?? 0) : Installments?.Sum(p => p.Cost) ?? 0;
+        public decimal Total => Monthly ? BaseCost : Installments?.Sum(p => p.Cost) ?? 0;
 
         public string FirstPaymentFormatted => Installments?.OrderBy(p => p.Number).FirstOrDefault()?.Date.ToString("dd/MM/yyyy");
     }

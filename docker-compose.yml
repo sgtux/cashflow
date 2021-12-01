@@ -10,9 +10,18 @@ services:
         image: sgtux/cashflow
         networks:
             lan:
-                ipv4_address: 172.30.30.20
+                ipv4_address: 172.30.30.30
         ports:
             - "8090:80"
+
+    pgadmin_web:
+        environment:
+            - PGADMIN_DEFAULT_EMAIL=admin@mail.com
+            - PGADMIN_DEFAULT_PASSWORD=admin
+        image: dpage/pgadmin4
+        networks:
+            lan:
+                ipv4_address: 172.30.30.20
 
     database:
         environment:
