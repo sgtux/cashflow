@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Cashflow.Api.Contracts;
 using Cashflow.Api.Infra.Entity;
+using Cashflow.Api.Infra.Filters;
 using Cashflow.Api.Infra.Repository;
 
 namespace Cashflow.Tests.Mocks
@@ -17,9 +19,7 @@ namespace Cashflow.Tests.Mocks
 
         public Task<Payment> GetById(long id) => Task.Run(() => Payments.FirstOrDefault(p => p.Id == id));
 
-        public Task<IEnumerable<Payment>> GetByUser(int userId) => Task.Run(() => Payments.Where(p => p.UserId == userId));
-
-        public IEnumerable<Payment> GetSome(Expression<Func<Payment, bool>> expressions) => throw new NotImplementedException();
+        public Task<IEnumerable<Payment>> GetSome(BaseFilter filter) => Task.Run(() => Payments.Where(p => p.UserId == filter.UserId));
 
         public Task Remove(long id)
         {

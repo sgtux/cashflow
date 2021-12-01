@@ -1,8 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Cashflow.Api.Contracts;
 using Cashflow.Api.Infra.Entity;
-using Cashflow.Api.Infra.Repository;
+using Cashflow.Api.Infra.Filters;
 
 namespace Cashflow.Tests.Mocks
 {
@@ -16,7 +17,7 @@ namespace Cashflow.Tests.Mocks
 
         public Task<Salary> GetById(long id) => Task.Run(() => Salaries.FirstOrDefault(p => p.Id == id));
 
-        public Task<IEnumerable<Salary>> GetByUserId(int userId) => Task.Run(() => Salaries.Where(p => p.UserId == userId));
+        public Task<IEnumerable<Salary>> GetSome(BaseFilter filter) => Task.Run(() => Salaries.Where(p => p.UserId == filter.UserId));
 
         public Task Remove(long id) => Task.Run(() => Salaries.Remove(Salaries.First(p => p.Id == id)));
 

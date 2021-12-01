@@ -1,8 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Cashflow.Api.Contracts;
 using Cashflow.Api.Infra.Entity;
-using Cashflow.Api.Infra.Repository;
+using Cashflow.Api.Infra.Filters;
 
 namespace Cashflow.Tests.Mocks
 {
@@ -16,7 +17,7 @@ namespace Cashflow.Tests.Mocks
 
         public Task<CreditCard> GetById(long id) => Task.Run(() => CreditCards.FirstOrDefault(p => p.Id == id));
 
-        public Task<IEnumerable<CreditCard>> GetByUserId(int userId) => Task.Run(() => CreditCards.Where(p => p.UserId == userId).AsEnumerable());
+        public Task<IEnumerable<CreditCard>> GetSome(BaseFilter filter) => Task.Run(() => CreditCards.Where(p => p.UserId == filter.UserId).AsEnumerable());
 
         public Task<bool> HasPayments(int cardId) => Task.Run(() => Payments.Any(p => p.CreditCardId == cardId));
 

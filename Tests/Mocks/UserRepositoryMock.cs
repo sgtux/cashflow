@@ -1,8 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Cashflow.Api.Contracts;
 using Cashflow.Api.Infra.Entity;
-using Cashflow.Api.Infra.Repository;
+using Cashflow.Api.Infra.Filters;
 
 namespace Cashflow.Tests.Mocks
 {
@@ -29,5 +30,7 @@ namespace Cashflow.Tests.Mocks
         public Task<bool> Exists(long userId) => Task.Run(() => Users.Any(p => p.Id == userId));
 
         public Task<User> FindByNickName(string nickName) => Task.Run(() => Users.FirstOrDefault(p => p.NickName == nickName));
+
+        public Task<IEnumerable<User>> GetSome(BaseFilter filter) => throw new System.NotImplementedException();
     }
 }

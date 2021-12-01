@@ -1,8 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Cashflow.Api.Contracts;
 using Cashflow.Api.Infra.Entity;
-using Cashflow.Api.Infra.Repository;
+using Cashflow.Api.Infra.Filters;
 
 namespace Cashflow.Tests.Mocks
 {
@@ -29,6 +30,6 @@ namespace Cashflow.Tests.Mocks
 
         public Task<bool> Exists(long id) => Task.Run(() => DailyExpenses.Any(p => p.Id == id));
 
-        public Task<IEnumerable<DailyExpenses>> GetByUser(int userId) => Task.Run(() => DailyExpenses.Where(p => p.UserId == userId));
+        public Task<IEnumerable<DailyExpenses>> GetSome(BaseFilter filter) => Task.Run(() => DailyExpenses.Where(p => p.UserId == filter.UserId));
     }
 }
