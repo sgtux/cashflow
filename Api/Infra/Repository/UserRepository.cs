@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Cashflow.Api.Contracts;
 using Cashflow.Api.Infra.Entity;
+using Cashflow.Api.Infra.Filters;
 using Cashflow.Api.Infra.Sql.User;
 using Cashflow.Api.Service;
 using Cashflow.Api.Shared;
@@ -21,5 +23,7 @@ namespace Cashflow.Api.Infra.Repository
         public Task Update(User t) => throw new NotImplementedException();
 
         public Task Remove(long id) => throw new NotImplementedException();
+
+        public Task<IEnumerable<User>> GetSome(BaseFilter filter) => throw new NotImplementedException();
     }
 }

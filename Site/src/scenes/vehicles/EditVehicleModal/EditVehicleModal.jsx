@@ -10,7 +10,7 @@ import {
 
 import { toReal, fromReal, dateToString } from '../../../helpers'
 import { vehicleService } from '../../../services'
-import { InputMoney, InputText } from '../../../components/inputs'
+import { InputMoney, InputText, DatePickerContainer, DatePickerInput } from '../../../components/inputs'
 
 import { FuelExpensesTable } from './styles'
 
@@ -82,7 +82,10 @@ export function EditVehicleModal({ vehicle, onCancel }) {
 
     function remove(id) {
         vehicleService.removeFuelExpenses(id)
-            .then(() => setFuelExpenses(fuelExpenses.filter(p => p.id !== id)))
+            .then(() => {
+                setFuelExpenses(fuelExpenses.filter(p => p.id !== id))
+                clear()
+            })
     }
 
     return (
@@ -128,7 +131,7 @@ export function EditVehicleModal({ vehicle, onCancel }) {
                             </tbody>
                         </table>
                     </FuelExpensesTable>
-                    <div style={{ padding: 10 }}>
+                    <DatePickerContainer style={{ padding: 10 }}>
                         Quilometragem:
                         <InputText
                             value={miliage}
@@ -143,6 +146,7 @@ export function EditVehicleModal({ vehicle, onCancel }) {
                             kind="money"
                             value={valueSupplied} />
                         Data: <DatePicker onChange={e => setDate(e)}
+                            customInput={<DatePickerInput />}
                             dateFormat="dd/MM/yyyy" locale={ptBr} selected={date} />
                         <Button onClick={() => clear()} autoFocus>limpar</Button>
                         <Button onClick={() => save()}
@@ -153,7 +157,7 @@ export function EditVehicleModal({ vehicle, onCancel }) {
                         <div style={{ margin: '10px', textAlign: 'center' }}>
                             <Button onClick={() => onCancel()} variant="contained" autoFocus>fechar</Button>
                         </div>
-                    </div>
+                    </DatePickerContainer>
                 </div>
             </DialogContent>
         </Dialog>

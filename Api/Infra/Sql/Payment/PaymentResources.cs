@@ -6,7 +6,7 @@ namespace Cashflow.Api.Infra.Sql.Payment
 
         public static ResourceBuilder ById => new ResourceBuilder("Payment.GetById.sql");
 
-        public static ResourceBuilder ByUser => new ResourceBuilder("Payment.GetByUser.sql");
+        public static ResourceBuilder Some => new ResourceBuilder("Payment.GetSome.sql");
 
         public static ResourceBuilder Types => new ResourceBuilder("Payment.GetTypes.sql");
 

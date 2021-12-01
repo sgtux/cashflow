@@ -6,7 +6,7 @@ namespace Cashflow.Api.Infra.Sql.DailyExpenses
 
         public static ResourceBuilder DeleteItems => new ResourceBuilder("DailyExpenses.DeleteItems.sql");
 
-        public static ResourceBuilder ByUser => new ResourceBuilder("DailyExpenses.GetByUser.sql");
+        public static ResourceBuilder Some => new ResourceBuilder("DailyExpenses.GetSome.sql");
 
         public static ResourceBuilder ById => new ResourceBuilder("DailyExpenses.GetById.sql");
 

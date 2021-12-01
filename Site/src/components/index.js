@@ -3,7 +3,10 @@ export {
     InputDate,
     InputNumbers,
     InputMoney,
-    InputMonth
+    InputMonth,
+    DatePickerContainer,
+    InputText,
+    DatePickerInput
 } from './inputs'
 
 export { MainContainer } from './main'

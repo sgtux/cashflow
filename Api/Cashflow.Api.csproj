@@ -37,7 +37,7 @@
 
     <EmbeddedResource Include="Infra/Sql/Payment/Delete.sql" />
     <EmbeddedResource Include="Infra/Sql/Payment/GetById.sql" />
-    <EmbeddedResource Include="Infra/Sql/Payment/GetByUser.sql" />
+    <EmbeddedResource Include="Infra/Sql/Payment/GetSome.sql" />
     <EmbeddedResource Include="Infra/Sql/Payment/GetTypes.sql" />
     <EmbeddedResource Include="Infra/Sql/Payment/Insert.sql" />
     <EmbeddedResource Include="Infra/Sql/Payment/Update.sql" />
@@ -47,7 +47,7 @@
 
     <EmbeddedResource Include="Infra/Sql/DailyExpenses/Delete.sql" />
     <EmbeddedResource Include="Infra/Sql/DailyExpenses/DeleteItems.sql" />
-    <EmbeddedResource Include="Infra/Sql/DailyExpenses/GetByUser.sql" />
+    <EmbeddedResource Include="Infra/Sql/DailyExpenses/GetSome.sql" />
     <EmbeddedResource Include="Infra/Sql/DailyExpenses/GetById.sql" />
     <EmbeddedResource Include="Infra/Sql/DailyExpenses/Insert.sql" />
     <EmbeddedResource Include="Infra/Sql/DailyExpenses/InsertItem.sql" />
@@ -55,7 +55,7 @@
 
     <EmbeddedResource Include="Infra/Sql/Vehicle/Delete.sql" />
     <EmbeddedResource Include="Infra/Sql/Vehicle/GetById.sql" />
-    <EmbeddedResource Include="Infra/Sql/Vehicle/GetByUser.sql" />
+    <EmbeddedResource Include="Infra/Sql/Vehicle/GetSome.sql" />
     <EmbeddedResource Include="Infra/Sql/Vehicle/Insert.sql" />
     <EmbeddedResource Include="Infra/Sql/Vehicle/Update.sql" />
 

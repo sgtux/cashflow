@@ -1,8 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Cashflow.Api.Contracts;
 using Cashflow.Api.Infra.Entity;
-using Cashflow.Api.Infra.Repository;
+using Cashflow.Api.Infra.Filters;
 using Cashflow.Api.Models;
 using Cashflow.Api.Validators;
 
@@ -20,7 +21,7 @@ namespace Cashflow.Api.Service
             _userRepository = userRepository;
         }
 
-        public async Task<ResultDataModel<IEnumerable<CreditCard>>> GetByUser(int userId) => new ResultDataModel<IEnumerable<CreditCard>>(await _creditCardRepository.GetByUserId(userId));
+        public async Task<ResultDataModel<IEnumerable<CreditCard>>> GetByUser(int userId) => new ResultDataModel<IEnumerable<CreditCard>>(await _creditCardRepository.GetSome(new BaseFilter() { UserId = userId }));
 
         public async Task<ResultModel> Add(CreditCard card)
         {
@@ -51,7 +52,7 @@ namespace Cashflow.Api.Service
         public async Task<ResultModel> Remove(int id, int userId)
         {
             var result = new ResultModel();
-            var card = (await _creditCardRepository.GetByUserId(userId)).FirstOrDefault(p => p.Id == id);
+            var card = (await _creditCardRepository.GetSome(new BaseFilter() { UserId = userId })).FirstOrDefault(p => p.Id == id);
             if (card is null)
             {
                 result.AddNotification(ValidatorMessages.CreditCard.NotFound);

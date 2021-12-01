@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Cashflow.Api.Contracts;
 using Cashflow.Api.Infra.Entity;
-using Cashflow.Api.Infra.Repository;
+using Cashflow.Api.Infra.Filters;
 using FluentValidation;
 
 namespace Cashflow.Api.Validators
@@ -54,7 +55,7 @@ namespace Cashflow.Api.Validators
         {
             if (payment.CreditCardId > 0)
             {
-                var card = _creditCardRepository.GetByUserId(payment.UserId).Result.FirstOrDefault(p => p.Id == payment.CreditCardId.Value);
+                var card = _creditCardRepository.GetSome(new BaseFilter() { UserId = payment.UserId }).Result.FirstOrDefault(p => p.Id == payment.CreditCardId.Value);
                 if (card == null || card.UserId != payment.UserId)
                     return false;
             }

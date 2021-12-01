@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Cashflow.Api.Infra.Sql.CreditCard;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Service;
 using Cashflow.Api.Shared;
+using Cashflow.Api.Infra.Filters;
+using Cashflow.Api.Contracts;
 
 namespace Cashflow.Api.Infra.Repository
 {
@@ -17,12 +18,7 @@ namespace Cashflow.Api.Infra.Repository
 
         public Task<CreditCard> GetById(long id) => throw new NotImplementedException();
 
-        public Task<IEnumerable<CreditCard>> GetByUserId(int userId) => Query(CreditCardResources.ByUser, new { UserId = userId });
-
-        public Task<IEnumerable<CreditCard>> GetSome(Expression<Func<CreditCard, bool>> expressions)
-        {
-            throw new NotImplementedException();
-        }
+        public Task<IEnumerable<CreditCard>> GetSome(BaseFilter filter) => Query(CreditCardResources.ByUser, filter);
 
         public async Task<bool> HasPayments(int cardId)
         {

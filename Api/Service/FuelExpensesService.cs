@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
+using Cashflow.Api.Contracts;
 using Cashflow.Api.Infra.Entity;
-using Cashflow.Api.Infra.Repository;
 using Cashflow.Api.Models;
 using Cashflow.Api.Validators;
 

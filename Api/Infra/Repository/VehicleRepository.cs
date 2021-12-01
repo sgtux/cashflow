@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Cashflow.Api.Infra.Entity;
@@ -6,6 +5,8 @@ using Cashflow.Api.Service;
 using Cashflow.Api.Shared;
 using Cashflow.Api.Infra.Sql.Vehicle;
 using System.Linq;
+using Cashflow.Api.Contracts;
+using Cashflow.Api.Infra.Filters;
 
 namespace Cashflow.Api.Infra.Repository
 {
@@ -32,10 +33,10 @@ namespace Cashflow.Api.Infra.Repository
             return vehicle;
         }
 
-        public async Task<IEnumerable<Vehicle>> GetByUserId(int userId)
+        public async Task<IEnumerable<Vehicle>> GetSome(BaseFilter filter)
         {
             var list = new List<Vehicle>();
-            await Query<FuelExpenses>(VehicleResources.ByUser, (x, y) =>
+            await Query<FuelExpenses>(VehicleResources.Some, (x, y) =>
             {
                 var vehicle = list.FirstOrDefault(p => p.Id == x.Id);
                 if (vehicle == null)
@@ -47,7 +48,7 @@ namespace Cashflow.Api.Infra.Repository
                 if (y != null)
                     vehicle.FuelExpenses.Add(y);
                 return x;
-            }, new { UserId = userId });
+            }, filter);
             return list;
         }
 

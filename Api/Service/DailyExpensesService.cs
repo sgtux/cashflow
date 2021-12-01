@@ -2,8 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Cashflow.Api.Contracts;
 using Cashflow.Api.Infra.Entity;
-using Cashflow.Api.Infra.Repository;
+using Cashflow.Api.Infra.Filters;
 using Cashflow.Api.Models;
 using Cashflow.Api.Validators;
 
@@ -25,8 +26,12 @@ namespace Cashflow.Api.Service
             if (year > now.Year + 5 || year < now.Year - 5)
                 year = now.Year;
 
-            var list = await _dailyExpensesRepository.GetByUser(userId);
-            list = list.Where(p => p.Date.Month == month && p.Date.Year == year);
+            var list = await _dailyExpensesRepository.GetSome(new BaseFilter()
+            {
+                StartDate = new DateTime(year, month, 1),
+                EndDate = new DateTime(year, month, DateTime.DaysInMonth(year, month)),
+                UserId = userId
+            });
             return new ResultDataModel<IEnumerable<DailyExpenses>>(list);
         }
 

@@ -1,6 +1,7 @@
 using System.Linq;
+using Cashflow.Api.Contracts;
 using Cashflow.Api.Infra.Entity;
-using Cashflow.Api.Infra.Repository;
+using Cashflow.Api.Infra.Filters;
 using FluentValidation;
 
 namespace Cashflow.Api.Validators
@@ -23,7 +24,7 @@ namespace Cashflow.Api.Validators
 
         public bool CreditCardExists(CreditCard card)
         {
-            var cards = _creditCardRepository.GetByUserId(card.UserId).Result;
+            var cards = _creditCardRepository.GetSome(new BaseFilter() { UserId = card.UserId }).Result;
             return cards.Any(p => p.Id == card.Id);
         }
 

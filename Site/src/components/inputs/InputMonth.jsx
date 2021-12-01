@@ -7,7 +7,7 @@ import {
 
 import { Months } from '../../helpers/utils'
 
-export function InputMonth({ startYear, onChange, selectedMonth, selectedYear, label }) {
+export function InputMonth({ startYear, onChange, selectedMonth, selectedYear, label, countYears }) {
 
   const [years, setYears] = useState([])
 
@@ -15,7 +15,7 @@ export function InputMonth({ startYear, onChange, selectedMonth, selectedYear, l
 
     const currentYear = new Date().getFullYear()
     const temp = startYear && !isNaN(startYear) ? [Number(startYear)] : [currentYear]
-    for (let i = 1; i < 5; i++)
+    for (let i = 1; i < (countYears || 5); i++)
       temp.push(temp[0] + i)
     setYears(temp)
   }, [])

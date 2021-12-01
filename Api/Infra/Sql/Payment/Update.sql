@@ -5,5 +5,5 @@ SET
   "Type" = @TypeId,
   "CreditCardId" = @CreditCardId,
   "Condition" = @Condition,
-  "Active" = @Active
+  "InactiveAt" = @InactiveAt
 WHERE "Id" = @Id

@@ -9,7 +9,8 @@ import {
   EditPayment,
   DailyExpenses,
   EditDailyExpenses,
-  Vehicles
+  Vehicles,
+  Home
 } from '../../scenes'
 
 const history = createHashHistory()
@@ -31,7 +32,7 @@ history.listen((location, action) => {
 export default function () {
   return (
     <Routes>
-      <Route path="/" exact={true} element={<Projection />} />
+      <Route path="/" exact={true} element={<Home />} />
       <Route path="/payments" element={<Payments />} />
       <Route path="/credit-cards" element={<CreditCards />} />
       <Route path="/projection" element={<Projection />} />

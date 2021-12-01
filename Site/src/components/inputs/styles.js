@@ -36,3 +36,9 @@ export const InputText = styled.input`
     font-family: Roboto Helvetica Arial sans-serif;
     font-size: 16px;
 `
+
+export const DatePickerContainer = styled.div`
+    & div.react-datepicker-wrapper, & div.react-datepicker__input-container {
+        display: inline;
+    }
+`

@@ -8,6 +8,12 @@ namespace Cashflow.Api.Shared
 
         Contributions = 3,
 
-        Dividends = 4
+        Dividends = 4,
+
+        Financing = 5,
+
+        Education = 6,
+
+        Loan = 7
     }
 }
