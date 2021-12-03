@@ -6,6 +6,11 @@ const InvoiceCostSpan = styled.span`
     color: ${Colors.AppRed};
     margin-top: 6px;
     padding: 3px;
+    font-family: "Roboto","Helvetica","Arial",sans-serif;
+`
+
+export const InvoiceCostSmall = styled(InvoiceCostSpan)`
+    font-size: 10px;
 `
 
 export const InvoiceCost = styled(InvoiceCostSpan)`
@@ -13,9 +18,5 @@ export const InvoiceCost = styled(InvoiceCostSpan)`
 `
 
 export const InvoiceTotalCost = styled(InvoiceCostSpan)`
-    font-size: 14px;
-`
-
-export const InvoiceCostSmall = styled(InvoiceCostSpan)`
-    font-size: 10px;
+    font-size: 16px;
 `

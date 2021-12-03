@@ -25,10 +25,7 @@ export function Home() {
             setSelectedDate(date)
             setLoading(true)
             homeService.getChart(date.month, date.year)
-                .then(res => {
-                    setHomeChart(res)
-                    console.log(res)
-                })
+                .then(res => setHomeChart(res))
                 .finally(() => setLoading(false))
         }
     }

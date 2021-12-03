@@ -36,6 +36,7 @@ export const ContainerCosts = styled.div`
     display: flex;
     flex-direction: column;
     margin-top: 20px;
+    padding-right: 10px; 
 `
 
 export const BoxCosts = styled.div`

@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import {
   Button,
-  GridList,
-  GridListTile,
+  ImageList,
+  ImageListItem,
   FormControlLabel,
   Checkbox
 } from '@material-ui/core'
@@ -179,8 +179,8 @@ export function EditPayment() {
     <MainContainer title="Pagamento" loading={loading}>
       <div style={{ textAlign: 'start', fontSize: 14, color: '#666', fontFamily: '"Roboto", "Helvetica", "Arial", "sans-serif"' }} >
 
-        <GridList cellHeight={380} cols={5}>
-          <GridListTile cols={3}>
+        <ImageList rowHeight={380} cols={5}>
+          <ImageListItem cols={3}>
 
             <IconTextInput
               label="Descrição"
@@ -229,14 +229,14 @@ export function EditPayment() {
               {editInstallment && <EditInstallmentModal installment={editInstallment} onCancel={() => setEditInstallment()} onSave={p => installmentChanged(p)} />}
             </div>
 
-          </GridListTile>
-          <GridListTile cols={2}>
+          </ImageListItem>
+          <ImageListItem cols={2}>
             <InstallmentList installments={installments}
               hide={condition !== PaymentCondition.Installment || !installments.length}
               onEdit={p => setEditInstallment(p)}
             />
-          </GridListTile>
-        </GridList>
+          </ImageListItem>
+        </ImageList>
       </div>
 
       <div style={{ display: 'flex', justifyContent: 'end' }}>

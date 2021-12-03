@@ -16,8 +16,8 @@ const styles = {
     flexGrow: 2,
     textTransform: 'uppercase',
     color: '#FFF',
-    fontFamily: 'cash-currency',
-    fontSize: '40px'
+    fontFamily: 'Permanent Marker',
+    fontSize: '30px'
   },
   menuButton: {
     marginLeft: -12,
@@ -50,7 +50,7 @@ export function AppToolbar({ openSideBar, dockedMenu }) {
               </IconButton>
           }
           <Typography variant="h2" color="inherit" style={styles.grow}>
-            Fluxo de caixa (R$)
+            Educação Financeira (R$)
           </Typography>
           {appState.user.nickName}
           <Button color="secondary" onClick={() => logout()}>
