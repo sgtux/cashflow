@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { PieChart, Pie, Cell } from 'recharts'
 
 import { toReal } from '../../../helpers'
@@ -52,9 +52,18 @@ function Legend({ item }) {
 
 export function MonthExpensesChart({ data }) {
 
+    const [total, setTotal] = useState(0)
+
+    useEffect(() => {
+        let sum = 0
+        data.forEach(e => sum += e.value)
+        setTotal(sum)
+    }, [data])
+
     return (
         <div style={{ marginTop: 20 }}>
             {data.map(p => <Legend key={p.index} item={p} />)}
+            <span style={{ fontSize: 20, marginTop: 10 }}>Total: {toReal(total)}</span>
             <PieChart width={300} height={300}>
                 <Pie
                     data={data}

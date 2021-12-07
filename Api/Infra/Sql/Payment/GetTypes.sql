@@ -1,5 +1,8 @@
-SELECT 
+SELECT
   "Id",
   "Description",
   "In"
-FROM "PaymentType" ORDER BY "Id"
+FROM
+  "PaymentType"
+ORDER BY
+  "Id"

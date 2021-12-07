@@ -1,4 +1,4 @@
-SELECT 
+SELECT
   p."Id",
   p."Description",
   p."UserId",
@@ -6,12 +6,15 @@ SELECT
   p."CreditCardId",
   p."Condition",
   p."InactiveAt",
+  p."BaseCost",
   i."Id",
   i."PaymentId",
   i."Cost",
   i."Number",
   i."Date",
   i."PaidDate"
-FROM "Payment" p
-JOIN "Installment" i on p."Id" = i."PaymentId"
-WHERE p."Id" = @Id
+FROM
+  "Payment" p
+  JOIN "Installment" i ON p."Id" = i."PaymentId"
+WHERE
+  p."Id" = @Id

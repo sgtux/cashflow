@@ -23,11 +23,14 @@ namespace Cashflow.Api.Service
 
         private IVehicleRepository _vehicleRepository;
 
+        private IRemainingBalanceRepository _remainingBalanceRepository;
+
         public PaymentService(IPaymentRepository paymentRepository,
             ICreditCardRepository creditCardRepository,
             ISalaryRepository salaryRepository,
             IDailyExpensesRepository dailyExpensesRepository,
-            IVehicleRepository vehicleRepository
+            IVehicleRepository vehicleRepository,
+            IRemainingBalanceRepository remainingBalanceRepository
             )
         {
             _paymentRepository = paymentRepository;
@@ -35,6 +38,7 @@ namespace Cashflow.Api.Service
             _salaryRepository = salaryRepository;
             _dailyExpensesRepository = dailyExpensesRepository;
             _vehicleRepository = vehicleRepository;
+            _remainingBalanceRepository = remainingBalanceRepository;
         }
 
         public async Task<ResultDataModel<Payment>> Get(int id, int userId)
@@ -43,7 +47,17 @@ namespace Cashflow.Api.Service
             return new ResultDataModel<Payment>(p?.UserId == userId ? p : null);
         }
 
-        public async Task<ResultDataModel<IEnumerable<Payment>>> GetByUser(int userId) => new ResultDataModel<IEnumerable<Payment>>(await _paymentRepository.GetSome(new BaseFilter() { UserId = userId }));
+        public async Task<ResultDataModel<IEnumerable<Payment>>> GetByUser(int userId, PaymentFilterModel filterModel)
+        {
+            var filter = new BaseFilter()
+            {
+                UserId = userId,
+                Active = filterModel.Active,
+                InactiveFrom = filterModel.InactiveFrom?.FixStartTimeFilter(),
+                InactiveTo = filterModel.InactiveTo?.FixEndTimeFilter()
+            };
+            return new ResultDataModel<IEnumerable<Payment>>(await _paymentRepository.GetSome(filter));
+        }
 
         public async Task<ResultDataModel<IEnumerable<PaymentType>>> GetTypes() => new ResultDataModel<IEnumerable<PaymentType>>(await _paymentRepository.GetTypes());
 
@@ -57,6 +71,7 @@ namespace Cashflow.Api.Service
             var salary = (await _salaryRepository.GetSome(baseFilter)).FirstOrDefault(p => p.EndDate is null);
             var vehicles = await _vehicleRepository.GetSome(baseFilter);
             var allDailyExpenses = await _dailyExpensesRepository.GetSome(baseFilter);
+            var remainingBalance = await _remainingBalanceRepository.GetByMonthYear(userId, DateTime.Now.Month, DateTime.Now.Year);
 
             var dates = LoadDates(month, year);
 
@@ -74,6 +89,15 @@ namespace Cashflow.Api.Service
                         Cost = salary.Value
                     });
                 }
+
+                if (remainingBalance != null && remainingBalance.Month == date.Month && remainingBalance.Year == date.Year)
+                    resultModel.Payments.Add(new PaymentProjectionModel()
+                    {
+                        Description = "Saldo Mês Anterior",
+                        MonthYear = date.ToString("MM/yyyy"),
+                        Type = types.First(p => p.Id == (remainingBalance.Value >= 0 ? (int)PaymentTypeEnum.Gain : (int)PaymentTypeEnum.Expense)),
+                        Cost = Math.Abs(remainingBalance.Value)
+                    });
 
                 FillVehicleExpenses(userId, resultModel, vehicles, date, types);
 

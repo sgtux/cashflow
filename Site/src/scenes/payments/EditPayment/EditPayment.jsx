@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
+import ptBr from 'date-fns/locale/pt-BR'
+import DatePicker from 'react-datepicker'
 import {
   Button,
   ImageList,
@@ -13,6 +15,7 @@ import { InstallmentSetBox } from './InstallmnetSetBox/InstallmentSetBox'
 import { ConditionCreditCardBox } from './ConditionCreditCardBox/ConditionCreditCardBox'
 import { MainContainer } from '../../../components/main'
 import IconTextInput from '../../../components/main/IconTextInput'
+import { DatePickerInput, DatePickerContainer } from '../../../components/inputs'
 
 import { toReal, toast, fromReal, PaymentCondition } from '../../../helpers'
 import { paymentService, creditCardService } from '../../../services'
@@ -39,6 +42,8 @@ export function EditPayment() {
   const [installmentsUpdated, setInstallmentsUpdated] = useState(false)
   const [formIsValid, setFormIsValid] = useState(false)
   const [active, setActive] = useState(true)
+  const [inactiveAt, setInactiveAt] = useState()
+
 
   const params = useParams()
   const navigate = useNavigate()
@@ -53,6 +58,10 @@ export function EditPayment() {
 
         const payment = res || {}
         setId(payment.id)
+
+        if (payment.id && payment.inactiveAt) {
+          setInactiveAt(new Date(payment.inactiveAt))
+        }
 
         const firstInstallment = (payment.installments || [])[0] || {}
         const qtdInstallments = (payment.installments || []).length || 1
@@ -142,7 +151,9 @@ export function EditPayment() {
       id,
       description: description,
       typeId: type,
+      baseCost: fromReal(costText),
       installments,
+      inactiveAt,
       condition,
       creditCardId: card,
       active
@@ -214,14 +225,14 @@ export function EditPayment() {
               qtdInstallmentsChanged={v => setQtdInstallments(v)}
             />
 
-            <div style={{ marginBottom: 10 }}>
-              <FormControlLabel label="Ativo"
-                control={<Checkbox
-                  checked={active}
-                  onChange={(e, c) => setActive(c)}
-                  color="primary"
-                />} />
+            {id && <div style={{ marginBottom: 10 }}>
+              <DatePickerContainer style={{ color: '#666' }}>
+                <span>Data Inativação:</span>
+                <DatePicker customInput={<DatePickerInput style={{ width: 115 }} />} onChange={e => setInactiveAt(e)}
+                  dateFormat="dd/MM/yyyy" locale={ptBr} selected={inactiveAt} />
+              </DatePickerContainer>
             </div>
+            }
 
             <div hidden={condition !== PaymentCondition.Installment}>
               <Button disabled={installmentsUpdated} onClick={() => updateInstallments()} variant="contained" autoFocus>atualizar parcelas</Button>

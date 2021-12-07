@@ -20,6 +20,7 @@ namespace Cashflow.Api.Extensions
             services.AddScoped<DailyExpensesService>();
             services.AddScoped<VehicleService>();
             services.AddScoped<FuelExpensesService>();
+            services.AddScoped<RemainingBalanceService>();
             services.AddScoped<LogService>();
 
             services.AddScoped<IUserRepository, UserRepository>();
@@ -29,6 +30,7 @@ namespace Cashflow.Api.Extensions
             services.AddScoped<IDailyExpensesRepository, DailyExpensesRepository>();
             services.AddScoped<IVehicleRepository, VehicleRepository>();
             services.AddScoped<IFuelExpensesRepository, FuelExpensesRepository>();
+            services.AddScoped<IRemainingBalanceRepository, RemainingBalanceRepository>();
 
             services.AddScoped<DatabaseContext>();
         }
