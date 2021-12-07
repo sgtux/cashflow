@@ -63,6 +63,11 @@
     <EmbeddedResource Include="Infra/Sql/FuelExpenses/GetById.sql" />
     <EmbeddedResource Include="Infra/Sql/FuelExpenses/Insert.sql" />
     <EmbeddedResource Include="Infra/Sql/FuelExpenses/Update.sql" />
+
+    <EmbeddedResource Include="Infra/Sql/RemainingBalance/Delete.sql" />
+    <EmbeddedResource Include="Infra/Sql/RemainingBalance/GetByMonthYear.sql" />
+    <EmbeddedResource Include="Infra/Sql/RemainingBalance/Insert.sql" />
+    <EmbeddedResource Include="Infra/Sql/RemainingBalance/Update.sql" />
   </ItemGroup>
 
 </Project>

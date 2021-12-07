@@ -1,4 +1,18 @@
-INSERT INTO "Payment" 
-  ("Description", "UserId", "Type", "CreditCardId", "Condition", "InactiveAt")
+INSERT INTO
+  "Payment" (
+    "Description",
+    "UserId",
+    "Type",
+    "CreditCardId",
+    "Condition",
+    "InactiveAt"
+  )
 VALUES
-  (@Description, @UserId, @TypeId, @CreditCardId, @Condition, @InactiveAt)
+  (
+    @Description,
+    @UserId,
+    @TypeId,
+    @CreditCardId,
+    @Condition,
+    @InactiveAt
+  )

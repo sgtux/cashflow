@@ -15,10 +15,16 @@ namespace Cashflow.Api.Controllers
     {
         private PaymentService _service;
 
-        public PaymentController(PaymentService service) => _service = service;
+        private RemainingBalanceService _remainingBalanceService;
+
+        public PaymentController(PaymentService service, RemainingBalanceService remainingBalanceService)
+        {
+            _service = service;
+            _remainingBalanceService = remainingBalanceService;
+        }
 
         [HttpGet]
-        public async Task<IActionResult> Get() => HandleResult(await _service.GetByUser(UserId));
+        public async Task<IActionResult> Get([FromQuery] PaymentFilterModel filter) => HandleResult(await _service.GetByUser(UserId, filter));
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id) => HandleResult(await _service.Get(id, UserId));
@@ -27,7 +33,11 @@ namespace Cashflow.Api.Controllers
         public async Task<IActionResult> GetTypes() => HandleResult(await _service.GetTypes());
 
         [HttpGet("Projection")]
-        public async Task<IActionResult> GetProjection([FromQuery] int month, [FromQuery] int year) => HandleResult(await _service.GetProjection(UserId, month, year));
+        public async Task<IActionResult> GetProjection([FromQuery] int month, [FromQuery] int year)
+        {
+            await _remainingBalanceService.Update(UserId);
+            return HandleResult(await _service.GetProjection(UserId, month, year));
+        }
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Payment payment)

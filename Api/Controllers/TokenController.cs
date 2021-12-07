@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -19,11 +20,17 @@ namespace Cashflow.Api.Controllers
 
         private PaymentService _paymentService;
 
-        public TokenController(AppConfig config, AccountService accountService, PaymentService paymentService)
+        private RemainingBalanceService _remainingBalanceService;
+
+        public TokenController(AppConfig config,
+            AccountService accountService,
+            PaymentService paymentService,
+            RemainingBalanceService remainingBalanceService)
         {
             _config = config;
             _accountService = accountService;
             _paymentService = paymentService;
+            _remainingBalanceService = remainingBalanceService;
         }
 
         [HttpPost]
@@ -38,6 +45,7 @@ namespace Cashflow.Api.Controllers
                 return HandleUnauthorized(result.Notifications.First());
 
             await _paymentService.UpdateMonthlyPayments(result.Data.Id);
+            await _remainingBalanceService.Update(result.Data.Id);
 
             var claims = new Dictionary<string, string>();
             claims.Add(ClaimTypes.Sid, result.Data.Id.ToString());

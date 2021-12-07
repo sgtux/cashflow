@@ -55,3 +55,19 @@ export const debounce = (callback, delay) => {
     timer = setTimeout(() => callback(...args), delay)
   }
 }
+
+export const buildQueryParameters = obj => {
+  if (!obj) {
+    return ''
+  }
+  let result = ''
+  for (const i in obj) {
+    if (obj[i] !== undefined && obj[i] !== null) {
+      if (typeof (obj[i]) === 'object' && obj[i].toISOString)
+        result += `${i}=${obj[i].toISOString()}&`
+      else
+        result += `${i}=${obj[i]}&`
+    }
+  }
+  return result
+}
