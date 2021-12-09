@@ -5,9 +5,7 @@ import DatePicker from 'react-datepicker'
 import {
   Button,
   ImageList,
-  ImageListItem,
-  FormControlLabel,
-  Checkbox
+  ImageListItem
 } from '@material-ui/core'
 
 import { InstallmentList } from './InstallmentList/InstallmentList'
@@ -113,6 +111,18 @@ export function EditPayment() {
       let day = firstPayment.getDate()
       let month = firstPayment.getMonth() + 1
       let year = firstPayment.getFullYear()
+
+      if (card) {
+        const invoiceDay = cards.filter(p => p.id === card)[0].invoiceDay
+        if (day > invoiceDay) {
+          month++
+          if (month > 12) {
+            month = 1
+            year++
+          }
+        }
+        day = invoiceDay
+      }
 
       if (condition === PaymentCondition.Installment) {
         let firstCost = cost

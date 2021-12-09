@@ -1,6 +1,11 @@
 SELECT
   "Id",
   "Name",
-  "UserId"
-FROM "CreditCard"
-WHERE "UserId" = @UserId
+  "UserId",
+  "InvoiceDay"
+FROM
+  "CreditCard"
+WHERE
+  "UserId" = @UserId
+ORDER BY
+  "Name"

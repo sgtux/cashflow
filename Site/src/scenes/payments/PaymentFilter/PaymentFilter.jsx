@@ -68,9 +68,9 @@ export function PaymentFilter({ filterChanged }) {
                             dateFormat="dd/MM/yyyy" locale={ptBr} selected={inactiveTo} />
                     </span>
                 }
-                <div>
-                    <Button onClick={() => reset()}>Limpar</Button>
-                    <Button onClick={() => filter()}>Filtrar</Button>
+                <div style={{ textAlign: 'end' }}>
+                    <Button style={{ marginRight: 10 }} variant="contained" onClick={() => reset()}>Limpar</Button>
+                    <Button variant="contained" onClick={() => filter()}>Filtrar</Button>
                 </div>
 
             </DatePickerContainer>
