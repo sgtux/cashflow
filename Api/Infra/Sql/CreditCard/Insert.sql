@@ -1,4 +1,4 @@
-INSERT INTO "CreditCard" 
-  ("Name", "UserId") 
+INSERT INTO
+  "CreditCard" ("Name", "UserId", "InvoiceDay")
 VALUES
-  (@Name, @UserId)
+  (@Name, @UserId, @InvoiceDay)

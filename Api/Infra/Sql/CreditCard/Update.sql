@@ -1,4 +1,8 @@
-UPDATE "CreditCard"
-  SET "Name" = @Name,
-  "UserId" = @UserId
-  WHERE "Id" = @Id
+UPDATE
+  "CreditCard"
+SET
+  "Name" = @Name,
+  "UserId" = @UserId,
+  "InvoiceDay" = @InvoiceDay
+WHERE
+  "Id" = @Id

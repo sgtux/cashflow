@@ -12,6 +12,8 @@ namespace Cashflow.Api.Validators
 
         public static string MaxValue(string fieldName, int value) => string.Format("O valor máximo para o campo '{0}' é {1}.", fieldName, value);
 
+        public static string BetweenValue(string fieldName, int start, int end) => string.Format("O valor do campo '{0}' deve estar entre {1} e {2}.", fieldName, start, end);
+
         public static string NotFound(string name) => string.Format("{0} não encontrado.", name);
 
         public static UserMessages User = new UserMessages();

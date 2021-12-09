@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 
 import {
   Paper,
@@ -10,15 +10,17 @@ import {
   IconButton,
   ListItemText,
   Tooltip,
-  Button,
-  Divider
+  Button
 } from '@material-ui/core'
 
-import DeleteIcon from '@material-ui/icons/Delete'
-import CardIcon from '@material-ui/icons/CreditCardOutlined'
+import {
+  Delete as DeleteIcon,
+  EditOutlined as EditIcon,
+  CreditCardOutlined as CardIcon
+} from '@material-ui/icons'
 
 import { MainContainer } from '../../components/main'
-import IconTextInput from '../../components/main/IconTextInput'
+import { DailyExpensesDetailModal } from './CreditCardEditModal/CreditCardEditModal'
 
 import { creditCardService } from '../../services/index'
 
@@ -39,111 +41,92 @@ const styles = {
   }
 }
 
-export default class CreditCards extends React.Component {
+export function CreditCards() {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      loading: true,
-      cards: [],
-      card: null,
-      cardName: ''
-    }
-  }
+  const [loading, setLoading] = useState(false)
+  const [cards, setCards] = useState([])
+  const [card, setCard] = useState(null)
 
-  componentDidMount() {
-    this.refresh()
-  }
+  useEffect(() => refresh(), [])
 
-  refresh() {
-    this.setState({ loading: true, errorMessage: '', card: null, cardName: '' })
+  function refresh() {
+    setLoading(true)
+    setCard(null)
     creditCardService.get().then(res => {
-      setTimeout(() => {
-        this.setState({ loading: false, cards: res })
-      }, 300)
+      setLoading(false)
+      setCards(res)
     })
   }
 
-  removeCard(id) {
+  function removeCard(id) {
     creditCardService.remove(id)
-      .then(() => this.refresh())
-      .catch(err => this.setState({ errorMessage: err.error }))
+      .then(() => refresh())
+      .catch(() => setLoading(false))
   }
 
-  saveCard() {
-    const { card, cardName } = this.state
-    card.name = cardName
-    if (card.id)
-      creditCardService.update(card)
-        .then(() => this.refresh())
-        .catch(err => this.setState({ errorMessage: err.error }))
+  function saveCard(c) {
+    setLoading(true)
+    if (c.id)
+      creditCardService.update(c)
+        .then(() => refresh())
+        .catch(() => setLoading(false))
     else
-      creditCardService.create(card)
-        .then(() => this.refresh())
-        .catch(err => this.setState({ errorMessage: err.error }))
+      creditCardService.create(c)
+        .then(() => refresh())
+        .catch(() => setLoading(false))
   }
 
-  render() {
-    return (
-      <MainContainer title="Cartões de crédito" loading={this.state.loading}>
-        {this.state.cards.length > 0 ?
-          <Paper>
-            <List dense={true}>
-              {this.state.cards.map(p =>
-                <ListItem button key={p.id}
-                  onClick={() => this.setState({ card: p, cardName: p.name })}>
-                  <ListItemAvatar>
-                    <Avatar>
-                      <CardIcon />
-                    </Avatar>
-                  </ListItemAvatar>
-                  <ListItemText
-                    primary={p.name}
-                    secondary=""
-                  />
-                  <ListItemSecondaryAction>
-                    <Tooltip title="Remover este cartão">
-                      <IconButton color="secondary" aria-label="Delete"
-                        onClick={() => this.removeCard(p.id)}>
-                        <DeleteIcon />
-                      </IconButton>
-                    </Tooltip>
-                  </ListItemSecondaryAction>
-                </ListItem>
-              )}
-            </List>
-          </Paper>
-          :
-          <div style={styles.noRecords}>
-            <span>Você ainda não adicionou cartões.</span>
-          </div>
-        }
-        <div style={styles.divNewCard}>
-          <Button variant="text" color="primary" onClick={() => this.setState({ card: {} })}>
-            Adicionar Cartão
-          </Button>
-          <div style={{ marginTop: '20px' }} hidden={this.state.card === null}>
-            <Divider />
-            <IconTextInput
-              label="Nome do cartão"
-              value={this.state.cardName}
-              onChange={(e) => this.setState({ cardName: e.value, errorMessage: '' })}
-              Icon={<CardIcon />}
-            />
-            <br />
-            <div style={{ marginTop: '20px' }}>
-              <Button color="primary" onClick={() => this.setState({ card: null, cardName: '' })}>
-                Cancelar
-              </Button>
-              <Button variant="contained" color="primary"
-                onClick={() => this.saveCard()}>
-                Salvar
-              </Button>
-            </div>
-            <span style={{ color: '#d55', marginTop: '10px' }}>{this.state.errorMessage}</span>
-          </div>
+  return (
+    <MainContainer title="Cartões de crédito" loading={loading}>
+      {cards.length > 0 ?
+        <Paper>
+          <List dense={true}>
+            {cards.map(p =>
+              <ListItem key={p.id}>
+                <ListItemAvatar>
+                  <Avatar>
+                    <CardIcon />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText
+                  style={{ width: 160 }}
+                  primary={p.name}
+                  secondary=""
+                />
+                <ListItemText
+                  style={{ width: 160, textAlign: 'center' }}
+                  primary="Dia da fatura"
+                  secondary={p.invoiceDay}
+                />
+                <ListItemSecondaryAction>
+                  <Tooltip title="Editar este cartão">
+                    <IconButton color="primary" aria-label="Edit"
+                      onClick={() => setCard(p)}>
+                      <EditIcon />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Remover este cartão">
+                    <IconButton color="secondary" aria-label="Delete"
+                      onClick={() => removeCard(p.id)}>
+                      <DeleteIcon />
+                    </IconButton>
+                  </Tooltip>
+                </ListItemSecondaryAction>
+              </ListItem>
+            )}
+          </List>
+        </Paper>
+        :
+        <div style={styles.noRecords}>
+          <span>Você ainda não adicionou cartões.</span>
         </div>
-      </MainContainer>
-    )
-  }
+      }
+      <div style={styles.divNewCard}>
+        <Button variant="text" color="primary" onClick={() => setCard({})}>
+          Adicionar Cartão
+        </Button>
+      </div>
+      <DailyExpensesDetailModal onSave={c => saveCard(c)} onClose={() => refresh()} card={card} />
+    </MainContainer>
+  )
 }
