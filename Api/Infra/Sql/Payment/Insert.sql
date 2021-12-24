@@ -5,7 +5,9 @@ INSERT INTO
     "Type",
     "CreditCardId",
     "Condition",
-    "InactiveAt"
+    "InactiveAt",
+    "BaseCost",
+    "Date"
   )
 VALUES
   (
@@ -14,5 +16,7 @@ VALUES
     @TypeId,
     @CreditCardId,
     @Condition,
-    @InactiveAt
+    @InactiveAt,
+    @BaseCost,
+    @Date
   )

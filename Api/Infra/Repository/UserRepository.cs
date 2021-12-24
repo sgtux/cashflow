@@ -6,13 +6,12 @@ using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Infra.Filters;
 using Cashflow.Api.Infra.Sql.User;
 using Cashflow.Api.Service;
-using Cashflow.Api.Shared;
 
 namespace Cashflow.Api.Infra.Repository
 {
     public class UserRepository : BaseRepository<User>, IUserRepository
     {
-        public UserRepository(DatabaseContext conn, LogService logService) : base(conn, logService) { }
+        public UserRepository(IDatabaseContext conn, LogService logService) : base(conn, logService) { }
 
         public Task<User> FindByNickName(string nickName) => FirstOrDefault(UserResources.ByNickName, new { NickName = nickName });
 

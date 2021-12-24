@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Data;
 using System.Threading;
 using System.Threading.Tasks;
+using Cashflow.Api.Contracts;
 using Cashflow.Api.Infra.Sql;
 using Cashflow.Api.Service;
-using Cashflow.Api.Shared;
 using Dapper;
 
 namespace Cashflow.Api.Infra.Repository
@@ -14,13 +14,13 @@ namespace Cashflow.Api.Infra.Repository
     {
         private readonly IDbConnection _conn;
 
-        private readonly DatabaseContext _context;
+        private readonly IDatabaseContext _context;
 
         private readonly LogService _logService;
 
         public IDbTransaction Transaction { get; private set; }
 
-        protected BaseRepository(DatabaseContext context, LogService logService)
+        protected BaseRepository(IDatabaseContext context, LogService logService)
         {
             _context = context;
             _conn = context.Connection;
@@ -94,6 +94,6 @@ namespace Cashflow.Api.Infra.Repository
             return _conn.ExecuteScalarAsync<long>(query);
         }
 
-        private void Log(string query) => _logService.Info($"\n\nContextId: {_context.Id} - ThreadId: {Thread.CurrentThread.ManagedThreadId} - Query:{query}\n\n");
+        private void Log(string query) => _logService.Info($"Query: {query}\n\n");
     }
 }

@@ -31,14 +31,20 @@ namespace Cashflow.Api.Validators
             RuleFor(c => c).Must(DataMiliageIsMatch).WithMessage("Data e Quilometragem não batem devido à outro abastecimento");
         }
 
-        private bool VehicleExists(FuelExpenses fuelExpenses) => _vehicleRepository.GetById(fuelExpenses.VehicleId).Result?.UserId == _userId;
+        private bool VehicleExists(FuelExpenses fuelExpenses)
+        {
+            var vehicle = _vehicleRepository.GetById(fuelExpenses.VehicleId).Result;
+            return vehicle?.UserId == _userId;
+        }
 
         private bool FuelExpensesExists(FuelExpenses fuelExpenses) => _fuelExpensesRepository.GetById(fuelExpenses.Id).Result != null;
 
         private bool DataMiliageIsMatch(FuelExpenses fuelExpense)
         {
-            var list = _vehicleRepository.GetById(fuelExpense.VehicleId).Result.FuelExpenses;
-            return !list.Any(p => p.Id != fuelExpense.Id && (fuelExpense.Miliage == p.Miliage
+            var vehicle = _vehicleRepository.GetById(fuelExpense.VehicleId).Result;
+            if (vehicle == null)
+                return false;
+            return !vehicle.FuelExpenses.Any(p => p.Id != fuelExpense.Id && (fuelExpense.Miliage == p.Miliage
                 || (fuelExpense.Miliage > p.Miliage && !IsSameDay(fuelExpense.Date, p.Date) && fuelExpense.Date < p.Date)
                 || fuelExpense.Miliage < p.Miliage && !IsSameDay(fuelExpense.Date, p.Date) && fuelExpense.Date > p.Date));
         }

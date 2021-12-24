@@ -16,11 +16,10 @@ namespace Cashflow.Api.Validators
         {
             _creditCardRepository = creditCardRepository;
             _userRepository = userRepository;
-            RuleFor(c => c.Name).NotEmpty().WithMessage(ValidatorMessages.CreditCard.NameRequired);
-            RuleFor(c => c.UserId).GreaterThan(0).WithMessage(ValidatorMessages.CreditCard.UserIdRequired);
+            RuleFor(c => c.Name).NotEmpty().WithMessage(ValidatorMessages.FieldIsRequired("Nome"));
             RuleFor(c => c.InvoiceDay).InclusiveBetween(1, 30).WithMessage(ValidatorMessages.BetweenValue("Dia da fatura", 1, 30));
-            RuleFor(c => c).Must(CreditCardExists).When(c => c.Id > 0).WithMessage(ValidatorMessages.CreditCard.NotFound);
-            RuleFor(c => c).Must(UserExists).WithMessage(ValidatorMessages.User.NotFound);
+            RuleFor(c => c).Must(CreditCardExists).When(c => c.Id > 0).WithMessage(ValidatorMessages.NotFound("Cartão de Crédito"));
+            RuleFor(c => c).Must(UserExists).WithMessage(ValidatorMessages.NotFound("Usuário"));
         }
 
         public bool CreditCardExists(CreditCard card)
@@ -31,7 +30,7 @@ namespace Cashflow.Api.Validators
 
         public bool UserExists(CreditCard card)
         {
-            return _userRepository.GetById(card.UserId).Result != null;
+            return card.UserId > 0 && _userRepository.GetById(card.UserId).Result != null;
         }
     }
 }

@@ -8,6 +8,7 @@ using Cashflow.Api.Infra.Filters;
 using Cashflow.Api.Models;
 using Cashflow.Api.Shared;
 using Cashflow.Api.Validators;
+using Cashflow.Api.Extensions;
 
 namespace Cashflow.Api.Service
 {
@@ -19,7 +20,7 @@ namespace Cashflow.Api.Service
 
         private ISalaryRepository _salaryRepository;
 
-        private IDailyExpensesRepository _dailyExpensesRepository;
+        private IHouseholdExpenseRepository _householdExpenseRepository;
 
         private IVehicleRepository _vehicleRepository;
 
@@ -28,7 +29,7 @@ namespace Cashflow.Api.Service
         public PaymentService(IPaymentRepository paymentRepository,
             ICreditCardRepository creditCardRepository,
             ISalaryRepository salaryRepository,
-            IDailyExpensesRepository dailyExpensesRepository,
+            IHouseholdExpenseRepository householdExpenseRepository,
             IVehicleRepository vehicleRepository,
             IRemainingBalanceRepository remainingBalanceRepository
             )
@@ -36,7 +37,7 @@ namespace Cashflow.Api.Service
             _paymentRepository = paymentRepository;
             _creditCardRepository = creditCardRepository;
             _salaryRepository = salaryRepository;
-            _dailyExpensesRepository = dailyExpensesRepository;
+            _householdExpenseRepository = householdExpenseRepository;
             _vehicleRepository = vehicleRepository;
             _remainingBalanceRepository = remainingBalanceRepository;
         }
@@ -70,7 +71,7 @@ namespace Cashflow.Api.Service
             var cards = await _creditCardRepository.GetSome(baseFilter);
             var salary = (await _salaryRepository.GetSome(baseFilter)).FirstOrDefault(p => p.EndDate is null);
             var vehicles = await _vehicleRepository.GetSome(baseFilter);
-            var allDailyExpenses = await _dailyExpensesRepository.GetSome(baseFilter);
+            var allHouseholdExpense = await _householdExpenseRepository.GetSome(baseFilter);
             var remainingBalance = await _remainingBalanceRepository.GetByMonthYear(userId, DateTime.Now.Month, DateTime.Now.Year);
 
             var dates = LoadDates(month, year);
@@ -101,7 +102,7 @@ namespace Cashflow.Api.Service
 
                 FillVehicleExpenses(userId, resultModel, vehicles, date, types);
 
-                FillDailyExpenses(resultModel, allDailyExpenses, date, types);
+                FillHouseholdExpense(resultModel, allHouseholdExpense, date, types);
 
                 foreach (var payMonth in payments.Where(p => p.Monthly || (p.Installments?.Any(p => p.Date.Year == date.Year && p.Date.Month == date.Month) ?? false)))
                 {
@@ -138,35 +139,35 @@ namespace Cashflow.Api.Service
                 UserId = userId
             };
 
-            var expenses = new HomeChartModel() { Index = 0, Description = "Gastos Essênciais" };
-            var dailyExpensesModel = new HomeChartModel() { Index = 1, Description = "Despesas Diárias" };
+            var expensesModel = new HomeChartModel() { Index = 0, Description = "Gastos Essênciais" };
+            var householdExpenseModel = new HomeChartModel() { Index = 1, Description = "Despesas Domésticas" };
             var vehicleModel = new HomeChartModel() { Index = 2, Description = "Combustível" };
-            var financings = new HomeChartModel() { Index = 3, Description = "Financiamentos" };
-            var loan = new HomeChartModel() { Index = 4, Description = "Empréstimos" };
-            var contributions = new HomeChartModel() { Index = 5, Description = "Aportes (Investimentos)" };
-            var education = new HomeChartModel() { Index = 6, Description = "Educação" };
+            var financingsModel = new HomeChartModel() { Index = 3, Description = "Financiamentos" };
+            var loanModel = new HomeChartModel() { Index = 4, Description = "Empréstimos" };
+            var contributionsModel = new HomeChartModel() { Index = 5, Description = "Aportes (Investimentos)" };
+            var educationModel = new HomeChartModel() { Index = 6, Description = "Educação" };
 
             foreach (var item in (await _vehicleRepository.GetSome(filter)))
                 vehicleModel.Value += item.FuelExpenses.Sum(p => p.ValueSupplied);
 
-            foreach (var item in (await _dailyExpensesRepository.GetSome(filter)))
-                dailyExpensesModel.Value += item.TotalPrice;
+            foreach (var item in (await _householdExpenseRepository.GetSome(filter)))
+                householdExpenseModel.Value += item.Value;
 
             var payments = await _paymentRepository.GetSome(filter);
 
-            expenses.Value += CalculatePaymentHomeChartModel(payments, month, year, PaymentTypeEnum.Expense);
-            contributions.Value += CalculatePaymentHomeChartModel(payments, month, year, PaymentTypeEnum.Contributions);
-            financings.Value += CalculatePaymentHomeChartModel(payments, month, year, PaymentTypeEnum.Financing);
-            education.Value += CalculatePaymentHomeChartModel(payments, month, year, PaymentTypeEnum.Education);
-            loan.Value += CalculatePaymentHomeChartModel(payments, month, year, PaymentTypeEnum.Loan);
+            expensesModel.Value += CalculatePaymentHomeChartModel(payments, month, year, PaymentTypeEnum.Expense);
+            contributionsModel.Value += CalculatePaymentHomeChartModel(payments, month, year, PaymentTypeEnum.Contributions);
+            financingsModel.Value += CalculatePaymentHomeChartModel(payments, month, year, PaymentTypeEnum.Financing);
+            educationModel.Value += CalculatePaymentHomeChartModel(payments, month, year, PaymentTypeEnum.Education);
+            loanModel.Value += CalculatePaymentHomeChartModel(payments, month, year, PaymentTypeEnum.Loan);
 
-            result.Data.Add(expenses);
-            result.Data.Add(dailyExpensesModel);
+            result.Data.Add(expensesModel);
+            result.Data.Add(householdExpenseModel);
             result.Data.Add(vehicleModel);
-            result.Data.Add(financings);
-            result.Data.Add(loan);
-            result.Data.Add(contributions);
-            result.Data.Add(education);
+            result.Data.Add(financingsModel);
+            result.Data.Add(loanModel);
+            result.Data.Add(contributionsModel);
+            result.Data.Add(educationModel);
 
             return result;
         }
@@ -206,7 +207,7 @@ namespace Cashflow.Api.Service
             var result = new ResultModel();
             var payment = await _paymentRepository.GetById(paymentId);
             if (payment is null || payment.UserId != userId)
-                result.AddNotification(ValidatorMessages.Payment.NotFound);
+                result.AddNotification(ValidatorMessages.NotFound("Pagamento"));
             else
                 await _paymentRepository.Remove(paymentId);
             return result;
@@ -296,10 +297,10 @@ namespace Cashflow.Api.Service
             }
         }
 
-        private void FillDailyExpenses(PaymentProjectionResultModel resultModel, IEnumerable<DailyExpenses> allDailyExpenses, DateTime date, IEnumerable<PaymentType> types)
+        private void FillHouseholdExpense(PaymentProjectionResultModel resultModel, IEnumerable<HouseholdExpense> allHouseholdExpenses, DateTime date, IEnumerable<PaymentType> types)
         {
-            var dailyExpenses = allDailyExpenses.Where(p => p.Date.Month == date.Month && p.Date.Year == date.Year);
-            if (dailyExpenses.Any())
+            var householdExpense = allHouseholdExpenses.Where(p => p.Date.Month == date.Month && p.Date.Year == date.Year);
+            if (householdExpense.Any())
             {
                 resultModel.Payments.Add(new PaymentProjectionModel()
                 {
@@ -308,7 +309,7 @@ namespace Cashflow.Api.Service
                     Condition = PaymentConditionEnum.Cash,
                     MonthYear = date.ToString("MM/yyyy"),
                     Type = types.First(p => p.Id == (int)PaymentTypeEnum.Expense),
-                    Cost = dailyExpenses.Sum(p => p.TotalPrice)
+                    Cost = householdExpense.Sum(p => p.Value)
                 });
             }
         }

@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Cashflow.Api.Infra.Sql.Salary;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Service;
-using Cashflow.Api.Shared;
 using Cashflow.Api.Infra.Filters;
 using Cashflow.Api.Contracts;
 
@@ -11,7 +10,7 @@ namespace Cashflow.Api.Infra.Repository
 {
     public class SalaryRepository : BaseRepository<Salary>, ISalaryRepository
     {
-        public SalaryRepository(DatabaseContext conn, LogService logService) : base(conn, logService) { }
+        public SalaryRepository(IDatabaseContext conn, LogService logService) : base(conn, logService) { }
 
         public Task Add(Salary salary) => Execute(SalaryResources.Insert, salary);
 

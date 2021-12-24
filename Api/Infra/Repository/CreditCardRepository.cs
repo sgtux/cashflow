@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Cashflow.Api.Infra.Sql.CreditCard;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Service;
-using Cashflow.Api.Shared;
 using Cashflow.Api.Infra.Filters;
 using Cashflow.Api.Contracts;
 
@@ -12,7 +11,7 @@ namespace Cashflow.Api.Infra.Repository
 {
     public class CreditCardRepository : BaseRepository<CreditCard>, ICreditCardRepository
     {
-        public CreditCardRepository(DatabaseContext conn, LogService logService) : base(conn, logService) { }
+        public CreditCardRepository(IDatabaseContext conn, LogService logService) : base(conn, logService) { }
 
         public Task Add(CreditCard card) => Execute(CreditCardResources.Insert, card);
 

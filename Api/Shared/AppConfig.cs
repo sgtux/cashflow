@@ -1,8 +1,9 @@
 using System;
+using Cashflow.Api.Contracts;
 
 namespace Cashflow.Api.Shared
 {
-    public class AppConfig
+    public class AppConfig : IAppConfig
     {
         private readonly string _environmentName;
 

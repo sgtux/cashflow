@@ -21,11 +21,10 @@ namespace Cashflow.Api.Service
             var result = new ResultModel();
             salary.SetDays();
             var validatorResult = new SalaryValidator(_salaryRepository).Validate(salary);
-            if (!validatorResult.IsValid)
-                result.AddNotification(validatorResult.Errors);
-
-            if (result.IsValid)
+            if (validatorResult.IsValid)
                 await _salaryRepository.Add(salary);
+            else
+                result.AddNotification(validatorResult.Errors);
             return result;
         }
 
@@ -48,7 +47,7 @@ namespace Cashflow.Api.Service
 
             var salary = await _salaryRepository.GetById(salaryId);
             if (salary is null || salary.UserId != userId)
-                result.AddNotification(ValidatorMessages.Salary.NotFound);
+                result.AddNotification(ValidatorMessages.NotFound("Salário"));
             else
                 await _salaryRepository.Remove(salaryId);
             return result;

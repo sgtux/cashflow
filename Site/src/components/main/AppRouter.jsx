@@ -7,8 +7,8 @@ import {
   Projection,
   Salary,
   EditPayment,
-  DailyExpenses,
-  EditDailyExpenses,
+  HouseholdExpenses,
+  EditHouseholdExpense,
   Vehicles,
   Home
 } from '../../scenes'
@@ -38,8 +38,8 @@ export default function () {
       <Route path="/projection" element={<Projection />} />
       <Route path="/salary" element={<Salary />} />
       <Route path="/edit-payment/:id" element={<EditPayment />} />
-      <Route path="/daily-expenses" element={<DailyExpenses />} />
-      <Route path="/edit-daily-expenses/:id" element={<EditDailyExpenses />} />
+      <Route path="/household-expenses" element={<HouseholdExpenses />} />
+      <Route path="/edit-household-expense/:id" element={<EditHouseholdExpense />} />
       <Route path="/vehicles" element={<Vehicles />} />
     </Routes>
   )

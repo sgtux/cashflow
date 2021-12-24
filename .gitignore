@@ -8,5 +8,6 @@ Api/wwwroot
 .scannerwork
 logs
 dist
+coverage
 
 App

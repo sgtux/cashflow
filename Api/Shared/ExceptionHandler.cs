@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Cashflow.Api.Contracts;
 using Cashflow.Api.Service;
 using Microsoft.AspNetCore.Http;
 
@@ -17,7 +18,7 @@ namespace Cashflow.Api.Shared
             _next = next;
         }
 
-        public async Task Invoke(HttpContext context, DatabaseContext databaseContext, LogService logService)
+        public async Task Invoke(HttpContext context, IDatabaseContext databaseContext, LogService logService)
         {
             try
             {

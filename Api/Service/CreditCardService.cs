@@ -55,7 +55,7 @@ namespace Cashflow.Api.Service
             var card = (await _creditCardRepository.GetSome(new BaseFilter() { UserId = userId })).FirstOrDefault(p => p.Id == id);
             if (card is null)
             {
-                result.AddNotification(ValidatorMessages.CreditCard.NotFound);
+                result.AddNotification(ValidatorMessages.NotFound("Cartão de Crédito"));
                 return result;
             }
 

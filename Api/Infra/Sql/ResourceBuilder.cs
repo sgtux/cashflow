@@ -17,7 +17,7 @@ namespace Cashflow.Api.Infra.Sql
 
         public async Task<string> Build()
         {
-            var stream = Assembly.GetEntryAssembly().GetManifestResourceStream(resourceName);
+            var stream = typeof(ResourceBuilder).Assembly.GetManifestResourceStream(resourceName);
             if (stream == null)
             {
                 if (Assembly.GetEntryAssembly().GetManifestResourceNames().Contains(resourceName))
