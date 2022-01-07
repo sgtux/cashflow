@@ -6,6 +6,8 @@ SET
   "Type" = @TypeId,
   "CreditCardId" = @CreditCardId,
   "Condition" = @Condition,
-  "InactiveAt" = @InactiveAt
+  "InactiveAt" = @InactiveAt,
+  "BaseCost" = @BaseCost,
+  "Date" = @Date
 WHERE
   "Id" = @Id

@@ -16,6 +16,6 @@ namespace Cashflow.Api.Infra.Entity
 
         public int VehicleId { get; set; }
 
-        public decimal LitersSupplied => ValueSupplied / PricePerLiter;
+        public decimal LitersSupplied => ValueSupplied == 0 || PricePerLiter == 0 ? 0 : ValueSupplied / PricePerLiter;
     }
 }

@@ -1,4 +1,5 @@
-﻿using Cashflow.Api.Extensions;
+﻿using Cashflow.Api.Contracts;
+using Cashflow.Api.Extensions;
 using Cashflow.Api.Shared;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,6 +10,7 @@ namespace Cashflow.Api
     public class Startup
     {
         private bool _isDevelopment;
+
         public Startup(IHostEnvironment env) { }
 
         public void ConfigureServices(IServiceCollection services)
@@ -19,8 +21,10 @@ namespace Cashflow.Api
             services.AddControllers();
             services.ConfigureAuthentication(appConfig.SecretJwtKey);
             services.AddRouting();
-            services.AddSingleton(appConfig);
-            services.ConfigureScopes();
+            services.AddSingleton<IAppConfig>(appConfig);
+            services.ConfigureServices();
+            services.ConfigureRepositories();
+            services.ConfigureDatabaseContext();
         }
 
         public void Configure(IApplicationBuilder app)

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Service;
-using Cashflow.Api.Shared;
 using Cashflow.Api.Infra.Sql.Vehicle;
 using Cashflow.Api.Contracts;
 using Cashflow.Api.Infra.Filters;
@@ -12,7 +11,7 @@ namespace Cashflow.Api.Infra.Repository
 {
     public class FuelExpensesRepository : BaseRepository<FuelExpenses>, IFuelExpensesRepository
     {
-        public FuelExpensesRepository(DatabaseContext conn, LogService logService) : base(conn, logService) { }
+        public FuelExpensesRepository(IDatabaseContext conn, LogService logService) : base(conn, logService) { }
 
         public Task Add(FuelExpenses t) => Execute(FuelExpensesResources.Insert, t);
 

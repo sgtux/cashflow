@@ -7,7 +7,8 @@ export {
   isSameMonth,
   toReal,
   fromReal,
-  debounce
+  debounce,
+  ellipsisText
 } from './utils'
 
 export { default as toast } from './toast'

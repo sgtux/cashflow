@@ -18,12 +18,13 @@ namespace Cashflow.Api.Validators
         {
             _paymentRepository = paymentRepository;
             _creditCardRepository = creditCardRepository;
-            RuleFor(p => p.Description).NotEmpty().WithMessage(ValidatorMessages.Payment.DescriptionRequired);
+            RuleFor(p => p.Description).NotEmpty().WithMessage(ValidatorMessages.FieldIsRequired("Descrição"));
             RuleFor(p => p.Installments).NotEmpty().WithMessage(ValidatorMessages.Payment.InstallmentsRequired);
             RuleFor(p => p.TypeId).IsInEnum().WithMessage(ValidatorMessages.Payment.PaymentTypeInvalid);
             RuleFor(p => p.Condition).IsInEnum().WithMessage(ValidatorMessages.Payment.PaymentCoditionInvalid);
-            RuleFor(p => p).Must(ValidCreditCard).WithMessage(ValidatorMessages.CreditCard.NotFound);
-            RuleFor(p => p).Must(ValidPayment).When(p => p.Id > 0).WithMessage(ValidatorMessages.Payment.NotFound);
+            RuleFor(p => p.BaseCost).GreaterThan(0).WithMessage(ValidatorMessages.GreaterThan("Valor Base", 0));
+            RuleFor(p => p).Must(ValidCreditCard).WithMessage(ValidatorMessages.NotFound("Cartão de Crédito"));
+            RuleFor(p => p).Must(ValidPayment).When(p => p.Id > 0).WithMessage(ValidatorMessages.NotFound("Pagamento"));
             RuleFor(p => p.Installments).Custom(ValidateInstallments);
         }
 

@@ -1,4 +1,5 @@
 using System;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Cashflow.Api.Contracts;
 using Cashflow.Api.Infra.Entity;
@@ -13,7 +14,10 @@ namespace Cashflow.Api.Service
     {
         private IUserRepository _userRepository;
 
-        public AccountService(IUserRepository repository) => _userRepository = repository;
+        public AccountService(IUserRepository repository)
+        {
+            _userRepository = repository;
+        }
 
         public async Task<ResultModel> GetById(int userId)
         {
@@ -51,6 +55,7 @@ namespace Cashflow.Api.Service
             }
 
             var user = await _userRepository.FindByNickName(nickName);
+
             if (user == null || user.Password != Utils.Sha1(password))
             {
                 result.AddNotification(ValidatorMessages.User.LoginFailed);

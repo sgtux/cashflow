@@ -1,12 +1,11 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Cashflow.Api.Auth;
+using Cashflow.Api.Contracts;
 using Cashflow.Api.Models;
 using Cashflow.Api.Service;
-using Cashflow.Api.Shared;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cashflow.Api.Controllers
@@ -14,7 +13,7 @@ namespace Cashflow.Api.Controllers
     [Route("api/token")]
     public class TokenController : BaseController
     {
-        private AppConfig _config;
+        private IAppConfig _config;
 
         private AccountService _accountService;
 
@@ -22,10 +21,11 @@ namespace Cashflow.Api.Controllers
 
         private RemainingBalanceService _remainingBalanceService;
 
-        public TokenController(AppConfig config,
+        public TokenController(IAppConfig config,
             AccountService accountService,
             PaymentService paymentService,
-            RemainingBalanceService remainingBalanceService)
+            RemainingBalanceService remainingBalanceService,
+            LogService logService)
         {
             _config = config;
             _accountService = accountService;

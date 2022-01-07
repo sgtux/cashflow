@@ -32,9 +32,9 @@ namespace Cashflow.Api.Infra.Entity
 
         public string CreditCardText => CreditCard?.Name ?? string.Empty;
 
-        public bool Paid { get; set; }
-
         public DateTime? InactiveAt { get; set; }
+
+        public DateTime Date { get; set; }
 
         public bool Active => !InactiveAt.HasValue;
 

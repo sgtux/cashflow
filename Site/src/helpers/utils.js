@@ -71,3 +71,9 @@ export const buildQueryParameters = obj => {
   }
   return result
 }
+
+export const ellipsisText = (text, length) => {
+  if ((text || '').length <= length)
+    return text
+  return text.substring(0, length) + '...'
+}

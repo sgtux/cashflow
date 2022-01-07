@@ -3,7 +3,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Cashflow.Api.Contracts;
 using Cashflow.Api.Infra.Filters;
-using Cashflow.Api.Shared;
+using Cashflow.Api.Extensions;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 
 namespace Cashflow.Api.Service
 {
@@ -13,21 +15,21 @@ namespace Cashflow.Api.Service
 
         private IVehicleRepository _vehicleRepository;
 
-        private IDailyExpensesRepository _dailyExpensesRepository;
+        private IHouseholdExpenseRepository _householdExpenseRepository;
 
         private IPaymentRepository _paymentRepository;
 
         private ISalaryRepository _salaryRepository;
 
         public RemainingBalanceService(IRemainingBalanceRepository remainingBalanceRepository,
-            IDailyExpensesRepository dailyExpensesRepository,
+            IHouseholdExpenseRepository householdExpenseRepository,
             IVehicleRepository vehicleRepository,
             IPaymentRepository paymentRepository,
             ISalaryRepository salaryRepository)
         {
             _remainingBalanceRepository = remainingBalanceRepository;
             _vehicleRepository = vehicleRepository;
-            _dailyExpensesRepository = dailyExpensesRepository;
+            _householdExpenseRepository = householdExpenseRepository;
             _paymentRepository = paymentRepository;
             _salaryRepository = salaryRepository;
         }
@@ -49,11 +51,16 @@ namespace Cashflow.Api.Service
             foreach (var item in (await _vehicleRepository.GetSome(filter)))
                 total -= item.FuelExpenses.Sum(p => p.ValueSupplied);
 
-            foreach (var item in (await _dailyExpensesRepository.GetSome(filter)))
-                total -= item.TotalPrice;
+            foreach (var item in (await _householdExpenseRepository.GetSome(filter)))
+                total -= item.Value;
 
             foreach (var item in (await _paymentRepository.GetSome(filter)))
             {
+                if (item == null)
+                    throw new Exception("Item é nulo");
+                else if (item.Type == null)
+                    throw new Exception($"ItemType é nulo - {JsonSerializer.Serialize(item)}");
+
                 if (item.Type.In)
                     total += item.Installments.Where(p => p.Date.Year == date.Year && p.Date.Month == date.Month).Sum(p => p.Cost);
                 else

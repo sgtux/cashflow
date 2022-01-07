@@ -11,28 +11,37 @@ namespace Cashflow.Api.Extensions
 {
     public static class StartupExtensions
     {
-        public static void ConfigureScopes(this IServiceCollection services)
+        public static void ConfigureServices(this IServiceCollection services)
         {
             services.AddScoped<AccountService>();
             services.AddScoped<PaymentService>();
             services.AddScoped<CreditCardService>();
             services.AddScoped<SalaryService>();
-            services.AddScoped<DailyExpensesService>();
+            services.AddScoped<HouseholdExpenseService>();
             services.AddScoped<VehicleService>();
             services.AddScoped<FuelExpensesService>();
             services.AddScoped<RemainingBalanceService>();
+            services.AddScoped<RecurringExpenseService>();
             services.AddScoped<LogService>();
+        }
 
+        public static void ConfigureRepositories(this IServiceCollection services)
+        {
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IPaymentRepository, PaymentRepository>();
             services.AddScoped<ICreditCardRepository, CreditCardRepository>();
             services.AddScoped<ISalaryRepository, SalaryRepository>();
-            services.AddScoped<IDailyExpensesRepository, DailyExpensesRepository>();
+            services.AddScoped<IHouseholdExpenseRepository, HouseholdExpenseRepository>();
             services.AddScoped<IVehicleRepository, VehicleRepository>();
             services.AddScoped<IFuelExpensesRepository, FuelExpensesRepository>();
             services.AddScoped<IRemainingBalanceRepository, RemainingBalanceRepository>();
+            services.AddScoped<IRecurringExpenseRepository, RecurringExpenseRepository>();
 
-            services.AddScoped<DatabaseContext>();
+        }
+
+        public static void ConfigureDatabaseContext(this IServiceCollection services)
+        {
+            services.AddScoped<IDatabaseContext, DatabaseContext>();
         }
 
         public static void ConfigureAuthentication(this IServiceCollection services, string jwtKey)
@@ -48,7 +57,7 @@ namespace Cashflow.Api.Extensions
             };
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(options => options.TokenValidationParameters = tokenValidationParameters);
+                .AddJwtBearer(options => options.TokenValidationParameters = tokenValidationParameters);
         }
     }
 }

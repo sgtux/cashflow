@@ -1,23 +1,23 @@
 using System.Data;
+using Cashflow.Api.Contracts;
 using Npgsql;
 
 namespace Cashflow.Api.Shared
 {
-    public class DatabaseContext
+    public class DatabaseContext : IDatabaseContext
     {
-        private static int _id;
+        private IDbConnection _conn;
 
-        public readonly IDbConnection Connection;
+        private string _connectionString;
 
-        public readonly int Id;
+        public IDbConnection Connection => _conn;
 
         public IDbTransaction Transaction { get; private set; }
 
-        public DatabaseContext(AppConfig config)
+        public DatabaseContext(IAppConfig config)
         {
-            Id = ++_id;
-            string conn = config.DatabaseConnectionString;
-            Connection = new NpgsqlConnection(conn);
+            _connectionString = config.DatabaseConnectionString;
+            _conn = new NpgsqlConnection(_connectionString);
         }
 
         public IDbTransaction BeginTransaction()

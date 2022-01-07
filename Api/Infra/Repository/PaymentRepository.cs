@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Cashflow.Api.Infra.Sql.Payment;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Service;
-using Cashflow.Api.Shared;
 using Cashflow.Api.Contracts;
 using Cashflow.Api.Infra.Filters;
 
@@ -16,7 +15,7 @@ namespace Cashflow.Api.Infra.Repository
     {
         private ICreditCardRepository _creditCardRepository;
 
-        public PaymentRepository(DatabaseContext conn, LogService logService, ICreditCardRepository creditCardRepository) : base(conn, logService)
+        public PaymentRepository(IDatabaseContext conn, LogService logService, ICreditCardRepository creditCardRepository) : base(conn, logService)
         {
             _creditCardRepository = creditCardRepository;
         }
@@ -65,6 +64,7 @@ namespace Cashflow.Api.Infra.Repository
                 payment.Installments.Add(i);
                 return p;
             }, new { Id = id });
+
             if (payment != null)
             {
                 var cards = await _creditCardRepository.GetSome(new BaseFilter() { UserId = payment.UserId });

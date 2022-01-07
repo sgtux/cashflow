@@ -1,4 +1,5 @@
 using System;
+using Cashflow.Api.Extensions;
 
 namespace Cashflow.Api.Infra.Entity
 {
@@ -16,12 +17,8 @@ namespace Cashflow.Api.Infra.Entity
 
         public void SetDays()
         {
-            StartDate = new DateTime(StartDate.Year, StartDate.Month, 1);
-            if (EndDate != null)
-            {
-                var lastDayEnd = DateTime.DaysInMonth(EndDate.Value.Year, EndDate.Value.Month);
-                EndDate = new DateTime(EndDate.Value.Year, EndDate.Value.Month, lastDayEnd);
-            }
+            StartDate = StartDate.FixFirstDayInMonth();
+            EndDate = EndDate?.FixLastDayInMonth();
         }
     }
 }

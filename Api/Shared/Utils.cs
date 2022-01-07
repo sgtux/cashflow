@@ -49,20 +49,5 @@ namespace Cashflow.Api.Shared
             }
             return target;
         }
-
-        public static DateTime CreateEndDate(int year, int month) => new DateTime(year, month, DateTime.DaysInMonth(year, month));
-
-        public static DateTime CreateEndDate(this DateTime date) => CreateEndDate(date.Year, date.Month);
-
-        public static DateTime FixStartTimeFilter(this DateTime date)
-        {
-            return new DateTime(date.Year, date.Month, date.Day, 0, 0, 0);
-        }
-
-        public static DateTime FixEndTimeFilter(this DateTime date)
-        {
-            var result = new DateTime(date.Year, date.Month, date.Day, 0, 0, 0);
-            return result.AddDays(1).AddMilliseconds(-1);
-        }
     }
 }

@@ -13,7 +13,7 @@ namespace Cashflow.Migrations.DDL
 
         public override void Down()
         {
-            Delete.Column("Date").FromTable("Payment"); ;
+            Delete.Column("Date").FromTable("Payment");
         }
     }
 }

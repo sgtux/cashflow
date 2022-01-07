@@ -40,11 +40,7 @@ const styles = {
 export function Payments() {
 
   const [loading, setLoading] = useState(false)
-  const [payment, setPayment] = useState({})
   const [payments, setPayments] = useState([])
-  const [paymentType, setPaymentType] = useState(2)
-  const [useCreditCard, setUseCreditCard] = useState(false)
-  const [card, setCard] = useState(false)
 
   useEffect(() => refresh(), [])
 
@@ -61,21 +57,9 @@ export function Payments() {
       .finally(() => setLoading(false))
   }
 
-  function inactiveChanged(e) {
-    console.log(e)
-  }
-
-  function activeChanged(e) {
-    console.log(e)
-  }
-
-  function filterChanged(filter) {
-    refresh(filter)
-  }
-
   return (
     <MainContainer title="Pagamentos" loading={loading}>
-      <PaymentFilter filterChanged={e => filterChanged(e)} />
+      <PaymentFilter filterChanged={e => refresh(e)} />
       {payments.length ?
         <div>
           <div style={styles.divNewPayment}>
@@ -84,8 +68,6 @@ export function Payments() {
             </Link>
           </div>
           <Paper>
-
-
             <List dense={true}>
               {payments.map(p =>
                 <ListItem key={p.id}>
