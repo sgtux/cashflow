@@ -135,7 +135,7 @@ export function Vehicles() {
             <ConfirmModal show={!!removeId}
                 onClose={() => setRemoveId(0)}
                 onConfirm={() => remove()}
-                text="Desejá realmente remover este veículo?" />
+                text="Deseja realmente remover este veículo?" />
             <EditVehicleModal vehicle={editVehicle}
                 onCancel={() => { setEditVehicle(null); refresh() }} />
         </MainContainer>

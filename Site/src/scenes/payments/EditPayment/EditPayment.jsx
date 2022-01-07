@@ -11,8 +11,7 @@ import {
 import { InstallmentList } from './InstallmentList/InstallmentList'
 import { InstallmentSetBox } from './InstallmnetSetBox/InstallmentSetBox'
 import { ConditionCreditCardBox } from './ConditionCreditCardBox/ConditionCreditCardBox'
-import { MainContainer } from '../../../components/main'
-import IconTextInput from '../../../components/main/IconTextInput'
+import { MainContainer, IconTextInput } from '../../../components/main'
 import { DatePickerInput, DatePickerContainer } from '../../../components/inputs'
 
 import { toReal, toast, fromReal, PaymentCondition } from '../../../helpers'

@@ -1,7 +1,9 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Cashflow.Api.Contracts;
 using Cashflow.Api.Infra.Entity;
+using Cashflow.Api.Infra.Filters;
 using Cashflow.Api.Models;
 using Cashflow.Api.Validators;
 
@@ -18,6 +20,14 @@ namespace Cashflow.Api.Service
             _recurringExpenseRepository = recurringExpenseRepository;
             _creditCardRepository = creditCardRepository;
         }
+
+        public async Task<ResultDataModel<RecurringExpense>> GetById(long id, int userId)
+        {
+            var expense = await _recurringExpenseRepository.GetById(id);
+            return new ResultDataModel<RecurringExpense>(expense?.UserId == userId ? expense : null);
+        }
+
+        public async Task<ResultDataModel<IEnumerable<RecurringExpense>>> GetByUser(int userId) => new ResultDataModel<IEnumerable<RecurringExpense>>(await _recurringExpenseRepository.GetSome(new BaseFilter() { UserId = userId }));
 
         public async Task<ResultModel> Add(RecurringExpense recurringExpense)
         {
@@ -97,13 +107,10 @@ namespace Cashflow.Api.Service
                 return result;
             }
 
-            if (!recurringExpense.History.Any(p => p.Id == id))
-            {
+            if (recurringExpense.History.Any(p => p.Id == id))
+                await _recurringExpenseRepository.RemoveHistory(id);
+            else
                 result.AddNotification(ValidatorMessages.NotFound("Histórico"));
-                return result;
-            }
-
-            await _recurringExpenseRepository.Remove(id);
 
             return result;
         }

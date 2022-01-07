@@ -66,6 +66,16 @@
     <EmbeddedResource Include="Infra/Sql/RemainingBalance/GetByMonthYear.sql" />
     <EmbeddedResource Include="Infra/Sql/RemainingBalance/Insert.sql" />
     <EmbeddedResource Include="Infra/Sql/RemainingBalance/Update.sql" />
+
+    <EmbeddedResource Include="Infra/Sql/RecurringExpense/Delete.sql" />
+    <EmbeddedResource Include="Infra/Sql/RecurringExpense/GetById.sql" />
+    <EmbeddedResource Include="Infra/Sql/RecurringExpense/GetSome.sql" />
+    <EmbeddedResource Include="Infra/Sql/RecurringExpense/Insert.sql" />
+    <EmbeddedResource Include="Infra/Sql/RecurringExpense/Update.sql" />
+
+    <EmbeddedResource Include="Infra/Sql/RecurringExpenseHistory/Delete.sql" />
+    <EmbeddedResource Include="Infra/Sql/RecurringExpenseHistory/Insert.sql" />
+    <EmbeddedResource Include="Infra/Sql/RecurringExpenseHistory/Update.sql" />
   </ItemGroup>
 
 </Project>

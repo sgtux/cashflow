@@ -15,5 +15,7 @@ namespace Cashflow.Api.Extensions
             var result = new DateTime(date.Year, date.Month, date.Day, 0, 0, 0);
             return result.AddDays(1).AddMilliseconds(-1);
         }
+
+        public static bool SameMonthYear(this DateTime date1, DateTime date2) => date1.Year == date2.Year && date1.Month == date2.Month;
     }
 }

@@ -1,6 +1,6 @@
 using FluentMigrator;
 
-namespace Cashflow.Tests.Config.DatabaseSeeders
+namespace Cashflow.Tests.Mocks.Database.Tables
 {
     [Migration(202112152000)]
     public class User : Migration

@@ -64,6 +64,7 @@ namespace Cashflow.Api.Infra.Repository
                 payment.Installments.Add(i);
                 return p;
             }, new { Id = id });
+
             if (payment != null)
             {
                 var cards = await _creditCardRepository.GetSome(new BaseFilter() { UserId = payment.UserId });

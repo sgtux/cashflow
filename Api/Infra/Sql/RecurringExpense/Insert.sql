@@ -3,12 +3,14 @@ INSERT INTO
         "Description",
         "Value",
         "InactiveAt",
-        "CreditCardId"
+        "CreditCardId",
+        "UserId"
     )
 VALUES
     (
         @Description,
         @Value,
         @InactiveAt,
-        @CreditCardId
+        @CreditCardId,
+        @UserId
     )
