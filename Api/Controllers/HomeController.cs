@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using Cashflow.Api.Service;
+using Cashflow.Api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,11 +9,28 @@ namespace Cashflow.Api.Controllers
     [Route("api/[controller]")]
     public class HomeController : BaseController
     {
-        private PaymentService _service;
+        private PaymentService _paymentService;
 
-        public HomeController(PaymentService service) => _service = service;
+        private RemainingBalanceService _remainingBalanceService;
 
-        [HttpGet("chart")]
-        public async Task<IActionResult> GetChart([FromQuery] int month, [FromQuery] int year) => HandleResult(await _service.GetHomeChart(UserId, month, year));
+        private ProjectionService _projectionService;
+
+        public HomeController(PaymentService paymentService, RemainingBalanceService remainingBalanceService, ProjectionService projectionService)
+        {
+            _paymentService = paymentService;
+            _remainingBalanceService = remainingBalanceService;
+            _projectionService = projectionService;
+        }
+
+        [HttpGet("Chart")]
+        public async Task<IActionResult> GetChart([FromQuery] int month, [FromQuery] int year) => HandleResult(await _paymentService.GetHomeChart(UserId, month, year));
+
+
+        [HttpGet("Projection")]
+        public async Task<IActionResult> GetProjection([FromQuery] int month, [FromQuery] int year)
+        {
+            await _remainingBalanceService.Update(UserId);
+            return HandleResult(await _projectionService.GetProjection(UserId, month, year));
+        }
     }
 }

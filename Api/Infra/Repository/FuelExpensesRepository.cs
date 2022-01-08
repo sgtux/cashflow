@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Cashflow.Api.Infra.Entity;
-using Cashflow.Api.Service;
+using Cashflow.Api.Services;
 using Cashflow.Api.Infra.Sql.Vehicle;
 using Cashflow.Api.Contracts;
 using Cashflow.Api.Infra.Filters;

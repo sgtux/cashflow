@@ -6,7 +6,7 @@ using Cashflow.Api.Infra.Filters;
 using Cashflow.Api.Models;
 using Cashflow.Api.Validators;
 
-namespace Cashflow.Api.Service
+namespace Cashflow.Api.Services
 {
     public class SalaryService : BaseService
     {

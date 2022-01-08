@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using Cashflow.Api.Infra.Entity;
-using Cashflow.Api.Service;
+using Cashflow.Api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

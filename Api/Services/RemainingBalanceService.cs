@@ -4,10 +4,9 @@ using System.Threading.Tasks;
 using Cashflow.Api.Contracts;
 using Cashflow.Api.Infra.Filters;
 using Cashflow.Api.Extensions;
-using System.Text.Json.Serialization;
 using System.Text.Json;
 
-namespace Cashflow.Api.Service
+namespace Cashflow.Api.Services
 {
     public class RemainingBalanceService : BaseService
     {

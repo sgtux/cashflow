@@ -4,7 +4,7 @@ using Cashflow.Api.Contracts;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Infra.Filters;
 using Cashflow.Api.Infra.Sql.HouseholdExpense;
-using Cashflow.Api.Service;
+using Cashflow.Api.Services;
 
 namespace Cashflow.Api.Infra.Repository
 {

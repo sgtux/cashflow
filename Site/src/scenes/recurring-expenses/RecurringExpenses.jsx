@@ -87,7 +87,7 @@ export function RecurringExpenses() {
                                     <td>{p.id}</td>
                                     <td>{p.description}</td>
                                     <td>{toReal(p.value)}</td>
-                                    <td>{p.paid ? 'Pago' : 'Pendente'}</td>
+                                    <td>{p.inactiveAt ? 'Inativo' : p.paid ? 'Pago' : 'Pendente'}</td>
                                     <td>
                                         <Tooltip title="Histórico de Pagamentos">
                                             <IconButton onClick={() => setRecurringExpenseEditHistory(p)} color="primary" aria-label="History">
@@ -108,7 +108,7 @@ export function RecurringExpenses() {
                                         </Tooltip>
                                     </td>
                                     <td>
-                                        {!p.paid && <Button variant="contained" color="primary" onClick={() => pay(p)}>Pagar</Button>}
+                                        {!p.inactiveAt && !p.paid && <Button variant="contained" color="primary" onClick={() => pay(p)}>Pagar</Button>}
                                     </td>
                                 </tr>
                             )}

@@ -27,8 +27,10 @@ namespace Cashflow.Api.Infra.Entity
 
         public void SortHistory()
         {
-            if (History?.Any() ?? false)
+            if (HasHistory())
                 History = History.OrderBy(p => p.Date).ToList();
         }
+
+        public bool HasHistory() => History?.Any() ?? false;
     }
 }

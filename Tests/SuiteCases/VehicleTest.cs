@@ -1,7 +1,5 @@
 using System.Threading.Tasks;
 using Cashflow.Api.Infra.Entity;
-using Cashflow.Api.Service;
-using Cashflow.Tests.Mocks;
 using Cashflow.Tests.Tests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

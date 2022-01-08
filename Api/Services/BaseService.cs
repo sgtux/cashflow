@@ -1,4 +1,4 @@
-namespace Cashflow.Api.Service
+namespace Cashflow.Api.Services
 {
     public class BaseService { }
 }

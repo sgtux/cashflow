@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
-
+import DatePicker from 'react-datepicker'
+import ptBr from 'date-fns/locale/pt-BR'
 import {
     Button,
     FormControl,
@@ -9,12 +10,12 @@ import {
     Select
 } from '@material-ui/core'
 
-import { InputMoney } from '../../../components/inputs'
+import { InputMoney, DatePickerInput, DatePickerContainer } from '../../../components/inputs'
 
 import { MainContainer, IconTextInput } from '../../../components/main'
 
 import { recurringExpenseService, creditCardService } from '../../../services'
-import { toast, fromReal } from '../../../helpers'
+import { toast, fromReal, toReal } from '../../../helpers'
 import { RecurringExpenseHistoryModal } from '../RecurringExpenseHistoryModal/RecurringExpenseHistoryModal'
 
 export function EditRecurringExpense() {
@@ -28,6 +29,7 @@ export function EditRecurringExpense() {
     const [cards, setCards] = useState([])
     const [recurringExpense, setRecurringExpense] = useState(null)
     const [showModal, setShowModal] = useState(false)
+    const [inactiveAt, setInactiveAt] = useState()
 
     const params = useParams()
 
@@ -46,9 +48,11 @@ export function EditRecurringExpense() {
                 .then(res => {
                     if (res) {
                         setDescription(res.description)
-                        setValue(res.value)
+                        setValue(toReal(res.value))
                         setCard((res.creditCard || {}).id)
                         setRecurringExpense(res)
+                        if (res.inactiveAt)
+                            setInactiveAt(new Date(res.inactiveAt))
                     }
                 })
                 .catch(err => console.log(err))
@@ -66,7 +70,8 @@ export function EditRecurringExpense() {
             id,
             description,
             value: fromReal(value),
-            creditCardId: card
+            creditCardId: card,
+            inactiveAt
         }).then(() => toast.success('Salvo com sucesso.'))
             .catch(err => console.log(err))
             .finally(() => setLoading(false))
@@ -100,11 +105,23 @@ export function EditRecurringExpense() {
                         <br />
                     </div>
                 }
+                {
+                    !!id && <div style={{ marginBottom: 10 }}>
+                        <DatePickerContainer style={{ color: '#666' }}>
+                            <span>Data Inativação:</span>
+                            <DatePicker customInput={<DatePickerInput style={{ width: 115 }} />} onChange={e => setInactiveAt(e)}
+                                dateFormat="dd/MM/yyyy" locale={ptBr} selected={inactiveAt} />
+                        </DatePickerContainer>
+                    </div>
+                }
                 <div style={{ margin: '10px', textAlign: 'right' }}>
-                    <Button onClick={() => setShowModal(true)}
-                        color="primary"
-                        style={{ marginLeft: 20, marginRight: 20 }}
-                        autoFocus>Histórico</Button>
+                    {
+                        !!id &&
+                        <Button onClick={() => setShowModal(true)}
+                            color="primary"
+                            style={{ marginLeft: 20, marginRight: 20 }}
+                            autoFocus>Histórico</Button>
+                    }
                     <Link to="/recurring-expenses">
                         <Button variant="contained" autoFocus>lista de despesas</Button>
                     </Link>
@@ -121,6 +138,6 @@ export function EditRecurringExpense() {
                     requestRefresh={() => refresh()}
                     onCancel={() => setShowModal(false)} />
             </div>
-        </MainContainer>
+        </MainContainer >
     )
 }

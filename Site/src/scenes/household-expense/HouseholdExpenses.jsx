@@ -15,7 +15,8 @@ import {
 
 import {
     Delete as DeleteIcon,
-    EditOutlined as EditIcon
+    EditOutlined as EditIcon,
+    Refresh as RefreshIcon
 } from '@material-ui/icons'
 
 import { MainContainer, InputMonth } from '../../components'
@@ -29,6 +30,7 @@ export function HouseholdExpenses() {
     const [loading, setLoading] = useState(false)
     const [selectedMonth, setSelectedMonth] = useState('')
     const [selectedYear, setSelectedYear] = useState('')
+    const [total, setTotal] = useState(0)
 
     useEffect(() => {
         const now = new Date()
@@ -42,7 +44,11 @@ export function HouseholdExpenses() {
     function refresh(month, year) {
         setLoading(true)
         householdExpenseService.getAll(month, year)
-            .then(res => setHouseholdExpenses(res))
+            .then(res => {
+                setHouseholdExpenses(res)
+                if (res.length)
+                    setTotal(res.map(p => p.value).reduce((x, y) => x + y))
+            })
             .catch(err => console.log(err))
             .finally(() => setLoading(false))
     }
@@ -58,7 +64,6 @@ export function HouseholdExpenses() {
     function monthYearChanged(month, year) {
         setSelectedMonth(month)
         setSelectedYear(year)
-        refresh(month, year)
     }
 
     return (
@@ -68,6 +73,13 @@ export function HouseholdExpenses() {
                 onChange={(month, year) => monthYearChanged(month, year)}
                 label="Filtro"
                 startYear={new Date().getFullYear() - 4} />
+            <IconButton style={{ marginLeft: 10 }} color="primary" aria-label="Refresh"
+                onClick={() => refresh(selectedMonth, selectedYear)}>
+                <RefreshIcon />
+            </IconButton>
+            <div style={{ fontSize: 16, marginTop: 20 }}>
+                <span>Total: {toReal(total)}</span>
+            </div>
             {householdExpenses.length ?
                 <div>
                     <div style={{ textTransform: 'none', fontSize: '18px', textAlign: 'center' }}>

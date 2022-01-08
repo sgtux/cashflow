@@ -7,7 +7,7 @@ namespace Cashflow.Migrations.DDL
     {
         public override void Up()
         {
-            Execute.Sql($"UPDATE \"HouseholdExpense\" SET \"Description\" = \"Description\" || ' - ' || subquery.description, \"Value\" = subquery.value FROM (SELECT \"DailyExpensesId\", SUM(\"Price\" * \"Amount\") AS Value, string_agg(\"ItemName\", ',') AS Description FROM \"DailyExpensesItem\" GROUP BY \"DailyExpensesId\") AS subquery WHERE \"Id\" = subquery.\"DailyExpensesId\"");
+            Execute.Sql($"UPDATE \"HouseholdExpense\" SET \"Description\" = substring(\"Description\" || ' - ' || subquery.description from 0 for 255), \"Value\" = subquery.value FROM (SELECT \"DailyExpensesId\", SUM(\"Price\" * \"Amount\") AS Value, string_agg(\"ItemName\", ',') AS Description FROM \"DailyExpensesItem\" GROUP BY \"DailyExpensesId\") AS subquery WHERE \"Id\" = subquery.\"DailyExpensesId\"");
         }
 
         public override void Down()

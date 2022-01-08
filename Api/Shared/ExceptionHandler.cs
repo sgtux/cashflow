@@ -4,7 +4,7 @@ using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Cashflow.Api.Contracts;
-using Cashflow.Api.Service;
+using Cashflow.Api.Services;
 using Microsoft.AspNetCore.Http;
 
 namespace Cashflow.Api.Shared

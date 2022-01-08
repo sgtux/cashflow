@@ -1,7 +1,7 @@
 using System.Text;
 using Cashflow.Api.Contracts;
 using Cashflow.Api.Infra.Repository;
-using Cashflow.Api.Service;
+using Cashflow.Api.Services;
 using Cashflow.Api.Shared;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,6 +22,7 @@ namespace Cashflow.Api.Extensions
             services.AddScoped<FuelExpensesService>();
             services.AddScoped<RemainingBalanceService>();
             services.AddScoped<RecurringExpenseService>();
+            services.AddScoped<ProjectionService>();
             services.AddScoped<LogService>();
         }
 
@@ -36,7 +37,6 @@ namespace Cashflow.Api.Extensions
             services.AddScoped<IFuelExpensesRepository, FuelExpensesRepository>();
             services.AddScoped<IRemainingBalanceRepository, RemainingBalanceRepository>();
             services.AddScoped<IRecurringExpenseRepository, RecurringExpenseRepository>();
-
         }
 
         public static void ConfigureDatabaseContext(this IServiceCollection services)

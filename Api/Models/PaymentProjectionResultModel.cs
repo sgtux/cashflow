@@ -8,7 +8,7 @@ namespace Cashflow.Api.Models
     {
         public PaymentProjectionResultModel() => Payments = new List<PaymentProjectionModel>();
 
-        public List<PaymentProjectionModel> Payments { get; set; }
+        public List<PaymentProjectionModel> Payments { get; }
 
         public decimal CostExpense => Payments.Where(p => p.Type.Id == (int)PaymentTypeEnum.Expense).Sum(p => p.Cost);
 

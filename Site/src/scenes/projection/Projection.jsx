@@ -5,7 +5,7 @@ import { Paper, List } from '@material-ui/core'
 import { MainContainer, MoneySpan } from '../../components'
 import { InputMonth } from '../../components/inputs'
 
-import { paymentService } from '../../services/index'
+import { homeService } from '../../services'
 
 import { toReal, getMonthYear } from '../../helpers/utils'
 import { PaymentMonth } from './PaymentMonth/PaymentMonth'
@@ -37,7 +37,7 @@ export function Projection() {
   function refresh(date) {
     setLoading(true)
     setEndDate(date)
-    paymentService.getProjection(date.month, date.year)
+    homeService.getProjection(date.month, date.year)
       .then(res => {
         const dates = Object.keys(res)
         let total = 0

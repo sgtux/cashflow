@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Cashflow.Api.Auth;
 using Cashflow.Api.Contracts;
 using Cashflow.Api.Models;
-using Cashflow.Api.Service;
+using Cashflow.Api.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cashflow.Api.Controllers

@@ -234,13 +234,14 @@ export function EditPayment() {
               qtdInstallmentsChanged={v => setQtdInstallments(v)}
             />
 
-            {id && <div style={{ marginBottom: 10 }}>
-              <DatePickerContainer style={{ color: '#666' }}>
-                <span>Data Inativação:</span>
-                <DatePicker customInput={<DatePickerInput style={{ width: 115 }} />} onChange={e => setInactiveAt(e)}
-                  dateFormat="dd/MM/yyyy" locale={ptBr} selected={inactiveAt} />
-              </DatePickerContainer>
-            </div>
+            {
+              id && <div style={{ marginBottom: 10 }}>
+                <DatePickerContainer style={{ color: '#666' }}>
+                  <span>Data Inativação:</span>
+                  <DatePicker customInput={<DatePickerInput style={{ width: 115 }} />} onChange={e => setInactiveAt(e)}
+                    dateFormat="dd/MM/yyyy" locale={ptBr} selected={inactiveAt} />
+                </DatePickerContainer>
+              </div>
             }
 
             <div hidden={condition !== PaymentCondition.Installment}>
@@ -261,7 +262,7 @@ export function EditPayment() {
 
       <div style={{ display: 'flex', justifyContent: 'end' }}>
         <Link to="/payments">
-          <Button onClick={() => { }} variant="contained" autoFocus>Lista de Pagamentos</Button>
+          <Button variant="contained" autoFocus>Lista de Pagamentos</Button>
         </Link>
 
         <Button

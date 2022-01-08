@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Cashflow.Api.Infra.Sql.Salary;
 using Cashflow.Api.Infra.Entity;
-using Cashflow.Api.Service;
+using Cashflow.Api.Services;
 using Cashflow.Api.Infra.Filters;
 using Cashflow.Api.Contracts;
 

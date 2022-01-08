@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Cashflow.Api.Contracts;
 using Cashflow.Api.Infra.Sql;
-using Cashflow.Api.Service;
+using Cashflow.Api.Services;
 using Dapper;
 
 namespace Cashflow.Api.Infra.Repository

@@ -53,7 +53,7 @@ export function Invoices(props) {
                                 <span style={{ fontWeight: 'bold' }}>{c.name}</span>
                                 <List dense={true} style={{ marginLeft: '50px' }}>
                                     {c.payments.map((p, k) =>
-                                        <ListItem key={k}>
+                                        <ListItem style={{ backgroundColor: k % 2 == 0 ? '#ddd' : '#eee' }} key={k}>
                                             <ImageList rowHeight={18} cols={5} style={{ width: '100%' }}>
                                                 <ImageListItem cols={3}>
                                                     <span>{p.description}</span>

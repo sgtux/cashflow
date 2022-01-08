@@ -5,7 +5,7 @@ using Cashflow.Api.Contracts;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Infra.Filters;
 using Cashflow.Api.Infra.Sql.RecurringExpense;
-using Cashflow.Api.Service;
+using Cashflow.Api.Services;
 
 namespace Cashflow.Api.Infra.Repository
 {
@@ -24,7 +24,7 @@ namespace Cashflow.Api.Infra.Repository
             var cards = await _creditCardRepository.GetSome(filter);
             await Query<RecurringExpenseHistory>(RecurringExpenseResources.Some, (p, i) =>
             {
-                var recurringExpense = list.FirstOrDefault(p => p.Id == p.Id);
+                var recurringExpense = list.FirstOrDefault(x => x.Id == p.Id);
                 if (recurringExpense == null)
                 {
                     recurringExpense = p;

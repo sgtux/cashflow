@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Models;
-using Cashflow.Api.Service;
+using Cashflow.Api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,13 +13,7 @@ namespace Cashflow.Api.Controllers
     {
         private PaymentService _service;
 
-        private RemainingBalanceService _remainingBalanceService;
-
-        public PaymentController(PaymentService service, RemainingBalanceService remainingBalanceService)
-        {
-            _service = service;
-            _remainingBalanceService = remainingBalanceService;
-        }
+        public PaymentController(PaymentService service) => _service = service;
 
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] PaymentFilterModel filter) => HandleResult(await _service.GetByUser(UserId, filter));
@@ -29,13 +23,6 @@ namespace Cashflow.Api.Controllers
 
         [HttpGet("Types")]
         public async Task<IActionResult> GetTypes() => HandleResult(await _service.GetTypes());
-
-        [HttpGet("Projection")]
-        public async Task<IActionResult> GetProjection([FromQuery] int month, [FromQuery] int year)
-        {
-            await _remainingBalanceService.Update(UserId);
-            return HandleResult(await _service.GetProjection(UserId, month, year));
-        }
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Payment payment)

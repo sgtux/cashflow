@@ -37,7 +37,7 @@ export function PaymentMonth({ monthYear, paymentMonth, show }) {
           <AccordionDetails>
             <List dense={true} style={{ width: '100%' }}>
               {paymentMonth.payments.filter(p => !(p.creditCard || {}).id).map((p, j) =>
-                <ListItem key={j}>
+                <ListItem style={{ backgroundColor: j % 2 == 0 ? '#ddd' : '#eee' }} key={j}>
                   <div style={{ width: '100%' }}>
                     <ImageList rowHeight={20} cols={6}>
                       <ImageListItem cols={3}>

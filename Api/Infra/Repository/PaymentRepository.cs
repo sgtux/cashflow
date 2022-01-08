@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Cashflow.Api.Infra.Sql.Payment;
 using Cashflow.Api.Infra.Entity;
-using Cashflow.Api.Service;
+using Cashflow.Api.Services;
 using Cashflow.Api.Contracts;
 using Cashflow.Api.Infra.Filters;
 

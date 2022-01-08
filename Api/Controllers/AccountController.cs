@@ -5,7 +5,7 @@ using Cashflow.Api.Auth;
 using Cashflow.Api.Contracts;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Models;
-using Cashflow.Api.Service;
+using Cashflow.Api.Services;
 using Cashflow.Api.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
