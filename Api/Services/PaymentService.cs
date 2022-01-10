@@ -117,13 +117,18 @@ namespace Cashflow.Api.Services
             var result = new ResultModel();
             var validatorResult = new PaymentValidator(_paymentRepository, _creditCardRepository).Validate(payment);
             if (!validatorResult.IsValid)
+            {
                 result.AddNotification(validatorResult.Errors);
+                return result;
+            }
 
             if (result.IsValid)
             {
-                UpdateMonthlyPayment(payment);
+                if (payment.Monthly)
+                    UpdateMonthlyPayment(payment);
                 await _paymentRepository.Update(payment);
             }
+
             return result;
         }
 

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Cashflow.Api.Contracts;
+using Cashflow.Api.Extensions;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Infra.Filters;
 using Cashflow.Api.Models;
@@ -27,8 +28,8 @@ namespace Cashflow.Api.Services
 
             var list = await _householdExpenseRepository.GetSome(new BaseFilter()
             {
-                StartDate = new DateTime(year, month, 1),
-                EndDate = new DateTime(year, month, DateTime.DaysInMonth(year, month)),
+                StartDate = new DateTime(year, month, 1).FixStartTimeFilter(),
+                EndDate = new DateTime(year, month, DateTime.DaysInMonth(year, month)).FixEndTimeFilter(),
                 UserId = userId
             });
             return new ResultDataModel<IEnumerable<HouseholdExpense>>(list);

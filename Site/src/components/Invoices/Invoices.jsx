@@ -15,6 +15,7 @@ import { ExpandMore } from '@material-ui/icons'
 import { toReal } from '../../helpers/utils'
 
 import { InvoiceCost, InvoiceTotalCost, InvoiceCostSmall } from './styles'
+import { MoneySpan } from '../../components'
 
 export function Invoices(props) {
 
@@ -44,7 +45,7 @@ export function Invoices(props) {
         cards.length ?
             <Accordion>
                 <AccordionSummary expandIcon={<ExpandMore />}>
-                    <Typography style={{ color: '#666' }}>Faturas</Typography>
+                    <Typography style={{ color: '#666' }}>Faturas - <MoneySpan bold>{toReal(total)}</MoneySpan></Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                     <div style={{ marginLeft: 20, width: '100%', color: '#666' }}>

@@ -8,13 +8,7 @@ import {
     Button
 } from '@material-ui/core'
 
-import {
-    Delete as DeleteIcon,
-    Edit as EditIcon
-} from '@material-ui/icons'
-
 import { MainContainer } from '../../../components/main'
-import IconTextInput from '../../../components/main/IconTextInput'
 import { InputMoney, DatePickerContainer, DatePickerInput } from '../../../components/inputs'
 import { toReal, fromReal } from '../../../helpers'
 
@@ -44,7 +38,7 @@ export function EditHouseholdExpense() {
                     setId(res.id)
                     setDescription(res.description)
                     setDate(new Date(res.date))
-                    setValue(res.value)
+                    setValue(toReal(res.value))
                 })
                 .catch(err => console.log(err))
                 .finally(() => setLoading(false))
