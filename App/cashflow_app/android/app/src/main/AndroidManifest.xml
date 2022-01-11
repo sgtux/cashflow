@@ -1,7 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.cashflow_app">
+    package="com.household_expences_control">
+  <uses-permission android:name="android.permission.INTERNET"/>
    <application
-        android:label="cashflow_app"
+        android:label="Controlador de Despesas Domésticas"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
