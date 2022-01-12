@@ -38,6 +38,7 @@ dependencies:
   localstorage: ^4.0.0+1
   flutter_masked_text: ^0.8.0
   date_format: ^2.0.5
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:

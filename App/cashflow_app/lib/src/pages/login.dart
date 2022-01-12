@@ -10,21 +10,12 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  final StorageService storage = StorageService();
+  final StorageService storageService = StorageService();
 
   late AccountService accountService;
   late String name = '';
   late String password = '';
   late bool isLoading = false;
-
-  @override
-  void initState() {
-    final token = storage.getToken();
-    if (token != null && token != '') {
-      Navigator.pushNamed(context, '/home');
-    }
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,6 +49,7 @@ class _LoginState extends State<Login> {
             decoration: const InputDecoration(
                 icon: Icon(Icons.lock), hintText: 'Senha'),
           ),
+          const SizedBox(height: 20),
           isLoading
               ? const CircularProgressIndicator()
               : ElevatedButton(
@@ -67,12 +59,13 @@ class _LoginState extends State<Login> {
                     });
                     accountService.login(name, password).then((res) {
                       if (res != null) {
-                        storage.setToken(res.token);
-                        Navigator.pushNamed(context, '/home');
+                        storageService.setToken(res.token);
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, '/home', (_) => false);
                       }
                     }).whenComplete(() => setState(() => {isLoading = false}));
                   },
-                  child: const Text("Entrar"))
+                  child: const Text("Entrar")),
         ],
       ),
     )));

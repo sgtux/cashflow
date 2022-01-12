@@ -1,6 +1,5 @@
 class ResultModel {
   final List<String> errors;
-  // final Map<String, dynamic> data;
   final dynamic data;
 
   ResultModel({required this.errors, required this.data});
@@ -15,5 +14,9 @@ class ResultModel {
       });
     }
     return ResultModel(data: data, errors: errors);
+  }
+
+  bool isValid() {
+    return errors.isEmpty;
   }
 }

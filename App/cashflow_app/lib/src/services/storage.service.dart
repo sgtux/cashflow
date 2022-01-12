@@ -4,7 +4,7 @@ import 'package:cashflow_app/src/utils/constants.dart';
 class StorageService {
   late LocalStorage storage = LocalStorage(cashflowStorageKey);
 
-  void setToken(String token) {
+  void setToken(String? token) {
     storage.setItem(tokenStorageKey, token);
   }
 
