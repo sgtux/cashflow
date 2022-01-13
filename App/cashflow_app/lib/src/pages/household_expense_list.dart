@@ -1,28 +1,31 @@
 import 'package:cashflow_app/src/models/household-expense/household_expense_model.dart';
 import 'package:cashflow_app/src/services/household-expense.service.dart';
+import 'package:cashflow_app/src/utils/constants.dart';
 import 'package:cashflow_app/src/utils/exception_handler.dart';
 import 'package:cashflow_app/src/utils/string_extensions.dart';
 import 'package:flutter/material.dart';
 
 typedef RemoveCallback = void Function(int id);
 
-class HouseholdExpenses extends StatefulWidget {
-  const HouseholdExpenses({Key? key}) : super(key: key);
+class HouseholdExpenseList extends StatefulWidget {
+  const HouseholdExpenseList({Key? key}) : super(key: key);
 
   @override
-  _HouseholdExpensesState createState() => _HouseholdExpensesState();
+  _HouseholdExpenseListState createState() => _HouseholdExpenseListState();
 }
 
-class _HouseholdExpensesState extends State<HouseholdExpenses> {
+class _HouseholdExpenseListState extends State<HouseholdExpenseList> {
   late HouseholdExpenseService householdExpenseService;
   late List<HouseholdExpenseModel> list = [];
-  late bool isLoading = false;
+  late bool isLoading = true;
   late String? selectedYear;
   late String? selectedMonth;
 
   @override
   void initState() {
     super.initState();
+    isLoading = true;
+
     final now = DateTime.now();
     selectedYear = now.year.toString();
     final months = getMonthList();
@@ -55,7 +58,6 @@ class _HouseholdExpensesState extends State<HouseholdExpenses> {
     householdExpenseService = HouseholdExpenseService(context);
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Despesas Domésticas")),
       body: Column(children: [
         const SizedBox(
           height: 10,
@@ -160,14 +162,16 @@ class _HouseholdExpensesState extends State<HouseholdExpenses> {
                               icon: const Icon(Icons.more_vert),
                               onPressed: () {
                                 Navigator.pushNamed(
-                                    context, '/household-expense-detail',
-                                    arguments: list[idx]);
+                                        context, Routes.householdExpenseDetail,
+                                        arguments: list[idx])
+                                    .then((value) => refresh());
                               })));
                 }))
       ]),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.pushNamed(context, '/household-expense-detail');
+          Navigator.pushNamed(context, Routes.householdExpenseDetail)
+              .then((value) => refresh());
         },
         backgroundColor: Colors.green,
         child: const Icon(Icons.addchart),
