@@ -40,7 +40,7 @@ namespace Cashflow.Api.Services
 
         public async Task Update(int userId)
         {
-            var date = DateTime.Now.AddMonths(-1);
+            var date = CurrentDate.AddMonths(-1);
             var filter = new BaseFilter()
             {
                 StartDate = new DateTime(date.Year, date.Month, 1).FixStartTimeFilter(),

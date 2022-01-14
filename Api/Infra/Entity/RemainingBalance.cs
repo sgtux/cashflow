@@ -1,6 +1,6 @@
 namespace Cashflow.Api.Infra.Entity
 {
-    public class RemainingBalance
+    public class RemainingBalance : BaseEntity
     {
         public long Id { get; set; }
 

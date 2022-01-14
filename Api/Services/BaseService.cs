@@ -1,4 +1,9 @@
+using System;
+
 namespace Cashflow.Api.Services
 {
-    public class BaseService { }
+    public abstract class BaseService
+    {
+        public DateTime CurrentDate => DateTime.Now;
+    }
 }

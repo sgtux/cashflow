@@ -2,13 +2,13 @@ using System;
 
 namespace Cashflow.Api.Infra.Entity
 {
-    public class Installment
+    public class Installment : BaseEntity
     {
         public long Id { get; set; }
 
         public long PaymentId { get; set; }
 
-        public int Number { get; set; }
+        public short Number { get; set; }
 
         public decimal Cost { get; set; }
 

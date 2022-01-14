@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Cashflow.Api.Enums;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Tests.Tests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -15,7 +16,9 @@ namespace Cashflow.Tests
             UserId = 2,
             Description = "Computer Shop 3",
             Date = new DateTime(2019, 5, 1),
-            Value = 327.5M
+            Value = 327.5M,
+            VehicleId = 3,
+            Type = HouseholdExpenseTypeEnum.Others
         };
 
         [TestMethod]
@@ -43,6 +46,15 @@ namespace Cashflow.Tests
             model.Value = 0;
             var result = await Post("/api/HouseholdExpense", model, model.UserId);
             TestErrors(model, result, "O campo 'Valor' deve ser maior que 0.");
+        }
+
+        [TestMethod]
+        public async Task AddWithInvalidVehicle()
+        {
+            var model = DefaultHouseholdExpense;
+            model.VehicleId = 2;
+            var result = await Post("/api/HouseholdExpense", model, model.UserId);
+            TestErrors(model, result, "Veículo não encontrado(a).");
         }
 
         [TestMethod]
@@ -78,6 +90,15 @@ namespace Cashflow.Tests
             model.Value = 0;
             var result = await Put("/api/HouseholdExpense", model, model.UserId);
             TestErrors(model, result, "O campo 'Valor' deve ser maior que 0.");
+        }
+
+        [TestMethod]
+        public async Task UpdateWithInvalidVehicle()
+        {
+            var model = DefaultHouseholdExpense;
+            model.VehicleId = 2;
+            var result = await Put("/api/HouseholdExpense", model, model.UserId);
+            TestErrors(model, result, "Veículo não encontrado(a).");
         }
 
         [TestMethod]

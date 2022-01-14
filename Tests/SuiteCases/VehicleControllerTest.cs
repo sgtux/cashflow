@@ -70,7 +70,7 @@ namespace Cashflow.Tests
         public async Task MilagePerLiterOk()
         {
             var vehicle = await Get<Vehicle>("/api/Vehicle/2", 1);
-            Assert.AreEqual(10.66M, vehicle.Data.MilagePerLiter);
+            Assert.AreEqual(10.66M, vehicle.Data.MiliagePerLiter);
         }
     }
 }

@@ -1,6 +1,6 @@
-namespace Cashflow.Api.Shared
+namespace Cashflow.Api.Enums
 {
-    public enum PaymentTypeEnum : int
+    public enum PaymentTypeEnum : byte
     {
         Expense = 1,
 

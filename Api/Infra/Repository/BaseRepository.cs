@@ -95,5 +95,7 @@ namespace Cashflow.Api.Infra.Repository
         }
 
         private void Log(string query) => _logService.Info($"Query: {query}\n\n");
+
+        public DateTime CurrentDate => DateTime.Now;
     }
 }

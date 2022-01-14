@@ -107,6 +107,7 @@ export function EditVehicleModal({ vehicle, onCancel }) {
                                     <th>Quilometragem</th>
                                     <th>Preço por Litro</th>
                                     <th>Valor Abastecido</th>
+                                    <th>Litros Abastecidos</th>
                                     <th>Data</th>
                                     <th>Ações</th>
                                 </tr>
@@ -117,6 +118,7 @@ export function EditVehicleModal({ vehicle, onCancel }) {
                                         <td>{p.miliage} Km</td>
                                         <td>{toReal(p.pricePerLiter)}</td>
                                         <td>{toReal(p.valueSupplied)}</td>
+                                        <td>{p.litersSupplied}</td>
                                         <td>{dateToString(p.date)}</td>
                                         <td>
                                             <IconButton onClick={() => edit(p)} color="primary" aria-label="Edit">

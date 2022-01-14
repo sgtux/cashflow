@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Cashflow.Api.Contracts;
+using Cashflow.Api.Enums;
 using Cashflow.Api.Extensions;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Infra.Filters;
 using Cashflow.Api.Models;
+using Cashflow.Api.Models.HouseholdExpense;
 using Cashflow.Api.Validators;
 
 namespace Cashflow.Api.Services
@@ -14,11 +17,18 @@ namespace Cashflow.Api.Services
     {
         private IHouseholdExpenseRepository _householdExpenseRepository;
 
-        public HouseholdExpenseService(IHouseholdExpenseRepository householdExpenseRepository) => _householdExpenseRepository = householdExpenseRepository;
+        private IVehicleRepository _vehicleRepository;
+
+        public HouseholdExpenseService(IHouseholdExpenseRepository householdExpenseRepository,
+            IVehicleRepository vehicleRepository)
+        {
+            _householdExpenseRepository = householdExpenseRepository;
+            _vehicleRepository = vehicleRepository;
+        }
 
         public async Task<ResultDataModel<IEnumerable<HouseholdExpense>>> GetByUser(int userId, int month, int year)
         {
-            var now = DateTime.Now;
+            var now = CurrentDate;
 
             if (month > 12 || month < 1)
                 month = now.Month;
@@ -41,10 +51,16 @@ namespace Cashflow.Api.Services
             return new ResultDataModel<HouseholdExpense>(p?.UserId == userId ? p : null);
         }
 
+        public ResultDataModel<IEnumerable<HouseholdExpenseTypeModel>> GetTypes()
+        {
+            var types = Enum.GetValues<HouseholdExpenseTypeEnum>().Select(p => new HouseholdExpenseTypeModel(p));
+            return new ResultDataModel<IEnumerable<HouseholdExpenseTypeModel>>(types);
+        }
+
         public async Task<ResultModel> Add(HouseholdExpense householdExpense)
         {
             var result = new ResultModel();
-            var validatorResult = new HouseholdExpenseValidator(_householdExpenseRepository).Validate(householdExpense);
+            var validatorResult = new HouseholdExpenseValidator(_householdExpenseRepository, _vehicleRepository).Validate(householdExpense);
             if (!validatorResult.IsValid)
                 result.AddNotification(validatorResult.Errors);
 
@@ -56,7 +72,7 @@ namespace Cashflow.Api.Services
         public async Task<ResultModel> Update(HouseholdExpense householdExpense)
         {
             var result = new ResultModel();
-            var validatorResult = new HouseholdExpenseValidator(_householdExpenseRepository).Validate(householdExpense);
+            var validatorResult = new HouseholdExpenseValidator(_householdExpenseRepository, _vehicleRepository).Validate(householdExpense);
             if (validatorResult.IsValid)
                 await _householdExpenseRepository.Update(householdExpense);
             else

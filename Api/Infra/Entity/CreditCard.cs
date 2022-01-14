@@ -1,6 +1,6 @@
 namespace Cashflow.Api.Infra.Entity
 {
-    public class CreditCard
+    public class CreditCard : BaseEntity
     {
         public int Id { get; set; }
 

@@ -6,7 +6,7 @@ using Cashflow.Api.Contracts;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Infra.Filters;
 using Cashflow.Api.Models;
-using Cashflow.Api.Shared;
+using Cashflow.Api.Enums;
 using Cashflow.Api.Validators;
 using Cashflow.Api.Extensions;
 

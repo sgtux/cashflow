@@ -19,7 +19,8 @@ namespace Cashflow.Tests.Mocks.Database.Seeders
                 .Row(new { Id = 8, Value = 1200, UserId = 2, StartDate = new DateTime(2020, 1, 1), EndDate = new DateTime(2020, 6, 1) })
                 .Row(new { Id = 9, Value = 1500, UserId = 2, StartDate = new DateTime(2020, 7, 1), EndDate = new DateTime(2020, 8, 1) })
                 .Row(new { Id = 10, Value = 2000, UserId = 2, StartDate = new DateTime(2020, 12, 1), EndDate = new DateTime(2021, 3, 1) })
-                .Row(new { Id = 11, Value = 2000, UserId = 3, StartDate = new DateTime(2020, 12, 1), EndDate = new DateTime(2021, 3, 1) });
+                .Row(new { Id = 11, Value = 2000, UserId = 3, StartDate = new DateTime(2020, 12, 1), EndDate = new DateTime(2021, 3, 1) })
+                .Row(new { Id = 12, Value = 2500, UserId = 4, StartDate = DateTime.Now.AddMonths(-2) });
         }
 
         public override void Down()

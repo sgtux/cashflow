@@ -3,6 +3,8 @@ UPDATE
 SET
   "Description" = @Description,
   "Date" = @Date,
-  "Value" = @Value
+  "Value" = @Value,
+  "VehicleId" = @VehicleId,
+  "Type" = @Type
 WHERE
   "Id" = @Id

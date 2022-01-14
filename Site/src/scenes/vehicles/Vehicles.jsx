@@ -91,7 +91,7 @@ export function Vehicles() {
                                     <td>{p.id}</td>
                                     <td>{p.description}</td>
                                     <td>{p.miliageTraveled}</td>
-                                    <td>{p.milagePerLiter}</td>
+                                    <td>{p.miliagePerLiter}</td>
                                     <td>
                                         <IconButton onClick={() => setEditVehicle(p)} color="primary" aria-label="Edit">
                                             <Tooltip title="Abastecimentos">

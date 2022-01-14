@@ -30,7 +30,7 @@ namespace Cashflow.Api.Services
             if (validationResults.IsValid)
             {
                 model.Password = Utils.Sha1(model.Password);
-                model.CreatedAt = DateTime.Now;
+                model.CreatedAt = CurrentDate;
 
                 await _userRepository.Add(model);
                 var user = await _userRepository.FindByNickName(model.NickName);

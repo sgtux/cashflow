@@ -104,7 +104,5 @@ namespace Cashflow.Api.Infra.Repository
             await Execute(InstallmentResources.Delete, new { PaymentId = id });
             await Execute(PaymentResources.Delete, new { Id = id });
         }
-
-        public DateTime CurrentDate => DateTime.Now;
     }
 }

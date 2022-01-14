@@ -22,7 +22,6 @@ export const getDateFromStringEg = (value) => {
   const date = value.split('-')
   const year = date[0]
   const month = date[1]
-  new Date('2002/10')
   return new Date(`${year}/${month}`)
 }
 

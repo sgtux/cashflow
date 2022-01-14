@@ -1,6 +1,6 @@
 namespace Cashflow.Api.Infra.Entity
 {
-    public class PaymentType
+    public class PaymentType : BaseEntity
     {
         public int Id { get; set; }
 

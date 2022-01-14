@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using Cashflow.Api.Shared;
+using Cashflow.Api.Enums;
 
 namespace Cashflow.Api.Models
 {

@@ -1,4 +1,18 @@
 INSERT INTO
-  "HouseholdExpense" ("Description", "Date", "UserId", "Value")
+  "HouseholdExpense" (
+    "Description",
+    "Date",
+    "UserId",
+    "Value",
+    "VehicleId",
+    "Type"
+  )
 VALUES
-  (@Description, @Date, @UserId, @Value)
+  (
+    @Description,
+    @Date,
+    @UserId,
+    @Value,
+    @VehicleId,
+    @Type
+  )

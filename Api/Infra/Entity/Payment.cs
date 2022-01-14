@@ -1,14 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Cashflow.Api.Extensions;
-using Cashflow.Api.Shared;
+using Cashflow.Api.Enums;
 
 namespace Cashflow.Api.Infra.Entity
 {
-    public class Payment
+    public class Payment : BaseEntity
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         public string Description { get; set; }
 

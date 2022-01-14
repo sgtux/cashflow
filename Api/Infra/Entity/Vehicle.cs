@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Cashflow.Api.Infra.Entity
 {
-    public class Vehicle
+    public class Vehicle : BaseEntity
     {
         public int Id { get; set; }
 
@@ -16,7 +16,7 @@ namespace Cashflow.Api.Infra.Entity
 
         public decimal MiliageTraveled => HasExpenses ? FuelExpenses.Max(p => p.Miliage) - FuelExpenses.Min(p => p.Miliage) : 0;
 
-        public decimal MilagePerLiter
+        public decimal MiliagePerLiter
         {
             get
             {

@@ -3,7 +3,7 @@ using Cashflow.Api.Extensions;
 
 namespace Cashflow.Api.Infra.Entity
 {
-    public class Salary
+    public class Salary : BaseEntity
     {
         public int Id { get; set; }
 

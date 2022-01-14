@@ -7,7 +7,7 @@ using Cashflow.Api.Extensions;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Infra.Filters;
 using Cashflow.Api.Models;
-using Cashflow.Api.Shared;
+using Cashflow.Api.Enums;
 
 namespace Cashflow.Api.Services
 {
@@ -78,6 +78,12 @@ namespace Cashflow.Api.Services
         {
             var now = _paymentRepository.CurrentDate;
             var dates = new List<DateTime>();
+
+            if (month <= 0 || month > 12)
+                month = 12;
+
+            if (year < now.Year || year > now.AddYears(5).Year)
+                year = now.AddYears(1).Year;
 
             var baseDate = new DateTime(year, month, 1);
 
@@ -161,7 +167,7 @@ namespace Cashflow.Api.Services
 
         private async Task FillHouseholdExpense(List<PaymentProjectionModel> list, List<DateTime> dates, IEnumerable<PaymentType> types, BaseFilter filter)
         {
-            var fromDate = DateTime.Now.AddMonths(-3).FixFirstDayInMonth();
+            var fromDate = CurrentDate.AddMonths(-3).FixFirstDayInMonth();
             var allHouseholdExpenses = await _householdExpenseRepository.GetSome(new BaseFilter() { UserId = filter.UserId, StartDate = fromDate });
 
             var average = allHouseholdExpenses.Where(p => p.Date.SameMonthYear(fromDate)).Sum(p => p.Value);
@@ -199,11 +205,11 @@ namespace Cashflow.Api.Services
 
         private async Task FillRecurringExpenses(List<PaymentProjectionModel> list, List<DateTime> dates, IEnumerable<PaymentType> types, IEnumerable<CreditCard> cards, BaseFilter filter)
         {
-            var currentRecurringExpenses = await _recurringExpenseRepository.GetSome(new BaseFilter() { UserId = filter.UserId, StartDate = DateTime.Now.FixFirstDayInMonth(), EndDate = DateTime.Now.FixLastDayInMonth() });
+            var currentRecurringExpenses = await _recurringExpenseRepository.GetSome(new BaseFilter() { UserId = filter.UserId, StartDate = CurrentDate.FixFirstDayInMonth(), EndDate = CurrentDate.FixLastDayInMonth() });
             var projectionRecurringExpenses = await _recurringExpenseRepository.GetSome(new BaseFilter() { UserId = filter.UserId, Active = true });
             foreach (var date in dates)
             {
-                if (date.SameMonthYear(DateTime.Now))
+                if (date.SameMonthYear(CurrentDate))
                 {
                     var expenses = currentRecurringExpenses.Where(p => p.HasHistory() && p.History.Any(x => date.SameMonthYear(x.Date)));
                     foreach (var item in expenses)
@@ -249,7 +255,7 @@ namespace Cashflow.Api.Services
 
         private async Task FillRemainingBalance(List<PaymentProjectionModel> list, List<DateTime> dates, IEnumerable<PaymentType> types, IEnumerable<CreditCard> cards, BaseFilter filter)
         {
-            var now = DateTime.Now;
+            var now = CurrentDate;
             var remainingBalance = await _remainingBalanceRepository.GetByMonthYear(filter.UserId, now.Month, now.Year);
             if (remainingBalance != null)
                 list.Add(new PaymentProjectionModel()
