@@ -64,8 +64,8 @@ namespace Cashflow.Api.Services
                 UserId = userId
             };
 
-            var expensesModel = new HomeChartModel() { Index = 0, Description = "Gastos Essênciais" };
-            var householdExpenseModel = new HomeChartModel() { Index = 1, Description = "Despesas Domésticas" };
+            var householdExpenseModel = new HomeChartModel() { Index = 0, Description = "Despesas Domésticas" };
+            var expensesModel = new HomeChartModel() { Index = 1, Description = "Outros Gastos" };
             var vehicleModel = new HomeChartModel() { Index = 2, Description = "Combustível" };
             var financingsModel = new HomeChartModel() { Index = 3, Description = "Financiamentos" };
             var loanModel = new HomeChartModel() { Index = 4, Description = "Empréstimos" };

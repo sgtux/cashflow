@@ -10,15 +10,11 @@ namespace Cashflow.Api.Models
 
         public List<PaymentProjectionModel> Payments { get; }
 
-        public decimal CostExpense => Payments.Where(p => p.Type.Id == (int)PaymentTypeEnum.Expense).Sum(p => p.Cost);
+        public decimal TotalIn => Payments.Where(p => p.Type.In).Sum(p => p.Cost);
 
-        public decimal CostGain => Payments.Where(p => p.Type.Id == (int)PaymentTypeEnum.Gain).Sum(p => p.Cost);
+        public decimal TotalOut => Payments.Where(p => !p.Type.In).Sum(p => p.Cost);
 
-        public decimal CostDividends => Payments.Where(p => p.Type.Id == (int)PaymentTypeEnum.Dividends).Sum(p => p.Cost);
-
-        public decimal CostContributions => Payments.Where(p => p.Type.Id == (int)PaymentTypeEnum.Contributions).Sum(p => p.Cost);
-
-        public decimal Total => (CostDividends + CostGain) - (CostExpense + CostContributions);
+        public decimal Total => TotalIn - TotalOut;
 
         public decimal AccumulatedCost { get; set; }
     }

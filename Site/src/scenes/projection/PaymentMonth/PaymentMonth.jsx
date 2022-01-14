@@ -46,7 +46,7 @@ export function PaymentMonth({ monthYear, paymentMonth, show }) {
                       </ImageListItem>
                       <ImageListItem cols={1}></ImageListItem>
                       <ImageListItem cols={1} style={{ textAlign: 'center' }}>
-                        <span style={{ fontFamily: '"Roboto", "Helvetica", "Arial", "sans-serif"' }}>
+                        <span style={{ color: 'gray', fontFamily: '"Roboto", "Helvetica", "Arial", "sans-serif"' }}>
                           {p.condition === PaymentCondition.Installment ? `${p.number}/${p.qtdInstallments}` : ''}
                         </span>
                         {p.paidDate && <PaidSpan>PAGA</PaidSpan>}
@@ -63,11 +63,11 @@ export function PaymentMonth({ monthYear, paymentMonth, show }) {
           <ContainerCosts>
             <BoxCosts>
               <span style={{ color: 'grey', marginRight: 20 }}>Gastos:</span>
-              <MoneySpan>{toReal(paymentMonth.costExpense)}</MoneySpan>
+              <MoneySpan>{toReal(paymentMonth.totalOut)}</MoneySpan>
             </BoxCosts>
             <BoxCosts>
               <span style={{ color: 'grey', marginRight: 20 }}>Ganhos:</span>
-              <MoneySpan gain>{toReal(paymentMonth.costGain)}</MoneySpan>
+              <MoneySpan gain>{toReal(paymentMonth.totalIn)}</MoneySpan>
             </BoxCosts>
             <BoxCosts>
               <span style={{ color: 'grey', marginRight: 20 }}>Líquido:</span>
