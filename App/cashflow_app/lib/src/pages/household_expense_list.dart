@@ -41,7 +41,7 @@ class _HouseholdExpenseListState extends State<HouseholdExpenseList> {
     });
     final month = getMonthList().indexOf(selectedMonth.toString()) + 1;
     householdExpenseService
-        .getAll(month.toString(), selectedYear.toString())
+        .getSome(month.toString(), selectedYear.toString())
         .then((value) => {
               setState(() => {list = value, isLoading = false})
             })
@@ -157,6 +157,15 @@ class _HouseholdExpenseListState extends State<HouseholdExpenseList> {
                             ),
                             const Text(" - "),
                             Text(toDateString(value: list[idx].date)),
+                            const Text(" - "),
+                            Text(list[idx].typeDescription!),
+                            const Text(" - "),
+                            list[idx].vehicleId != null
+                                ? const Icon(
+                                    Icons.motorcycle,
+                                    color: Colors.grey,
+                                  )
+                                : const SizedBox()
                           ]),
                           trailing: IconButton(
                               icon: const Icon(Icons.more_vert),

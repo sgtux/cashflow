@@ -108,7 +108,10 @@ class _VehicleListScreenStage extends State<VehicleListScreen> {
                                           });
                                     },
                                     title: Text(vehicles[idx].description),
-                                    subtitle: Text("Teste"),
+                                    subtitle: Row(children: [
+                                      Text(
+                                          "${vehicles[idx].miliageTraveled} km")
+                                    ]),
                                     trailing: IconButton(
                                         icon: const Icon(Icons.more_vert),
                                         onPressed: () {

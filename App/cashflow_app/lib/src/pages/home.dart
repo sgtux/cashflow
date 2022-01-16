@@ -1,6 +1,6 @@
 import 'package:cashflow_app/src/pages/household_expense_list.dart';
 import 'package:cashflow_app/src/pages/resume_screen.dart';
-import 'package:cashflow_app/src/pages/vehicle_list.screen.dart';
+import 'package:cashflow_app/src/pages/vehicle/vehicle_list.screen.dart';
 import "package:flutter/material.dart";
 
 class Home extends StatefulWidget {
