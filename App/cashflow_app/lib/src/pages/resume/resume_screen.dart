@@ -1,4 +1,4 @@
-import 'package:cashflow_app/src/models/home/projection-model.dart';
+import 'package:cashflow_app/src/models/home/home_data_model.dart';
 import 'package:cashflow_app/src/services/home.service.dart';
 import 'package:cashflow_app/src/utils/exception_handler.dart';
 import 'package:cashflow_app/src/utils/string_extensions.dart';
@@ -14,7 +14,16 @@ class ResumeScreen extends StatefulWidget {
 class _ResumeScreenState extends State<ResumeScreen> {
   late HomeService homeService;
   bool isLoading = false;
-  List<ProjectionModel> list = [];
+  List<HomeDataModel> list = [];
+  final List<Color?> listColors = [
+    Colors.red,
+    Colors.orange.shade600,
+    Colors.orange.shade800,
+    Colors.blue.shade300,
+    Colors.blue.shade800,
+    Colors.green.shade400,
+    Colors.green.shade900
+  ];
 
   @override
   void initState() {
@@ -26,7 +35,7 @@ class _ResumeScreenState extends State<ResumeScreen> {
     setState(() {
       isLoading = true;
     });
-    homeService.getProjection().then((value) {
+    homeService.getHomeData().then((value) {
       setState(() {
         isLoading = false;
         list = value;
@@ -42,44 +51,30 @@ class _ResumeScreenState extends State<ResumeScreen> {
   @override
   Widget build(BuildContext context) {
     homeService = HomeService(context);
+
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const SizedBox(width: 20),
-            isLoading
-                ? const CircularProgressIndicator()
-                : Row(children: [
-                    const SizedBox(width: 40),
-                    ElevatedButton(
-                        onPressed: () {
-                          refresh();
-                        },
-                        child: const Text('BUSCAR'))
-                  ]),
-            Expanded(
-                child: ListView.builder(
-                    itemCount: list.length,
-                    itemBuilder: (BuildContext ctx, int idx) {
-                      return Card(
-                          child: ListTile(
-                        title: Text(toMonthYearText(list[idx].monthYear)),
-                        subtitle: Row(children: [
-                          Text(
-                            toReal(value: list[idx].accumulatedCost.toDouble()),
+      body: isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : Column(children: [
+              Expanded(
+                  child: ListView.builder(
+                      itemCount: list.length,
+                      itemBuilder: (BuildContext ctx, int idx) {
+                        return Card(
+                            child: ListTile(
+                          title: Text(toReal(value: list[idx].value.toDouble()),
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  color: listColors[list[idx].index])),
+                          subtitle: Text(
+                            list[idx].description,
                             style: TextStyle(
-                                color: list[idx].accumulatedCost > 0
-                                    ? Colors.green.shade300
-                                    : Colors.red.shade300,
-                                fontWeight: FontWeight.bold),
+                                fontSize: 12,
+                                color: listColors[list[idx].index]),
                           ),
-                        ]),
-                      ));
-                    }))
-          ],
-        ),
-      ),
+                        ));
+                      }))
+            ]),
     );
   }
 }

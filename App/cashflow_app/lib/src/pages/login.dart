@@ -1,4 +1,5 @@
 import 'package:cashflow_app/src/utils/constants.dart';
+import 'package:cashflow_app/src/utils/exception_handler.dart';
 import 'package:flutter/material.dart';
 import '../services/account.service.dart';
 import '../services/storage.service.dart';
@@ -65,13 +66,16 @@ class _LoginState extends State<Login> {
                           isLoading = true;
                         });
                         accountService.login(name, password).then((res) {
+                          setState(() => {isLoading = false});
                           if (res != null) {
                             storageService.setToken(res.token);
                             Navigator.pushNamedAndRemoveUntil(
                                 context, Routes.home, (_) => false);
                           }
-                        }).whenComplete(
-                            () => setState(() => {isLoading = false}));
+                        }).catchError((error) {
+                          setState(() => {isLoading = false});
+                          handleHttpException(error, context);
+                        });
                       },
                       child: const Text("Entrar")),
             ],

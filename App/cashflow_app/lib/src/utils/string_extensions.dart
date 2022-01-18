@@ -4,7 +4,7 @@ String toReal({required double value}) {
   final controller =
       MoneyMaskedTextController(decimalSeparator: '.', thousandSeparator: ',');
   controller.updateValue(value);
-  return "R\$${controller.text}";
+  return "R\$ ${controller.text}";
 }
 
 String toDateString({required DateTime? value, String? separator}) {

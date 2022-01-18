@@ -1,4 +1,5 @@
 import 'package:cashflow_app/src/pages/household_expense_list.dart';
+import 'package:cashflow_app/src/pages/resume/projection_screen.dart';
 import 'package:cashflow_app/src/pages/resume/resume_screen.dart';
 import 'package:cashflow_app/src/pages/vehicle/vehicle_list.screen.dart';
 import "package:flutter/material.dart";
@@ -16,7 +17,8 @@ class _HomeState extends State<Home> {
   final List<Widget> _screens = const [
     ResumeScreen(),
     VehicleListScreen(),
-    HouseholdExpenseList()
+    HouseholdExpenseList(),
+    ProjectionScreen()
   ];
 
   _incrementTap(index) {
@@ -44,7 +46,7 @@ class _HomeState extends State<Home> {
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.motorcycle), label: 'Veículos'),
+              icon: Icon(Icons.car_rental), label: 'Veículos'),
           BottomNavigationBarItem(
               icon: Icon(Icons.shopping_cart), label: 'Despesas'),
           BottomNavigationBarItem(
