@@ -45,3 +45,8 @@ List<String> getMonthList() {
     'Dezembro'
   ];
 }
+
+String toMonthYearText(String monthYear) {
+  var arr = monthYear.split("/");
+  return "${getMonthList()[int.parse(arr[0]) - 1]} - ${arr[1]}";
+}
