@@ -27,5 +27,9 @@ namespace Cashflow.Api.Models
         public CreditCard CreditCard { get; set; }
 
         public string MonthYear { get; set; }
+
+        public string TypeText => Type?.Description ?? "";
+
+        public string CreditCardName => CreditCard?.Name ?? "";
     }
 }
