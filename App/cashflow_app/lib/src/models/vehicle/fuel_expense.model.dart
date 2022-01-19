@@ -3,11 +3,11 @@ import 'package:cashflow_app/src/models/model_base.dart';
 class FuelExpenseModel extends ModelBase {
   final int id;
   final int miliage;
-  final double valueSupplied;
-  final double pricePerLiter;
+  final num valueSupplied;
+  final num pricePerLiter;
   final DateTime date;
   final int vehicleId;
-  late double litersSupplied;
+  late num litersSupplied;
 
   FuelExpenseModel(
       {required this.id,
@@ -21,12 +21,12 @@ class FuelExpenseModel extends ModelBase {
   factory FuelExpenseModel.fromMap(Map<String, dynamic> map) {
     return FuelExpenseModel(
       id: map['id'],
-      miliage: map['description'],
-      valueSupplied: double.parse(map['value']),
-      pricePerLiter: double.parse(map['value']),
+      miliage: map['miliage'],
+      valueSupplied: map['valueSupplied'],
+      pricePerLiter: map['pricePerLiter'],
       date: DateTime.parse(map['date']),
-      vehicleId: map['value'],
-      litersSupplied: double.parse(map['value']),
+      vehicleId: map['vehicleId'],
+      litersSupplied: map['litersSupplied'],
     );
   }
 
@@ -38,8 +38,7 @@ class FuelExpenseModel extends ModelBase {
       "valueSupplied": valueSupplied,
       "pricePerLiter": pricePerLiter,
       "date": date.toIso8601String(),
-      "vehicleId": vehicleId,
-      "litersSupplied": litersSupplied,
+      "vehicleId": vehicleId
     };
   }
 }

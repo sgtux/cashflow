@@ -1,5 +1,5 @@
 import 'package:cashflow_app/src/models/household-expense/household_expense_model.dart';
-import 'package:cashflow_app/src/services/household-expense.service.dart';
+import 'package:cashflow_app/src/services/household_expense.service.dart';
 import 'package:cashflow_app/src/utils/constants.dart';
 import 'package:cashflow_app/src/utils/exception_handler.dart';
 import 'package:cashflow_app/src/utils/string_extensions.dart';

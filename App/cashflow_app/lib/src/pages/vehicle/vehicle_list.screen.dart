@@ -112,14 +112,30 @@ class _VehicleListScreenStage extends State<VehicleListScreen> {
                                       Text(
                                           "${vehicles[idx].miliageTraveled} km")
                                     ]),
-                                    trailing: IconButton(
-                                        icon: const Icon(Icons.more_vert),
-                                        onPressed: () {
-                                          Navigator.pushNamed(
-                                                  context, Routes.vehicleDetail,
-                                                  arguments: vehicles[idx])
-                                              .then((value) => refresh());
-                                        })));
+                                    trailing: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        IconButton(
+                                            icon: const Icon(
+                                                Icons.local_gas_station),
+                                            color: Colors.orange.shade400,
+                                            onPressed: () {
+                                              Navigator.pushNamed(context,
+                                                      Routes.vehicleDetail,
+                                                      arguments: vehicles[idx])
+                                                  .then((value) => refresh());
+                                            }),
+                                        IconButton(
+                                            icon: const Icon(Icons.edit),
+                                            color: Colors.blue.shade300,
+                                            onPressed: () {
+                                              Navigator.pushNamed(context,
+                                                      Routes.vehicleDetail,
+                                                      arguments: vehicles[idx])
+                                                  .then((value) => refresh());
+                                            }),
+                                      ],
+                                    )));
                           }))
                 ]),
       floatingActionButton: FloatingActionButton(
