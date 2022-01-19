@@ -58,84 +58,62 @@ class _VehicleListScreenStage extends State<VehicleListScreen> {
                           itemBuilder: (BuildContext ctx, int idx) {
                             return Card(
                                 child: ListTile(
-                                    onLongPress: () {
-                                      showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return AlertDialog(
-                                              title: const Text(
-                                                  "Deletar este item?"),
-                                              content: Text(
-                                                  vehicles[idx].description),
-                                              actions: [
-                                                TextButton(
-                                                    onPressed: () {
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                    },
-                                                    child:
-                                                        const Text("Cancelar")),
-                                                ElevatedButton(
-                                                    onPressed: () {
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                      setState(() {
-                                                        isLoading = true;
-                                                      });
-                                                      _vehicleService
-                                                          .remove(
-                                                              vehicles[idx].id)
-                                                          .then((res) {
-                                                        refresh();
-                                                      }).catchError((error) {
-                                                        handleHttpException(
-                                                            error, context);
-                                                        setState(() {
-                                                          isLoading = false;
-                                                        });
-                                                      });
-                                                    },
-                                                    child:
-                                                        const Text("Remover"),
-                                                    style: ButtonStyle(
-                                                      backgroundColor:
-                                                          MaterialStateProperty
-                                                              .all(Colors.red
-                                                                  .shade400),
-                                                    ))
-                                              ],
-                                            );
-                                          });
-                                    },
-                                    title: Text(vehicles[idx].description),
-                                    subtitle: Row(children: [
-                                      Text(
-                                          "${vehicles[idx].miliageTraveled} km")
-                                    ]),
-                                    trailing: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        IconButton(
-                                            icon: const Icon(
-                                                Icons.local_gas_station),
-                                            color: Colors.orange.shade400,
-                                            onPressed: () {
-                                              Navigator.pushNamed(context,
-                                                      Routes.vehicleDetail,
-                                                      arguments: vehicles[idx])
-                                                  .then((value) => refresh());
-                                            }),
-                                        IconButton(
-                                            icon: const Icon(Icons.edit),
-                                            color: Colors.blue.shade300,
-                                            onPressed: () {
-                                              Navigator.pushNamed(context,
-                                                      Routes.vehicleDetail,
-                                                      arguments: vehicles[idx])
-                                                  .then((value) => refresh());
-                                            }),
-                                      ],
-                                    )));
+                              onLongPress: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: const Text("Deletar este item?"),
+                                        content:
+                                            Text(vehicles[idx].description),
+                                        actions: [
+                                          TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: const Text("Cancelar")),
+                                          ElevatedButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                                setState(() {
+                                                  isLoading = true;
+                                                });
+                                                _vehicleService
+                                                    .remove(vehicles[idx].id)
+                                                    .then((res) {
+                                                  refresh();
+                                                }).catchError((error) {
+                                                  handleHttpException(
+                                                      error, context);
+                                                  setState(() {
+                                                    isLoading = false;
+                                                  });
+                                                });
+                                              },
+                                              child: const Text("Remover"),
+                                              style: ButtonStyle(
+                                                backgroundColor:
+                                                    MaterialStateProperty.all(
+                                                        Colors.red.shade400),
+                                              ))
+                                        ],
+                                      );
+                                    });
+                              },
+                              title: Text(vehicles[idx].description),
+                              subtitle: Row(children: [
+                                Text("${vehicles[idx].miliageTraveled} km")
+                              ]),
+                              trailing: IconButton(
+                                  icon: const Icon(Icons.edit),
+                                  color: Colors.blue.shade300,
+                                  onPressed: () {
+                                    Navigator.pushNamed(
+                                            context, Routes.vehicleDetail,
+                                            arguments: vehicles[idx])
+                                        .then((value) => refresh());
+                                  }),
+                            ));
                           }))
                 ]),
       floatingActionButton: FloatingActionButton(

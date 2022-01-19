@@ -20,7 +20,7 @@ class _FuelExpenseListScreenState extends State<FuelExpenseListScreen> {
   List<VehicleModel> vehicles = [];
   List<FuelExpenseModel> list = [];
   bool isLoading = false;
-  VehicleModel? selectedVehicle = null;
+  VehicleModel? selectedVehicle;
 
   @override
   void initState() {
@@ -72,6 +72,9 @@ class _FuelExpenseListScreenState extends State<FuelExpenseListScreen> {
                     onChanged: (VehicleModel? newValue) {
                       setState(() {
                         selectedVehicle = newValue;
+                        list = vehicles
+                            .firstWhere((e) => e.id == newValue!.id)
+                            .fuelExpenses;
                       });
                     })
               ]),

@@ -1,6 +1,3 @@
-import 'package:cashflow_app/src/models/model_base.dart';
-import 'package:cashflow_app/src/pages/home.dart';
-
 class HomeDataModel {
   final int index;
   final String description;
