@@ -143,26 +143,48 @@ namespace Cashflow.Api.Services
                 };
         }
 
-        private async Task FillVehicleExpenses(List<PaymentProjectionModel> list, List<DateTime> dates, IEnumerable<PaymentType> types, BaseFilter baseFilter)
+        private async Task FillVehicleExpenses(List<PaymentProjectionModel> list, List<DateTime> dates, IEnumerable<PaymentType> types, BaseFilter filter)
         {
-            var vehicles = await _vehicleRepository.GetSome(baseFilter);
+            var fromDate = DateTime.Now.AddMonths(-3).FixFirstDayInMonth();
+            var vehicles = await _vehicleRepository.GetSome(new BaseFilter() { UserId = filter.UserId, StartDate = fromDate });
+            List<FuelExpenses> allFuelExpenses = new List<FuelExpenses>();
+            vehicles.ToList().ForEach(p => allFuelExpenses.AddRange(p.FuelExpenses));
+
+            var average = allFuelExpenses.Where(p => p.Date.SameMonthYear(fromDate)).Sum(p => p.ValueSupplied);
+            average += allFuelExpenses.Where(p => p.Date.SameMonthYear(fromDate.AddMonths(1))).Sum(p => p.ValueSupplied);
+            average += allFuelExpenses.Where(p => p.Date.SameMonthYear(fromDate.AddMonths(2))).Sum(p => p.ValueSupplied);
+
+            if (average > 0)
+                average = average / 3;
+
             foreach (var date in dates)
-                foreach (var item in vehicles)
+            {
+                var fuelExpenses = allFuelExpenses.Where(p => p.Date.Month == date.Month && p.Date.Year == date.Year);
+                if (fuelExpenses.Any())
                 {
-                    var fuelExpenses = item.FuelExpenses.Where(p => p.Date.Month == date.Month && p.Date.Year == date.Year);
-                    if (fuelExpenses.Any())
+                    list.Add(new PaymentProjectionModel()
                     {
-                        list.Add(new PaymentProjectionModel()
-                        {
-                            Description = $"Gastos em Combustível ({item.Description})",
-                            Monthly = false,
-                            Condition = PaymentConditionEnum.Cash,
-                            MonthYear = date.ToString("MM/yyyy"),
-                            Type = types.First(p => p.Id == (int)PaymentTypeEnum.Expense),
-                            Cost = fuelExpenses.Sum(p => p.ValueSupplied)
-                        });
-                    }
+                        Description = $"Gastos em Combustível",
+                        Monthly = false,
+                        Condition = PaymentConditionEnum.Cash,
+                        MonthYear = date.ToString("MM/yyyy"),
+                        Type = types.First(p => p.Id == (int)PaymentTypeEnum.Expense),
+                        Cost = fuelExpenses.Sum(p => p.ValueSupplied)
+                    });
                 }
+                else if (average > 0)
+                {
+                    list.Add(new PaymentProjectionModel()
+                    {
+                        Description = $"Gastos em Combustível (Estimado)",
+                        Monthly = false,
+                        Condition = PaymentConditionEnum.Cash,
+                        MonthYear = date.ToString("MM/yyyy"),
+                        Type = types.First(p => p.Id == (int)PaymentTypeEnum.Expense),
+                        Cost = average
+                    });
+                }
+            }
         }
 
         private async Task FillHouseholdExpense(List<PaymentProjectionModel> list, List<DateTime> dates, IEnumerable<PaymentType> types, BaseFilter filter)
@@ -193,7 +215,7 @@ namespace Cashflow.Api.Services
                 else if (average > 0)
                     list.Add(new PaymentProjectionModel()
                     {
-                        Description = $"Despesas Domésticas (Média últimos 3 meses)",
+                        Description = $"Despesas Domésticas (Estimado)",
                         Monthly = false,
                         Condition = PaymentConditionEnum.Cash,
                         MonthYear = date.ToString("MM/yyyy"),
