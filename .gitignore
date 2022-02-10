@@ -9,3 +9,4 @@ Api/wwwroot
 logs
 dist
 coverage
+.sonarqube

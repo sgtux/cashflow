@@ -1,33 +1,113 @@
-# ASP.NET Core (.NET Framework)
-# Build and test ASP.NET Core projects targeting the full .NET Framework.
-# Add steps that publish symbols, save build artifacts, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+trigger:
+  none
+
+name: 1.0.$(BuildID)$(Rev:.r)-$(SourceBranchName)
 
 pool:
-  vmImage: 'windows-latest'
+  vmImage: windows-2022
+
+parameters:
+  - name: runSonar
+    displayName: Rodar Sonar
+    type: boolean
+    default: false
+
+  - name: runDependencyCheck
+    displayName: Rodar Dependency Check
+    type: boolean
+    default: false
+
+  - name: runPublish
+    displayName: Publicar
+    type: boolean
+    default: false
 
 variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
+  runDependencyCheck: ${{ parameters.runDependencyCheck }}
+  runSonar: ${{ parameters.runSonar }}
+  runPublish: ${{ parameters.runPublish }}
 
 steps:
-- task: NuGetToolInstaller@1
+  - task: PowerShell@2
+    condition: eq(variables.runDependencyCheck, 'true')
+    displayName: Dependency Check (Site)
+    inputs:
+      targetType: 'inline'
+      script: |
+        Invoke-RestMethod -Uri 'https://github.com/jeremylong/DependencyCheck/releases/download/v6.5.3/dependency-check-6.5.3-release.zip' -OutFile .\dependency-check.zip
+        Expand-Archive .\dependency-check.zip -DestinationPath .\
+        .\dependency-check\bin\dependency-check.bat -s .\Site --disableYarnAudit -project "Cashflow Site"  --format "HTML" --out "$(Build.ArtifactStagingDirectory)/report-site.html"
+  - task: PowerShell@2
+    condition: and(succeeded(), eq(variables.runDependencyCheck, 'true'))
+    displayName: Dependency Check (Api)
+    inputs:
+      targetType: 'inline'
+      script: |
+        .\dependency-check\bin\dependency-check.bat -s .\Api --disableYarnAudit -project "Cashflow Api"  --format "HTML" --out "$(Build.ArtifactStagingDirectory)/report-api.html"
+  - task: PublishBuildArtifacts@1
+    displayName: Publish Artifacts
+    condition: and(succeeded(), eq(variables.runDependencyCheck, 'true'))
+    inputs:
+      pathToPublish: "$(Build.ArtifactStagingDirectory)"
+      artifactName: Dependency Check Reports
 
-- task: NuGetCommand@2
-  inputs:
-    restoreSolution: '$(solution)'
+  - task: SonarCloudPrepare@1
+    displayName: Prepare analysis on SonarCloud
+    condition: eq(variables.runSonar, 'true')
+    inputs:
+      SonarCloud: 'Cashflow'
+      organization: 'sgtux'
+      scannerMode: 'MSBuild'
+      projectKey: 'Cashflow'
+      projectName: 'Cashflow'
 
-- task: VSBuild@1
-  inputs:
-    solution: '$(solution)'
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+  - task: DotNetCoreCLI@2
+    displayName: Dotnet Build
+    inputs:
+      command: 'build'
+      projects: 'Cashflow.sln'
+      arguments: '--configuration $(BuildConfiguration)'
 
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'test'
-    projects: '**/*[Tt]ests/*.csproj'
-    arguments: '/p:CollectCoverage=true /p:CoverletOutputFormat=opencover --configuration $(BuildConfiguration)'
-    testRunTitle: 'Test Coverage'
+  - task: DotNetCoreCLI@2
+    displayName: Dotnet Test
+    inputs:
+      command: 'test'
+      projects: '**/*[Tt]ests/*.csproj'
+      arguments: '/p:CollectCoverage=true /p:CoverletOutputFormat=opencover --configuration $(BuildConfiguration)'
+      
+  - task: SonarCloudAnalyze@1
+    condition: and(succeeded(), eq(variables.runSonar, 'true'))
+    displayName: Run Sonar Code Analysis
+
+  - task: SonarCloudPublish@1
+    condition: and(succeeded(), eq(variables.runSonar, 'true'))
+    displayName: Publish Quality Gate Result
+    inputs:
+      pollingTimeoutSec: '300'
+
+  - task: Yarn@3
+    displayName: Yarn Install
+    inputs:
+      projectDirectory: 'Site'
+
+  - task: Yarn@3
+    displayName: Yarn Build
+    inputs:
+      projectDirectory: 'Site'
+      arguments: 'build:prod'
+
+  - task: DotNetCoreCLI@2
+    condition: and(succeeded(), eq(variables.runPublish, 'true'))
+    displayName: DB Migrations
+    inputs:
+      command: 'run'
+      projects: 'Migrations'
+
+  - task: Bash@3
+    condition: and(succeeded(), eq(variables.runPublish, 'true'))
+    displayName: Publish to Heroku
+    inputs:
+      filePath: 'heroku-deploy.sh'
