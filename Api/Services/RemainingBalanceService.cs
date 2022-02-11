@@ -19,7 +19,7 @@ namespace Cashflow.Api.Services
 
         private IPaymentRepository _paymentRepository;
 
-        private ISalaryRepository _salaryRepository;
+        private IEarningRepository _earningRepository;
 
         private IRecurringExpenseRepository _recurringExpenseRepository;
 
@@ -27,14 +27,14 @@ namespace Cashflow.Api.Services
             IHouseholdExpenseRepository householdExpenseRepository,
             IVehicleRepository vehicleRepository,
             IPaymentRepository paymentRepository,
-            ISalaryRepository salaryRepository,
+            IEarningRepository earningRepository,
             IRecurringExpenseRepository recurringExpenseRepository)
         {
             _remainingBalanceRepository = remainingBalanceRepository;
             _vehicleRepository = vehicleRepository;
             _householdExpenseRepository = householdExpenseRepository;
             _paymentRepository = paymentRepository;
-            _salaryRepository = salaryRepository;
+            _earningRepository = earningRepository;
             _recurringExpenseRepository = recurringExpenseRepository;
         }
 
@@ -50,15 +50,10 @@ namespace Cashflow.Api.Services
 
             filter.InactiveTo = filter.EndDate?.FixEndTimeFilter();
 
-            Salary salary = null;
-            decimal total;
+            decimal total = 0;
 
-            var salaries = await _salaryRepository.GetSome(filter);
-            salary = salaries.FirstOrDefault(p => date.SameMonthYear(p.EndDate ?? default(DateTime)));
-            if (salary == null)
-                total = salaries.FirstOrDefault(p => p.EndDate == null)?.Value ?? 0;
-            else
-                total = salary.Value;
+            foreach (var item in (await _earningRepository.GetSome(filter)))
+                total += item.Value;
 
             foreach (var item in (await _vehicleRepository.GetSome(filter)))
                 total -= item.FuelExpenses.Sum(p => p.ValueSupplied);

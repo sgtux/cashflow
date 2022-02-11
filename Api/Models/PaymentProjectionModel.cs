@@ -10,7 +10,7 @@ namespace Cashflow.Api.Models
 
         public int Number { get; set; }
 
-        public PaymentConditionEnum Condition { get; set; }
+        public PaymentCondition Condition { get; set; }
 
         public string ConditionText => Condition.GetDescription();
 

@@ -4,9 +4,9 @@ namespace Cashflow.Api.Models.HouseholdExpense
 {
     public class HouseholdExpenseTypeModel
     {
-        private HouseholdExpenseTypeEnum _type;
+        private HouseholdExpenseType _type;
 
-        public HouseholdExpenseTypeModel(HouseholdExpenseTypeEnum e)
+        public HouseholdExpenseTypeModel(HouseholdExpenseType e)
         {
             _type = e;
         }

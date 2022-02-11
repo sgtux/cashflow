@@ -1,6 +1,6 @@
 namespace Cashflow.Api.Enums
 {
-    public enum PaymentConditionEnum : byte
+    public enum PaymentCondition : byte
     {
         Cash = 1,
 

@@ -8,31 +8,31 @@ namespace Cashflow.Api.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]
-    public class SalaryController : BaseController
+    public class EarningController : BaseController
     {
-        private SalaryService _service;
+        private EarningService _service;
 
-        public SalaryController(SalaryService service) => _service = service;
+        public EarningController(EarningService service) => _service = service;
 
         [HttpGet]
         public async Task<IActionResult> Get() => HandleResult(await _service.GetByUser(UserId));
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Salary salary)
+        public async Task<IActionResult> Post([FromBody] Earning earning)
         {
-            if (salary is null)
+            if (earning is null)
                 return HandleUnprocessableEntity();
-            salary.UserId = UserId;
-            return HandleResult(await _service.Add(salary));
+            earning.UserId = UserId;
+            return HandleResult(await _service.Add(earning));
         }
 
         [HttpPut]
-        public async Task<IActionResult> Put([FromBody] Salary salary)
+        public async Task<IActionResult> Put([FromBody] Earning earning)
         {
-            if (salary is null)
+            if (earning is null)
                 return HandleUnprocessableEntity();
-            salary.UserId = UserId;
-            return HandleResult(await _service.Update(salary));
+            earning.UserId = UserId;
+            return HandleResult(await _service.Update(earning));
         }
 
         [HttpDelete("{id}")]

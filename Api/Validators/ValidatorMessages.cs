@@ -67,11 +67,7 @@ namespace Cashflow.Api.Validators
 
         public class SalaryMessages
         {
-            public string EndDateMustBeMoreThenStartDate = "A Data Fim deve ser maior que a Data Início.";
-
-            public string AnotherCurrentSalary = "Tem outro salário vigente.";
-
-            public string AnotherSalaryInThisDateRange = "Tem outro salário neste intervalo de datas.";
+            public string AlreadySalaryForThisMonthYear = "Já existe um salário para este mês/ano.";
         }
 
         public class VehicleMessages

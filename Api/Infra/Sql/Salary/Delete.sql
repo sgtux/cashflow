@@ -1,1 +1,0 @@
-DELETE FROM "Salary" WHERE "Id" = @Id

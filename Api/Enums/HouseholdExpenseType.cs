@@ -1,6 +1,6 @@
 namespace Cashflow.Api.Enums
 {
-    public enum HouseholdExpenseTypeEnum
+    public enum HouseholdExpenseType
     {
         Food = 1,
 
