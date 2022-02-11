@@ -17,7 +17,7 @@ namespace Cashflow.Api.Services
 
         private ICreditCardRepository _creditCardRepository;
 
-        private ISalaryRepository _salaryRepository;
+        private IEarningRepository _earningRepository;
 
         private IHouseholdExpenseRepository _householdExpenseRepository;
 
@@ -29,7 +29,7 @@ namespace Cashflow.Api.Services
 
         public ProjectionService(IPaymentRepository paymentRepository,
            ICreditCardRepository creditCardRepository,
-           ISalaryRepository salaryRepository,
+           IEarningRepository earningRepository,
            IHouseholdExpenseRepository householdExpenseRepository,
            IVehicleRepository vehicleRepository,
            IRemainingBalanceRepository remainingBalanceRepository,
@@ -38,7 +38,7 @@ namespace Cashflow.Api.Services
         {
             _paymentRepository = paymentRepository;
             _creditCardRepository = creditCardRepository;
-            _salaryRepository = salaryRepository;
+            _earningRepository = earningRepository;
             _householdExpenseRepository = householdExpenseRepository;
             _vehicleRepository = vehicleRepository;
             _remainingBalanceRepository = remainingBalanceRepository;
@@ -105,7 +105,7 @@ namespace Cashflow.Api.Services
 
         private async Task FillSalary(List<PaymentProjectionModel> list, List<DateTime> dates, IEnumerable<PaymentType> types, BaseFilter filter)
         {
-            var salary = (await _salaryRepository.GetSome(filter)).FirstOrDefault(p => p.EndDate is null);
+            var salary = (await _earningRepository.GetSome(filter)).FirstOrDefault(p => p.Date.SameMonthYear(DateTime.Now));
             if (salary != null)
             {
                 foreach (var date in dates)
@@ -166,7 +166,7 @@ namespace Cashflow.Api.Services
                     {
                         Description = $"Gastos em Combustível",
                         Monthly = false,
-                        Condition = PaymentConditionEnum.Cash,
+                        Condition = PaymentCondition.Cash,
                         MonthYear = date.ToString("MM/yyyy"),
                         Type = types.First(p => p.Id == (int)PaymentTypeEnum.Expense),
                         Cost = fuelExpenses.Sum(p => p.ValueSupplied)
@@ -178,7 +178,7 @@ namespace Cashflow.Api.Services
                     {
                         Description = $"Gastos em Combustível (Estimado)",
                         Monthly = false,
-                        Condition = PaymentConditionEnum.Cash,
+                        Condition = PaymentCondition.Cash,
                         MonthYear = date.ToString("MM/yyyy"),
                         Type = types.First(p => p.Id == (int)PaymentTypeEnum.Expense),
                         Cost = average
@@ -207,7 +207,7 @@ namespace Cashflow.Api.Services
                     {
                         Description = $"Despesas Domésticas",
                         Monthly = false,
-                        Condition = PaymentConditionEnum.Cash,
+                        Condition = PaymentCondition.Cash,
                         MonthYear = date.ToString("MM/yyyy"),
                         Type = types.First(p => p.Id == (int)PaymentTypeEnum.Expense),
                         Cost = householdExpense.Sum(p => p.Value)
@@ -217,7 +217,7 @@ namespace Cashflow.Api.Services
                     {
                         Description = $"Despesas Domésticas (Estimado)",
                         Monthly = false,
-                        Condition = PaymentConditionEnum.Cash,
+                        Condition = PaymentCondition.Cash,
                         MonthYear = date.ToString("MM/yyyy"),
                         Type = types.First(p => p.Id == (int)PaymentTypeEnum.Expense),
                         Cost = average
@@ -240,7 +240,7 @@ namespace Cashflow.Api.Services
                             Description = $"{item.Description} (Recorrente)",
                             Monthly = true,
                             CreditCard = cards.FirstOrDefault(p => p.Id == item.CreditCardId),
-                            Condition = PaymentConditionEnum.Cash,
+                            Condition = PaymentCondition.Cash,
                             MonthYear = date.ToString("MM/yyyy"),
                             Type = types.First(p => p.Id == (int)PaymentTypeEnum.Expense),
                             Cost = item.History.First(p => date.SameMonthYear(p.Date)).PaidValue
@@ -252,7 +252,7 @@ namespace Cashflow.Api.Services
                             Description = $"{item.Description} (Recorrente)",
                             Monthly = true,
                             CreditCard = cards.FirstOrDefault(p => p.Id == item.CreditCardId),
-                            Condition = PaymentConditionEnum.Cash,
+                            Condition = PaymentCondition.Cash,
                             MonthYear = date.ToString("MM/yyyy"),
                             Type = types.First(p => p.Id == (int)PaymentTypeEnum.Expense),
                             Cost = item.Value
@@ -266,7 +266,7 @@ namespace Cashflow.Api.Services
                             Description = $"{item.Description} (Recorrente)",
                             Monthly = true,
                             CreditCard = cards.FirstOrDefault(p => p.Id == item.CreditCardId),
-                            Condition = PaymentConditionEnum.Cash,
+                            Condition = PaymentCondition.Cash,
                             MonthYear = date.ToString("MM/yyyy"),
                             Type = types.First(p => p.Id == (int)PaymentTypeEnum.Expense),
                             Cost = item.Value

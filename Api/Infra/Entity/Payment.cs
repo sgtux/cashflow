@@ -17,13 +17,13 @@ namespace Cashflow.Api.Infra.Entity
 
         public PaymentTypeEnum TypeId { get; set; }
 
-        public PaymentConditionEnum Condition { get; set; }
+        public PaymentCondition Condition { get; set; }
 
         public decimal BaseCost { get; set; }
 
         public string ConditionText => Condition.GetDescription();
 
-        public bool Monthly => Condition == PaymentConditionEnum.Monthly;
+        public bool Monthly => Condition == PaymentCondition.Monthly;
 
         public int? CreditCardId { get; set; }
 

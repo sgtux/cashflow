@@ -23,11 +23,11 @@
     <EmbeddedResource Include="Infra/Sql/User/GetById.sql" />
     <EmbeddedResource Include="Infra/Sql/User/Insert.sql" />
 
-    <EmbeddedResource Include="Infra/Sql/Salary/Insert.sql" />
-    <EmbeddedResource Include="Infra/Sql/Salary/Delete.sql" />
-    <EmbeddedResource Include="Infra/Sql/Salary/GetById.sql" />
-    <EmbeddedResource Include="Infra/Sql/Salary/GetByUser.sql" />
-    <EmbeddedResource Include="Infra/Sql/Salary/Update.sql" />
+    <EmbeddedResource Include="Infra/Sql/Earning/Insert.sql" />
+    <EmbeddedResource Include="Infra/Sql/Earning/Delete.sql" />
+    <EmbeddedResource Include="Infra/Sql/Earning/GetById.sql" />
+    <EmbeddedResource Include="Infra/Sql/Earning/GetSome.sql" />
+    <EmbeddedResource Include="Infra/Sql/Earning/Update.sql" />
 
     <EmbeddedResource Include="Infra/Sql/CreditCard/Delete.sql" />
     <EmbeddedResource Include="Infra/Sql/CreditCard/GetByUser.sql" />

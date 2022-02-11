@@ -53,7 +53,7 @@ namespace Cashflow.Api.Services
 
         public ResultDataModel<IEnumerable<HouseholdExpenseTypeModel>> GetTypes()
         {
-            var types = Enum.GetValues<HouseholdExpenseTypeEnum>().Select(p => new HouseholdExpenseTypeModel(p));
+            var types = Enum.GetValues<HouseholdExpenseType>().Select(p => new HouseholdExpenseTypeModel(p));
             return new ResultDataModel<IEnumerable<HouseholdExpenseTypeModel>>(types);
         }
 

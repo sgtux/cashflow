@@ -20,7 +20,7 @@ namespace Cashflow.Tests
             CreditCardId = 1,
             BaseCost = 20.5M,
             Description = "First Payment",
-            Condition = PaymentConditionEnum.Cash,
+            Condition = PaymentCondition.Cash,
             Type = new PaymentType() { Id = (int)PaymentTypeEnum.Expense },
             TypeId = PaymentTypeEnum.Expense,
             Installments = new List<Installment>()

@@ -2,49 +2,62 @@ namespace Cashflow.Api.Enums
 {
     public static class EnumExtensions
     {
-        public static string GetDescription(this PaymentConditionEnum conditionEnum)
+        public static string GetDescription(this PaymentCondition conditionEnum)
         {
             switch (conditionEnum)
             {
-                case PaymentConditionEnum.Cash:
+                case PaymentCondition.Cash:
                     return "À Vista";
-                case PaymentConditionEnum.Monthly:
+                case PaymentCondition.Monthly:
                     return "Mensal";
-                case PaymentConditionEnum.Installment:
+                case PaymentCondition.Installment:
                     return "Parcelado";
                 default:
-                    return "Condição do Pagamento";
+                    return "Desconhecido";
             }
         }
 
-        public static string GetDescription(this HouseholdExpenseTypeEnum e)
+        public static string GetDescription(this HouseholdExpenseType e)
         {
             switch (e)
             {
-                case HouseholdExpenseTypeEnum.Food:
+                case HouseholdExpenseType.Food:
                     return "Comida";
-                case HouseholdExpenseTypeEnum.MarketRanch:
+                case HouseholdExpenseType.MarketRanch:
                     return "Rancho";
-                case HouseholdExpenseTypeEnum.FastFood:
+                case HouseholdExpenseType.FastFood:
                     return "Fast-Food";
-                case HouseholdExpenseTypeEnum.Hygiene:
+                case HouseholdExpenseType.Hygiene:
                     return "Higiene";
-                case HouseholdExpenseTypeEnum.Education:
+                case HouseholdExpenseType.Education:
                     return "Educação";
-                case HouseholdExpenseTypeEnum.Vehicle:
+                case HouseholdExpenseType.Vehicle:
                     return "Veículo";
-                case HouseholdExpenseTypeEnum.Pets:
+                case HouseholdExpenseType.Pets:
                     return "Animal";
-                case HouseholdExpenseTypeEnum.Leisure:
+                case HouseholdExpenseType.Leisure:
                     return "Lazer";
-                case HouseholdExpenseTypeEnum.HardDrink:
+                case HouseholdExpenseType.HardDrink:
                     return "Bebida Alcólica";
-                case HouseholdExpenseTypeEnum.Party:
+                case HouseholdExpenseType.Party:
                     return "Festa";
-                case HouseholdExpenseTypeEnum.Others:
+                case HouseholdExpenseType.Others:
                     return "Outros";
                 default:
-                    return "Tipo";
+                    return "Desconhecido";
+            }
+        }
+
+        public static string GetDescription(this EarningType e)
+        {
+            switch (e)
+            {
+                case EarningType.Salary:
+                    return "Salário";
+                case EarningType.Benefit:
+                    return "Benefício";
+                default:
+                    return "Desconhecido";
             }
         }
     }
