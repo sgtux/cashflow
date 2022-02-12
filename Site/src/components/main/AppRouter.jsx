@@ -5,7 +5,8 @@ import {
   CreditCards,
   Payments,
   Projection,
-  Salary,
+  Earnings,
+  EditEarning,
   EditPayment,
   HouseholdExpenses,
   EditHouseholdExpense,
@@ -38,7 +39,8 @@ export default function () {
       <Route path="/payments" element={<Payments />} />
       <Route path="/credit-cards" element={<CreditCards />} />
       <Route path="/projection" element={<Projection />} />
-      <Route path="/salary" element={<Salary />} />
+      <Route path="/earnings" element={<Earnings />} />
+      <Route path="/edit-earning/:id" element={<EditEarning />} />
       <Route path="/edit-payment/:id" element={<EditPayment />} />
       <Route path="/household-expenses" element={<HouseholdExpenses />} />
       <Route path="/edit-household-expense/:id" element={<EditHouseholdExpense />} />

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { SignInScreen } from './SignIn'
 import { SignUpScreen } from './SignUp'
 
-export default function Auth() {
+export function Auth() {
   const [isLogin, setIsLogin] = useState(true)
   return (
     <div>
