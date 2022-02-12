@@ -8,7 +8,6 @@ using Cashflow.Api.Extensions;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Infra.Filters;
 using Cashflow.Api.Models;
-using Cashflow.Api.Models.HouseholdExpense;
 using Cashflow.Api.Validators;
 
 namespace Cashflow.Api.Services
@@ -51,10 +50,14 @@ namespace Cashflow.Api.Services
             return new ResultDataModel<HouseholdExpense>(p?.UserId == userId ? p : null);
         }
 
-        public ResultDataModel<IEnumerable<HouseholdExpenseTypeModel>> GetTypes()
+        public ResultDataModel<IEnumerable<TypeModel>> GetTypes()
         {
-            var types = Enum.GetValues<HouseholdExpenseType>().Select(p => new HouseholdExpenseTypeModel(p));
-            return new ResultDataModel<IEnumerable<HouseholdExpenseTypeModel>>(types);
+            var types = Enum.GetValues<HouseholdExpenseType>().Select(p => new TypeModel()
+            {
+                Id = (int)p,
+                Description = p.GetDescription()
+            });
+            return new ResultDataModel<IEnumerable<TypeModel>>(types);
         }
 
         public async Task<ResultModel> Add(HouseholdExpense householdExpense)

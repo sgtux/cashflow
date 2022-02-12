@@ -17,6 +17,12 @@ namespace Cashflow.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> Get() => HandleResult(await _service.GetByUser(UserId));
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(int id) => HandleResult(await _service.GetById(id));
+
+        [HttpGet("Types")]
+        public IActionResult GetTypes() => HandleResult(_service.GetTypes());
+
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Earning earning)
         {

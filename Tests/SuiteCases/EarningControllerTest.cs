@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Cashflow.Api.Enums;
 using Cashflow.Api.Infra.Entity;
+using Cashflow.Api.Models;
 using Cashflow.Tests.Tests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -18,6 +19,13 @@ namespace Cashflow.Tests
         {
             var result = await Get<IEnumerable<Earning>>("/api/Earning", 1);
             Assert.IsTrue(result.Data.Count() > 0);
+        }
+
+        [TestMethod]
+        public async Task GetTypes()
+        {
+            var result = await Get<IEnumerable<TypeModel>>("/api/Earning/Types", 1);
+            Assert.IsTrue(result.Data.Count() == 2);
         }
 
         [TestMethod]

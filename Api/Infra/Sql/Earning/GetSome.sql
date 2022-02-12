@@ -18,4 +18,4 @@ WHERE
     OR "Date" <= @EndDate
   )
 ORDER BY
-  "Date"
+  "Date" DESC

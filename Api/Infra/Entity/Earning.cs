@@ -16,5 +16,7 @@ namespace Cashflow.Api.Infra.Entity
         public int UserId { get; set; }
 
         public EarningType Type { get; set; }
+
+        public string TypeDescription => Type.GetDescription();
     }
 }
