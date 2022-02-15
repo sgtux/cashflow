@@ -1,6 +1,3 @@
-trigger:
-  none
-
 name: 1.0.$(BuildID)$(Rev:.r)-$(SourceBranchName)
 
 pool:
@@ -10,17 +7,17 @@ parameters:
   - name: runSonar
     displayName: Rodar Sonar
     type: boolean
-    default: false
+    default: true
 
   - name: runDependencyCheck
     displayName: Rodar Dependency Check
     type: boolean
-    default: false
+    default: true
 
   - name: runPublish
     displayName: Publicar
     type: boolean
-    default: false
+    default: true
 
 variables:
   solution: '**/*.sln'
@@ -76,8 +73,21 @@ steps:
     inputs:
       command: 'test'
       projects: '**/*[Tt]ests/*.csproj'
-      arguments: '/p:CollectCoverage=true /p:CoverletOutputFormat=opencover --configuration $(BuildConfiguration)'
-      
+      arguments: '--logger trx --results-directory ./coverage --collect:"XPlat Code Coverage"'
+      publishTestResults: false
+
+  - task: PublishTestResults@2
+    displayName: Publish Test Results
+    inputs:
+      testResultsFormat: 'VSTest'
+      testResultsFiles: '$(System.DefaultWorkingDirectory)/coverage/*.trx'
+  
+  - task: PublishCodeCoverageResults@1
+    displayName: Publish Code Coverage
+    inputs:
+      codeCoverageTool: 'Cobertura'
+      summaryFileLocation: '$(System.DefaultWorkingDirectory)/coverage/**/coverage.cobertura.xml'
+
   - task: SonarCloudAnalyze@1
     condition: and(succeeded(), eq(variables.runSonar, 'true'))
     displayName: Run Sonar Code Analysis
