@@ -97,6 +97,10 @@ export function HouseholdExpenses() {
                                         secondary={ellipsisText(p.description, 30)}
                                     />
                                     <ListItemText
+                                        style={{ width: '100px' }}
+                                        secondary={`(${p.typeDescription})`}
+                                    />
+                                    <ListItemText
                                         style={{ width: '100px', textAlign: 'center' }}
                                         secondary={toReal(p.value)}
                                     />

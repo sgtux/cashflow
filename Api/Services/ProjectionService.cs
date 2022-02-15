@@ -55,7 +55,7 @@ namespace Cashflow.Api.Services
             var dates = LoadDates(month, year);
             var list = new List<PaymentProjectionModel>();
 
-            await FillSalary(list, dates, types, baseFilter);
+            await FillBenefits(list, dates, types, baseFilter);
             await FillPayments(list, dates, types, cards, baseFilter);
             await FillVehicleExpenses(list, dates, types, baseFilter);
             await FillHouseholdExpense(list, dates, types, baseFilter);
@@ -103,20 +103,34 @@ namespace Cashflow.Api.Services
             return dates;
         }
 
-        private async Task FillSalary(List<PaymentProjectionModel> list, List<DateTime> dates, IEnumerable<PaymentType> types, BaseFilter filter)
+        private async Task FillBenefits(List<PaymentProjectionModel> list, List<DateTime> dates, IEnumerable<PaymentType> types, BaseFilter filter)
         {
-            var salary = (await _earningRepository.GetSome(filter)).FirstOrDefault(p => p.Date.SameMonthYear(DateTime.Now));
-            if (salary != null)
+            var benefits = await _earningRepository.GetSome(filter);
+            if (benefits.Any())
             {
+                var salary = benefits.FirstOrDefault(p => p.Date.SameMonthYear(DateTime.Now));
                 foreach (var date in dates)
-                    list.Add(new PaymentProjectionModel()
-                    {
-                        Description = "Salário",
-                        Monthly = true,
-                        MonthYear = date.ToString("MM/yyyy"),
-                        Type = types.First(p => p.Id == (int)PaymentTypeEnum.Gain),
-                        Cost = salary.Value
-                    });
+                {
+                    if (salary != null)
+                        list.Add(new PaymentProjectionModel()
+                        {
+                            Description = "Salário",
+                            Monthly = true,
+                            MonthYear = date.ToString("MM/yyyy"),
+                            Type = types.First(p => p.Id == (int)PaymentTypeEnum.Gain),
+                            Cost = salary.Value
+                        });
+
+                    foreach (var item in benefits.Where(p => p.Type != EarningType.Salary && p.Date.SameMonthYear(date)))
+                        list.Add(new PaymentProjectionModel()
+                        {
+                            Description = $"{item.Description} (Benefício)",
+                            Monthly = true,
+                            MonthYear = date.ToString("MM/yyyy"),
+                            Type = types.First(p => p.Id == (int)PaymentTypeEnum.Gain),
+                            Cost = item.Value
+                        });
+                }
             }
         }
 
@@ -192,9 +206,9 @@ namespace Cashflow.Api.Services
             var fromDate = CurrentDate.AddMonths(-3).FixFirstDayInMonth();
             var allHouseholdExpenses = await _householdExpenseRepository.GetSome(new BaseFilter() { UserId = filter.UserId, StartDate = fromDate });
 
-            var average = allHouseholdExpenses.Where(p => p.Date.SameMonthYear(fromDate)).Sum(p => p.Value);
-            average += allHouseholdExpenses.Where(p => p.Date.SameMonthYear(fromDate.AddMonths(1))).Sum(p => p.Value);
-            average += allHouseholdExpenses.Where(p => p.Date.SameMonthYear(fromDate.AddMonths(2))).Sum(p => p.Value);
+            var average = allHouseholdExpenses.Where(p => p.IsRecurrent && p.Date.SameMonthYear(fromDate)).Sum(p => p.Value);
+            average += allHouseholdExpenses.Where(p => p.IsRecurrent && p.Date.SameMonthYear(fromDate.AddMonths(1))).Sum(p => p.Value);
+            average += allHouseholdExpenses.Where(p => p.IsRecurrent && p.Date.SameMonthYear(fromDate.AddMonths(2))).Sum(p => p.Value);
 
             if (average > 0)
                 average = average / 3;
