@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -45,7 +46,7 @@ namespace Cashflow.Api.Controllers
                 return HandleUnauthorized(result.Notifications.First());
 
             await _paymentService.UpdateMonthlyPayments(result.Data.Id);
-            await _remainingBalanceService.Update(result.Data.Id);
+            await _remainingBalanceService.Recalculate(result.Data.Id, DateTime.Now);
 
             var claims = new Dictionary<string, string>();
             claims.Add(ClaimTypes.Sid, result.Data.Id.ToString());

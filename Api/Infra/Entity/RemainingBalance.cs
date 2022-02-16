@@ -1,3 +1,5 @@
+using System;
+
 namespace Cashflow.Api.Infra.Entity
 {
     public class RemainingBalance : BaseEntity
@@ -11,5 +13,7 @@ namespace Cashflow.Api.Infra.Entity
         public int Year { get; set; }
 
         public int UserId { get; set; }
+
+        public string MonthYearText => new DateTime(Year, Month, 1).ToString("MM/yyyy");
     }
 }
