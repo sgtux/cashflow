@@ -292,7 +292,7 @@ namespace Cashflow.Api.Services
         private async Task FillRemainingBalance(List<PaymentProjectionModel> list, List<DateTime> dates, IEnumerable<PaymentType> types, IEnumerable<CreditCard> cards, BaseFilter filter)
         {
             var now = CurrentDate;
-            var remainingBalance = await _remainingBalanceRepository.GetByMonthYear(filter.UserId, now.Month, now.Year);
+            var remainingBalance = await _remainingBalanceRepository.GetByMonthYear(filter.UserId, now);
             if (remainingBalance != null)
                 list.Add(new PaymentProjectionModel()
                 {

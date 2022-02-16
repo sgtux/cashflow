@@ -4,8 +4,10 @@ using System.Threading.Tasks;
 using Cashflow.Api.Contracts;
 using Cashflow.Api.Infra.Filters;
 using Cashflow.Api.Extensions;
-using System.Text.Json;
 using Cashflow.Api.Infra.Entity;
+using Cashflow.Api.Models;
+using Cashflow.Api.Validators;
+using System.Collections.Generic;
 
 namespace Cashflow.Api.Services
 {
@@ -38,9 +40,16 @@ namespace Cashflow.Api.Services
             _recurringExpenseRepository = recurringExpenseRepository;
         }
 
-        public async Task Update(int userId)
+        public async Task<ResultModel> GetAll(int userId) => new ResultDataModel<IEnumerable<RemainingBalance>>(await _remainingBalanceRepository.GetSome(new BaseFilter() { UserId = userId }));
+
+        public async Task<ResultModel> Recalculate(int userId, DateTime date, bool force = false)
         {
-            var date = CurrentDate.AddMonths(-1);
+            var resultModel = new ResultModel();
+            var current = await _remainingBalanceRepository.GetByMonthYear(userId, date);
+            if (current != null && !force)
+                return resultModel;
+
+            date = date.AddMonths(-1);
             var filter = new BaseFilter()
             {
                 StartDate = new DateTime(date.Year, date.Month, 1).FixStartTimeFilter(),
@@ -69,7 +78,7 @@ namespace Cashflow.Api.Services
                     total -= item.Installments.Where(p => p.Date.Year == date.Year && p.Date.Month == date.Month).Sum(p => p.Cost);
             }
 
-            var lastRemainingBalance = await _remainingBalanceRepository.GetByMonthYear(userId, date.Month, date.Year);
+            var lastRemainingBalance = await _remainingBalanceRepository.GetByMonthYear(userId, date);
             if (lastRemainingBalance != null)
                 total += lastRemainingBalance.Value;
 
@@ -78,7 +87,6 @@ namespace Cashflow.Api.Services
 
             date = date.AddMonths(1);
 
-            var current = await _remainingBalanceRepository.GetByMonthYear(userId, date.Month, date.Year);
             if (current != null)
             {
                 current.Value = total;
@@ -94,6 +102,22 @@ namespace Cashflow.Api.Services
                     UserId = userId
                 });
             }
+
+            return resultModel;
+        }
+
+        public async Task<ResultModel> Update(int userId, RemainingBalanceModel model)
+        {
+            var result = new ResultModel();
+            var remainingBalance = await _remainingBalanceRepository.GetByMonthYear(userId, new DateTime(model.Year, model.Month, 1));
+            if (remainingBalance == null)
+            {
+                result.AddNotification(ValidatorMessages.NotFound("Saldo Remanecente"));
+                return result;
+            }
+            remainingBalance.Value = model.Value;
+            await _remainingBalanceRepository.Update(remainingBalance);
+            return result;
         }
     }
 }

@@ -17,18 +17,15 @@ namespace Cashflow.Api.Infra.Repository
 
         public Task<RemainingBalance> GetById(long id) => throw new NotImplementedException();
 
-        public Task<RemainingBalance> GetByMonthYear(int userId, int month, int year)
+        public Task<RemainingBalance> GetByMonthYear(int userId, DateTime date)
         => FirstOrDefault(RemainingBalanceResources.ByMonthYear, new
         {
             UserId = userId,
-            Month = month,
-            Year = year
+            Month = date.Month,
+            Year = date.Year
         });
 
-        public Task<IEnumerable<RemainingBalance>> GetSome(BaseFilter filter)
-        {
-            throw new NotImplementedException();
-        }
+        public Task<IEnumerable<RemainingBalance>> GetSome(BaseFilter filter) => Query(RemainingBalanceResources.Some, filter);
 
         public Task Remove(long id) => Execute(RemainingBalanceResources.Delete, new { Id = id });
 
