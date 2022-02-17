@@ -18,17 +18,17 @@ namespace Cashflow.Api.Validators
 
         public static string NotFound(string name) => string.Format("{0} não encontrado(a).", name);
 
-        public static UserMessages User = new UserMessages();
+        public static UserMessages User => new UserMessages();
 
-        public static PaymentMessages Payment = new PaymentMessages();
+        public static PaymentMessages Payment => new PaymentMessages();
 
-        public static CreditCardMessages CreditCard = new CreditCardMessages();
+        public static CreditCardMessages CreditCard => new CreditCardMessages();
 
-        public static SalaryMessages Salary = new SalaryMessages();
+        public static SalaryMessages Salary => new SalaryMessages();
 
-        public static VehicleMessages Vehicle = new VehicleMessages();
+        public static VehicleMessages Vehicle => new VehicleMessages();
 
-        public static RecurringExpenseMessages RecurringExpense = new RecurringExpenseMessages();
+        public static RecurringExpenseMessages RecurringExpense => new RecurringExpenseMessages();
 
         public class UserMessages
         {

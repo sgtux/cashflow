@@ -9,15 +9,11 @@ namespace Cashflow.Api
 {
     public class Startup
     {
-        private bool _isDevelopment;
-
         public Startup(IHostEnvironment env) { }
 
         public void ConfigureServices(IServiceCollection services)
         {
             var appConfig = new AppConfig();
-            _isDevelopment = appConfig.IsDevelopment;
-
             services.AddControllers();
             services.ConfigureAuthentication(appConfig.SecretJwtKey);
             services.AddRouting();

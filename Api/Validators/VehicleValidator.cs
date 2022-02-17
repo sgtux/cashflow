@@ -8,12 +8,9 @@ namespace Cashflow.Api.Validators
     {
         private IVehicleRepository _vehicleRepository;
 
-        private IUserRepository _userRepository;
-
         public VehicleValidator(IVehicleRepository vehicleRepository, IUserRepository userRepository)
         {
             _vehicleRepository = vehicleRepository;
-            _userRepository = userRepository;
             RuleFor(c => c.Description).NotEmpty().WithMessage(ValidatorMessages.FieldIsRequired("Descrição"));
             RuleFor(c => c.Description).MaximumLength(200).WithMessage(ValidatorMessages.FieldMaxLength("Descrição", 200));
             RuleFor(c => c).Must(VehicleExists).When(c => c.Id > 0).WithMessage(ValidatorMessages.NotFound("Veículo"));

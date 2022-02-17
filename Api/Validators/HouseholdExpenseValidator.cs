@@ -7,13 +7,10 @@ namespace Cashflow.Api.Validators
 {
     public class HouseholdExpenseValidator : AbstractValidator<HouseholdExpense>
     {
-        private IHouseholdExpenseRepository _repository;
-
         private IVehicleRepository _vehicleRepository;
 
         public HouseholdExpenseValidator(IHouseholdExpenseRepository repository, IVehicleRepository vehicleRepository)
         {
-            _repository = repository;
             _vehicleRepository = vehicleRepository;
             RuleFor(s => s.Date).NotEqual(default(System.DateTime)).WithMessage(ValidatorMessages.FieldIsRequired("Data"));
             RuleFor(s => s.Description).NotEmpty().WithMessage(ValidatorMessages.FieldIsRequired("Descrição"));
