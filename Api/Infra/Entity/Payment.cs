@@ -17,14 +17,6 @@ namespace Cashflow.Api.Infra.Entity
 
         public PaymentTypeEnum TypeId { get; set; }
 
-        public PaymentCondition Condition { get; set; }
-
-        public decimal BaseCost { get; set; }
-
-        public string ConditionText => Condition.GetDescription();
-
-        public bool Monthly => Condition == PaymentCondition.Monthly;
-
         public int? CreditCardId { get; set; }
 
         public CreditCard CreditCard { get; set; }
@@ -41,7 +33,7 @@ namespace Cashflow.Api.Infra.Entity
 
         public int PaidInstallments => Installments?.Where(p => p.PaidDate.HasValue).Count() ?? 0;
 
-        public decimal Total => Monthly ? BaseCost : Installments?.Sum(p => p.Cost) ?? 0;
+        public decimal Total => Installments?.Sum(p => p.Cost) ?? 0;
 
         public string FirstPaymentFormatted => Installments?.OrderBy(p => p.Number).FirstOrDefault()?.Date.ToString("dd/MM/yyyy");
     }

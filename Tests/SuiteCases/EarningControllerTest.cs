@@ -62,26 +62,11 @@ namespace Cashflow.Tests
                 Date = DateTime.Now,
                 Value = 0,
                 UserId = 1,
-                Type = EarningType.Salary,
+                Type = EarningType.MonthyBenefit,
                 Description = "Salário"
             };
             var result = await Post("/api/Earning", model, model.UserId);
             TestErrors(model, result, "O campo 'Valor' deve ser maior que 0.");
-        }
-
-        [TestMethod]
-        public async Task AddCurrentSalaryWithOtherCurrentSalary()
-        {
-            var model = new Earning()
-            {
-                Date = new DateTime(2020, 12, 1),
-                Value = 1000,
-                UserId = 1,
-                Type = EarningType.Salary,
-                Description = "Salário"
-            };
-            var result = await Post("/api/Earning", model, model.UserId);
-            TestErrors(model, result, "Já existe um salário para este mês/ano.");
         }
 
         [TestMethod]
@@ -107,7 +92,7 @@ namespace Cashflow.Tests
                 Date = new DateTime(2021, 4, 1),
                 Value = 1000,
                 UserId = 2,
-                Type = EarningType.Salary,
+                Type = EarningType.MonthyBenefit,
                 Description = "Salário"
             };
             var result = await Post("/api/Earning", model, model.UserId);
@@ -177,22 +162,6 @@ namespace Cashflow.Tests
         }
 
         [TestMethod]
-        public async Task UpdateCurrentSalaryWithOtherCurrentSalary()
-        {
-            var model = new Earning()
-            {
-                Id = 4,
-                Description = "Salário",
-                Date = new DateTime(2020, 7, 1),
-                Value = 1000,
-                UserId = 1,
-                Type = EarningType.Salary
-            };
-            var result = await Put("/api/Earning", model, model.UserId);
-            TestErrors(model, result, "Já existe um salário para este mês/ano.");
-        }
-
-        [TestMethod]
         public async Task UpdateEarningNotFound()
         {
             var model = new Earning()
@@ -233,7 +202,7 @@ namespace Cashflow.Tests
                 Date = new DateTime(2020, 4, 1),
                 Value = 1000,
                 UserId = 1,
-                Type = EarningType.Salary
+                Type = EarningType.MonthyBenefit
             };
             var result = await Put("/api/Earning", model, model.UserId);
             TestErrors(model, result);

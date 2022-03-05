@@ -2,8 +2,9 @@ namespace Cashflow.Api.Enums
 {
     public enum EarningType : short
     {
-        Salary = 1,
+        MonthyBenefit = 1,
 
-        Benefit
+        Benefit,
+
     }
 }

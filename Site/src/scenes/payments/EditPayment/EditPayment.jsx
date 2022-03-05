@@ -5,16 +5,19 @@ import DatePicker from 'react-datepicker'
 import {
   Button,
   ImageList,
-  ImageListItem
+  ImageListItem,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select
 } from '@material-ui/core'
 
 import { InstallmentList } from './InstallmentList/InstallmentList'
 import { InstallmentSetBox } from './InstallmnetSetBox/InstallmentSetBox'
-import { ConditionCreditCardBox } from './ConditionCreditCardBox/ConditionCreditCardBox'
 import { MainContainer, IconTextInput } from '../../../components/main'
 import { DatePickerInput, DatePickerContainer } from '../../../components/inputs'
 
-import { toReal, toast, fromReal, PaymentCondition } from '../../../helpers'
+import { toReal, toast, fromReal } from '../../../helpers'
 import { paymentService, creditCardService } from '../../../services'
 import { PaymentTypeBox } from './PaymentTypeBox/PaymentTypeBox'
 import { CostDateBox } from './CostDateBox/CostDateBox'
@@ -24,7 +27,6 @@ export function EditPayment() {
 
   const [description, setDescription] = useState('')
   const [type, setType] = useState(2)
-  const [condition, setCondition] = useState(1)
   const [qtdInstallments, setQtdInstallments] = useState(10)
   const [card, setCard] = useState(0)
   const [costByInstallment, setCostByInstallment] = useState(false)
@@ -71,13 +73,7 @@ export function EditPayment() {
         setCostByInstallment(false)
         setQtdInstallments(qtdInstallments)
 
-        if (payment.condition === PaymentCondition.Installment)
-          setCostText(toReal(costs.length ? costs.reduce((a, b) => a + b) : 0))
-        else
-          setCostText(toReal(costs[0] || 0))
-
-        if (payment.condition)
-          setCondition(payment.condition)
+        setCostText(toReal(costs.length ? costs.reduce((a, b) => a + b) : 0))
 
         setFirstPayment(firstInstallment.date ? new Date(firstInstallment.date) : null)
         setInstallments(payment.installments || [])
@@ -89,19 +85,13 @@ export function EditPayment() {
   }, [])
 
   useEffect(() => {
-    const installmentValid = condition !== PaymentCondition.Installment || installmentsUpdated
-    setFormIsValid(!!description && installmentValid && firstPayment)
-  }, [description, condition, installmentsUpdated, firstPayment])
+    setFormIsValid(!!description && installmentsUpdated && firstPayment)
+  }, [description, installmentsUpdated, firstPayment])
 
   useEffect(() => {
-    if (condition !== PaymentCondition.Installment)
-      updateInstallments()
-  }, [costText, condition, firstPayment])
-
-  useEffect(() => {
-    if (!editInstallment && condition === PaymentCondition.Installment)
+    if (!editInstallment)
       setInstallmentsUpdated(false)
-  }, [costByInstallment, firstPayment, qtdInstallments, costText, condition])
+  }, [costByInstallment, firstPayment, qtdInstallments, costText])
 
   function updateInstallments() {
     const installments = []
@@ -123,31 +113,27 @@ export function EditPayment() {
         day = invoiceDay
       }
 
-      if (condition === PaymentCondition.Installment) {
-        let firstCost = cost
-        if (!costByInstallment) {
-          const total = cost
-          cost = parseFloat(Number(parseInt((cost / qtdInstallments) * 100) / 100).toFixed(2))
-          const sum = parseFloat(Number(cost * qtdInstallments).toFixed(2))
-          firstCost = cost + (total > sum ? total - sum : sum - total)
-        }
-
-        for (let i = 1; i <= qtdInstallments; i++) {
-          if (month > 12) {
-            month = 1
-            year++
-          }
-          installments.push({
-            number: i,
-            cost: cost,
-            date: new Date(`${month}/${day}/${year}`),
-          })
-          month++
-        }
-        installments[0].cost = firstCost
+      let firstCost = cost
+      if (!costByInstallment) {
+        const total = cost
+        cost = parseFloat(Number(parseInt((cost / qtdInstallments) * 100) / 100).toFixed(2))
+        const sum = parseFloat(Number(cost * qtdInstallments).toFixed(2))
+        firstCost = cost + (total > sum ? total - sum : sum - total)
       }
-      else
-        installments.push({ number: 1, cost: cost, date: new Date(`${month}/${day}/${year}`) })
+
+      for (let i = 1; i <= qtdInstallments; i++) {
+        if (month > 12) {
+          month = 1
+          year++
+        }
+        installments.push({
+          number: i,
+          cost: cost,
+          date: new Date(`${month}/${day}/${year}`),
+        })
+        month++
+      }
+      installments[0].cost = firstCost
 
       setInstallments(installments)
       setInstallmentsUpdated(true)
@@ -160,10 +146,8 @@ export function EditPayment() {
       id,
       description: description,
       typeId: type,
-      baseCost: fromReal(costText),
       installments,
       inactiveAt,
-      condition,
       creditCardId: card,
       active
     }
@@ -213,13 +197,16 @@ export function EditPayment() {
                 paymentTypeChanged={e => setType(e)} />
             }
 
-            <ConditionCreditCardBox
-              cards={cards}
-              condition={condition}
-              conditionChanged={e => setCondition(Number(e))}
-              card={card}
-              cardChanged={e => setCard(e)}
-            />
+            <div style={{ marginTop: 10 }} hidden={!cards.length}>
+              <FormControl>
+                <InputLabel htmlFor="select-tipo">Cartão de Crédito</InputLabel>
+                <Select style={{ width: '200px' }} value={card || ''}
+                  onChange={e => setCard(e.target.value)}>
+                  <MenuItem value={0}><span style={{ color: 'gray' }}>LIMPAR</span></MenuItem>
+                  {cards.map(p => <MenuItem key={p.id} value={p.id}>{p.name}</MenuItem>)}
+                </Select>
+              </FormControl>
+            </div>
 
             <CostDateBox cost={costText}
               costChanged={e => setCostText(e)}
@@ -227,8 +214,7 @@ export function EditPayment() {
               dateChanged={e => setFirstPayment(e)}
             />
 
-            <InstallmentSetBox hide={condition !== PaymentCondition.Installment}
-              costByInstallment={costByInstallment}
+            <InstallmentSetBox costByInstallment={costByInstallment}
               qtdInstallments={qtdInstallments}
               costByInstallmentChanged={checked => setCostByInstallment(checked)}
               qtdInstallmentsChanged={v => setQtdInstallments(v)}
@@ -244,7 +230,7 @@ export function EditPayment() {
               </div>
             }
 
-            <div hidden={condition !== PaymentCondition.Installment}>
+            <div>
               <Button disabled={installmentsUpdated} onClick={() => updateInstallments()} variant="contained" autoFocus>atualizar parcelas</Button>
 
               {editInstallment && <EditInstallmentModal installment={editInstallment} onCancel={() => setEditInstallment()} onSave={p => installmentChanged(p)} />}
@@ -253,7 +239,7 @@ export function EditPayment() {
           </ImageListItem>
           <ImageListItem cols={2}>
             <InstallmentList installments={installments}
-              hide={condition !== PaymentCondition.Installment || !installments.length}
+              hide={!installments.length}
               onEdit={p => setEditInstallment(p)}
             />
           </ImageListItem>
@@ -267,10 +253,9 @@ export function EditPayment() {
 
         <Button
           style={{ marginLeft: 10 }}
-          disabled={loading}
           onClick={() => save()}
           color="primary"
-          disabled={!formIsValid}
+          disabled={loading || !formIsValid}
           variant="contained" autoFocus>salvar</Button>
       </div>
 

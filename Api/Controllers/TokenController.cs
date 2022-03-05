@@ -45,7 +45,6 @@ namespace Cashflow.Api.Controllers
             if (!result.IsValid)
                 return HandleUnauthorized(result.Notifications.First());
 
-            await _paymentService.UpdateMonthlyPayments(result.Data.Id);
             await _remainingBalanceService.Recalculate(result.Data.Id, DateTime.Now);
 
             var claims = new Dictionary<string, string>();

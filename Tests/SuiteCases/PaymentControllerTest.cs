@@ -18,9 +18,7 @@ namespace Cashflow.Tests
             Id = 1,
             UserId = 1,
             CreditCardId = 1,
-            BaseCost = 20.5M,
             Description = "First Payment",
-            Condition = PaymentCondition.Cash,
             Type = new PaymentType() { Id = (int)PaymentTypeEnum.Expense },
             TypeId = PaymentTypeEnum.Expense,
             Installments = new List<Installment>()
@@ -61,16 +59,6 @@ namespace Cashflow.Tests
             p.CreditCardId = 99;
             var result = await Post("/api/Payment", p, p.UserId);
             TestErrors(p, result, "Cartão de Crédito não encontrado(a).");
-        }
-
-        [TestMethod]
-        public async Task AddInvalidBaseValue()
-        {
-            var p = DefaultPayment;
-            p.Id = 0;
-            p.BaseCost = 0;
-            var result = await Post("/api/Payment", p, p.UserId);
-            TestErrors(p, result, "O campo 'Valor Base' deve ser maior que 0.");
         }
 
         [TestMethod]

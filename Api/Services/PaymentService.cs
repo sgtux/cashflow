@@ -102,13 +102,13 @@ namespace Cashflow.Api.Services
             var result = new ResultModel();
             var validatorResult = new PaymentValidator(_paymentRepository, _creditCardRepository).Validate(payment);
             if (!validatorResult.IsValid)
-                result.AddNotification(validatorResult.Errors);
-
-            if (result.IsValid)
             {
-                UpdateMonthlyPayment(payment);
-                await _paymentRepository.Add(payment);
+                result.AddNotification(validatorResult.Errors);
+                return result;
             }
+
+            await _paymentRepository.Add(payment);
+
             return result;
         }
 
@@ -122,12 +122,7 @@ namespace Cashflow.Api.Services
                 return result;
             }
 
-            if (result.IsValid)
-            {
-                if (payment.Monthly)
-                    UpdateMonthlyPayment(payment);
-                await _paymentRepository.Update(payment);
-            }
+            await _paymentRepository.Update(payment);
 
             return result;
         }
@@ -141,47 +136,6 @@ namespace Cashflow.Api.Services
             else
                 await _paymentRepository.Remove(paymentId);
             return result;
-        }
-
-        public async Task UpdateMonthlyPayments(int userId)
-        {
-            foreach (var payment in (await _paymentRepository.GetSome(new BaseFilter() { UserId = userId })).Where(p => p.Monthly))
-                if (FillMonthly(payment))
-                    await _paymentRepository.Update(payment);
-        }
-
-        private void UpdateMonthlyPayment(Payment payment) => FillMonthly(payment);
-
-        private bool FillMonthly(Payment payment)
-        {
-            var updated = false;
-            var referenceInstallment = payment.Installments.OrderBy(p => p.Date).First();
-            var month = referenceInstallment.Date.Month;
-            var year = referenceInstallment.Date.Year;
-            var now = _paymentRepository.CurrentDate;
-
-            while (year < now.Year || (month <= now.Month && year == now.Year))
-            {
-                if (!payment.Installments.Any(p => p.Date.Year == year && p.Date.Month == month))
-                {
-                    payment.Installments.Add(new Installment()
-                    {
-                        Cost = referenceInstallment.Cost,
-                        Date = new DateTime(year, month, referenceInstallment.Date.Day),
-                        PaymentId = payment.Id
-                    });
-                    updated = true;
-                }
-
-                month++;
-                if (month > 12)
-                {
-                    month = 1;
-                    year++;
-                }
-            }
-
-            return updated;
         }
 
         private decimal CalculatePaymentHomeChartModel(IEnumerable<Payment> payments, int month, int year, PaymentTypeEnum type)

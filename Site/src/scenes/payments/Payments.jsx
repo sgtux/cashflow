@@ -20,7 +20,7 @@ import {
 
 import { MainContainer } from '../../components/main'
 import { paymentService } from '../../services'
-import { toReal, dateToString, PaymentCondition } from '../../helpers'
+import { toReal, dateToString } from '../../helpers'
 import { PaymentFilter } from './PaymentFilter/PaymentFilter'
 
 const styles = {
@@ -100,7 +100,7 @@ export function Payments() {
                   />
                   <ListItemText
                     style={{ width: '30px' }}
-                    secondary={p.condition === PaymentCondition.Installment ? `${p.paidInstallments}/${p.installments.length}` : ''}
+                    secondary={`${p.paidInstallments}/${p.installments.length}`}
                   />
                   <ListItemText style={{ width: '40px', color: 'gray' }}
                     primary={p.active ? '' : 'Inativado em:'}

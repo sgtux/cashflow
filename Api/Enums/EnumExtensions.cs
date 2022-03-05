@@ -52,8 +52,8 @@ namespace Cashflow.Api.Enums
         {
             switch (e)
             {
-                case EarningType.Salary:
-                    return "Salário";
+                case EarningType.MonthyBenefit:
+                    return "Benefício Mensal";
                 case EarningType.Benefit:
                     return "Benefício";
                 default:

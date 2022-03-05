@@ -23,14 +23,6 @@ namespace Cashflow.Api.Validators
             RuleFor(s => s.Value).GreaterThan(0).WithMessage(ValidatorMessages.GreaterThan("Valor", 0));
             RuleFor(s => s.Type).IsInEnum().WithMessage("Tipo inválido.");
             RuleFor(s => s).Must(EarningExists).When(p => p.Id > 0).WithMessage(ValidatorMessages.NotFound("Benefício/Salário"));
-            RuleFor(s => ValidateSalary(s)).NotEqual(true).WithMessage(ValidatorMessages.Salary.AlreadySalaryForThisMonthYear);
-        }
-
-        private bool ValidateSalary(Earning earning)
-        {
-            LoadEarnings(earning);
-            return earning.Type == EarningType.Salary
-                && _earnings.Any(p => p.Id != earning.Id && earning.Date.SameMonthYear(p.Date));
         }
 
         private bool EarningExists(Earning earning)

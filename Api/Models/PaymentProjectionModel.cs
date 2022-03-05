@@ -10,13 +10,7 @@ namespace Cashflow.Api.Models
 
         public int Number { get; set; }
 
-        public PaymentCondition Condition { get; set; }
-
-        public string ConditionText => Condition.GetDescription();
-
         public DateTime? PaidDate { get; set; }
-
-        public bool Monthly { get; set; }
 
         public int QtdInstallments { get; set; }
 

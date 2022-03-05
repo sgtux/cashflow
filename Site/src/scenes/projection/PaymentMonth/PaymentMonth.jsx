@@ -17,7 +17,6 @@ import { ExpandMore } from '@material-ui/icons'
 import { toReal } from '../../../helpers/utils'
 import { Invoices, MoneySpan } from '../../../components'
 import { PaidSpan, ContainerCosts, BoxCosts } from '../styles'
-import { PaymentCondition } from '../../../helpers'
 
 export function PaymentMonth({ monthYear, paymentMonth, show }) {
 
@@ -47,7 +46,7 @@ export function PaymentMonth({ monthYear, paymentMonth, show }) {
                       <ImageListItem cols={1}></ImageListItem>
                       <ImageListItem cols={1} style={{ textAlign: 'center' }}>
                         <span style={{ color: 'gray', fontFamily: '"Roboto", "Helvetica", "Arial", "sans-serif"' }}>
-                          {p.condition === PaymentCondition.Installment ? `${p.number}/${p.qtdInstallments}` : ''}
+                          {p.qtdInstallments ? `${p.number}/${p.qtdInstallments}` : ''}
                         </span>
                         {p.paidDate && <PaidSpan>PAGA</PaidSpan>}
                       </ImageListItem>

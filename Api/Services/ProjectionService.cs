@@ -108,24 +108,22 @@ namespace Cashflow.Api.Services
             var benefits = await _earningRepository.GetSome(filter);
             if (benefits.Any())
             {
-                var salary = benefits.FirstOrDefault(p => p.Date.SameMonthYear(DateTime.Now));
+                var monthyBenefits = benefits.Where(p => p.Date.SameMonthYear(DateTime.Now) && p.Type == EarningType.MonthyBenefit);
                 foreach (var date in dates)
                 {
-                    if (salary != null)
+                    foreach (var item in monthyBenefits)
                         list.Add(new PaymentProjectionModel()
                         {
-                            Description = "Salário",
-                            Monthly = true,
+                            Description = $"{item.Description} ({item.TypeDescription})",
                             MonthYear = date.ToString("MM/yyyy"),
                             Type = types.First(p => p.Id == (int)PaymentTypeEnum.Gain),
-                            Cost = salary.Value
+                            Cost = item.Value
                         });
 
-                    foreach (var item in benefits.Where(p => p.Type != EarningType.Salary && p.Date.SameMonthYear(date)))
+                    foreach (var item in benefits.Where(p => p.Type != EarningType.MonthyBenefit && p.Date.SameMonthYear(date)))
                         list.Add(new PaymentProjectionModel()
                         {
                             Description = $"{item.Description} (Benefício)",
-                            Monthly = true,
                             MonthYear = date.ToString("MM/yyyy"),
                             Type = types.First(p => p.Id == (int)PaymentTypeEnum.Gain),
                             Cost = item.Value
@@ -138,15 +136,13 @@ namespace Cashflow.Api.Services
         {
             var payments = (await _paymentRepository.GetSome(filter)).Where(p => p.Active);
             foreach (var date in dates)
-                foreach (var payMonth in payments.Where(p => p.Monthly || (p.Installments?.Any(p => p.Date.Year == date.Year && p.Date.Month == date.Month) ?? false)))
+                foreach (var payMonth in payments.Where(p => p.Installments?.Any(p => p.Date.SameMonthYear(date)) ?? false))
                 {
-                    var installment = payMonth.Installments.First(p => payMonth.Monthly || (p.Date.Year == date.Year && p.Date.Month == date.Month));
+                    var installment = payMonth.Installments.First(p => p.Date.SameMonthYear(date));
                     list.Add(new PaymentProjectionModel()
                     {
                         CreditCard = cards.FirstOrDefault(p => p.Id == payMonth.CreditCardId),
                         Description = payMonth.Description,
-                        Monthly = payMonth.Monthly,
-                        Condition = payMonth.Condition,
                         MonthYear = date.ToString("MM/yyyy"),
                         Number = installment.Number,
                         PaidDate = installment.PaidDate,
@@ -179,8 +175,6 @@ namespace Cashflow.Api.Services
                     list.Add(new PaymentProjectionModel()
                     {
                         Description = $"Gastos em Combustível",
-                        Monthly = false,
-                        Condition = PaymentCondition.Cash,
                         MonthYear = date.ToString("MM/yyyy"),
                         Type = types.First(p => p.Id == (int)PaymentTypeEnum.Expense),
                         Cost = fuelExpenses.Sum(p => p.ValueSupplied)
@@ -191,8 +185,6 @@ namespace Cashflow.Api.Services
                     list.Add(new PaymentProjectionModel()
                     {
                         Description = $"Gastos em Combustível (Estimado)",
-                        Monthly = false,
-                        Condition = PaymentCondition.Cash,
                         MonthYear = date.ToString("MM/yyyy"),
                         Type = types.First(p => p.Id == (int)PaymentTypeEnum.Expense),
                         Cost = average
@@ -220,8 +212,6 @@ namespace Cashflow.Api.Services
                     list.Add(new PaymentProjectionModel()
                     {
                         Description = $"Despesas Domésticas",
-                        Monthly = false,
-                        Condition = PaymentCondition.Cash,
                         MonthYear = date.ToString("MM/yyyy"),
                         Type = types.First(p => p.Id == (int)PaymentTypeEnum.Expense),
                         Cost = householdExpense.Sum(p => p.Value)
@@ -230,8 +220,6 @@ namespace Cashflow.Api.Services
                     list.Add(new PaymentProjectionModel()
                     {
                         Description = $"Despesas Domésticas (Estimado)",
-                        Monthly = false,
-                        Condition = PaymentCondition.Cash,
                         MonthYear = date.ToString("MM/yyyy"),
                         Type = types.First(p => p.Id == (int)PaymentTypeEnum.Expense),
                         Cost = average
@@ -252,9 +240,7 @@ namespace Cashflow.Api.Services
                         list.Add(new PaymentProjectionModel()
                         {
                             Description = $"{item.Description} (Recorrente)",
-                            Monthly = true,
                             CreditCard = cards.FirstOrDefault(p => p.Id == item.CreditCardId),
-                            Condition = PaymentCondition.Cash,
                             MonthYear = date.ToString("MM/yyyy"),
                             Type = types.First(p => p.Id == (int)PaymentTypeEnum.Expense),
                             Cost = item.History.First(p => date.SameMonthYear(p.Date)).PaidValue
@@ -264,9 +250,7 @@ namespace Cashflow.Api.Services
                         list.Add(new PaymentProjectionModel()
                         {
                             Description = $"{item.Description} (Recorrente)",
-                            Monthly = true,
                             CreditCard = cards.FirstOrDefault(p => p.Id == item.CreditCardId),
-                            Condition = PaymentCondition.Cash,
                             MonthYear = date.ToString("MM/yyyy"),
                             Type = types.First(p => p.Id == (int)PaymentTypeEnum.Expense),
                             Cost = item.Value
@@ -278,9 +262,7 @@ namespace Cashflow.Api.Services
                         list.Add(new PaymentProjectionModel()
                         {
                             Description = $"{item.Description} (Recorrente)",
-                            Monthly = true,
                             CreditCard = cards.FirstOrDefault(p => p.Id == item.CreditCardId),
-                            Condition = PaymentCondition.Cash,
                             MonthYear = date.ToString("MM/yyyy"),
                             Type = types.First(p => p.Id == (int)PaymentTypeEnum.Expense),
                             Cost = item.Value
