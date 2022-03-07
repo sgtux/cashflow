@@ -1,15 +1,14 @@
 using System;
-
 namespace Cashflow.Api.Models
 {
     public class PaymentFilterModel
     {
         public string Description { get; set; }
 
-        public DateTime? InactiveFrom { get; set; }
+        public bool? Done { get; set; }
 
-        public DateTime? InactiveTo { get; set; }
+        public DateTime? StartDate { get; set; }
 
-        public bool? Active { get; set; }
+        public DateTime? EndDate { get; set; }
     }
 }

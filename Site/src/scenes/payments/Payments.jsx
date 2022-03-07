@@ -20,7 +20,7 @@ import {
 
 import { MainContainer } from '../../components/main'
 import { paymentService } from '../../services'
-import { toReal, dateToString } from '../../helpers'
+import { toReal } from '../../helpers'
 import { PaymentFilter } from './PaymentFilter/PaymentFilter'
 
 const styles = {
@@ -41,10 +41,11 @@ export function Payments() {
 
   const [loading, setLoading] = useState(false)
   const [payments, setPayments] = useState([])
+  const [filter, setFilter] = useState({ done: false })
 
-  useEffect(() => refresh(), [])
+  useEffect(() => refresh(), [filter])
 
-  function refresh(filter) {
+  function refresh() {
     setLoading(true)
     paymentService.getAll(filter)
       .then(res => setPayments(res))
@@ -59,7 +60,7 @@ export function Payments() {
 
   return (
     <MainContainer title="Pagamentos" loading={loading}>
-      <PaymentFilter filterChanged={e => refresh(e)} />
+      <PaymentFilter filterChanged={e => setFilter(e)} />
       {payments.length ?
         <div>
           <div style={styles.divNewPayment}>
@@ -103,8 +104,7 @@ export function Payments() {
                     secondary={`${p.paidInstallments}/${p.installments.length}`}
                   />
                   <ListItemText style={{ width: '40px', color: 'gray' }}
-                    primary={p.active ? '' : 'Inativado em:'}
-                    secondary={p.active ? '' : dateToString(p.inactiveAt)}
+                    primary={p.done ? 'Concluído' : ''}
                   />
                   <ListItemSecondaryAction>
                     <Link to={`/edit-payment/${p.id}`}>

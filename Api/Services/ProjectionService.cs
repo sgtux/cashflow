@@ -134,11 +134,16 @@ namespace Cashflow.Api.Services
 
         private async Task FillPayments(List<PaymentProjectionModel> list, List<DateTime> dates, IEnumerable<PaymentType> types, IEnumerable<CreditCard> cards, BaseFilter filter)
         {
-            var payments = (await _paymentRepository.GetSome(filter)).Where(p => p.Active);
+            var payments = await _paymentRepository.GetSome(filter);
+            payments = payments.Where(p => !p.Done || p.PaidInThisMonth);
+
             foreach (var date in dates)
-                foreach (var payMonth in payments.Where(p => p.Installments?.Any(p => p.Date.SameMonthYear(date)) ?? false))
+            {
+                Func<Installment, bool> condition = i => (i.PaidDate == null && i.Date.SameMonthYear(date)) || (i.PaidDate != null && i.PaidDate.Value.SameMonthYear(date));
+                foreach (var payMonth in payments.Where(p => p.Installments?.Any(condition) ?? false))
                 {
-                    var installment = payMonth.Installments.First(p => p.Date.SameMonthYear(date));
+                    var installment = payMonth.Installments.First(condition);
+
                     list.Add(new PaymentProjectionModel()
                     {
                         CreditCard = cards.FirstOrDefault(p => p.Id == payMonth.CreditCardId),
@@ -150,7 +155,8 @@ namespace Cashflow.Api.Services
                         Type = payMonth.Type,
                         Cost = installment.Cost
                     });
-                };
+                }
+            }
         }
 
         private async Task FillVehicleExpenses(List<PaymentProjectionModel> list, List<DateTime> dates, IEnumerable<PaymentType> types, BaseFilter filter)

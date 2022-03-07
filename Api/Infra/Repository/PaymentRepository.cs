@@ -46,7 +46,7 @@ namespace Cashflow.Api.Infra.Repository
                 pay.Installments.Add(i);
                 return p;
             }, filter);
-            return list.OrderBy(p => p.Description);
+            return list;
         }
 
         public async Task<Payment> GetById(long id)

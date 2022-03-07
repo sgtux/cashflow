@@ -10,7 +10,6 @@ namespace Cashflow.Tests.Mocks.Database.Tables
             Create.Table("Payment")
                 .WithColumn("Id").AsInt32().PrimaryKey().Identity()
                 .WithColumn("Description").AsString(255).NotNullable()
-                .WithColumn("InactiveAt").AsDateTime().Nullable()
                 .WithColumn("Date").AsDateTime();
 
             Execute.Sql("ALTER TABLE Payment ADD COLUMN UserId INTEGER REFERENCES User(Id)");

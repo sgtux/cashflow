@@ -4,7 +4,6 @@ SELECT
   p."UserId",
   p."Type" "TypeId",
   p."CreditCardId",
-  p."InactiveAt",
   i."Id",
   i."PaymentId",
   i."Cost",

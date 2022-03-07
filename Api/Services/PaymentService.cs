@@ -45,11 +45,20 @@ namespace Cashflow.Api.Services
             var filter = new BaseFilter()
             {
                 UserId = userId,
-                Active = filterModel.Active,
-                InactiveFrom = filterModel.InactiveFrom?.FixStartTimeFilter(),
-                InactiveTo = filterModel.InactiveTo?.FixEndTimeFilter()
+                Description = filterModel.Description.FormatToLike(),
+                StartDate = filterModel.StartDate.FixStartTimeFilter(),
+                EndDate = filterModel.StartDate.FixEndTimeFilter()
             };
-            return new ResultDataModel<IEnumerable<Payment>>(await _paymentRepository.GetSome(filter));
+            var list = await _paymentRepository.GetSome(filter);
+            if (filterModel.Done.HasValue)
+            {
+                if (filterModel.Done.Value)
+                    list = list.Where(p => p.Done);
+                else
+                    list = list.Where(p => !p.Done);
+            }
+            list = list.OrderByDescending(p => p.Date);
+            return new ResultDataModel<IEnumerable<Payment>>(list);
         }
 
         public async Task<ResultDataModel<IEnumerable<PaymentType>>> GetTypes() => new ResultDataModel<IEnumerable<PaymentType>>(await _paymentRepository.GetTypes());

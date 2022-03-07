@@ -4,7 +4,6 @@ INSERT INTO
     "UserId",
     "Type",
     "CreditCardId",
-    "InactiveAt",
     "Date"
   )
 VALUES
@@ -13,6 +12,5 @@ VALUES
     @UserId,
     @TypeId,
     @CreditCardId,
-    @InactiveAt,
     @Date
   )

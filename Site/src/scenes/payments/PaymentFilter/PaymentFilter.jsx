@@ -13,25 +13,25 @@ import { InputText, DatePickerInput, DatePickerContainer, InputLabel } from '../
 export function PaymentFilter({ filterChanged }) {
 
     const [description, setDescription] = useState('')
-    const [active, setActive] = useState(true)
-    const [inactive, setInactive] = useState(true)
-    const [inactiveFrom, setInactiveFrom] = useState(null)
-    const [inactiveTo, setInactiveTo] = useState(null)
+    const [inProgress, setInProgress] = useState(true)
+    const [done, setDone] = useState(false)
+    const [startDate, setStartDate] = useState(null)
+    const [endDate, setEndDate] = useState(null)
 
     function reset() {
         setDescription('')
-        setActive(true)
-        setInactive(true)
-        setInactiveFrom(null)
-        setInactiveTo(null)
+        setInProgress(true)
+        setDone(false)
+        setStartDate(null)
+        setEndDate(null)
     }
 
     function filter() {
         filterChanged({
             description,
-            active: active && inactive ? undefined : active ? true : false,
-            inactiveFrom,
-            inactiveTo
+            done: inProgress && done ? undefined : done ? true : false,
+            startDate,
+            endDate
         })
     }
 
@@ -42,32 +42,27 @@ export function PaymentFilter({ filterChanged }) {
                 <InputText style={{ width: 120 }}
                     onChange={e => setDescription(e.target.value)}
                     value={description} />
+                <InputLabel>Desde:</InputLabel>
+                <DatePicker customInput={<DatePickerInput style={{ width: 150 }} />}
+                    onChange={e => setStartDate(e)}
+                    dateFormat="dd/MM/yyyy" locale={ptBr} selected={startDate} />
+                <InputLabel>Até:</InputLabel>
+                <DatePicker customInput={<DatePickerInput style={{ width: 150 }} />}
+                    onChange={e => setEndDate(e)}
+                    dateFormat="dd/MM/yyyy" locale={ptBr} selected={endDate} />
                 <br />
-                <FormControlLabel label="Ativo"
+                <FormControlLabel label="Em Andamento"
                     control={<Checkbox
-                        checked={active}
-                        onChange={(e, c) => setActive(c)}
+                        checked={inProgress}
+                        onChange={(e, c) => setInProgress(c)}
                         color="primary"
                     />} />
-                <br />
-                <FormControlLabel label="Inativo"
+                <FormControlLabel label="Concluído"
                     control={<Checkbox
-                        checked={inactive}
-                        onChange={(e, c) => setInactive(c)}
+                        checked={done}
+                        onChange={(e, c) => setDone(c)}
                         color="primary"
                     />} />
-                {inactive &&
-                    <span>
-                        <InputLabel>Desde:</InputLabel>
-                        <DatePicker customInput={<DatePickerInput style={{ width: 150 }} />}
-                            onChange={e => setInactiveFrom(e)}
-                            dateFormat="dd/MM/yyyy" locale={ptBr} selected={inactiveFrom} />
-                        <InputLabel>Até:</InputLabel>
-                        <DatePicker customInput={<DatePickerInput style={{ width: 150 }} />}
-                            onChange={e => setInactiveTo(e)}
-                            dateFormat="dd/MM/yyyy" locale={ptBr} selected={inactiveTo} />
-                    </span>
-                }
                 <div style={{ textAlign: 'end' }}>
                     <Button style={{ marginRight: 10 }} variant="contained" onClick={() => reset()}>Limpar</Button>
                     <Button variant="contained" onClick={() => filter()}>Filtrar</Button>

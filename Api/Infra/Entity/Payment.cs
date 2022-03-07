@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Cashflow.Api.Enums;
+using Cashflow.Api.Extensions;
 
 namespace Cashflow.Api.Infra.Entity
 {
@@ -23,11 +24,11 @@ namespace Cashflow.Api.Infra.Entity
 
         public string CreditCardText => CreditCard?.Name ?? string.Empty;
 
-        public DateTime? InactiveAt { get; set; }
-
         public DateTime Date { get; set; }
 
-        public bool Active => !InactiveAt.HasValue;
+        public bool Done => Installments?.All(p => p.PaidDate.HasValue) ?? false;
+
+        public bool PaidInThisMonth => Done && (Installments?.Any(p => p.PaidDate.HasValue && p.PaidDate.Value.SameMonthYear(DateTime.Now)) ?? false);
 
         public IList<Installment> Installments { get; set; }
 
