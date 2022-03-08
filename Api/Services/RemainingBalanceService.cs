@@ -73,9 +73,9 @@ namespace Cashflow.Api.Services
             foreach (var item in (await _paymentRepository.GetSome(filter)))
             {
                 if (item.Type.In)
-                    total += item.Installments.Where(p => p.Date.Year == date.Year && p.Date.Month == date.Month).Sum(p => p.Cost);
+                    total += item.Installments.Where(p => p.PaidDate?.SameMonthYear(date) ?? false).Sum(p => p.PaidValue.Value);
                 else
-                    total -= item.Installments.Where(p => p.Date.Year == date.Year && p.Date.Month == date.Month).Sum(p => p.Cost);
+                    total -= item.Installments.Where(p => p.PaidDate?.SameMonthYear(date) ?? false).Sum(p => p.PaidValue.Value);
             }
 
             var lastRemainingBalance = await _remainingBalanceRepository.GetByMonthYear(userId, date);

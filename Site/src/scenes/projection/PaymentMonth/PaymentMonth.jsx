@@ -25,7 +25,7 @@ export function PaymentMonth({ monthYear, paymentMonth, show }) {
       <ListItemText>
         <Accordion>
           <AccordionSummary expandIcon={<ExpandMore />}>
-            <Typography>{monthYear} - {<MoneySpan bold gain={paymentMonth.accumulatedCost > 0}>{toReal(paymentMonth.accumulatedCost)}</MoneySpan>}</Typography>
+            <Typography>{monthYear} - {<MoneySpan bold gain={paymentMonth.accumulatedValue > 0}>{toReal(paymentMonth.accumulatedValue)}</MoneySpan>}</Typography>
           </AccordionSummary>
 
           <AccordionDetails>
@@ -51,7 +51,7 @@ export function PaymentMonth({ monthYear, paymentMonth, show }) {
                         {p.paidDate && <PaidSpan>PAGA</PaidSpan>}
                       </ImageListItem>
                       <ImageListItem cols={1} style={{ textAlign: 'end' }}>
-                        <MoneySpan gain={p.type.in}>{toReal(p.cost)}</MoneySpan>
+                        <MoneySpan gain={p.type.in}>{toReal(p.value)}</MoneySpan>
                       </ImageListItem>
                     </ImageList>
                   </div>
@@ -74,7 +74,7 @@ export function PaymentMonth({ monthYear, paymentMonth, show }) {
             </BoxCosts>
           </ContainerCosts>
           <div style={{ textAlign: 'center', padding: 10 }}>
-            {show && <MoneySpan bold gain={paymentMonth.accumulatedCost > 0}>{toReal(paymentMonth.accumulatedCost)}</MoneySpan>}
+            {show && <MoneySpan bold gain={paymentMonth.accumulatedValue > 0}>{toReal(paymentMonth.accumulatedValue)}</MoneySpan>}
           </div>
         </Accordion>
       </ListItemText>

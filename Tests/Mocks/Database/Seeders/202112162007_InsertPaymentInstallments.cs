@@ -1,4 +1,6 @@
 using System;
+using Cashflow.Api.Infra.Entity;
+using Cashflow.Tests.Extensions;
 using FluentMigrator;
 
 namespace Cashflow.Tests.Mocks.Database.Seeders
@@ -10,16 +12,16 @@ namespace Cashflow.Tests.Mocks.Database.Seeders
         {
             var date = DateTime.Now.AddMonths(-3);
             Insert.IntoTable("Installment")
-                .Row(new { Id = 1, Cost = 1500.5, Date = new DateTime(2019, 5, 1), PaymentId = 1, Number = 1 })
-                .Row(new { Id = 2, Cost = 1500.5, Date = new DateTime(2019, 5, 1), PaymentId = 2, Number = 1 })
-                .Row(new { Id = 3, Cost = 1500.5, Date = new DateTime(2019, 5, 1), PaymentId = 3, Number = 1 })
-                .Row(new { Id = 4, Cost = 1500.5, Date = new DateTime(2019, 5, 1), PaymentId = 4, Number = 1 })
-                .Row(new { Id = 5, Cost = 2000, Date = date, PaymentId = 5, Number = 1 })
-                .Row(new { Id = 6, Cost = 2000, Date = date.AddMonths(1), PaymentId = 5, Number = 2 })
-                .Row(new { Id = 7, Cost = 2000, Date = date.AddMonths(2), PaymentId = 5, Number = 3 })
-                .Row(new { Id = 8, Cost = 2000, Date = date.AddMonths(3), PaymentId = 5, Number = 4 })
-                .Row(new { Id = 9, Cost = 2000, Date = date.AddMonths(4), PaymentId = 5, Number = 5 })
-                .Row(new { Id = 10, Cost = 2000, Date = date.AddMonths(5), PaymentId = 5, Number = 6 });
+                .Row(new Installment() { Id = 1, Value = 1500.5M, Date = new DateTime(2019, 5, 1), PaymentId = 1, Number = 1 }.ToSqliteEntity())
+                .Row(new Installment() { Id = 2, Value = 1500.5M, Date = new DateTime(2019, 5, 1), PaymentId = 2, Number = 1 }.ToSqliteEntity())
+                .Row(new Installment() { Id = 3, Value = 1500.5M, Date = new DateTime(2019, 5, 1), PaymentId = 3, Number = 1 }.ToSqliteEntity())
+                .Row(new Installment() { Id = 4, Value = 1500.5M, Date = new DateTime(2019, 5, 1), PaymentId = 4, Number = 1 }.ToSqliteEntity())
+                .Row(new Installment() { Id = 5, Value = 2000, Date = date, PaidDate = date, PaidValue = 2000, PaymentId = 5, Number = 1 }.ToSqliteEntity())
+                .Row(new Installment() { Id = 6, Value = 2000, Date = date.AddMonths(1), PaidDate = date.AddMonths(1), PaidValue = 2000, PaymentId = 5, Number = 2 }.ToSqliteEntity())
+                .Row(new Installment() { Id = 7, Value = 2000, Date = date.AddMonths(2), PaidDate = date.AddMonths(2), PaidValue = 2000, PaymentId = 5, Number = 3 }.ToSqliteEntity())
+                .Row(new Installment() { Id = 8, Value = 2000, Date = date.AddMonths(3), PaidDate = date.AddMonths(3), PaidValue = 1500, PaymentId = 5, Number = 4 }.ToSqliteEntity())
+                .Row(new Installment() { Id = 9, Value = 2000, Date = date.AddMonths(4), PaymentId = 5, Number = 5 }.ToSqliteEntity())
+                .Row(new Installment() { Id = 10, Value = 2000, Date = date.AddMonths(5), PaymentId = 5, Number = 6 }.ToSqliteEntity());
 
         }
 

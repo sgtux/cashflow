@@ -53,7 +53,7 @@ export const PaidSpan = styled.span`
     color: #fff;
     font-size: 10px;
     margin-left: 6px;
-    background-color: #21b721;
+    background-color: #bbb;
     padding: 4px;
     border-radius: 6px;
 `

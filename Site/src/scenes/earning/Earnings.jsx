@@ -49,7 +49,7 @@ export function Earnings() {
     }
 
     return (
-        <MainContainer title="Ganhos" loading={loading}>
+        <MainContainer title="Ganhos/Benefícios" loading={loading}>
             <Container>
                 <EarningTable>
                     <table>

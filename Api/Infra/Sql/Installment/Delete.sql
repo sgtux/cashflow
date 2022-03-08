@@ -1,1 +1,4 @@
-DELETE FROM "Installment" WHERE "PaymentId" = @PaymentId
+DELETE FROM
+    "Installment"
+WHERE
+    "PaymentId" = @PaymentId

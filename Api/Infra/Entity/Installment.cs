@@ -10,9 +10,11 @@ namespace Cashflow.Api.Infra.Entity
 
         public short Number { get; set; }
 
-        public decimal Cost { get; set; }
+        public decimal Value { get; set; }
 
         public DateTime Date { get; set; }
+
+        public decimal? PaidValue { get; set; }
 
         public DateTime? PaidDate { get; set; }
     }

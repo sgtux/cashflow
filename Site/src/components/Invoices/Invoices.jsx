@@ -29,12 +29,12 @@ export function Invoices(props) {
         props.payments.forEach(p => {
             if (p.creditCard && !cardsTemp.find(x => x.id === p.creditCard.id))
                 cardsTemp.push(p.creditCard)
-            totalTemp += p.cost
+            totalTemp += p.value
         })
         cardsTemp.forEach(c => {
             const pays = props.payments.filter(x => x.creditCard && x.creditCard.id === c.id)
             c.payments = pays
-            c.cost = pays.length ? pays.map(p => p.cost).reduce((sum, p) => sum + p) : 0
+            c.value = pays.length ? pays.map(p => p.value).reduce((sum, p) => sum + p) : 0
         })
         setCards(cardsTemp)
         setShowing(showing)
@@ -63,14 +63,14 @@ export function Invoices(props) {
                                                     <span style={{ fontFamily: '"Roboto", "Helvetica", "Arial", "sans-serif"' }}>{p.monthly ? '' : `${p.number}/${p.qtdInstallments}`}</span>
                                                 </ImageListItem>
                                                 <ImageListItem cols={1} style={{ textAlign: 'center' }}>
-                                                    <InvoiceCostSmall in={p.in}>{toReal(p.cost)}</InvoiceCostSmall>
+                                                    <InvoiceCostSmall in={p.in}>{toReal(p.value)}</InvoiceCostSmall>
                                                 </ImageListItem>
                                             </ImageList>
                                         </ListItem>
                                     )}
                                 </List>
                                 <div style={{ textAlign: 'right' }}>
-                                    <InvoiceCost>{toReal(c.cost)}</InvoiceCost>
+                                    <InvoiceCost>{toReal(c.value)}</InvoiceCost>
                                 </div>
                             </div>
                         )}

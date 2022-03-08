@@ -7,18 +7,19 @@ export const Container = styled.div`
 
 export const InstallmentTable = styled.div`
     overflow-y: auto;
-    max-height: 320px;
     margin: 5px;
-    font-size: 14px;
+    max-height: 450px;
     & > table {
         border-collapse: collapse;
         width: 100%;
+        font-size: 12px;
     }
     & thead th {
         position: sticky;
         top: 0;
         background-color: white;
         padding-top: 4px;
+        font-size: 14px;
     }
     & tr:nth-child(even) {
         background-color: #ededed;

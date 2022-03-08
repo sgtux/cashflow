@@ -1,5 +1,5 @@
 export const toDateFormat = (p, format) => {
-  if (!p || !format)
+  if (!p)
     return p
   const date = new Date(p)
   if (date.toString() === 'Invalid Date')
@@ -12,9 +12,9 @@ export const toDateFormat = (p, format) => {
   switch (format) {
     case 'dd/MM/yy':
       return `${day}/${month}/${year.substring(2, 4)}`
-    case 'dd/MM/yyyy':
-      return `${day}/${month}/${year}`
     case 'MM/yyyy':
       return `${month}/${year}`
+    default:
+      return `${day}/${month}/${year}`
   }
 }

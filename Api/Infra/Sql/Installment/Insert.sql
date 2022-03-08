@@ -1,4 +1,18 @@
-INSERT INTO "Installment" 
-  ("PaymentId", "Cost", "Number", "Date", "PaidDate")
+INSERT INTO
+  "Installment" (
+    "PaymentId",
+    "Value",
+    "Number",
+    "Date",
+    "PaidDate",
+    "PaidValue"
+  )
 VALUES
-  (@PaymentId, @Cost, @Number, @Date, @PaidDate)
+  (
+    @PaymentId,
+    @Value,
+    @Number,
+    @Date,
+    @PaidDate,
+    @PaidValue
+  )

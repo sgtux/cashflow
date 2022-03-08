@@ -16,7 +16,7 @@ export function Projection() {
   const [allPayments, setAllPayments] = useState({})
   const [dates, setDates] = useState([])
   const [endDate, setEndDate] = useState({ month: '', year: '' })
-  const [totalCost, setTotalCost] = useState(0)
+  const [totalValue, setTotalValue] = useState(0)
   const [shownMonths, setShownMonths] = useState({})
 
   useEffect(() => {
@@ -45,7 +45,7 @@ export function Projection() {
           res[d].payments.sort((a, b) => a.description > b.description ? 1 : a.description < b.description ? -1 : 0)
           total += res[d].total
         })
-        setTotalCost(total)
+        setTotalValue(total)
         setAllPayments(res)
         setDates(dates)
         if (dates.length)
@@ -89,7 +89,7 @@ export function Projection() {
           color: 'grey'
         }}>
           <span>Total Acumulado:</span><br />
-          <MoneySpan bold bigger gain={totalCost > 0}>{toReal(totalCost)}</MoneySpan>
+          <MoneySpan bold bigger gain={totalValue > 0}>{toReal(totalValue)}</MoneySpan>
         </div>
       </Paper>
     </MainContainer>

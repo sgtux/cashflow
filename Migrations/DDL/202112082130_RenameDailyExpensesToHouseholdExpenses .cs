@@ -7,7 +7,7 @@ namespace Cashflow.Migrations.DDL
     {
         public override void Up()
         {
-            Execute.Sql($"ALTER TABLE \"DailyExpenses\" RENAME TO \"HouseholdExpense\"");
+            Execute.Sql("ALTER TABLE \"DailyExpenses\" RENAME TO \"HouseholdExpense\"");
         }
 
         public override void Down()

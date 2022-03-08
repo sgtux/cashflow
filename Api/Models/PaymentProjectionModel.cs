@@ -1,6 +1,5 @@
 using System;
 using Cashflow.Api.Infra.Entity;
-using Cashflow.Api.Enums;
 
 namespace Cashflow.Api.Models
 {
@@ -8,13 +7,13 @@ namespace Cashflow.Api.Models
     {
         public string Description { get; set; }
 
-        public int Number { get; set; }
+        public string Number { get; set; }
 
         public DateTime? PaidDate { get; set; }
 
         public int QtdInstallments { get; set; }
 
-        public decimal Cost { get; set; }
+        public decimal Value { get; set; }
 
         public PaymentType Type { get; set; }
 

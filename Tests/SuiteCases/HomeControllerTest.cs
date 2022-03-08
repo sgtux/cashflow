@@ -26,7 +26,7 @@ namespace Cashflow.Tests
             // Household Expenses: 300.5
             // FuelExpenses: 200
             // Recurring Expense: 115/130
-            Assert.AreEqual((decimal)(2500 + 305 - 2000 - 300.5 - 200 - 115), payments[now.ToString("MM/yyyy")].AccumulatedCost);
+            Assert.AreEqual((decimal)(2500 + 305 - 1500 - 300.5 - 200 - 115), payments[now.ToString("MM/yyyy")].AccumulatedValue);
         }
     }
 }

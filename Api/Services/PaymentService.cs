@@ -151,7 +151,7 @@ namespace Cashflow.Api.Services
         {
             decimal value = 0;
             foreach (var item in payments.Where(p => p.TypeId == type))
-                value += item.Installments.Where(p => p.Date.Year == year && p.Date.Month == month).Sum(p => p.Cost);
+                value += item.Installments.Where(p => p.Date.Year == year && p.Date.Month == month).Sum(p => p.Value);
             return value;
         }
     }

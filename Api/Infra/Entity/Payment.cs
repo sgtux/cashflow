@@ -28,14 +28,18 @@ namespace Cashflow.Api.Infra.Entity
 
         public bool Done => Installments?.All(p => p.PaidDate.HasValue) ?? false;
 
-        public bool PaidInThisMonth => Done && (Installments?.Any(p => p.PaidDate.HasValue && p.PaidDate.Value.SameMonthYear(DateTime.Now)) ?? false);
+        public bool DoneInThisMonth => HasInstallments && Done && (Installments?.Max(p => p.PaidDate.Value).SameMonthYear(DateTime.Now) ?? false);
 
         public IList<Installment> Installments { get; set; }
 
         public int PaidInstallments => Installments?.Where(p => p.PaidDate.HasValue).Count() ?? 0;
 
-        public decimal Total => Installments?.Sum(p => p.Cost) ?? 0;
+        public decimal Total => Installments?.Sum(p => p.Value) ?? 0;
+
+        public decimal TotalPaid => Installments?.Sum(p => p.PaidValue) ?? 0;
 
         public string FirstPaymentFormatted => Installments?.OrderBy(p => p.Number).FirstOrDefault()?.Date.ToString("dd/MM/yyyy");
+
+        private bool HasInstallments => Installments?.Any() ?? false;
     }
 }

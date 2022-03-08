@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
-import ptBr from 'date-fns/locale/pt-BR'
-import DatePicker from 'react-datepicker'
+
 import {
   Button,
-  ImageList,
-  ImageListItem,
   FormControl,
   InputLabel,
   MenuItem,
@@ -15,12 +12,11 @@ import {
 import { InstallmentList } from './InstallmentList/InstallmentList'
 import { InstallmentSetBox } from './InstallmnetSetBox/InstallmentSetBox'
 import { MainContainer, IconTextInput } from '../../../components/main'
-import { DatePickerInput, DatePickerContainer } from '../../../components/inputs'
 
 import { toReal, toast, fromReal } from '../../../helpers'
 import { paymentService, creditCardService } from '../../../services'
 import { PaymentTypeBox } from './PaymentTypeBox/PaymentTypeBox'
-import { CostDateBox } from './CostDateBox/CostDateBox'
+import { ValueDateBox } from './ValueDateBox/ValueDateBox'
 import { EditInstallmentModal } from './EditInstallmentModal/EditInstallmentModal'
 
 export function EditPayment() {
@@ -29,8 +25,8 @@ export function EditPayment() {
   const [type, setType] = useState(2)
   const [qtdInstallments, setQtdInstallments] = useState(10)
   const [card, setCard] = useState(0)
-  const [costByInstallment, setCostByInstallment] = useState(false)
-  const [costText, setCostText] = useState('')
+  const [valueByInstallment, setValueByInstallment] = useState(false)
+  const [valueText, setValueText] = useState('')
   const [installments, setInstallments] = useState([])
   const [firstPayment, setFirstPayment] = useState('')
   const [loading, setLoading] = useState(false)
@@ -41,7 +37,6 @@ export function EditPayment() {
   const [installmentsUpdated, setInstallmentsUpdated] = useState(false)
   const [formIsValid, setFormIsValid] = useState(false)
   const [active, setActive] = useState(true)
-  const [inactiveAt, setInactiveAt] = useState()
 
 
   const params = useParams()
@@ -58,22 +53,18 @@ export function EditPayment() {
         const payment = res || {}
         setId(payment.id)
 
-        if (payment.id && payment.inactiveAt) {
-          setInactiveAt(new Date(payment.inactiveAt))
-        }
-
         const firstInstallment = (payment.installments || [])[0] || {}
         const qtdInstallments = (payment.installments || []).length || 1
-        const costs = (payment.installments || []).map(p => p.cost)
+        const values = (payment.installments || []).map(p => p.value)
 
         setDescription(payment.description || '')
         setType((payment.type || {}).id || 1)
         setCard(payment.creditCardId)
         setActive(params.id == 0 || payment.active)
-        setCostByInstallment(false)
+        setValueByInstallment(false)
         setQtdInstallments(qtdInstallments)
 
-        setCostText(toReal(costs.length ? costs.reduce((a, b) => a + b) : 0))
+        setValueText(toReal(values.length ? values.reduce((a, b) => a + b) : 0))
 
         setFirstPayment(firstInstallment.date ? new Date(firstInstallment.date) : null)
         setInstallments(payment.installments || [])
@@ -91,12 +82,12 @@ export function EditPayment() {
   useEffect(() => {
     if (!editInstallment)
       setInstallmentsUpdated(false)
-  }, [costByInstallment, firstPayment, qtdInstallments, costText])
+  }, [valueByInstallment, firstPayment, qtdInstallments, valueText])
 
   function updateInstallments() {
     const installments = []
-    let cost = fromReal(costText)
-    if (cost > 0 && qtdInstallments > 0 && qtdInstallments <= 72 && firstPayment) {
+    let value = fromReal(valueText)
+    if (value > 0 && qtdInstallments > 0 && qtdInstallments <= 72 && firstPayment) {
       let day = firstPayment.getDate()
       let month = firstPayment.getMonth() + 1
       let year = firstPayment.getFullYear()
@@ -113,12 +104,12 @@ export function EditPayment() {
         day = invoiceDay
       }
 
-      let firstCost = cost
-      if (!costByInstallment) {
-        const total = cost
-        cost = parseFloat(Number(parseInt((cost / qtdInstallments) * 100) / 100).toFixed(2))
-        const sum = parseFloat(Number(cost * qtdInstallments).toFixed(2))
-        firstCost = cost + (total > sum ? total - sum : sum - total)
+      let firstValue = value
+      if (!valueByInstallment) {
+        const total = value
+        value = parseFloat(Number(parseInt((value / qtdInstallments) * 100) / 100).toFixed(2))
+        const sum = parseFloat(Number(value * qtdInstallments).toFixed(2))
+        firstValue = value + (total > sum ? total - sum : sum - total)
       }
 
       for (let i = 1; i <= qtdInstallments; i++) {
@@ -128,12 +119,12 @@ export function EditPayment() {
         }
         installments.push({
           number: i,
-          cost: cost,
+          value: value,
           date: new Date(`${month}/${day}/${year}`),
         })
         month++
       }
-      installments[0].cost = firstCost
+      installments[0].value = firstValue
 
       setInstallments(installments)
       setInstallmentsUpdated(true)
@@ -147,7 +138,6 @@ export function EditPayment() {
       description: description,
       typeId: type,
       installments,
-      inactiveAt,
       creditCardId: card,
       active
     }
@@ -167,15 +157,12 @@ export function EditPayment() {
     const temp = []
     installments.forEach(e => {
       if (e.number === installment.number) {
-        e.cost = installment.cost
-        e.date = installment.date
+        e.paidValue = installment.paidValue
         e.paidDate = installment.paidDate
       }
       temp.push(e)
     })
     setInstallments(temp)
-    const costs = (installments || []).map(p => p.cost)
-    setCostText(toReal(costs.length ? costs.reduce((a, b) => a + b) : 0))
     setTimeout(() => setEditInstallment(null), 200)
   }
 
@@ -183,67 +170,50 @@ export function EditPayment() {
     <MainContainer title="Pagamento" loading={loading}>
       <div style={{ textAlign: 'start', fontSize: 14, color: '#666', fontFamily: '"Roboto", "Helvetica", "Arial", "sans-serif"' }} >
 
-        <ImageList rowHeight={380} cols={5}>
-          <ImageListItem cols={3}>
+        <IconTextInput
+          label="Descrição"
+          value={description}
+          onChange={e => setDescription(e.value)}
+        />
 
-            <IconTextInput
-              label="Descrição"
-              value={description}
-              onChange={e => setDescription(e.value)}
-            />
+        {types.length &&
+          <PaymentTypeBox types={types} paymentType={type}
+            paymentTypeChanged={e => setType(e)} />
+        }
 
-            {types.length &&
-              <PaymentTypeBox types={types} paymentType={type}
-                paymentTypeChanged={e => setType(e)} />
-            }
+        <div style={{ marginTop: 10 }} hidden={!cards.length}>
+          <FormControl>
+            <InputLabel htmlFor="select-tipo">Cartão de Crédito</InputLabel>
+            <Select style={{ width: '200px' }} value={card || ''}
+              onChange={e => setCard(e.target.value)}>
+              <MenuItem value={0}><span style={{ color: 'gray' }}>LIMPAR</span></MenuItem>
+              {cards.map(p => <MenuItem key={p.id} value={p.id}>{p.name}</MenuItem>)}
+            </Select>
+          </FormControl>
+        </div>
 
-            <div style={{ marginTop: 10 }} hidden={!cards.length}>
-              <FormControl>
-                <InputLabel htmlFor="select-tipo">Cartão de Crédito</InputLabel>
-                <Select style={{ width: '200px' }} value={card || ''}
-                  onChange={e => setCard(e.target.value)}>
-                  <MenuItem value={0}><span style={{ color: 'gray' }}>LIMPAR</span></MenuItem>
-                  {cards.map(p => <MenuItem key={p.id} value={p.id}>{p.name}</MenuItem>)}
-                </Select>
-              </FormControl>
-            </div>
+        <ValueDateBox value={valueText}
+          valueChanged={e => setValueText(e)}
+          date={firstPayment}
+          dateChanged={e => setFirstPayment(e)}
+        />
 
-            <CostDateBox cost={costText}
-              costChanged={e => setCostText(e)}
-              date={firstPayment}
-              dateChanged={e => setFirstPayment(e)}
-            />
+        <InstallmentSetBox valueByInstallment={valueByInstallment}
+          qtdInstallments={qtdInstallments}
+          valueByInstallmentChanged={checked => setValueByInstallment(checked)}
+          qtdInstallmentsChanged={v => setQtdInstallments(v)}
+        />
 
-            <InstallmentSetBox costByInstallment={costByInstallment}
-              qtdInstallments={qtdInstallments}
-              costByInstallmentChanged={checked => setCostByInstallment(checked)}
-              qtdInstallmentsChanged={v => setQtdInstallments(v)}
-            />
+        <div>
+          <Button disabled={installmentsUpdated} onClick={() => updateInstallments()} variant="contained" autoFocus>atualizar parcelas</Button>
 
-            {
-              id && <div style={{ marginBottom: 10 }}>
-                <DatePickerContainer style={{ color: '#666' }}>
-                  <span>Data Inativação:</span>
-                  <DatePicker customInput={<DatePickerInput style={{ width: 115 }} />} onChange={e => setInactiveAt(e)}
-                    dateFormat="dd/MM/yyyy" locale={ptBr} selected={inactiveAt} />
-                </DatePickerContainer>
-              </div>
-            }
+          {editInstallment && <EditInstallmentModal installment={editInstallment} onCancel={() => setEditInstallment()} onSave={p => installmentChanged(p)} />}
+        </div>
 
-            <div>
-              <Button disabled={installmentsUpdated} onClick={() => updateInstallments()} variant="contained" autoFocus>atualizar parcelas</Button>
-
-              {editInstallment && <EditInstallmentModal installment={editInstallment} onCancel={() => setEditInstallment()} onSave={p => installmentChanged(p)} />}
-            </div>
-
-          </ImageListItem>
-          <ImageListItem cols={2}>
-            <InstallmentList installments={installments}
-              hide={!installments.length}
-              onEdit={p => setEditInstallment(p)}
-            />
-          </ImageListItem>
-        </ImageList>
+        <InstallmentList installments={installments}
+          hide={!installments.length}
+          onEdit={p => setEditInstallment(p)}
+        />
       </div>
 
       <div style={{ display: 'flex', justifyContent: 'end' }}>

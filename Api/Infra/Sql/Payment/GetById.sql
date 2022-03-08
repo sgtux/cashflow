@@ -6,7 +6,8 @@ SELECT
   p."CreditCardId",
   i."Id",
   i."PaymentId",
-  i."Cost",
+  i."Value",
+  i."PaidValue",
   i."Number",
   i."Date",
   i."PaidDate"

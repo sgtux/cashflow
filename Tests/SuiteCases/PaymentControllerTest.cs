@@ -23,7 +23,7 @@ namespace Cashflow.Tests
             TypeId = PaymentTypeEnum.Expense,
             Installments = new List<Installment>()
                     {
-                      new Installment() { Number = 1, Id = 1, Cost = 1500.6M, Date = new DateTime(2020, 1, 1) }
+                      new Installment() { Number = 1, Id = 1, Value = 1500.6M, Date = new DateTime(2020, 1, 1) }
                     }
         };
 

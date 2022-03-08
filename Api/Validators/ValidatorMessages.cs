@@ -57,7 +57,7 @@ namespace Cashflow.Api.Validators
 
             public string InstallmentWithInvalidNumber = "Parcela com número inválido.";
 
-            public string InstallmentWithRepeatednNumbers = "Parcela com número repetido.";
+            public string InstallmentWithRepeatedNumbers = "Parcela com número repetido.";
         }
 
         public class CreditCardMessages

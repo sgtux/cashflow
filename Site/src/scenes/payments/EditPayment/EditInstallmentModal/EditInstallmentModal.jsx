@@ -3,28 +3,28 @@ import { Button, Dialog, DialogTitle, DialogContent, Zoom } from '@material-ui/c
 import ptBr from 'date-fns/locale/pt-BR'
 import DatePicker from 'react-datepicker'
 
-import { toReal, fromReal } from '../../../../helpers'
+import { toReal, fromReal, toDateFormat } from '../../../../helpers'
 
 import { InputMoney } from '../../../../components/inputs'
 
 export function EditInstallmentModal({ installment, onCancel, onSave }) {
 
-    const [cost, setCost] = useState('')
-    const [date, setDate] = useState('')
+    const [paidValue, setPaidValue] = useState('')
     const [paidDate, setPaidDate] = useState('')
 
+
     useEffect(() => {
-        setDate(new Date(installment.date))
         if (installment.paidDate)
             setPaidDate(new Date(installment.paidDate))
-        setCost(toReal(installment.cost))
+        if (installment.paidValue)
+            setPaidValue(toReal(installment.paidValue))
     }, [installment])
 
     function save() {
         onSave({
+            ...installment,
             number: installment.number,
-            cost: fromReal(cost),
-            date,
+            paidValue: fromReal(paidValue) > 0 ? fromReal(paidValue) : undefined,
             paidDate: paidDate || undefined
         })
     }
@@ -41,12 +41,11 @@ export function EditInstallmentModal({ installment, onCancel, onSave }) {
             <DialogContent>
                 <div style={{ minWidth: 360, minHeight: 340 }}>
                     N°: <span>{installment.number}</span><br />
-                    Valor: <InputMoney
-                        onChangeText={e => setCost(e)}
+                    Vencimento: <span>{toDateFormat(installment.date)}</span><br />
+                    Valor Pago: <InputMoney
+                        onChangeText={e => setPaidValue(e)}
                         kind="money"
-                        value={cost} /><br />
-                    Vencimento: <DatePicker onChange={e => setDate(e)}
-                        dateFormat="dd/MM/yyyy" locale={ptBr} selected={date} /><br />
+                        value={paidValue} /><br />
                     <div style={{ marginTop: 10 }}>
                         Pago em: <DatePicker onChange={e => setPaidDate(e)}
                             dateFormat="dd/MM/yyyy" locale={ptBr} selected={paidDate} /><br />
@@ -57,6 +56,7 @@ export function EditInstallmentModal({ installment, onCancel, onSave }) {
                             style={{ marginLeft: 10 }}
                             onClick={() => save()}
                             color="primary"
+                            disabled={(paidDate && !fromReal(paidValue)) || (!paidDate && fromReal(paidValue))}
                             variant="contained" autoFocus>ok</Button>
                     </div>
                 </div>

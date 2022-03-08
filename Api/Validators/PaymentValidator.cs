@@ -30,7 +30,7 @@ namespace Cashflow.Api.Validators
         {
             if (list != null)
             {
-                if (list.Any(p => p.Cost <= 0))
+                if (list.Any(p => p.Value <= 0))
                     context.AddFailure(ValidatorMessages.Payment.InstallmentWithInvalidValue);
 
                 if (list.Any(p => p.Date == default(DateTime)))
@@ -43,7 +43,7 @@ namespace Cashflow.Api.Validators
                     context.AddFailure(ValidatorMessages.Payment.InstallmentWithInvalidNumber);
 
                 if (list.Select(p => p.Number).Distinct().Count() != list.Count)
-                    context.AddFailure(ValidatorMessages.Payment.InstallmentWithRepeatednNumbers);
+                    context.AddFailure(ValidatorMessages.Payment.InstallmentWithRepeatedNumbers);
 
                 if (list.Count > 72)
                     context.AddFailure(ValidatorMessages.Payment.InstallmentWithMaxLengthExceded);
