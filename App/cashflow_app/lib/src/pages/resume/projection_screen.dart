@@ -66,9 +66,9 @@ class _ProjectionScreenState extends State<ProjectionScreen> {
                             Text("${toMonthYearText(item.monthYear)} - ",
                                 style: TextStyle(color: Colors.grey.shade600)),
                             Text(
-                              toReal(value: item.accumulatedCost.toDouble()),
+                              toReal(value: item.accumulatedValue.toDouble()),
                               style: TextStyle(
-                                  color: item.accumulatedCost > 0
+                                  color: item.accumulatedValue > 0
                                       ? Colors.green.shade300
                                       : Colors.red.shade300,
                                   fontWeight: FontWeight.bold),
@@ -97,7 +97,7 @@ class _ProjectionScreenState extends State<ProjectionScreen> {
                                               fontSize: 12,
                                               color: Colors.grey.shade600),
                                         ),
-                                        p.condition == 3
+                                        p.qtdInstallments > 0
                                             ? Text(
                                                 "${p.number}/${p.qtdInstallments}",
                                                 style: TextStyle(
@@ -107,7 +107,7 @@ class _ProjectionScreenState extends State<ProjectionScreen> {
                                               )
                                             : const SizedBox(),
                                         Text(
-                                          toReal(value: p.cost.toDouble()),
+                                          toReal(value: p.value.toDouble()),
                                           style: TextStyle(
                                               fontSize: 12,
                                               color: p.isIn

@@ -5,7 +5,7 @@ class ProjectionModel {
   final num totalIn;
   final num totalOut;
   final num total;
-  final num accumulatedCost;
+  final num accumulatedValue;
   final List<PaymentProjectionModel> payments;
 
   ProjectionModel(
@@ -13,7 +13,7 @@ class ProjectionModel {
       required this.totalIn,
       required this.totalOut,
       required this.total,
-      required this.accumulatedCost,
+      required this.accumulatedValue,
       required this.payments});
 
   factory ProjectionModel.fromMap(String yearMonth, Map<String, dynamic> map) {
@@ -23,7 +23,7 @@ class ProjectionModel {
     }
     return ProjectionModel(
         monthYear: yearMonth,
-        accumulatedCost: map['accumulatedCost'],
+        accumulatedValue: map['accumulatedValue'],
         total: map['total'],
         totalIn: map['totalIn'],
         totalOut: map['totalOut'],

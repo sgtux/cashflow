@@ -1,10 +1,9 @@
 class PaymentProjectionModel {
   final String description;
-  final int number;
-  final int condition;
-  final String conditionText;
+  final String number;
   final int qtdInstallments;
-  final num cost;
+  final DateTime? paidDate;
+  final num value;
   final String typeText;
   final String creditCardName;
   final bool isIn;
@@ -12,10 +11,9 @@ class PaymentProjectionModel {
   PaymentProjectionModel(
       {required this.description,
       required this.number,
-      required this.condition,
-      required this.conditionText,
       required this.qtdInstallments,
-      required this.cost,
+      required this.paidDate,
+      required this.value,
       required this.isIn,
       required this.typeText,
       required this.creditCardName});
@@ -24,10 +22,10 @@ class PaymentProjectionModel {
     return PaymentProjectionModel(
         description: map['description'],
         number: map['number'],
-        condition: map['condition'],
-        conditionText: map['conditionText'],
         qtdInstallments: map['qtdInstallments'],
-        cost: map['cost'],
+        paidDate:
+            map['paidDate'] == null ? null : DateTime.parse(map['paidDate']),
+        value: map['value'],
         typeText: map['typeText'],
         isIn: map['type']['in'],
         creditCardName: map['creditCardName']);
