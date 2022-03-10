@@ -213,6 +213,7 @@ export function EditPayment() {
         <InstallmentList installments={installments}
           hide={!installments.length}
           onEdit={p => setEditInstallment(p)}
+          onPay={p => installmentChanged(p)}
         />
       </div>
 

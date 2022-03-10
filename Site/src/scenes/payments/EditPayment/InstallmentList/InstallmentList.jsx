@@ -1,12 +1,16 @@
 import React from 'react'
-import { IconButton } from '@material-ui/core'
-
-import { EditOutlined as EditIcon } from '@material-ui/icons'
 
 import { toDateFormat, toReal } from '../../../../helpers'
-import { InstallmentTable, Container } from './styles'
+import { InstallmentTable, Container, PayButton, EditButton } from './styles'
 
-export function InstallmentList({ installments, hide, onEdit }) {
+export function InstallmentList({ installments, hide, onEdit, onPay }) {
+
+    function pay(p) {
+        p.paidDate = p.date
+        p.paidValue = p.value
+        onPay(p)
+    }
+
     return (
         <Container hidden={hide}>
             <InstallmentTable>
@@ -30,9 +34,8 @@ export function InstallmentList({ installments, hide, onEdit }) {
                                 <td>{p.paidValue ? toReal(p.paidValue) : '-'}</td>
                                 <td>{p.paidDate ? toDateFormat(p.paidDate, 'dd/MM/yyyy') : '-'}</td>
                                 <td>
-                                    <IconButton onClick={() => onEdit(p)} color="primary" aria-label="Edit">
-                                        <EditIcon />
-                                    </IconButton>
+                                    <EditButton onClick={() => onEdit(p)}>editar</EditButton>
+                                    {!p.paidDate && <PayButton onClick={() => pay(p)}>pagar</PayButton>}
                                 </td>
                             </tr>
                         )}
