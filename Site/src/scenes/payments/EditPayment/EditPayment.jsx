@@ -93,15 +93,15 @@ export function EditPayment() {
       let year = firstPayment.getFullYear()
 
       if (card) {
-        const invoiceDay = cards.filter(p => p.id === card)[0].invoiceDay
-        if (day > invoiceDay) {
+        const { invoiceClosingDay, invoiceDueDay } = cards.filter(p => p.id === card)[0]
+        if (day > invoiceClosingDay) {
           month++
           if (month > 12) {
             month = 1
             year++
           }
         }
-        day = invoiceDay
+        day = invoiceDueDay
       }
 
       let firstValue = value

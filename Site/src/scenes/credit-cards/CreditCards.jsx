@@ -20,7 +20,7 @@ import {
 } from '@material-ui/icons'
 
 import { MainContainer } from '../../components/main'
-import { DailyExpensesDetailModal } from './CreditCardEditModal/CreditCardEditModal'
+import { CreditCardDetailModal } from './CreditCardEditModal/CreditCardEditModal'
 
 import { creditCardService } from '../../services/index'
 
@@ -95,8 +95,13 @@ export function CreditCards() {
                 />
                 <ListItemText
                   style={{ width: 160, textAlign: 'center' }}
-                  primary="Dia da fatura"
-                  secondary={p.invoiceDay}
+                  primary="Fechamento da fatura"
+                  secondary={p.invoiceClosingDay}
+                />
+                <ListItemText
+                  style={{ width: 160, textAlign: 'center' }}
+                  primary="Vencimento da fatura"
+                  secondary={p.invoiceDueDay}
                 />
                 <ListItemSecondaryAction>
                   <Tooltip title="Editar este cartão">
@@ -126,7 +131,7 @@ export function CreditCards() {
           Adicionar Cartão
         </Button>
       </div>
-      <DailyExpensesDetailModal onSave={c => saveCard(c)} onClose={() => refresh()} card={card} />
+      <CreditCardDetailModal onSave={c => saveCard(c)} onClose={() => refresh()} card={card} />
     </MainContainer>
   )
 }

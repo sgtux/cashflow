@@ -27,47 +27,55 @@ namespace Cashflow.Tests
         [TestMethod]
         public async Task AddCardWithNoName()
         {
-            var model = new CreditCard() { Name = "", InvoiceDay = 5 };
+            var model = new CreditCard() { Name = "", InvoiceClosingDay = 5, InvoiceDueDay = 10 };
             var result = await Post("/api/CreditCard", model, 3);
             TestErrors(model, result, "O campo 'Nome' é obrigatório.");
         }
 
         [TestMethod]
-        public async Task AddCardWithInvalidInvoiceDay0()
+        public async Task AddCardWithInvalidInvoiceDueDay0()
         {
-            var model = new CreditCard() { Name = "nome do cartão", InvoiceDay = 0 };
+            var model = new CreditCard() { Name = "nome do cartão", InvoiceClosingDay = 5, InvoiceDueDay = 0 };
             var result = await Post("/api/CreditCard", model, 3);
-            TestErrors(model, result, "O valor do campo 'Dia da fatura' deve estar entre 1 e 30.");
+            TestErrors(model, result, "O valor do campo 'Dia de vencimento da fatura' deve estar entre 1 e 30.");
         }
 
         [TestMethod]
-        public async Task InsertCardWithInvalidInvoiceDay31()
+        public async Task AddCardWithInvalidInvoiceClosingDay0()
         {
-            var model = new CreditCard() { Name = "nome do cartão", InvoiceDay = 31 };
+            var model = new CreditCard() { Name = "nome do cartão", InvoiceDueDay = 5, InvoiceClosingDay = 0 };
             var result = await Post("/api/CreditCard", model, 3);
-            TestErrors(model, result, "O valor do campo 'Dia da fatura' deve estar entre 1 e 30.");
+            TestErrors(model, result, "O valor do campo 'Dia de fechamento da fatura' deve estar entre 1 e 30.");
         }
 
         [TestMethod]
-        public async Task AddCardWithInvoiceDay1OK()
+        public async Task InsertCardWithInvalidInvoiceDueDay31()
         {
-            var model = new CreditCard() { Name = "nome do cartão", InvoiceDay = 1 };
+            var model = new CreditCard() { Name = "nome do cartão", InvoiceClosingDay = 5, InvoiceDueDay = 31 };
+            var result = await Post("/api/CreditCard", model, 3);
+            TestErrors(model, result, "O valor do campo 'Dia de vencimento da fatura' deve estar entre 1 e 30.");
+        }
+
+        [TestMethod]
+        public async Task InsertCardWithInvalidInvoiceClosingDay31()
+        {
+            var model = new CreditCard() { Name = "nome do cartão", InvoiceClosingDay = 31, InvoiceDueDay = 5 };
+            var result = await Post("/api/CreditCard", model, 3);
+            TestErrors(model, result, "O valor do campo 'Dia de fechamento da fatura' deve estar entre 1 e 30.");
+        }
+
+        [TestMethod]
+        public async Task AddCardWithInvoiceDueDay1OK()
+        {
+            var model = new CreditCard() { Name = "nome do cartão", InvoiceClosingDay = 1, InvoiceDueDay = 1 };
             var result = await Post("/api/CreditCard", model, 3);
             TestErrors(model, result);
         }
 
         [TestMethod]
-        public async Task AddCardWithInvoiceDay30OK()
+        public async Task AddCardWithInvoiceDueDay30OK()
         {
-            var model = new CreditCard() { Name = "nome do cartão", InvoiceDay = 30 };
-            var result = await Post("/api/CreditCard", model, 3);
-            TestErrors(model, result);
-        }
-
-        [TestMethod]
-        public async Task InsertCardOK()
-        {
-            var model = new CreditCard() { Name = "nome do cartão", InvoiceDay = 5 };
+            var model = new CreditCard() { Name = "nome do cartão", InvoiceClosingDay = 30, InvoiceDueDay = 30 };
             var result = await Post("/api/CreditCard", model, 3);
             TestErrors(model, result);
         }
@@ -75,7 +83,7 @@ namespace Cashflow.Tests
         [TestMethod]
         public async Task UpdateCardWithNotFound()
         {
-            var model = new CreditCard() { Name = "teste", Id = 99, InvoiceDay = 5 };
+            var model = new CreditCard() { Name = "teste", Id = 99 };
             var result = await Put("/api/CreditCard", model, 3);
             TestErrors(model, result, "Cartão de Crédito não encontrado(a).");
         }
@@ -83,7 +91,7 @@ namespace Cashflow.Tests
         [TestMethod]
         public async Task UpdateCardWithNoName()
         {
-            var model = new CreditCard() { Name = "", UserId = 1, InvoiceDay = 5 };
+            var model = new CreditCard() { Name = "", UserId = 1, InvoiceDueDay = 5, InvoiceClosingDay = 5 };
             var result = await Put("/api/CreditCard", model, 3);
             TestErrors(model, result, "O campo 'Nome' é obrigatório.");
         }
@@ -91,7 +99,7 @@ namespace Cashflow.Tests
         [TestMethod]
         public async Task UpdateCardFromAnotherUser()
         {
-            var model = new CreditCard() { Name = "teste", Id = 1, InvoiceDay = 5 };
+            var model = new CreditCard() { Name = "teste", Id = 1, InvoiceDueDay = 5, InvoiceClosingDay = 5 };
             var result = await Put("/api/CreditCard", model, 3);
             TestErrors(model, result, "Cartão de Crédito não encontrado(a).");
         }
@@ -99,7 +107,7 @@ namespace Cashflow.Tests
         [TestMethod]
         public async Task UpdateCardOK()
         {
-            var model = new CreditCard() { Name = "nome do cartão", Id = 1, InvoiceDay = 5 };
+            var model = new CreditCard() { Name = "nome do cartão", Id = 1, InvoiceDueDay = 5, InvoiceClosingDay = 5 };
             var result = await Put("/api/CreditCard", model, 1);
             TestErrors(model, result);
         }

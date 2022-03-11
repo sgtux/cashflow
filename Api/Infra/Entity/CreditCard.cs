@@ -8,6 +8,8 @@ namespace Cashflow.Api.Infra.Entity
 
         public int UserId { get; set; }
 
-        public int InvoiceDay { get; set; }
+        public int InvoiceClosingDay { get; set; }
+
+        public int InvoiceDueDay { get; set; }
     }
 }

@@ -12,18 +12,20 @@ import CardIcon from '@material-ui/icons/CreditCardOutlined'
 
 import IconTextInput from '../../../components/main/IconTextInput'
 
-export function DailyExpensesDetailModal({ onClose, onSave, card }) {
+export function CreditCardDetailModal({ onClose, onSave, card }) {
 
     const [name, setName] = useState('')
-    const [invoiceDay, setInvoiceDay] = useState('')
+    const [invoiceClosingDay, setInvoiceClosingDay] = useState('')
+    const [invoiceDueDay, setInvoiceDueDay] = useState('')
     const [cardIdValid, setCardIdValid] = useState(false)
 
-    useEffect(() => setCardIdValid(!!name && invoiceDay > 0), [name, invoiceDay])
+    useEffect(() => setCardIdValid(!!name && invoiceDueDay > 0 && invoiceClosingDay > 0), [name, invoiceClosingDay, invoiceDueDay])
 
     useEffect(() => {
         if (card) {
-            setInvoiceDay((card.invoiceDay || '') + '')
             setName(card.name || '')
+            setInvoiceClosingDay((card.invoiceClosingDay || '') + '')
+            setInvoiceDueDay((card.invoiceDueDay || '') + '')
         }
     }, [card])
 
@@ -51,9 +53,16 @@ export function DailyExpensesDetailModal({ onClose, onSave, card }) {
                 />
                 <br />
                 <IconTextInput
-                    label="Dia da fatura"
-                    value={invoiceDay}
-                    onChange={e => setInvoiceDay((e.value || '').replace(/[^0-9]/g, ''))}
+                    label="Fechamento da fatura"
+                    value={invoiceClosingDay}
+                    onChange={e => setInvoiceClosingDay((e.value || '').replace(/[^0-9]/g, ''))}
+                    Icon={<CardIcon />}
+                />
+                <br />
+                <IconTextInput
+                    label="Vencimento da fatura"
+                    value={invoiceDueDay}
+                    onChange={e => setInvoiceDueDay((e.value || '').replace(/[^0-9]/g, ''))}
                     Icon={<CardIcon />}
                 />
             </DialogContent>
@@ -62,7 +71,7 @@ export function DailyExpensesDetailModal({ onClose, onSave, card }) {
                     Cancelar
                 </Button>
                 <Button variant="contained" color="primary" disabled={!cardIdValid}
-                    onClick={() => onSave({ name, invoiceDay, id: card.id })}>
+                    onClick={() => onSave({ name, invoiceDueDay, invoiceClosingDay, id: card.id })}>
                     Salvar
                 </Button>
             </div>

@@ -10,7 +10,8 @@ namespace Cashflow.Tests.Mocks.Database.Tables
             Create.Table("CreditCard")
                 .WithColumn("Id").AsInt32().PrimaryKey().Identity()
                 .WithColumn("Name").AsString(255)
-                .WithColumn("InvoiceDay").AsInt16();
+                .WithColumn("InvoiceClosingDay").AsInt16()
+                .WithColumn("InvoiceDueDay").AsInt16();
 
             Execute.Sql("ALTER TABLE CreditCard ADD COLUMN UserId INTEGER REFERENCES User(Id)");
         }

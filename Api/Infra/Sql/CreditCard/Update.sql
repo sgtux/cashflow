@@ -3,6 +3,7 @@ UPDATE
 SET
   "Name" = @Name,
   "UserId" = @UserId,
-  "InvoiceDay" = @InvoiceDay
+  "InvoiceClosingDay" = @InvoiceClosingDay,
+  "InvoiceDueDay" = @InvoiceDueDay
 WHERE
   "Id" = @Id

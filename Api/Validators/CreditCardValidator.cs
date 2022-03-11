@@ -17,7 +17,8 @@ namespace Cashflow.Api.Validators
             _creditCardRepository = creditCardRepository;
             _userRepository = userRepository;
             RuleFor(c => c.Name).NotEmpty().WithMessage(ValidatorMessages.FieldIsRequired("Nome"));
-            RuleFor(c => c.InvoiceDay).InclusiveBetween(1, 30).WithMessage(ValidatorMessages.BetweenValue("Dia da fatura", 1, 30));
+            RuleFor(c => c.InvoiceClosingDay).InclusiveBetween(1, 30).WithMessage(ValidatorMessages.BetweenValue("Dia de fechamento da fatura", 1, 30));
+            RuleFor(c => c.InvoiceDueDay).InclusiveBetween(1, 30).WithMessage(ValidatorMessages.BetweenValue("Dia de vencimento da fatura", 1, 30));
             RuleFor(c => c).Must(CreditCardExists).When(c => c.Id > 0).WithMessage(ValidatorMessages.NotFound("Cartão de Crédito"));
             RuleFor(c => c).Must(UserExists).WithMessage(ValidatorMessages.NotFound("Usuário"));
         }

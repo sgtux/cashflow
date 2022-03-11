@@ -2,7 +2,8 @@ SELECT
   "Id",
   "Name",
   "UserId",
-  "InvoiceDay"
+  "InvoiceClosingDay",
+  "InvoiceDueDay"
 FROM
   "CreditCard"
 WHERE
