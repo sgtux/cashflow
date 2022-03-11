@@ -15,7 +15,8 @@ import {
 
 import {
   Delete as DeleteIcon,
-  EditOutlined as EditIcon
+  EditOutlined as EditIcon,
+  AddCircle as AddCircleIcon
 } from '@material-ui/icons'
 
 import { MainContainer } from '../../components/main'
@@ -65,7 +66,9 @@ export function Payments() {
         <div>
           <div style={styles.divNewPayment}>
             <Link to="/edit-payment/0">
-              <Button variant="contained" color="primary">Adicionar Pagamento</Button>
+              <IconButton variant="contained" color="primary">
+                <AddCircleIcon />
+              </IconButton>
             </Link>
           </div>
           <Paper>
@@ -74,7 +77,7 @@ export function Payments() {
                 <ListItem key={p.id}>
                   <ListItemText
                     primary={p.description}
-                    style={{ width: '160px' }}
+                    style={{ width: '100px' }}
                     secondary={
                       <React.Fragment>
                         <Typography component="span" color={p.type.in ? 'primary' : 'secondary'}>
@@ -85,15 +88,11 @@ export function Payments() {
                   />
                   <ListItemText
                     style={{ width: '20px' }}
-                    secondary={p.firstPaymentFormatted}
+                    secondary={`${p.firstPaymentDate} - ${p.lastPaymentDate}`}
                   />
                   <ListItemText
                     style={{ width: '40px' }}
                     secondary={toReal(p.total)}
-                  />
-                  <ListItemText
-                    style={{ width: '20px' }}
-                    secondary={p.conditionText}
                   />
                   <ListItemText
                     style={{ width: '40px' }}
@@ -102,9 +101,6 @@ export function Payments() {
                   <ListItemText
                     style={{ width: '30px' }}
                     secondary={`${p.paidInstallments}/${p.installments.length}`}
-                  />
-                  <ListItemText style={{ width: '40px', color: 'gray' }}
-                    primary={p.done ? 'Concluído' : ''}
                   />
                   <ListItemSecondaryAction>
                     <Link to={`/edit-payment/${p.id}`}>
@@ -132,7 +128,9 @@ export function Payments() {
             <span>A busca não retornou registros.</span>
           </div>
           <Link to="/edit-payment/0">
-            <Button variant="contained" color="primary">Adicionar Pagamento</Button>
+            <IconButton variant="contained" color="primary">
+              <AddCircleIcon />
+            </IconButton>
           </Link>
         </div>
       }

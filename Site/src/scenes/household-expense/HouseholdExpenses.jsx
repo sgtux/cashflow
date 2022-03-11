@@ -67,7 +67,7 @@ export function HouseholdExpenses() {
     }
 
     return (
-        <MainContainer title="Despesas Domésticas" loading={loading}>
+        <MainContainer title="Despesas" loading={loading}>
             <InputMonth selectedYear={selectedYear}
                 selectedMonth={selectedMonth}
                 onChange={(month, year) => monthYearChanged(month, year)}

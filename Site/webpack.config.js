@@ -32,7 +32,6 @@ module.exports = {
     filename: `bundle${(new Date()).getTime()}.js`
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
     new ProgressBar(),
     new HtmlWebpackPlugin({
       template: path.join(__dirname, 'public', 'index.html'),

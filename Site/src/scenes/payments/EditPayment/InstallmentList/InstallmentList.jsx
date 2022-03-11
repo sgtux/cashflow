@@ -2,6 +2,7 @@ import React from 'react'
 
 import { toDateFormat, toReal } from '../../../../helpers'
 import { InstallmentTable, Container, PayButton, EditButton } from './styles'
+import { TableActionPayButton, TableActionEditButton } from '../../../../components'
 
 export function InstallmentList({ installments, hide, onEdit, onPay }) {
 
@@ -34,8 +35,8 @@ export function InstallmentList({ installments, hide, onEdit, onPay }) {
                                 <td>{p.paidValue ? toReal(p.paidValue) : '-'}</td>
                                 <td>{p.paidDate ? toDateFormat(p.paidDate, 'dd/MM/yyyy') : '-'}</td>
                                 <td>
-                                    <EditButton onClick={() => onEdit(p)}>editar</EditButton>
-                                    {!p.paidDate && <PayButton onClick={() => pay(p)}>pagar</PayButton>}
+                                    <TableActionEditButton onClick={() => onEdit(p)}>editar</TableActionEditButton>
+                                    {!p.paidDate && <TableActionPayButton onClick={() => pay(p)}>pagar</TableActionPayButton>}
                                 </td>
                             </tr>
                         )}

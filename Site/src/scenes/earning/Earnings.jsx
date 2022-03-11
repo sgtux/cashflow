@@ -9,7 +9,8 @@ import {
 
 import {
     Delete as DeleteIcon,
-    Edit as EditIcon
+    Edit as EditIcon,
+    AddCircle as AddCircleIcon
 } from '@material-ui/icons'
 
 import { EarningTable, Container } from './styles'
@@ -89,7 +90,9 @@ export function Earnings() {
                     </table>
                 </EarningTable>
                 <Link to="/edit-earning/0">
-                    <Button variant="contained" color="primary">Adicionar Ganho</Button>
+                    <IconButton variant="contained" color="primary">
+                        <AddCircleIcon />
+                    </IconButton>
                 </Link>
             </Container>
             <ConfirmModal show={!!removeItem}

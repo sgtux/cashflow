@@ -18,6 +18,7 @@ import {
 } from '@material-ui/icons'
 
 import { MainContainer, ConfirmModal } from '../../components/main'
+import { TableActionPayButton } from '../../components'
 import { toReal, toast } from '../../helpers'
 import { RecurringExpenseHistoryModal } from './RecurringExpenseHistoryModal/RecurringExpenseHistoryModal'
 
@@ -108,7 +109,7 @@ export function RecurringExpenses() {
                                         </Tooltip>
                                     </td>
                                     <td>
-                                        {!p.inactiveAt && !p.paid && <Button variant="contained" color="primary" onClick={() => pay(p)}>Pagar</Button>}
+                                        {!p.inactiveAt && !p.paid && <TableActionPayButton onClick={() => pay(p)}>Pagar</TableActionPayButton>}
                                     </td>
                                 </tr>
                             )}
