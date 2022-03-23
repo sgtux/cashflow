@@ -3,8 +3,9 @@ import { Link } from 'react-router-dom'
 
 import {
     IconButton,
-    Button,
-    Tooltip
+    Tooltip,
+    Paper, Select,
+    MenuItem
 } from '@material-ui/core'
 
 import {
@@ -25,14 +26,38 @@ export function Earnings() {
     const [earnings, setEarnings] = useState([])
     const [loading, setLoading] = useState(false)
     const [removeItem, setRemoveItem] = useState(null)
+    const [selectedMonthYear, setSelectedMonthYear] = useState('')
+    const [monthYearList, setMonthYearList] = useState([])
 
-    useEffect(() => refresh(), [])
+    useEffect(() => {
+
+        const now = new Date()
+        let year = now.getFullYear() - 1
+        let month = now.getMonth() + 1
+        const list = []
+        while (year < now.getFullYear() || (year === now.getFullYear() && month <= (now.getMonth() + 1))) {
+            month++
+            if (month > 12) {
+                year++
+                month = 1
+            }
+            list.push(`${month - 1}/${year}`)
+        }
+        setMonthYearList(list)
+        setSelectedMonthYear(`${month - 1}/${year}`)
+    }, [])
+
+    useEffect(() => refresh(), [selectedMonthYear])
 
     function refresh() {
-        setLoading(true)
-        earningService.getAll()
-            .then(res => setEarnings(res))
-            .finally(() => setLoading(false))
+        if (selectedMonthYear) {
+            const temp = selectedMonthYear.split('/')
+            const fromDate = new Date(`${temp[0]}/1/${temp[1]}`)
+            setLoading(true)
+            earningService.getAll({ fromDate })
+                .then(res => setEarnings(res))
+                .finally(() => setLoading(false))
+        }
     }
 
     function remove() {
@@ -51,6 +76,17 @@ export function Earnings() {
 
     return (
         <MainContainer title="Ganhos/Benefícios" loading={loading}>
+
+            <Paper>
+                <span style={{ margin: 10, fontSize: 16, color: '#666' }}>Desde: </span>
+                <Select
+                    value={selectedMonthYear}
+                    style={{ width: '130px' }}
+                    onChange={e => setSelectedMonthYear(e.target.value)}>
+                    {monthYearList.map((p, i) => <MenuItem key={i} value={p}>{p}</MenuItem>)}
+                </Select>
+            </Paper>
+
             <Container>
                 <EarningTable>
                     <table>

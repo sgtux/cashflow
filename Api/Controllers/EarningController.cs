@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Services;
@@ -15,7 +16,7 @@ namespace Cashflow.Api.Controllers
         public EarningController(EarningService service) => _service = service;
 
         [HttpGet]
-        public async Task<IActionResult> Get() => HandleResult(await _service.GetByUser(UserId));
+        public async Task<IActionResult> Get([FromQuery] DateTime? fromDate) => HandleResult(await _service.GetByUser(UserId, fromDate));
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id) => HandleResult(await _service.GetById(id));

@@ -44,6 +44,7 @@ export function Projection() {
         dates.forEach(d => {
           res[d].payments.sort((a, b) => a.description > b.description ? 1 : a.description < b.description ? -1 : 0)
           total += res[d].total
+          total += res[d].previousMonthBalanceValue
         })
         setTotalValue(total)
         setAllPayments(res)
@@ -89,7 +90,7 @@ export function Projection() {
           color: 'grey'
         }}>
           <span>Total Acumulado:</span><br />
-          <MoneySpan bold bigger gain={totalValue > 0}>{toReal(totalValue)}</MoneySpan>
+          <MoneySpan bold bigger gain={totalValue >= 0}>{toReal(totalValue)}</MoneySpan>
         </div>
       </Paper>
     </MainContainer>

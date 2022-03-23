@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Cashflow.Api.Contracts;
 using Cashflow.Api.Enums;
+using Cashflow.Api.Extensions;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Infra.Filters;
 using Cashflow.Api.Models;
@@ -19,7 +20,7 @@ namespace Cashflow.Api.Services
 
         public async Task<ResultDataModel<Earning>> GetById(int id) => new ResultDataModel<Earning>(await _earningRepository.GetById(id));
 
-        public async Task<ResultDataModel<IEnumerable<Earning>>> GetByUser(int userId) => new ResultDataModel<IEnumerable<Earning>>(await _earningRepository.GetSome(new BaseFilter() { UserId = userId }));
+        public async Task<ResultDataModel<IEnumerable<Earning>>> GetByUser(int userId, DateTime? from) => new ResultDataModel<IEnumerable<Earning>>(await _earningRepository.GetSome(new BaseFilter() { StartDate = from.FixStartTimeFilter(), UserId = userId }));
 
         public ResultDataModel<IEnumerable<TypeModel>> GetTypes()
         {

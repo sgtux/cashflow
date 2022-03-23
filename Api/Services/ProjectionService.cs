@@ -8,6 +8,7 @@ using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Infra.Filters;
 using Cashflow.Api.Models;
 using Cashflow.Api.Enums;
+using Cashflow.Api.Shared;
 
 namespace Cashflow.Api.Services
 {
@@ -68,7 +69,7 @@ namespace Cashflow.Api.Services
                 var resultModel = new PaymentProjectionResultModel();
                 resultModel.Payments.AddRange(list.Where(p => p.MonthYear == monthYear));
                 result.Data.Add(monthYear, resultModel);
-                resultModel.AccumulatedValue = result.Data.Values.Sum(p => p.Total);
+                resultModel.AccumulatedValue = result.Data.Values.Sum(p => p.Total + p.PreviousMonthBalanceValue);
             });
 
             return result;
@@ -284,7 +285,7 @@ namespace Cashflow.Api.Services
             if (remainingBalance != null)
                 list.Add(new PaymentProjectionModel()
                 {
-                    Description = "Saldo Mês Anterior",
+                    Description = Constants.PREVIOUS_MONTH_BALANCE,
                     MonthYear = now.ToString("MM/yyyy"),
                     Type = types.First(p => p.Id == (remainingBalance.Value >= 0 ? (int)PaymentTypeEnum.Gain : (int)PaymentTypeEnum.Expense)),
                     Value = Math.Abs(remainingBalance.Value)

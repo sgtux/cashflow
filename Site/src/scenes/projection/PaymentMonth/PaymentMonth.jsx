@@ -70,11 +70,11 @@ export function PaymentMonth({ monthYear, paymentMonth, show }) {
             </BoxCosts>
             <BoxCosts>
               <span style={{ color: 'grey', marginRight: 20 }}>Líquido:</span>
-              <MoneySpan gain={paymentMonth.total > 0}>{toReal(paymentMonth.total)}</MoneySpan>
+              <MoneySpan gain={paymentMonth.total >= 0}>{toReal(paymentMonth.total)}</MoneySpan>
             </BoxCosts>
           </ContainerCosts>
           <div style={{ textAlign: 'center', padding: 10 }}>
-            {show && <MoneySpan bold gain={paymentMonth.accumulatedValue > 0}>{toReal(paymentMonth.accumulatedValue)}</MoneySpan>}
+            {show && <MoneySpan bold gain={paymentMonth.accumulatedValue >= 0}>{toReal(paymentMonth.accumulatedValue)}</MoneySpan>}
           </div>
         </Accordion>
       </ListItemText>

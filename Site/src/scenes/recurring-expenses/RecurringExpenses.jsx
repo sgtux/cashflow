@@ -8,7 +8,9 @@ import { recurringExpenseService } from '../../services'
 import {
     IconButton,
     Button,
-    Tooltip
+    Tooltip,
+    FormControlLabel,
+    Checkbox
 } from '@material-ui/core'
 
 import {
@@ -28,13 +30,14 @@ export function RecurringExpenses() {
     const [loading, setLoading] = useState(false)
     const [recurringExpenseEditHistory, setRecurringExpenseEditHistory] = useState(null)
     const [removeItem, setRemoveItem] = useState(null)
+    const [showInactive, setShowInactive] = useState(false)
 
-    useEffect(() => refresh(), [])
+    useEffect(() => refresh(), [showInactive])
 
     function refresh() {
         setRecurringExpenseEditHistory(null)
         setLoading(true)
-        recurringExpenseService.getAll()
+        recurringExpenseService.getAll(showInactive)
             .then(res => setRecurringExpenses(res))
             .finally(() => setLoading(false))
     }
@@ -69,6 +72,12 @@ export function RecurringExpenses() {
 
     return (
         <MainContainer title="Pagamento Recorrentes" loading={loading}>
+            <FormControlLabel label="Exibir Inativos"
+                control={<Checkbox
+                    value={showInactive}
+                    onChange={(e, c) => setShowInactive(c)}
+                    color="primary"
+                />} />
             <Container>
                 <RecurringExpensesTable>
                     <table>
