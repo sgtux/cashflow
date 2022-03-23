@@ -7,7 +7,6 @@ export const Container = styled.div`
 
 export const RecurringExpensesTable = styled.div`
     overflow-y: auto;
-    max-height: 320px;
     margin: 5px;
     font-size: 14px;
     & > table {
