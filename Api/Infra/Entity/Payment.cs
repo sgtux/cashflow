@@ -42,6 +42,8 @@ namespace Cashflow.Api.Infra.Entity
 
         public string LastPaymentDate => Installments?.OrderByDescending(p => p.Number).FirstOrDefault()?.Date.ToString("dd/MM/yyyy");
 
+        public bool CurrentMonthPaid => Installments?.FirstOrDefault(p => p.Date.SameMonthYear(DateTime.Now))?.PaidDate.HasValue ?? false;
+
         private bool HasInstallments => Installments?.Any() ?? false;
     }
 }

@@ -24,6 +24,8 @@ import { paymentService } from '../../services'
 import { toReal } from '../../helpers'
 import { PaymentFilter } from './PaymentFilter/PaymentFilter'
 
+import { PaidDoneSpan } from './styles'
+
 const styles = {
   noRecords: {
     textTransform: 'none',
@@ -100,6 +102,7 @@ export function Payments() {
                   />
                   <ListItemText
                     style={{ width: '30px' }}
+                    primary={(p.done || p.currentMonthPaid) && <PaidDoneSpan>{`${p.done ? 'Concluído' : p.currentMonthPaid ? 'pago' : ''}`}</PaidDoneSpan>}
                     secondary={`${p.paidInstallments}/${p.installments.length}`}
                   />
                   <ListItemSecondaryAction>

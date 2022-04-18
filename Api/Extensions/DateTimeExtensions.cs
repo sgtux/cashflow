@@ -20,6 +20,6 @@ namespace Cashflow.Api.Extensions
 
         public static DateTime? FixEndTimeFilter(this DateTime? date) => date == null ? null : FixEndTimeFilter(date.Value);
 
-        public static bool SameMonthYear(this DateTime date1, DateTime date2) => date1.Year == date2.Year && date1.Month == date2.Month;
+        public static bool SameMonthYear(this DateTime date, DateTime compareTo) => date.Year == compareTo.Year && date.Month == compareTo.Month;
     }
 }
