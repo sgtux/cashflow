@@ -47,7 +47,11 @@ namespace Cashflow.Api.Validators
 
             public string PaymentCoditionInvalid = "A condição do pagamento é inválida.";
 
-            public string InstallmentWithInvalidValue = "Parcela com Valor inválido.";
+            public string InstallmentWithInvalidValue = "Parcela com valor inválido.";
+
+            public string InstallmentWithInvalidPaidValue = "Parcela com valor pago inválido.";
+
+            public string ExemptInstallmentWithValue = "Parcela isenta com valor pago informado.";
 
             public string InstallmentWithInvalidDate = "Parcela com Data de Vencimento inválida.";
 

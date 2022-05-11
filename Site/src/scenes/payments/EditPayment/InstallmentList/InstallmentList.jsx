@@ -1,15 +1,23 @@
 import React from 'react'
 
 import { toDateFormat, toReal } from '../../../../helpers'
-import { InstallmentTable, Container, PayButton, EditButton } from './styles'
-import { TableActionPayButton, TableActionEditButton } from '../../../../components'
+import { InstallmentTable, Container} from './styles'
+import { TableActionPayButton, TableActionEditButton, TableActionExemptButton } from '../../../../components'
 
-export function InstallmentList({ installments, hide, onEdit, onPay }) {
+export function InstallmentList({ installments, hide, onEdit, onPay, onExempt }) {
 
     function pay(p) {
         p.paidDate = p.date
         p.paidValue = p.value
+        p.exempt = false
         onPay(p)
+    }
+
+    function exempt(p) {
+        p.paidDate = null
+        p.paidValue = null
+        p.exempt = true
+        onExempt(p)
     }
 
     return (
@@ -32,11 +40,12 @@ export function InstallmentList({ installments, hide, onEdit, onPay }) {
                                 <td>{p.number}</td>
                                 <td>{toReal(p.value)}</td>
                                 <td>{toDateFormat(p.date, 'dd/MM/yyyy')}</td>
-                                <td>{p.paidValue ? toReal(p.paidValue) : '-'}</td>
-                                <td>{p.paidDate ? toDateFormat(p.paidDate, 'dd/MM/yyyy') : '-'}</td>
+                                <td>{p.exempt ? 'ISENTO' : p.paidValue ? toReal(p.paidValue) : '-'}</td>
+                                <td>{p.exempt ? 'ISENTO' : p.paidDate ? toDateFormat(p.paidDate, 'dd/MM/yyyy') : '-'}</td>
                                 <td>
                                     <TableActionEditButton onClick={() => onEdit(p)}>editar</TableActionEditButton>
                                     {!p.paidDate && <TableActionPayButton onClick={() => pay(p)}>pagar</TableActionPayButton>}
+                                    {!p.paidDate && <TableActionExemptButton onClick={() => exempt(p)}>isentar</TableActionExemptButton>}
                                 </td>
                             </tr>
                         )}

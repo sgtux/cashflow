@@ -20,5 +20,9 @@ export const TableActionPayButton = styled(TableActionButton)`
 `
 
 export const TableActionEditButton = styled(TableActionButton)`
-background-color: #3498db;
+    background-color: #3498db;
+`
+
+export const TableActionExemptButton = styled(TableActionButton)`
+    background-color: #aaa;
 `

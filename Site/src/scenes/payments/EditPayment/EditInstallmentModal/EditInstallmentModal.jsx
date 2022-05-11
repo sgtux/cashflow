@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Dialog, DialogTitle, DialogContent, Zoom } from '@material-ui/core'
+import { Button, Dialog, DialogTitle, DialogContent, Zoom, Checkbox, FormControlLabel } from '@material-ui/core'
 import ptBr from 'date-fns/locale/pt-BR'
 import DatePicker from 'react-datepicker'
 
@@ -11,21 +11,23 @@ export function EditInstallmentModal({ installment, onCancel, onSave }) {
 
     const [paidValue, setPaidValue] = useState('')
     const [paidDate, setPaidDate] = useState('')
-
+    const [exempt, setExempt] = useState(false)
 
     useEffect(() => {
         if (installment.paidDate)
             setPaidDate(new Date(installment.paidDate))
         if (installment.paidValue)
             setPaidValue(toReal(installment.paidValue))
+        setExempt(installment.exempt)
     }, [installment])
 
     function save() {
         onSave({
             ...installment,
             number: installment.number,
-            paidValue: fromReal(paidValue) > 0 ? fromReal(paidValue) : undefined,
-            paidDate: paidDate || undefined
+            paidValue: exempt || fromReal(paidValue) <= 0 ? undefined : fromReal(paidValue),
+            paidDate: exempt || !paidDate ? undefined : paidDate,
+            exempt
         })
     }
 
@@ -42,13 +44,25 @@ export function EditInstallmentModal({ installment, onCancel, onSave }) {
                 <div style={{ minWidth: 360, minHeight: 340 }}>
                     N°: <span>{installment.number}</span><br />
                     Vencimento: <span>{toDateFormat(installment.date)}</span><br />
-                    Valor Pago: <InputMoney
-                        onChangeText={e => setPaidValue(e)}
-                        kind="money"
-                        value={paidValue} /><br />
+                    <div hidden={exempt}>
+                        Valor Pago: <InputMoney
+                            onChangeText={e => setPaidValue(e)}
+                            kind="money"
+                            value={paidValue} /><br />
+                        <div style={{ marginTop: 10 }}>
+                            Pago em: <DatePicker onChange={e => setPaidDate(e)}
+                                dateFormat="dd/MM/yyyy" locale={ptBr} selected={paidDate} /><br />
+
+                        </div>
+                    </div>
                     <div style={{ marginTop: 10 }}>
-                        Pago em: <DatePicker onChange={e => setPaidDate(e)}
-                            dateFormat="dd/MM/yyyy" locale={ptBr} selected={paidDate} /><br />
+                        <FormControlLabel label="Isentar"
+                            control={<Checkbox
+                                checked={exempt}
+                                value={exempt}
+                                onChange={(e, c) => setExempt(c)}
+                                color="primary"
+                            />} />
                     </div>
                     <div style={{ margin: '10px', textAlign: 'end', marginTop: 200 }}>
                         <Button onClick={() => onCancel()} variant="contained" autoFocus>cancelar</Button>
@@ -56,7 +70,7 @@ export function EditInstallmentModal({ installment, onCancel, onSave }) {
                             style={{ marginLeft: 10 }}
                             onClick={() => save()}
                             color="primary"
-                            disabled={(paidDate && !fromReal(paidValue)) || (!paidDate && fromReal(paidValue))}
+                            disabled={(!!paidDate && !fromReal(paidValue)) || (!paidDate && fromReal(paidValue) > 0)}
                             variant="contained" autoFocus>ok</Button>
                     </div>
                 </div>

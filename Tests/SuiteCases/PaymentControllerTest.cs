@@ -23,7 +23,8 @@ namespace Cashflow.Tests
             TypeId = PaymentTypeEnum.Expense,
             Installments = new List<Installment>()
                     {
-                      new Installment() { Number = 1, Id = 1, Value = 1500.6M, Date = new DateTime(2020, 1, 1) }
+                      new Installment() { Number = 1, Id = 1, Value = 1500.6M, PaidValue = 1500.6M, Date = new DateTime(2020, 1, 1) },
+                      new Installment() { Number = 2, Id = 1, Value = 1500.6M, Exempt = true, Date = new DateTime(2020, 1, 1) }
                     }
         };
 
@@ -59,6 +60,30 @@ namespace Cashflow.Tests
             p.CreditCardId = 99;
             var result = await Post("/api/Payment", p, p.UserId);
             TestErrors(p, result, "Cartão de Crédito não encontrado(a).");
+        }
+
+        [TestMethod]
+        public async Task AddInstallmentExemptWithPaidValue()
+        {
+            var p = DefaultPayment;
+            p.Installments = new List<Installment>()
+                {
+                    new Installment() { Number = 1, Id = 1, Exempt = true, PaidValue = 1500.6M, PaidDate = DateTime.Now, Value = 1500.6M, Date = new DateTime(2020, 1, 1) }
+                };
+            var result = await Post("/api/Payment", p, p.UserId);
+            TestErrors(p, result, "Parcela isenta com valor pago informado.");
+        }
+
+        [TestMethod]
+        public async Task AddNoExemptInstallmentWithNoPaidValue()
+        {
+            var p = DefaultPayment;
+            p.Installments = new List<Installment>()
+                {
+                    new Installment() { Number = 1, Id = 1, Value = 1500.6M, PaidValue = 0, Date = new DateTime(2020, 1, 1) }
+                };
+            var result = await Post("/api/Payment", p, p.UserId);
+            TestErrors(p, result, "Parcela com valor pago inválido.");
         }
 
         [TestMethod]

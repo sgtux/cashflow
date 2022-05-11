@@ -10,7 +10,8 @@ SELECT
   i."PaidValue",
   i."Number",
   i."Date",
-  i."PaidDate"
+  i."PaidDate",
+  i."Exempt"
 FROM
   "Payment" p
   JOIN "Installment" i ON p."Id" = i."PaymentId"

@@ -17,5 +17,7 @@ namespace Cashflow.Api.Infra.Entity
         public decimal? PaidValue { get; set; }
 
         public DateTime? PaidDate { get; set; }
+
+        public bool Exempt { get; set; }
     }
 }

@@ -5,7 +5,8 @@ INSERT INTO
     "Number",
     "Date",
     "PaidDate",
-    "PaidValue"
+    "PaidValue",
+    "Exempt"
   )
 VALUES
   (
@@ -14,5 +15,6 @@ VALUES
     @Number,
     @Date,
     @PaidDate,
-    @PaidValue
+    @PaidValue,
+    @Exempt
   )

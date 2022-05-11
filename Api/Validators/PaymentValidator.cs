@@ -33,6 +33,12 @@ namespace Cashflow.Api.Validators
                 if (list.Any(p => p.Value <= 0))
                     context.AddFailure(ValidatorMessages.Payment.InstallmentWithInvalidValue);
 
+                if (list.Any(p => p.PaidValue <= 0 && !p.Exempt))
+                    context.AddFailure(ValidatorMessages.Payment.InstallmentWithInvalidPaidValue);
+
+                if (list.Any(p => p.PaidValue.HasValue && p.Exempt))
+                    context.AddFailure(ValidatorMessages.Payment.ExemptInstallmentWithValue);
+
                 if (list.Any(p => p.Date == default(DateTime)))
                     context.AddFailure(ValidatorMessages.Payment.InstallmentWithInvalidDate);
 

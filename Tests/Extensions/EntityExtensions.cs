@@ -14,7 +14,8 @@ namespace Cashflow.Tests.Extensions
                 Value = installment.Value,
                 Date = installment.Date,
                 PaidDate = installment.PaidDate,
-                PaidValue = installment.PaidValue
+                PaidValue = installment.PaidValue,
+                Exempt = installment.Exempt
             };
         }
     }

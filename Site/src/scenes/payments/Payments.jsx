@@ -89,12 +89,9 @@ export function Payments() {
                     }
                   />
                   <ListItemText
-                    style={{ width: '20px' }}
-                    secondary={`${p.firstPaymentDate} - ${p.lastPaymentDate}`}
-                  />
-                  <ListItemText
                     style={{ width: '40px' }}
-                    secondary={toReal(p.total)}
+                    primary={<span style={{color: '#666'}}>{`${p.firstPaymentDate} - ${p.lastPaymentDate}`}</span>}
+                    secondary={`${toReal(p.installmentValue)} - ${toReal(p.total)}`}
                   />
                   <ListItemText
                     style={{ width: '40px' }}

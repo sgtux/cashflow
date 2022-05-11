@@ -38,6 +38,8 @@ namespace Cashflow.Api.Infra.Entity
 
         public decimal TotalPaid => Installments?.Sum(p => p.PaidValue) ?? 0;
 
+        public decimal InstallmentValue => Installments?.FirstOrDefault(p => p.Date.SameMonthYear(DateTime.Now))?.Value ?? Installments?.FirstOrDefault()?.Value ?? 0;
+
         public string FirstPaymentDate => Installments?.OrderBy(p => p.Number).FirstOrDefault()?.Date.ToString("dd/MM/yyyy");
 
         public string LastPaymentDate => Installments?.OrderByDescending(p => p.Number).FirstOrDefault()?.Date.ToString("dd/MM/yyyy");

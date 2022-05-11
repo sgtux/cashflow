@@ -13,7 +13,8 @@ namespace Cashflow.Tests.Mocks.Database.Tables
                 .WithColumn("PaidValue").AsDecimal(10, 2).Nullable()
                 .WithColumn("Number").AsInt32().NotNullable()
                 .WithColumn("Date").AsDateTime().NotNullable()
-                .WithColumn("PaidDate").AsDateTime().Nullable();
+                .WithColumn("PaidDate").AsDateTime().Nullable()
+                .WithColumn("Exempt").AsBoolean();
 
             Execute.Sql("ALTER TABLE Installment ADD COLUMN PaymentId INTEGER REFERENCES Payment(Id)");
         }

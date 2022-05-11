@@ -159,6 +159,7 @@ export function EditPayment() {
       if (e.number === installment.number) {
         e.paidValue = installment.paidValue
         e.paidDate = installment.paidDate
+        e.exempt = installment.exempt
       }
       temp.push(e)
     })
@@ -214,6 +215,7 @@ export function EditPayment() {
           hide={!installments.length}
           onEdit={p => setEditInstallment(p)}
           onPay={p => installmentChanged(p)}
+          onExempt={p => installmentChanged(p)}
         />
       </div>
 
