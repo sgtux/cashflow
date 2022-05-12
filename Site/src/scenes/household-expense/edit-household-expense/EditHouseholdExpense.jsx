@@ -16,7 +16,7 @@ import { MainContainer } from '../../../components/main'
 import { InputMoney, DatePickerContainer, DatePickerInput } from '../../../components/inputs'
 import { toReal, fromReal } from '../../../helpers'
 
-import { householdExpenseService, vehicleService } from '../../../services'
+import { householdExpenseService, vehicleService, creditCardService } from '../../../services'
 
 export function EditHouseholdExpense() {
 
@@ -30,6 +30,8 @@ export function EditHouseholdExpense() {
     const [vehicles, setVehicles] = useState([])
     const [types, setTypes] = useState([])
     const [type, setType] = useState('')
+    const [cards, setCards] = useState([])
+    const [card, setCard] = useState('')
 
     const params = useParams()
     const navigate = useNavigate()
@@ -39,6 +41,7 @@ export function EditHouseholdExpense() {
         try {
             const taskVehicle = vehicleService.getAll()
             const taskTypes = householdExpenseService.getTypes()
+            const taskCards = creditCardService.get()
             let expense = null
             if (Number(params.id) > 0) {
                 expense = await householdExpenseService.get(params.id)
@@ -52,13 +55,17 @@ export function EditHouseholdExpense() {
                 setDate(new Date(expense.date))
                 setValue(toReal(expense.value))
             }
-            const list = await taskVehicle
+            const listVehicles = await taskVehicle
             const listTypes = await taskTypes
-            setVehicles(list)
+            const listCards = await taskCards
+            setVehicles(listVehicles)
             setTypes(listTypes)
+            setCards(listCards)
+            console.log(listCards[0])
             if (expense) {
                 setVehicleId(expense.vehicleId)
                 setType(expense.type)
+                setCard(expense.creditCardId)
             }
 
             setLoading(false)
@@ -80,7 +87,8 @@ export function EditHouseholdExpense() {
             date,
             value: fromReal(value),
             vehicleId: vehicleId ? Number(vehicleId) : 0,
-            type: Number(type)
+            type: Number(type),
+            creditCardId: card || undefined
         })
             .then(() => navigate('/household-expenses'))
             .catch(err => console.log(err))
@@ -119,7 +127,7 @@ export function EditHouseholdExpense() {
                 </FormControl>
                 <br />
             </div>
-            {!!vehicles.length &&
+            {!!vehicles.length && type === 6 &&
                 <div>
                     <FormControl>
                         <InputLabel htmlFor="select-tipo">Veículo</InputLabel>
@@ -127,6 +135,19 @@ export function EditHouseholdExpense() {
                             onChange={e => setVehicleId(e.target.value)}>
                             <MenuItem value={0}><span style={{ color: 'gray' }}>LIMPAR</span></MenuItem>
                             {vehicles.map(p => <MenuItem key={p.id} value={p.id}>{p.description}</MenuItem>)}
+                        </Select>
+                    </FormControl>
+                    <br />
+                </div>
+            }
+            {!!cards.length &&
+                <div>
+                    <FormControl>
+                        <InputLabel htmlFor="select-tipo">Cartão de Crédito</InputLabel>
+                        <Select style={{ width: '200px' }} value={card || ''}
+                            onChange={e => setCard(e.target.value)}>
+                            <MenuItem value={0}><span style={{ color: 'gray' }}>LIMPAR</span></MenuItem>
+                            {cards.map(p => <MenuItem key={p.id} value={p.id}>{p.name}</MenuItem>)}
                         </Select>
                     </FormControl>
                     <br />

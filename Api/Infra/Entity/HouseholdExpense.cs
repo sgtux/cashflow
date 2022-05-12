@@ -17,6 +17,16 @@ namespace Cashflow.Api.Infra.Entity
 
         public int? VehicleId { get; set; }
 
+        public int? CreditCardId { get; set; }
+
+        public CreditCard CreditCard { get; set; }
+
+        public string CreditCardText => CreditCard?.Name;
+
+        public bool CurrentInvoice => CreditCard != null && Date.Day <= CreditCard.InvoiceClosingDay;
+
+        public bool NextInvoice => CreditCard != null && Date.Day > CreditCard.InvoiceClosingDay;
+
         public HouseholdExpenseType Type { get; set; }
 
         public string TypeDescription => ((HouseholdExpenseType)Type).GetDescription();

@@ -59,7 +59,7 @@ namespace Cashflow.Api.Services
             await FillBenefits(list, dates, types, baseFilter);
             await FillPayments(list, dates, types, cards, baseFilter);
             await FillVehicleExpenses(list, dates, types, baseFilter);
-            await FillHouseholdExpense(list, dates, types, baseFilter);
+            await FillHouseholdExpense(list, cards, dates, types, baseFilter);
             await FillRecurringExpenses(list, dates, types, cards, baseFilter);
             await FillRemainingBalance(list, dates, types, cards, baseFilter);
 
@@ -200,7 +200,7 @@ namespace Cashflow.Api.Services
             }
         }
 
-        private async Task FillHouseholdExpense(List<PaymentProjectionModel> list, List<DateTime> dates, IEnumerable<PaymentType> types, BaseFilter filter)
+        private async Task FillHouseholdExpense(List<PaymentProjectionModel> list, IEnumerable<CreditCard> cards, List<DateTime> dates, IEnumerable<PaymentType> types, BaseFilter filter)
         {
             var fromDate = CurrentDate.AddMonths(-3).FixFirstDayInMonth();
             var allHouseholdExpenses = await _householdExpenseRepository.GetSome(new BaseFilter() { UserId = filter.UserId, StartDate = fromDate });
@@ -212,16 +212,46 @@ namespace Cashflow.Api.Services
             if (average > 0)
                 average = average / 3;
 
+            var lastMonthHouseholdExpenses = allHouseholdExpenses.Where(p => p.Date.SameMonthYear(CurrentDate.AddMonths(-1)) && p.NextInvoice);
+            var invoiceHouseholdExpenses = allHouseholdExpenses.Where(p => p.Date.SameMonthYear(CurrentDate));
+
+            foreach (var card in cards)
+            {
+                var currentInvoiceSum = lastMonthHouseholdExpenses.Where(p => p.CreditCardId == card.Id).Sum(p => p.Value);
+                currentInvoiceSum += invoiceHouseholdExpenses.Where(p => p.CurrentInvoice && p.CreditCardId == card.Id).Sum(p => p.Value);
+                if (currentInvoiceSum > 0)
+                    list.Add(new PaymentProjectionModel()
+                    {
+                        Description = $"Despesas Domésticas",
+                        MonthYear = CurrentDate.ToString("MM/yyyy"),
+                        Type = types.First(p => p.Id == (int)PaymentTypeEnum.Expense),
+                        Value = currentInvoiceSum,
+                        CreditCard = card
+                    });
+
+                var nextInvoiceSum = invoiceHouseholdExpenses.Where(p => p.NextInvoice && p.CreditCardId == card.Id).Sum(p => p.Value);
+                if (nextInvoiceSum > 0)
+                    list.Add(new PaymentProjectionModel()
+                    {
+                        Description = $"Despesas Domésticas",
+                        MonthYear = CurrentDate.AddMonths(1).ToString("MM/yyyy"),
+                        Type = types.First(p => p.Id == (int)PaymentTypeEnum.Expense),
+                        Value = nextInvoiceSum,
+                        CreditCard = card
+                    });
+            }
+
             foreach (var date in dates)
             {
-                var householdExpense = allHouseholdExpenses.Where(p => p.Date.Month == date.Month && p.Date.Year == date.Year);
-                if (householdExpense.Any())
+                var householdExpenses = allHouseholdExpenses.Where(p => p.Date.SameMonthYear(date));
+
+                if (householdExpenses.Any(p => !p.CreditCardId.HasValue))
                     list.Add(new PaymentProjectionModel()
                     {
                         Description = $"Despesas Domésticas",
                         MonthYear = date.ToString("MM/yyyy"),
                         Type = types.First(p => p.Id == (int)PaymentTypeEnum.Expense),
-                        Value = householdExpense.Sum(p => p.Value)
+                        Value = householdExpenses.Where(p => !p.CreditCardId.HasValue).Sum(p => p.Value)
                     });
                 else if (average > 0)
                     list.Add(new PaymentProjectionModel()

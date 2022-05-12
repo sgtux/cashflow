@@ -5,7 +5,8 @@ INSERT INTO
     "UserId",
     "Value",
     "VehicleId",
-    "Type"
+    "Type",
+    "CreditCardId"
   )
 VALUES
   (
@@ -14,5 +15,6 @@ VALUES
     @UserId,
     @Value,
     @VehicleId,
-    @Type
+    @Type,
+    @CreditCardId
   )

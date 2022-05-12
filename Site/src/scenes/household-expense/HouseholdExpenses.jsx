@@ -101,6 +101,10 @@ export function HouseholdExpenses() {
                                         secondary={`(${p.typeDescription})`}
                                     />
                                     <ListItemText
+                                        style={{ width: '100px' }}
+                                        secondary={p.creditCardText ? `(${p.creditCardText})` : ''}
+                                    />
+                                    <ListItemText
                                         style={{ width: '100px', textAlign: 'center' }}
                                         secondary={toReal(p.value)}
                                     />

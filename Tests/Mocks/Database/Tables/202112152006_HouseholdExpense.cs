@@ -16,6 +16,7 @@ namespace Cashflow.Tests.Mocks.Database.Tables
 
             Execute.Sql("ALTER TABLE HouseholdExpense ADD COLUMN UserId INTEGER REFERENCES User(Id)");
             Execute.Sql("ALTER TABLE HouseholdExpense ADD COLUMN VehicleId INTEGER REFERENCES Vehicle(Id)");
+            Execute.Sql("ALTER TABLE HouseholdExpense ADD COLUMN CreditCardId INTEGER REFERENCES CreditCard(Id)");
         }
 
         public override void Down()
