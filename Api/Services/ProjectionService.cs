@@ -140,7 +140,7 @@ namespace Cashflow.Api.Services
 
             foreach (var date in dates)
             {
-                Func<Installment, bool> condition = i => (i.PaidDate == null && i.Date.SameMonthYear(date)) || (i.PaidDate != null && i.PaidDate.Value.SameMonthYear(date));
+                Func<Installment, bool> condition = i => (i.PaidDate == null && !i.Exempt && i.Date.SameMonthYear(date)) || (i.PaidDate != null && i.PaidDate.Value.SameMonthYear(date));
                 foreach (var payMonth in payments.Where(p => p.Installments?.Any(condition) ?? false))
                 {
                     var installments = payMonth.Installments.Where(condition);
