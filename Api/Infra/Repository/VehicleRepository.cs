@@ -11,7 +11,13 @@ namespace Cashflow.Api.Infra.Repository
 {
     public class VehicleRepository : BaseRepository<Vehicle>, IVehicleRepository
     {
-        public VehicleRepository(IDatabaseContext conn, LogService logService) : base(conn, logService) { }
+        private ICreditCardRepository _creditCardRepository;
+        public VehicleRepository(IDatabaseContext conn,
+            LogService logService,
+            ICreditCardRepository creditCardRepository) : base(conn, logService)
+        {
+            _creditCardRepository = creditCardRepository;
+        }
 
         public Task Add(Vehicle vehicle) => Execute(VehicleResources.Insert, vehicle);
 
@@ -29,6 +35,14 @@ namespace Cashflow.Api.Infra.Repository
                     vehicle.FuelExpenses.Add(y);
                 return x;
             }, new { Id = id });
+
+            if (vehicle != null && vehicle.FuelExpenses.Any())
+            {
+                var cards = await _creditCardRepository.GetSome(new BaseFilter() { UserId = vehicle.UserId });
+                foreach (var item in vehicle.FuelExpenses.Where(p => p.CreditCardId.HasValue))
+                    item.CreditCard = cards.FirstOrDefault(p => p.Id == item.CreditCardId);
+            }
+
             return vehicle;
         }
 
@@ -48,6 +62,16 @@ namespace Cashflow.Api.Infra.Repository
                     vehicle.FuelExpenses.Add(y);
                 return x;
             }, filter);
+
+            if (list.Any())
+            {
+                var cards = await _creditCardRepository.GetSome(new BaseFilter() { UserId = list.First().UserId });
+                foreach (var vehicle in list)
+                    if (vehicle.FuelExpenses.Any())
+                        foreach (var item in vehicle.FuelExpenses.Where(p => p.CreditCardId.HasValue))
+                            item.CreditCard = cards.FirstOrDefault(p => p.Id == item.CreditCardId);
+            }
+
             return list;
         }
 

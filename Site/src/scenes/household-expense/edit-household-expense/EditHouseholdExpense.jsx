@@ -61,7 +61,6 @@ export function EditHouseholdExpense() {
             setVehicles(listVehicles)
             setTypes(listTypes)
             setCards(listCards)
-            console.log(listCards[0])
             if (expense) {
                 setVehicleId(expense.vehicleId)
                 setType(expense.type)

@@ -21,11 +21,13 @@ namespace Cashflow.Api.Infra.Entity
 
         public CreditCard CreditCard { get; set; }
 
+        public bool HasCreditCard => CreditCardId.HasValue;
+
         public string CreditCardText => CreditCard?.Name;
 
-        public bool CurrentInvoice => CreditCard != null && Date.Day <= CreditCard.InvoiceClosingDay;
+        public bool CurrentInvoice => HasCreditCard && Date.Day <= CreditCard.InvoiceClosingDay;
 
-        public bool NextInvoice => CreditCard != null && Date.Day > CreditCard.InvoiceClosingDay;
+        public bool NextInvoice => HasCreditCard && Date.Day > CreditCard.InvoiceClosingDay;
 
         public HouseholdExpenseType Type { get; set; }
 

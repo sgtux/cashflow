@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Cashflow.Api.Contracts;
 using Cashflow.Api.Infra.Entity;
+using Cashflow.Api.Infra.Filters;
 using FluentValidation;
 
 namespace Cashflow.Api.Validators
@@ -12,13 +13,19 @@ namespace Cashflow.Api.Validators
 
         private IFuelExpensesRepository _fuelExpensesRepository;
 
+        private ICreditCardRepository _creditCardRepository;
+
         private int _userId;
 
-        public FuelExpensesValidator(IVehicleRepository vehicleRepository, IFuelExpensesRepository fuelExpensesRepository, int userId)
+        public FuelExpensesValidator(IVehicleRepository vehicleRepository,
+            IFuelExpensesRepository fuelExpensesRepository,
+            ICreditCardRepository creditCardRepository,
+            int userId)
         {
             _userId = userId;
             _vehicleRepository = vehicleRepository;
             _fuelExpensesRepository = fuelExpensesRepository;
+            _creditCardRepository = creditCardRepository;
             RuleFor(c => c.Miliage).GreaterThan(0).WithMessage(ValidatorMessages.MinValue("Quilometragem", 0));
             RuleFor(c => c.Miliage).LessThan(1000000000).WithMessage(ValidatorMessages.MaxValue("Quilometragem", 999999999));
             RuleFor(c => c.PricePerLiter).GreaterThan(0).WithMessage(ValidatorMessages.MinValue("Preço por Litro", 0));
@@ -28,6 +35,7 @@ namespace Cashflow.Api.Validators
             RuleFor(c => c.Date).NotEqual(default(DateTime)).WithMessage(ValidatorMessages.FieldIsRequired("Data"));
             RuleFor(c => c).Must(VehicleExists).WithMessage(ValidatorMessages.NotFound("Veículo"));
             RuleFor(c => c).Must(FuelExpensesExists).When(c => c.Id > 0).WithMessage(ValidatorMessages.NotFound("Despesa de combustível"));
+            RuleFor(c => c).Must(CreditCardExists).WithMessage(ValidatorMessages.NotFound("Cartão de Crédito"));
             RuleFor(c => c).Must(DataMiliageIsMatch).WithMessage("Data e Quilometragem não batem devido à outro abastecimento");
         }
 
@@ -38,6 +46,18 @@ namespace Cashflow.Api.Validators
         }
 
         private bool FuelExpensesExists(FuelExpenses fuelExpenses) => _fuelExpensesRepository.GetById(fuelExpenses.Id).Result != null;
+
+        private bool CreditCardExists(FuelExpenses fuelExpenses)
+        {
+            if (fuelExpenses.CreditCardId > 0)
+            {
+                var cards = _creditCardRepository.GetSome(new BaseFilter() { UserId = _userId }).Result;
+                return cards.Any(p => p.Id == fuelExpenses.CreditCardId);
+            }
+            else
+                fuelExpenses.CreditCardId = null;
+            return true;
+        }
 
         private bool DataMiliageIsMatch(FuelExpenses fuelExpense)
         {

@@ -11,11 +11,24 @@ namespace Cashflow.Api.Infra.Repository
 {
     public class FuelExpensesRepository : BaseRepository<FuelExpenses>, IFuelExpensesRepository
     {
-        public FuelExpensesRepository(IDatabaseContext conn, LogService logService) : base(conn, logService) { }
+        private ICreditCardRepository _creditCardRepository;
+
+        public FuelExpensesRepository(IDatabaseContext conn,
+            LogService logService,
+            ICreditCardRepository creditCardRepository) : base(conn, logService)
+        {
+            _creditCardRepository = creditCardRepository;
+        }
 
         public Task Add(FuelExpenses t) => Execute(FuelExpensesResources.Insert, t);
 
-        public Task<FuelExpenses> GetById(long id) => FirstOrDefault(FuelExpensesResources.ById, new { Id = id });
+        public async Task<FuelExpenses> GetById(long id)
+        {
+            var expense = await FirstOrDefault(FuelExpensesResources.ById, new { Id = id });
+            if (expense != null && expense.CreditCardId.HasValue)
+                expense.CreditCard = await _creditCardRepository.GetById(expense.CreditCardId.Value);
+            return expense;
+        }
 
         public Task Update(FuelExpenses t) => Execute(FuelExpensesResources.Update, t);
 

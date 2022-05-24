@@ -4,6 +4,8 @@ namespace Cashflow.Api.Infra.Sql.CreditCard
     {
         public static ResourceBuilder Delete => new ResourceBuilder("CreditCard.Delete.sql");
 
+        public static ResourceBuilder ById => new ResourceBuilder("CreditCard.GetById.sql");
+
         public static ResourceBuilder ByUser => new ResourceBuilder("CreditCard.GetByUser.sql");
 
         public static ResourceBuilder Insert => new ResourceBuilder("CreditCard.Insert.sql");

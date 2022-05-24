@@ -12,16 +12,21 @@ namespace Cashflow.Api.Services
 
         private IFuelExpensesRepository _fuelExpensesRepository;
 
-        public FuelExpensesService(IVehicleRepository vehicleRepository, IFuelExpensesRepository fuelExpensesRepository)
+        private ICreditCardRepository _creditCardRepository;
+
+        public FuelExpensesService(IVehicleRepository vehicleRepository,
+            IFuelExpensesRepository fuelExpensesRepository,
+            ICreditCardRepository creditCardRepository)
         {
             _vehicleRepository = vehicleRepository;
             _fuelExpensesRepository = fuelExpensesRepository;
+            _creditCardRepository = creditCardRepository;
         }
 
         public async Task<ResultModel> Add(FuelExpenses fuelExpenses, int userId)
         {
             var result = new ResultModel();
-            var validatorResult = new FuelExpensesValidator(_vehicleRepository, _fuelExpensesRepository, userId).Validate(fuelExpenses);
+            var validatorResult = new FuelExpensesValidator(_vehicleRepository, _fuelExpensesRepository, _creditCardRepository, userId).Validate(fuelExpenses);
 
             if (validatorResult.IsValid)
                 await _fuelExpensesRepository.Add(fuelExpenses);
@@ -34,7 +39,7 @@ namespace Cashflow.Api.Services
         public async Task<ResultModel> Update(FuelExpenses fuelExpenses, int userId)
         {
             var result = new ResultModel();
-            var validatorResult = new FuelExpensesValidator(_vehicleRepository, _fuelExpensesRepository, userId).Validate(fuelExpenses);
+            var validatorResult = new FuelExpensesValidator(_vehicleRepository, _fuelExpensesRepository, _creditCardRepository, userId).Validate(fuelExpenses);
 
             if (validatorResult.IsValid)
                 await _fuelExpensesRepository.Update(fuelExpenses);
