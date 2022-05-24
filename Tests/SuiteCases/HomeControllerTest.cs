@@ -20,13 +20,25 @@ namespace Cashflow.Tests
 
             Assert.AreEqual(11, payments.Count);
 
-            // Salary: 2500
-            // Remaining Balance: 305 (2500(Salary) - 2000(Installment) - 100 (FuelExpense) - 95 (RecurringExpense))
-            // Installments 4/6: 2000
-            // Household Expenses: 300.5
-            // FuelExpenses: 200
-            // Recurring Expense: 115/130
-            Assert.AreEqual((decimal)(2500 + 305 - 1500 - 300.5 - 200 - 115), payments[now.ToString("MM/yyyy")].AccumulatedValue);
+            // Salary
+            decimal result = 2500;
+
+            // Remaining Balance: 
+            result += 305; // (2500(Salary) - 2000(Installment) - 100 (FuelExpense) - 95 (RecurringExpense))
+
+            // Installments 4/6
+            result -= 1500;
+
+            // Household Expenses
+            result -= 300.5M;
+
+            // FuelExpenses
+            result -= 200;
+
+            // Recurring Expense
+            result -= 115; // 115/130
+
+            Assert.AreEqual(result, payments[now.ToString("MM/yyyy")].AccumulatedValue);
         }
     }
 }

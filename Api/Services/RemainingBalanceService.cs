@@ -52,8 +52,8 @@ namespace Cashflow.Api.Services
             date = date.AddMonths(-1);
             var filter = new BaseFilter()
             {
-                StartDate = new DateTime(date.Year, date.Month, 1).FixStartTimeFilter(),
-                EndDate = new DateTime(date.Year, date.Month, DateTime.DaysInMonth(date.Year, date.Month)).FixEndTimeFilter(),
+                StartDate = date.FixFirstDayInMonth().FixStartTimeFilter(),
+                EndDate = date.FixLastDayInMonth().FixEndTimeFilter(),
                 UserId = userId
             };
 
@@ -64,11 +64,9 @@ namespace Cashflow.Api.Services
             foreach (var item in (await _earningRepository.GetSome(filter)))
                 total += item.Value;
 
-            foreach (var item in (await _vehicleRepository.GetSome(filter)))
-                total -= item.FuelExpenses.Sum(p => p.ValueSupplied);
+            total -= await CalculateFuelExpenses(filter);
 
-            foreach (var item in (await _householdExpenseRepository.GetSome(filter)))
-                total -= item.Value;
+            total -= await CalculateHouseholdExpenses(filter);
 
             foreach (var item in (await _paymentRepository.GetSome(filter)))
             {
@@ -118,6 +116,45 @@ namespace Cashflow.Api.Services
             remainingBalance.Value = model.Value;
             await _remainingBalanceRepository.Update(remainingBalance);
             return result;
+        }
+
+        private async Task<decimal> CalculateFuelExpenses(BaseFilter filter)
+        {
+            decimal total = 0;
+            var vehicles = await _vehicleRepository.GetSome(new BaseFilter()
+            {
+                UserId = filter.UserId,
+                StartDate = filter.StartDate.Value.AddMonths(-1),
+                EndDate = filter.EndDate
+            });
+
+            foreach (var item in vehicles)
+                total += item.FuelExpenses
+                    .Where(p => (p.NextInvoice && p.Date.SameMonthYear(filter.StartDate.Value.AddMonths(-1)))
+                        || ((!p.HasCreditCard || p.CurrentInvoice)
+                            && (p.Date.SameMonthYear(filter.StartDate.Value))))
+                    .Sum(p => p.ValueSupplied);
+
+            return total;
+        }
+
+        private async Task<decimal> CalculateHouseholdExpenses(BaseFilter filter)
+        {
+            decimal total = 0;
+            var expenses = await _householdExpenseRepository.GetSome(new BaseFilter()
+            {
+                UserId = filter.UserId,
+                StartDate = filter.StartDate?.AddMonths(-1),
+                EndDate = filter.EndDate
+            });
+
+            expenses = expenses.Where(p => (p.NextInvoice && p.Date.SameMonthYear(filter.StartDate.Value.AddMonths(-1)))
+               || ((!p.HasCreditCard || p.CurrentInvoice) && p.Date.SameMonthYear(filter.StartDate.Value)));
+
+            foreach (var item in expenses)
+                total += item.Value;
+
+            return total;
         }
     }
 }

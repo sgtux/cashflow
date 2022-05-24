@@ -30,6 +30,7 @@
     <EmbeddedResource Include="Infra/Sql/Earning/Update.sql" />
 
     <EmbeddedResource Include="Infra/Sql/CreditCard/Delete.sql" />
+    <EmbeddedResource Include="Infra/Sql/CreditCard/GetById.sql" />
     <EmbeddedResource Include="Infra/Sql/CreditCard/GetByUser.sql" />
     <EmbeddedResource Include="Infra/Sql/CreditCard/Insert.sql" />
     <EmbeddedResource Include="Infra/Sql/CreditCard/Update.sql" />

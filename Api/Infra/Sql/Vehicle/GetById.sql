@@ -7,7 +7,8 @@ SELECT
     f."ValueSupplied",
     f."PricePerLiter",
     f."VehicleId",
-    f."Date"
+    f."Date",
+    f."CreditCardId"
 FROM "Vehicle" v
 LEFT JOIN "FuelExpenses" f ON v."Id" = f."VehicleId"
 WHERE v."Id" = @Id
