@@ -1,5 +1,6 @@
 using System;
 using Cashflow.Api.Enums;
+using Cashflow.Api.Extensions;
 
 namespace Cashflow.Api.Infra.Entity
 {

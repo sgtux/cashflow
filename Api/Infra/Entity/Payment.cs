@@ -26,9 +26,9 @@ namespace Cashflow.Api.Infra.Entity
 
         public DateTime Date { get; set; }
 
-        public bool Done => Installments?.All(p => p.PaidDate.HasValue) ?? false;
+        public bool Done => Installments?.All(p => p.PaidDate.HasValue || p.Exempt) ?? false;
 
-        public bool DoneInThisMonth => HasInstallments && Done && (Installments?.Max(p => p.PaidDate.Value).SameMonthYear(DateTime.Now) ?? false);
+        public bool DoneInThisMonth => HasInstallments && Done && (Installments?.Where(p => p.PaidDate.HasValue).Max(p => p.PaidDate.Value).SameMonthYear(DateTime.Now) ?? false);
 
         public IList<Installment> Installments { get; set; }
 

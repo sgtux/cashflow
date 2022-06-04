@@ -1,5 +1,6 @@
 using System;
 using Cashflow.Api.Enums;
+using Cashflow.Api.Extensions;
 
 namespace Cashflow.Api.Infra.Entity
 {
@@ -38,6 +39,7 @@ namespace Cashflow.Api.Infra.Entity
         || Type == HouseholdExpenseType.Leisure
         || Type == HouseholdExpenseType.MarketRanch
         || Type == HouseholdExpenseType.Party
-        || Type == HouseholdExpenseType.Pets;
+        || Type == HouseholdExpenseType.Pets
+        || Type == HouseholdExpenseType.Uber;
     }
 }

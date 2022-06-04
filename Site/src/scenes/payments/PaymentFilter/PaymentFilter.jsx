@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import ptBr from 'date-fns/locale/pt-BR'
 import DatePicker from 'react-datepicker'
 
@@ -17,6 +17,13 @@ export function PaymentFilter({ filterChanged }) {
     const [done, setDone] = useState(false)
     const [startDate, setStartDate] = useState(null)
     const [endDate, setEndDate] = useState(null)
+    const [timerId, setTimerId] = useState(null)
+
+    useEffect(() => {
+        if (timerId)
+            clearTimeout(timerId)
+        setTimerId(setTimeout(() => filter(), 1000))
+    }, [description, inProgress, done, startDate, endDate])
 
     function reset() {
         setDescription('')

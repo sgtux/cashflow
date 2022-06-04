@@ -22,6 +22,10 @@ namespace Cashflow.Api.Enums
 
         Party = 10,
 
+        Uber = 11,
+
+        DelayInterest = 12,
+
         Others = 20
     }
 }

@@ -1,4 +1,6 @@
-namespace Cashflow.Api.Enums
+using Cashflow.Api.Enums;
+
+namespace Cashflow.Api.Extensions
 {
     public static class EnumExtensions
     {
@@ -34,13 +36,17 @@ namespace Cashflow.Api.Enums
                 case HouseholdExpenseType.Vehicle:
                     return "Veículo";
                 case HouseholdExpenseType.Pets:
-                    return "Animal";
+                    return "Pets";
                 case HouseholdExpenseType.Leisure:
                     return "Lazer";
                 case HouseholdExpenseType.HardDrink:
                     return "Bebida Alcólica";
                 case HouseholdExpenseType.Party:
                     return "Festa";
+                case HouseholdExpenseType.Uber:
+                    return "Uber";
+                case HouseholdExpenseType.DelayInterest:
+                    return "Juros de Atraso";
                 case HouseholdExpenseType.Others:
                     return "Outros";
                 default:

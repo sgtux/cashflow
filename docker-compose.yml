@@ -7,7 +7,7 @@ services:
             - DATABASE_CONNECTION_STRING=Host=172.30.30.10;Port=5432;Pooling=true;User Id=postgres;Password=Postgres123
             - COOKIE_EXPIRES_IN_MINUTES=120
             - SECRET_JWT_KEY=utohWai7Iefa2loo7aeYeCo3HeWahpoKi5
-        image: sgtux/cashflow
+        build: ./
         networks:
             lan:
                 ipv4_address: 172.30.30.30

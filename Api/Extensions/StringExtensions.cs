@@ -1,5 +1,3 @@
-using System;
-
 namespace Cashflow.Api.Extensions
 {
     public static class StringExtensions

@@ -19,7 +19,7 @@ WHERE
   p."UserId" = @UserId
   AND (
     @Description IS NULL
-    OR p."Description" LIKE @Description
+    OR LOWER(p."Description") LIKE LOWER(@Description)
   )
   AND (
     @StartDate IS NULL

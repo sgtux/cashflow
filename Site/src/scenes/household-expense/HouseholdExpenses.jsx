@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
-
 import {
     Paper,
     List,
@@ -30,6 +29,7 @@ export function HouseholdExpenses() {
     const [loading, setLoading] = useState(false)
     const [selectedMonth, setSelectedMonth] = useState('')
     const [selectedYear, setSelectedYear] = useState('')
+    const [totals, setTotals] = useState([])
     const [total, setTotal] = useState(0)
 
     useEffect(() => {
@@ -40,6 +40,19 @@ export function HouseholdExpenses() {
         setSelectedYear(year)
         refresh(month, year)
     }, [])
+
+    useEffect(() => {
+        if (householdExpenses.length) {
+            const keyValue = {}
+            householdExpenses.forEach(e => {
+                keyValue[e.typeDescription] = (keyValue[e.typeDescription] || 0) + e.value
+            })
+            const temp = []
+            for (const key in keyValue)
+                temp.push({ description: key, value: keyValue[key] })
+            setTotals(temp)
+        }
+    }, [householdExpenses])
 
     function refresh(month, year) {
         setLoading(true)
@@ -77,8 +90,13 @@ export function HouseholdExpenses() {
                 onClick={() => refresh(selectedMonth, selectedYear)}>
                 <RefreshIcon />
             </IconButton>
+            {
+                totals.map((e, i) => <div key={i} style={{ fontSize: 12 }}>
+                    <span>{e.description}: {toReal(e.value)}</span>
+                </div>)
+            }
             <div style={{ fontSize: 16, marginTop: 20 }}>
-                <span>Total: {toReal(total)}</span>
+                <span style={{ fontWeight: 'bold' }}>Total: {toReal(total)}</span>
             </div>
             {householdExpenses.length ?
                 <div>
@@ -94,11 +112,11 @@ export function HouseholdExpenses() {
                                 <ListItem key={p.id}>
                                     <ListItemText
                                         style={{ width: '100px' }}
-                                        secondary={ellipsisText(p.description, 30)}
+                                        secondary={p.typeDescription}
                                     />
                                     <ListItemText
                                         style={{ width: '100px' }}
-                                        secondary={`(${p.typeDescription})`}
+                                        secondary={ellipsisText(p.description, 30)}
                                     />
                                     <ListItemText
                                         style={{ width: '100px' }}
