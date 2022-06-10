@@ -4,11 +4,11 @@ namespace Cashflow.Api.Enums
     {
         Food = 1,
 
-        MarketRanch = 2,
+        Market = 2,
 
-        FastFood = 3,
+        Snack = 3,
 
-        Hygiene = 4,
+        Aesthetics = 4,
 
         Education = 5,
 
@@ -25,6 +25,8 @@ namespace Cashflow.Api.Enums
         Uber = 11,
 
         DelayInterest = 12,
+
+        Clothes = 13,
 
         Others = 20
     }

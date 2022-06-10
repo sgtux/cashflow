@@ -44,8 +44,8 @@ export function InstallmentList({ installments, hide, onEdit, onPay, onExempt })
                                 <td>{p.exempt ? 'ISENTO' : p.paidDate ? toDateFormat(p.paidDate, 'dd/MM/yyyy') : '-'}</td>
                                 <td>
                                     <TableActionEditButton onClick={() => onEdit(p)}>editar</TableActionEditButton>
-                                    {!p.paidDate && <TableActionPayButton onClick={() => pay(p)}>pagar</TableActionPayButton>}
-                                    {!p.paidDate && <TableActionExemptButton onClick={() => exempt(p)}>isentar</TableActionExemptButton>}
+                                    {!p.paidDate && !p.exempt && <TableActionPayButton onClick={() => pay(p)}>pagar</TableActionPayButton>}
+                                    {!p.paidDate && !p.exempt && <TableActionExemptButton onClick={() => exempt(p)}>isentar</TableActionExemptButton>}
                                 </td>
                             </tr>
                         )}

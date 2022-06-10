@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Cashflow.Api.Enums;
 
 namespace Cashflow.Api.Extensions
@@ -25,12 +27,12 @@ namespace Cashflow.Api.Extensions
             {
                 case HouseholdExpenseType.Food:
                     return "Comida";
-                case HouseholdExpenseType.MarketRanch:
-                    return "Rancho";
-                case HouseholdExpenseType.FastFood:
-                    return "Fast-Food";
-                case HouseholdExpenseType.Hygiene:
-                    return "Higiene";
+                case HouseholdExpenseType.Market:
+                    return "Mercado";
+                case HouseholdExpenseType.Snack:
+                    return "Lanche";
+                case HouseholdExpenseType.Aesthetics:
+                    return "Estética";
                 case HouseholdExpenseType.Education:
                     return "Educação";
                 case HouseholdExpenseType.Vehicle:
@@ -47,11 +49,23 @@ namespace Cashflow.Api.Extensions
                     return "Uber";
                 case HouseholdExpenseType.DelayInterest:
                     return "Juros de Atraso";
+                case HouseholdExpenseType.Clothes:
+                    return "Roupas";
                 case HouseholdExpenseType.Others:
                     return "Outros";
                 default:
                     return "Desconhecido";
             }
+        }
+
+        public static List<HouseholdExpenseType> FilterInactives(this IEnumerable<HouseholdExpenseType> list)
+        {
+            List<HouseholdExpenseType> inactives = new List<HouseholdExpenseType>()
+            {
+                HouseholdExpenseType.Food,
+                HouseholdExpenseType.HardDrink
+            };
+            return list.Where(p => !inactives.Contains(p)).ToList();
         }
 
         public static string GetDescription(this EarningType e)

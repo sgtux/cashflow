@@ -56,11 +56,12 @@ namespace Cashflow.Api.Services
 
         public ResultDataModel<IEnumerable<TypeModel>> GetTypes()
         {
-            var types = Enum.GetValues<HouseholdExpenseType>().Select(p => new TypeModel()
-            {
-                Id = (int)p,
-                Description = p.GetDescription()
-            });
+            var types = Enum.GetValues<HouseholdExpenseType>()
+                .Where(p => p != HouseholdExpenseType.Others)
+                .FilterInactives()
+                .Select(p => new TypeModel(p))
+                .OrderBy(p => p.Description)
+                .Append(new TypeModel(HouseholdExpenseType.Others));
             return new ResultDataModel<IEnumerable<TypeModel>>(types);
         }
 

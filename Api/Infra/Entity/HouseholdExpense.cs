@@ -35,9 +35,9 @@ namespace Cashflow.Api.Infra.Entity
         public string TypeDescription => ((HouseholdExpenseType)Type).GetDescription();
 
         public bool IsRecurrent => Type == HouseholdExpenseType.Food
-        || Type == HouseholdExpenseType.Hygiene
+        || Type == HouseholdExpenseType.Aesthetics
         || Type == HouseholdExpenseType.Leisure
-        || Type == HouseholdExpenseType.MarketRanch
+        || Type == HouseholdExpenseType.Market
         || Type == HouseholdExpenseType.Party
         || Type == HouseholdExpenseType.Pets
         || Type == HouseholdExpenseType.Uber;
