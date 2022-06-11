@@ -24,6 +24,9 @@ namespace Cashflow.Api.Controllers
         [HttpGet("Types")]
         public async Task<IActionResult> GetTypes() => HandleResult(await _service.GetTypes());
 
+        [HttpGet("GenerateInstallments")]
+        public async Task<IActionResult> GenerateInstallments([FromQuery] GenerateInstallmentsModel model) => HandleResult(await _service.GenerateInstallments(model, UserId));
+
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Payment payment)
         {

@@ -85,50 +85,18 @@ export function EditPayment() {
   }, [valueByInstallment, firstPayment, qtdInstallments, valueText])
 
   function updateInstallments() {
-    const installments = []
-    let value = fromReal(valueText)
-    if (value > 0 && qtdInstallments > 0 && qtdInstallments <= 72 && firstPayment) {
-      let day = firstPayment.getDate()
-      let month = firstPayment.getMonth() + 1
-      let year = firstPayment.getFullYear()
 
-      if (card) {
-        const { invoiceClosingDay, invoiceDueDay } = cards.filter(p => p.id === card)[0]
-        if (day > invoiceClosingDay) {
-          month++
-          if (month > 12) {
-            month = 1
-            year++
-          }
-        }
-        day = invoiceDueDay
-      }
-
-      let firstValue = value
-      if (!valueByInstallment) {
-        const total = value
-        value = parseFloat(Number(parseInt((value / qtdInstallments) * 100) / 100).toFixed(2))
-        const sum = parseFloat(Number(value * qtdInstallments).toFixed(2))
-        firstValue = value + (total > sum ? total - sum : sum - total)
-      }
-
-      for (let i = 1; i <= qtdInstallments; i++) {
-        if (month > 12) {
-          month = 1
-          year++
-        }
-        installments.push({
-          number: i,
-          value: value,
-          date: new Date(`${month}/${day}/${year}`),
-        })
-        month++
-      }
-      installments[0].value = firstValue
-
-      setInstallments(installments)
+    paymentService.generateInstallments({
+      value: fromReal(valueText),
+      amount: qtdInstallments,
+      date: firstPayment,
+      CreditCardId: card,
+      ValueByInstallment: valueByInstallment
+    }).then(res => {
+      setInstallments(res.map(({ number, value, date }) => ({ number, value, date })))
       setInstallmentsUpdated(true)
-    }
+    })
+      .catch(err => console.log(err))
   }
 
   function save() {

@@ -147,6 +147,82 @@ namespace Cashflow.Api.Services
             return result;
         }
 
+        public async Task<ResultModel> GenerateInstallments(GenerateInstallmentsModel model, int userId)
+        {
+            var installments = new List<Installment>();
+            var result = new ResultDataModel<List<Installment>>(installments);
+
+            if (model.Value <= 0 || model.Amount <= 0 || model.Amount > 72 || model.Date == default(DateTime))
+            {
+                if (model.Value <= 0)
+                    result.AddNotification("Valor deve ser maior que 0.");
+
+                if (model.Amount <= 0 || model.Amount > 72)
+                    result.AddNotification("Quantidade de parcelas deve estar entre 1 e 72.");
+
+                if (model.Date == default(DateTime))
+                    result.AddNotification("Data inválida.");
+
+                return result;
+            }
+
+            var day = model.Date.Day;
+            var month = model.Date.Month;
+            var year = model.Date.Year;
+
+            if (model.CreditCardId > 0)
+            {
+                var creditCard = await _creditCardRepository.GetById(model.CreditCardId);
+
+                if (creditCard == null || creditCard.UserId != userId)
+                {
+                    result.AddNotification(ValidatorMessages.NotFound("Cartão de Crédito"));
+                    return result;
+                }
+
+                if (day > creditCard.InvoiceClosingDay)
+                {
+                    month++;
+                    if (month > 12)
+                    {
+                        month = 1;
+                        year++;
+                    }
+                }
+                day = creditCard.InvoiceDueDay;
+            }
+
+            var firstValue = model.Value;
+
+            if (!model.ValueByInstallment)
+            {
+                var total = model.Value;
+                model.Value = Math.Round(total / model.Amount, 2, MidpointRounding.ToZero);
+                var sum = Math.Round(model.Value * model.Amount, 2);
+                firstValue = model.Value + (total > sum ? total - sum : sum - total);
+            }
+
+            for (short i = 1; i <= model.Amount; i++)
+            {
+                if (month > 12)
+                {
+                    month = 1;
+                    year++;
+                }
+                installments.Add(new Installment()
+                {
+                    Number = i,
+                    Value = model.Value,
+                    Date = new DateTime(year, month, day)
+                });
+                month++;
+            }
+
+            installments.First().Value = firstValue;
+
+            return result;
+        }
+
         private decimal CalculatePaymentHomeChartModel(IEnumerable<Payment> payments, int month, int year, PaymentTypeEnum type)
         {
             decimal value = 0;

@@ -6,11 +6,13 @@ const getAll = filter => httpService.get(`/payment?${buildQueryParameters(filter
 const getTypes = () => httpService.get('/payment/types')
 const save = p => p.id ? httpService.put('/payment', p) : httpService.post('/payment', p)
 const remove = id => httpService.delete(`/payment/${id}`)
+const generateInstallments = model => httpService.get(`/payment/GenerateInstallments?${buildQueryParameters(model)}`)
 
 export default {
   get,
   getAll,
   getTypes,
   save,
-  remove
+  remove,
+  generateInstallments
 }
