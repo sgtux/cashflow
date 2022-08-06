@@ -238,9 +238,9 @@ namespace Cashflow.Api.Services
             var fromDate = CurrentDate.AddMonths(-3).FixFirstDayInMonth();
             var allHouseholdExpenses = await _householdExpenseRepository.GetSome(new BaseFilter() { UserId = filter.UserId, StartDate = fromDate });
 
-            var average = allHouseholdExpenses.Where(p => p.IsRecurrent && p.Date.SameMonthYear(fromDate)).Sum(p => p.Value);
-            average += allHouseholdExpenses.Where(p => p.IsRecurrent && p.Date.SameMonthYear(fromDate.AddMonths(1))).Sum(p => p.Value);
-            average += allHouseholdExpenses.Where(p => p.IsRecurrent && p.Date.SameMonthYear(fromDate.AddMonths(2))).Sum(p => p.Value);
+            var average = allHouseholdExpenses.Where(p => p.IsEstimated && p.Date.SameMonthYear(fromDate)).Sum(p => p.Value);
+            average += allHouseholdExpenses.Where(p => p.IsEstimated && p.Date.SameMonthYear(fromDate.AddMonths(1))).Sum(p => p.Value);
+            average += allHouseholdExpenses.Where(p => p.IsEstimated && p.Date.SameMonthYear(fromDate.AddMonths(2))).Sum(p => p.Value);
 
             if (average > 0)
                 average = average / 3;

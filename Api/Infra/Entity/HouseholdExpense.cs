@@ -35,5 +35,16 @@ namespace Cashflow.Api.Infra.Entity
         public string TypeDescription => ((HouseholdExpenseType)Type).GetDescription();
 
         public bool IsRecurrent => Type != HouseholdExpenseType.DelayInterest && Type != HouseholdExpenseType.Others;
+
+        public bool IsEstimated
+        {
+            get
+            {
+                return Type != HouseholdExpenseType.DelayInterest
+                        && Type != HouseholdExpenseType.Others
+                        && Type != HouseholdExpenseType.HardDrink
+                        && Type != HouseholdExpenseType.Party;
+            }
+        }
     }
 }
