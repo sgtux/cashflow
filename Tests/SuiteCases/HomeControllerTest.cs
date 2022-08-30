@@ -14,7 +14,7 @@ namespace Cashflow.Tests
         public async Task GetProjection()
         {
             var date = DateTime.Now.AddMonths(10);
-            var payments = (await Get<Dictionary<string, PaymentProjectionResultModel>>($"/api/Home/Projection?month={date.Month}&year={date.Year}", 4)).Data;
+            var payments = (await Get<Dictionary<string, PaymentProjectionResultModel>>($"/api/Projection?month={date.Month}&year={date.Year}", 4)).Data;
 
             var now = DateTime.Now;
 
