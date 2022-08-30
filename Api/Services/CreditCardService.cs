@@ -11,9 +11,9 @@ namespace Cashflow.Api.Services
 {
     public class CreditCardService : BaseService
     {
-        private ICreditCardRepository _creditCardRepository;
+        private readonly ICreditCardRepository _creditCardRepository;
 
-        private IUserRepository _userRepository;
+        private readonly IUserRepository _userRepository;
 
         public CreditCardService(ICreditCardRepository creditCardRepository, IUserRepository userRepository)
         {

@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Cashflow.Api.Contracts;
-using Cashflow.Api.Enums;
-using Cashflow.Api.Extensions;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Infra.Filters;
 using FluentValidation;
@@ -11,7 +9,7 @@ namespace Cashflow.Api.Validators
 {
     public class EarningValidator : AbstractValidator<Earning>
     {
-        private IEarningRepository _repository;
+        private readonly IEarningRepository _repository;
 
         private IEnumerable<Earning> _earnings;
 

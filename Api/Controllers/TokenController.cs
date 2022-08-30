@@ -18,8 +18,6 @@ namespace Cashflow.Api.Controllers
 
         private AccountService _accountService;
 
-        private PaymentService _paymentService;
-
         private RemainingBalanceService _remainingBalanceService;
 
         public TokenController(IAppConfig config,
@@ -30,7 +28,6 @@ namespace Cashflow.Api.Controllers
         {
             _config = config;
             _accountService = accountService;
-            _paymentService = paymentService;
             _remainingBalanceService = remainingBalanceService;
         }
 

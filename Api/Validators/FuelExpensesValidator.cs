@@ -9,11 +9,11 @@ namespace Cashflow.Api.Validators
 {
     public class FuelExpensesValidator : AbstractValidator<FuelExpenses>
     {
-        private IVehicleRepository _vehicleRepository;
+        private readonly IVehicleRepository _vehicleRepository;
 
-        private IFuelExpensesRepository _fuelExpensesRepository;
+        private readonly IFuelExpensesRepository _fuelExpensesRepository;
 
-        private ICreditCardRepository _creditCardRepository;
+        private readonly ICreditCardRepository _creditCardRepository;
 
         private int _userId;
 

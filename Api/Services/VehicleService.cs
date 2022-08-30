@@ -11,9 +11,9 @@ namespace Cashflow.Api.Services
 {
     public class VehicleService : BaseService
     {
-        private IVehicleRepository _vehicleRepository;
+        private readonly IVehicleRepository _vehicleRepository;
 
-        private IUserRepository _userRepository;
+        private readonly IUserRepository _userRepository;
 
         public VehicleService(IVehicleRepository vehicleRepository, IUserRepository userRepository)
         {

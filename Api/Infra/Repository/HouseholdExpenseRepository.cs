@@ -11,7 +11,7 @@ namespace Cashflow.Api.Infra.Repository
 {
     public class HouseholdExpenseRepository : BaseRepository<HouseholdExpense>, IHouseholdExpenseRepository
     {
-        private ICreditCardRepository _creditCardRepository;
+        private readonly ICreditCardRepository _creditCardRepository;
 
         public HouseholdExpenseRepository(IDatabaseContext conn,
             LogService logService,

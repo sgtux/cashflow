@@ -58,16 +58,6 @@ namespace Cashflow.Api.Extensions
             }
         }
 
-        public static List<HouseholdExpenseType> FilterInactives(this IEnumerable<HouseholdExpenseType> list)
-        {
-            List<HouseholdExpenseType> inactives = new List<HouseholdExpenseType>()
-            {
-                HouseholdExpenseType.Food,
-                HouseholdExpenseType.HardDrink
-            };
-            return list.Where(p => !inactives.Contains(p)).ToList();
-        }
-
         public static string GetDescription(this EarningType e)
         {
             switch (e)
@@ -79,6 +69,16 @@ namespace Cashflow.Api.Extensions
                 default:
                     return "Desconhecido";
             }
+        }
+
+        public static List<HouseholdExpenseType> FilterInactives(this IEnumerable<HouseholdExpenseType> list)
+        {
+            List<HouseholdExpenseType> inactives = new List<HouseholdExpenseType>()
+            {
+                HouseholdExpenseType.Food,
+                HouseholdExpenseType.HardDrink
+            };
+            return list.Where(p => !inactives.Contains(p)).ToList();
         }
     }
 }

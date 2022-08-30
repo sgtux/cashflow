@@ -14,7 +14,7 @@ namespace Cashflow.Api.Services
 {
     public class EarningService : BaseService
     {
-        private IEarningRepository _earningRepository;
+        private readonly IEarningRepository _earningRepository;
 
         public EarningService(IEarningRepository earningRepository) => _earningRepository = earningRepository;
 

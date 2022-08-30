@@ -11,7 +11,8 @@ namespace Cashflow.Api.Infra.Repository
 {
     public class VehicleRepository : BaseRepository<Vehicle>, IVehicleRepository
     {
-        private ICreditCardRepository _creditCardRepository;
+        private readonly ICreditCardRepository _creditCardRepository;
+
         public VehicleRepository(IDatabaseContext conn,
             LogService logService,
             ICreditCardRepository creditCardRepository) : base(conn, logService)
@@ -66,10 +67,9 @@ namespace Cashflow.Api.Infra.Repository
             if (list.Any())
             {
                 var cards = await _creditCardRepository.GetSome(new BaseFilter() { UserId = list.First().UserId });
-                foreach (var vehicle in list)
-                    if (vehicle.FuelExpenses.Any())
-                        foreach (var item in vehicle.FuelExpenses.Where(p => p.CreditCardId.HasValue))
-                            item.CreditCard = cards.FirstOrDefault(p => p.Id == item.CreditCardId);
+                foreach (var vehicle in list.Where(p => p.FuelExpenses.Any()))
+                    foreach (var item in vehicle.FuelExpenses.Where(p => p.CreditCardId.HasValue))
+                        item.CreditCard = cards.FirstOrDefault(p => p.Id == item.CreditCardId);
             }
 
             return list;

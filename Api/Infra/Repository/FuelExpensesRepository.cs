@@ -11,7 +11,7 @@ namespace Cashflow.Api.Infra.Repository
 {
     public class FuelExpensesRepository : BaseRepository<FuelExpenses>, IFuelExpensesRepository
     {
-        private ICreditCardRepository _creditCardRepository;
+        private readonly ICreditCardRepository _creditCardRepository;
 
         public FuelExpensesRepository(IDatabaseContext conn,
             LogService logService,

@@ -8,9 +8,9 @@ namespace Cashflow.Api.Validators
 {
     public class RecurringExpenseValidator : AbstractValidator<RecurringExpense>
     {
-        private IRecurringExpenseRepository _recurringExpenseRepository;
+        private readonly IRecurringExpenseRepository _recurringExpenseRepository;
 
-        private ICreditCardRepository _creditCardRepository;
+        private readonly ICreditCardRepository _creditCardRepository;
 
         public RecurringExpenseValidator(IRecurringExpenseRepository recurringExpenseRepository, ICreditCardRepository creditCardRepository)
         {

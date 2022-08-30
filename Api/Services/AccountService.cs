@@ -9,7 +9,7 @@ namespace Cashflow.Api.Services
 {
     public class AccountService : BaseService
     {
-        private IUserRepository _userRepository;
+        private readonly IUserRepository _userRepository;
 
         public AccountService(IUserRepository repository)
         {

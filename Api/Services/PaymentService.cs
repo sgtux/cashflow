@@ -6,7 +6,6 @@ using Cashflow.Api.Contracts;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Infra.Filters;
 using Cashflow.Api.Models;
-using Cashflow.Api.Enums;
 using Cashflow.Api.Validators;
 using Cashflow.Api.Extensions;
 
@@ -14,13 +13,13 @@ namespace Cashflow.Api.Services
 {
     public class PaymentService : BaseService
     {
-        private IPaymentRepository _paymentRepository;
+        private readonly IPaymentRepository _paymentRepository;
 
-        private ICreditCardRepository _creditCardRepository;
+        private readonly ICreditCardRepository _creditCardRepository;
 
-        private IHouseholdExpenseRepository _householdExpenseRepository;
+        private readonly IHouseholdExpenseRepository _householdExpenseRepository;
 
-        private IVehicleRepository _vehicleRepository;
+        private readonly IVehicleRepository _vehicleRepository;
 
         public PaymentService(IPaymentRepository paymentRepository,
             ICreditCardRepository creditCardRepository,
@@ -62,49 +61,6 @@ namespace Cashflow.Api.Services
         }
 
         public async Task<ResultDataModel<IEnumerable<PaymentType>>> GetTypes() => new ResultDataModel<IEnumerable<PaymentType>>(await _paymentRepository.GetTypes());
-
-        public async Task<ResultDataModel<List<HomeChartModel>>> GetHomeChart(int userId, int month, int year)
-        {
-            var result = new ResultDataModel<List<HomeChartModel>>();
-            var filter = new BaseFilter()
-            {
-                StartDate = new DateTime(year, month, 1),
-                EndDate = new DateTime(year, month, DateTime.DaysInMonth(year, month)),
-                UserId = userId
-            };
-
-            var householdExpenseModel = new HomeChartModel() { Index = 0, Description = "Despesas Domésticas" };
-            var expensesModel = new HomeChartModel() { Index = 1, Description = "Outros Gastos" };
-            var vehicleModel = new HomeChartModel() { Index = 2, Description = "Combustível" };
-            var financingsModel = new HomeChartModel() { Index = 3, Description = "Financiamentos" };
-            var loanModel = new HomeChartModel() { Index = 4, Description = "Empréstimos" };
-            var contributionsModel = new HomeChartModel() { Index = 5, Description = "Aportes (Investimentos)" };
-            var educationModel = new HomeChartModel() { Index = 6, Description = "Educação" };
-
-            foreach (var item in (await _vehicleRepository.GetSome(filter)))
-                vehicleModel.Value += item.FuelExpenses.Sum(p => p.ValueSupplied);
-
-            foreach (var item in (await _householdExpenseRepository.GetSome(filter)))
-                householdExpenseModel.Value += item.Value;
-
-            var payments = await _paymentRepository.GetSome(filter);
-
-            expensesModel.Value += CalculatePaymentHomeChartModel(payments, month, year, PaymentTypeEnum.Expense);
-            contributionsModel.Value += CalculatePaymentHomeChartModel(payments, month, year, PaymentTypeEnum.Contributions);
-            financingsModel.Value += CalculatePaymentHomeChartModel(payments, month, year, PaymentTypeEnum.Financing);
-            educationModel.Value += CalculatePaymentHomeChartModel(payments, month, year, PaymentTypeEnum.Education);
-            loanModel.Value += CalculatePaymentHomeChartModel(payments, month, year, PaymentTypeEnum.Loan);
-
-            result.Data.Add(expensesModel);
-            result.Data.Add(householdExpenseModel);
-            result.Data.Add(vehicleModel);
-            result.Data.Add(financingsModel);
-            result.Data.Add(loanModel);
-            result.Data.Add(contributionsModel);
-            result.Data.Add(educationModel);
-
-            return result;
-        }
 
         public async Task<ResultModel> Add(Payment payment)
         {
@@ -221,14 +177,6 @@ namespace Cashflow.Api.Services
             installments.First().Value = firstValue;
 
             return result;
-        }
-
-        private decimal CalculatePaymentHomeChartModel(IEnumerable<Payment> payments, int month, int year, PaymentTypeEnum type)
-        {
-            decimal value = 0;
-            foreach (var item in payments.Where(p => p.TypeId == type))
-                value += item.Installments.Where(p => p.Date.Year == year && p.Date.Month == month).Sum(p => p.Value);
-            return value;
         }
     }
 }

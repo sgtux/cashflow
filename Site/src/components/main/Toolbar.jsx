@@ -50,7 +50,7 @@ export function AppToolbar({ openSideBar, dockedMenu }) {
               </IconButton>
           }
           <Typography variant="h2" color="inherit" style={styles.grow}>
-            Educação Financeira (R$)
+            Fluxo de Caixa (R$)
           </Typography>
           {appState.user.nickName}
           <Button color="secondary" onClick={() => logout()}>

@@ -8,11 +8,11 @@ namespace Cashflow.Api.Services
 {
     public class FuelExpensesService : BaseService
     {
-        private IVehicleRepository _vehicleRepository;
+        private readonly IVehicleRepository _vehicleRepository;
 
-        private IFuelExpensesRepository _fuelExpensesRepository;
+        private readonly IFuelExpensesRepository _fuelExpensesRepository;
 
-        private ICreditCardRepository _creditCardRepository;
+        private readonly ICreditCardRepository _creditCardRepository;
 
         public FuelExpensesService(IVehicleRepository vehicleRepository,
             IFuelExpensesRepository fuelExpensesRepository,

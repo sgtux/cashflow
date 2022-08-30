@@ -7,7 +7,7 @@ namespace Cashflow.Api.Validators
 {
     public class UserValidator : AbstractValidator<User>
     {
-        private IUserRepository _userRepository;
+        private readonly IUserRepository _userRepository;
 
         public UserValidator(IUserRepository userRepository)
         {

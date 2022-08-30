@@ -8,9 +8,9 @@ namespace Cashflow.Api.Validators
 {
     public class HouseholdExpenseValidator : AbstractValidator<HouseholdExpense>
     {
-        private IVehicleRepository _vehicleRepository;
+        private readonly IVehicleRepository _vehicleRepository;
 
-        private ICreditCardRepository _creditCardRepository;
+        private readonly ICreditCardRepository _creditCardRepository;
 
         public HouseholdExpenseValidator(IHouseholdExpenseRepository repository,
             IVehicleRepository vehicleRepository,

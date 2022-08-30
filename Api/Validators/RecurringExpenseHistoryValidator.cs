@@ -7,7 +7,7 @@ namespace Cashflow.Api.Validators
 {
     public class RecurringExpenseHistoryValidator : AbstractValidator<RecurringExpenseHistory>
     {
-        private IRecurringExpenseRepository _recurringExpenseRepository;
+        private readonly IRecurringExpenseRepository _recurringExpenseRepository;
 
         private RecurringExpense _recurringExpense;
 

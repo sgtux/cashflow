@@ -14,19 +14,19 @@ namespace Cashflow.Api.Services
 {
     public class ProjectionService : BaseService
     {
-        private IPaymentRepository _paymentRepository;
+        private readonly IPaymentRepository _paymentRepository;
 
-        private ICreditCardRepository _creditCardRepository;
+        private readonly ICreditCardRepository _creditCardRepository;
 
-        private IEarningRepository _earningRepository;
+        private readonly IEarningRepository _earningRepository;
 
-        private IHouseholdExpenseRepository _householdExpenseRepository;
+        private readonly IHouseholdExpenseRepository _householdExpenseRepository;
 
-        private IVehicleRepository _vehicleRepository;
+        private readonly IVehicleRepository _vehicleRepository;
 
-        private IRemainingBalanceRepository _remainingBalanceRepository;
+        private readonly IRemainingBalanceRepository _remainingBalanceRepository;
 
-        private IRecurringExpenseRepository _recurringExpenseRepository;
+        private readonly IRecurringExpenseRepository _recurringExpenseRepository;
 
         public ProjectionService(IPaymentRepository paymentRepository,
            ICreditCardRepository creditCardRepository,

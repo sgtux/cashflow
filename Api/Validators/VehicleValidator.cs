@@ -6,7 +6,7 @@ namespace Cashflow.Api.Validators
 {
     public class VehicleValidator : AbstractValidator<Vehicle>
     {
-        private IVehicleRepository _vehicleRepository;
+        private readonly IVehicleRepository _vehicleRepository;
 
         public VehicleValidator(IVehicleRepository vehicleRepository, IUserRepository userRepository)
         {

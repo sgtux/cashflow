@@ -14,6 +14,7 @@ namespace Cashflow.Api.Extensions
         public static void ConfigureServices(this IServiceCollection services)
         {
             services.AddScoped<AccountService>();
+            services.AddScoped<HomeService>();
             services.AddScoped<PaymentService>();
             services.AddScoped<CreditCardService>();
             services.AddScoped<EarningService>();

@@ -11,9 +11,9 @@ namespace Cashflow.Api.Services
 {
     public class RecurringExpenseService
     {
-        private IRecurringExpenseRepository _recurringExpenseRepository;
+        private readonly IRecurringExpenseRepository _recurringExpenseRepository;
 
-        private ICreditCardRepository _creditCardRepository;
+        private readonly ICreditCardRepository _creditCardRepository;
 
         public RecurringExpenseService(IRecurringExpenseRepository recurringExpenseRepository, ICreditCardRepository creditCardRepository)
         {

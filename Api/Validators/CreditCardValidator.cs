@@ -8,9 +8,9 @@ namespace Cashflow.Api.Validators
 {
     public class CreditCardValidator : AbstractValidator<CreditCard>
     {
-        private ICreditCardRepository _creditCardRepository;
+        private readonly ICreditCardRepository _creditCardRepository;
 
-        private IUserRepository _userRepository;
+        private readonly IUserRepository _userRepository;
 
         public CreditCardValidator(ICreditCardRepository creditCardRepository, IUserRepository userRepository)
         {

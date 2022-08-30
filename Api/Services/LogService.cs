@@ -7,7 +7,7 @@ namespace Cashflow.Api.Services
 {
     public class LogService
     {
-        private ILog _log;
+        private readonly ILog _log;
 
         public LogService()
         {
