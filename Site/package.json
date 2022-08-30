@@ -2,7 +2,8 @@
   "scripts": {
     "start": "webpack serve --config ./webpack.config.js --mode development",
     "build": "webpack --mode development",
-    "build:prod": "webpack --mode production"
+    "build:prod": "webpack --mode production",
+    "audit-fix": "yarn-audit-fix --force"
   },
   "devDependencies": {
     "@babel/plugin-transform-runtime": "^7.16.8",
@@ -17,7 +18,8 @@
     "react-hot-loader": "^4.13.0",
     "webpack": "^5.64.4",
     "webpack-cli": "^4.9.1",
-    "webpack-dev-server": "^4.6.0"
+    "webpack-dev-server": "^4.6.0",
+    "yarn-audit-fix": "^9.3.5"
   },
   "dependencies": {
     "@material-ui/core": "^4.12.3",
