@@ -10,7 +10,7 @@ namespace Cashflow.Api.Controllers
     [Route("api/[controller]")]
     public class RecurringExpenseController : BaseController
     {
-        private RecurringExpenseService _service;
+        private readonly RecurringExpenseService _service;
 
         public RecurringExpenseController(RecurringExpenseService service) => _service = service;
 

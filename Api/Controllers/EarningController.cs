@@ -11,7 +11,7 @@ namespace Cashflow.Api.Controllers
     [Route("api/[controller]")]
     public class EarningController : BaseController
     {
-        private EarningService _service;
+        private readonly EarningService _service;
 
         public EarningController(EarningService service) => _service = service;
 

@@ -10,26 +10,26 @@ namespace Cashflow.Api.Auth
 {
     public class JwtTokenBuilder
     {
-        private readonly int expiryInMinutes;
+        private readonly int _expiryInMinutes;
 
-        private readonly SecurityKey key;
+        private readonly SecurityKey _key;
 
-        private Dictionary<string, string> claims;
+        private readonly Dictionary<string, string> _claims;
 
         public JwtTokenBuilder(string key, int expiryInMinutes, Dictionary<string, string> claims)
         {
-            this.key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key));
-            this.claims = claims;
-            this.expiryInMinutes = expiryInMinutes;
+            _key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key));
+            _claims = claims;
+            _expiryInMinutes = expiryInMinutes;
         }
 
         public JwtToken Build()
         {
             var token = new JwtSecurityToken(
-              claims: claims.Select(item => new Claim(item.Key, item.Value)).ToList(),
-                expires: DateTime.UtcNow.AddMinutes(expiryInMinutes),
+              claims: _claims.Select(item => new Claim(item.Key, item.Value)).ToList(),
+                expires: DateTime.UtcNow.AddMinutes(_expiryInMinutes),
                 signingCredentials: new SigningCredentials(
-                    key,
+                    _key,
                     SecurityAlgorithms.HmacSha256
                 )
             );

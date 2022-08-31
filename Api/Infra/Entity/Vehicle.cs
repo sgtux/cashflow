@@ -28,6 +28,6 @@ namespace Cashflow.Api.Infra.Entity
             }
         }
 
-        private bool HasExpenses => FuelExpenses?.Count() > 1;
+        private bool HasExpenses => FuelExpenses?.Count > 1;
     }
 }

@@ -9,7 +9,7 @@ namespace Cashflow.Api.Controllers
     [Route("api/[controller]")]
     public class HomeController : BaseController
     {
-        private HomeService _homeService;
+        private readonly HomeService _homeService;
 
         public HomeController(HomeService homeService) => _homeService = homeService;
 

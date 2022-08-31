@@ -10,7 +10,7 @@ namespace Cashflow.Api.Controllers
     [Route("api/[controller]")]
     public class VehicleController : BaseController
     {
-        private VehicleService _service;
+        private readonly VehicleService _service;
 
         public VehicleController(VehicleService service) => _service = service;
 

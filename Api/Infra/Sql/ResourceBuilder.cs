@@ -8,21 +8,18 @@ namespace Cashflow.Api.Infra.Sql
 {
     public class ResourceBuilder
     {
-        private string resourceName;
+        private readonly string _resourceName;
 
-        public ResourceBuilder(string name)
-        {
-            resourceName = $"Cashflow.Api.Infra.Sql.{name}";
-        }
+        public ResourceBuilder(string name) => _resourceName = $"Cashflow.Api.Infra.Sql.{name}";
 
         public async Task<string> Build()
         {
-            var stream = typeof(ResourceBuilder).Assembly.GetManifestResourceStream(resourceName);
+            var stream = typeof(ResourceBuilder).Assembly.GetManifestResourceStream(_resourceName);
             if (stream == null)
             {
-                if (Assembly.GetEntryAssembly().GetManifestResourceNames().Contains(resourceName))
-                    throw new InvalidDataException($"Resource '{resourceName}' not found.");
-                throw new InvalidDataException($"Resource '{resourceName}' found but can't be loaded.");
+                if (Assembly.GetEntryAssembly().GetManifestResourceNames().Contains(_resourceName))
+                    throw new InvalidDataException($"Resource '{_resourceName}' not found.");
+                throw new InvalidDataException($"Resource '{_resourceName}' found but can't be loaded.");
             }
             using (var reader = new StreamReader(stream, Encoding.UTF8))
                 return await reader.ReadToEndAsync();

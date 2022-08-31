@@ -32,7 +32,7 @@ namespace Cashflow.Api.Infra.Entity
 
         public HouseholdExpenseType Type { get; set; }
 
-        public string TypeDescription => ((HouseholdExpenseType)Type).GetDescription();
+        public string TypeDescription => Type.GetDescription();
 
         public bool IsRecurrent => Type != HouseholdExpenseType.DelayInterest && Type != HouseholdExpenseType.Others;
 

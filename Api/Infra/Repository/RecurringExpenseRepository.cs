@@ -11,7 +11,7 @@ namespace Cashflow.Api.Infra.Repository
 {
     public class RecurringExpenseRepository : BaseRepository<RecurringExpense>, IRecurringExpenseRepository
     {
-        private ICreditCardRepository _creditCardRepository;
+        private readonly ICreditCardRepository _creditCardRepository;
 
         public RecurringExpenseRepository(IDatabaseContext conn, LogService logService, ICreditCardRepository creditCardRepository) : base(conn, logService)
         {

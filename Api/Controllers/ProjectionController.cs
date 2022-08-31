@@ -10,9 +10,9 @@ namespace Cashflow.Api.Controllers
     [Route("api/[controller]")]
     public class ProjectionController : BaseController
     {
-        private RemainingBalanceService _remainingBalanceService;
+        private readonly RemainingBalanceService _remainingBalanceService;
 
-        private ProjectionService _projectionService;
+        private readonly ProjectionService _projectionService;
 
         public ProjectionController(RemainingBalanceService remainingBalanceService, ProjectionService projectionService)
         {

@@ -10,7 +10,7 @@ namespace Cashflow.Api.Controllers
     [Route("api/[controller]")]
     public class HouseholdExpenseController : BaseController
     {
-        private HouseholdExpenseService _service;
+        private readonly HouseholdExpenseService _service;
 
         public HouseholdExpenseController(HouseholdExpenseService service) => _service = service;
 

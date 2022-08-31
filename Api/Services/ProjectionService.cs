@@ -7,7 +7,6 @@ using Cashflow.Api.Extensions;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Infra.Filters;
 using Cashflow.Api.Models;
-using Cashflow.Api.Enums;
 using Cashflow.Api.Shared;
 
 namespace Cashflow.Api.Services
@@ -109,7 +108,7 @@ namespace Cashflow.Api.Services
             var benefits = await _earningRepository.GetSome(filter);
             if (benefits.Any())
             {
-                var monthyBenefits = benefits.Where(p => p.Date.SameMonthYear(DateTime.Now) && p.Type == EarningType.MonthyBenefit);
+                var monthyBenefits = benefits.Where(p => p.Date.SameMonthYear(DateTime.Now) && p.Type == Enums.EarningType.MonthyBenefit);
                 foreach (var date in dates)
                 {
                     foreach (var item in monthyBenefits)
@@ -117,16 +116,16 @@ namespace Cashflow.Api.Services
                         {
                             Description = $"{item.Description} ({item.TypeDescription})",
                             MonthYear = date.ToString("MM/yyyy"),
-                            Type = types.First(p => p.Id == (int)PaymentTypeEnum.Gain),
+                            Type = types.First(p => p.Id == (int)Enums.PaymentType.Gain),
                             Value = item.Value
                         });
 
-                    foreach (var item in benefits.Where(p => p.Type != EarningType.MonthyBenefit && p.Date.SameMonthYear(date)))
+                    foreach (var item in benefits.Where(p => p.Type != Enums.EarningType.MonthyBenefit && p.Date.SameMonthYear(date)))
                         list.Add(new PaymentProjectionModel()
                         {
                             Description = $"{item.Description} (Benefício)",
                             MonthYear = date.ToString("MM/yyyy"),
-                            Type = types.First(p => p.Id == (int)PaymentTypeEnum.Gain),
+                            Type = types.First(p => p.Id == (int)Enums.PaymentType.Gain),
                             Value = item.Value
                         });
                 }
@@ -187,7 +186,7 @@ namespace Cashflow.Api.Services
                     {
                         Description = $"Gastos em Combustível ({card.Name})",
                         MonthYear = CurrentDate.ToString("MM/yyyy"),
-                        Type = types.First(p => p.Id == (int)PaymentTypeEnum.Expense),
+                        Type = types.First(p => p.Id == (int)Enums.PaymentType.Expense),
                         Value = currentInvoiceSum,
                         CreditCard = card
                     });
@@ -199,7 +198,7 @@ namespace Cashflow.Api.Services
                     {
                         Description = $"Gastos em Combustível ({card.Name})",
                         MonthYear = CurrentDate.AddMonths(1).ToString("MM/yyyy"),
-                        Type = types.First(p => p.Id == (int)PaymentTypeEnum.Expense),
+                        Type = types.First(p => p.Id == (int)Enums.PaymentType.Expense),
                         Value = nextInvoiceSum,
                         CreditCard = card
                     });
@@ -216,7 +215,7 @@ namespace Cashflow.Api.Services
                     {
                         Description = $"Gastos em Combustível",
                         MonthYear = date.ToString("MM/yyyy"),
-                        Type = types.First(p => p.Id == (int)PaymentTypeEnum.Expense),
+                        Type = types.First(p => p.Id == (int)Enums.PaymentType.Expense),
                         Value = fuelExpenses.Sum(p => p.ValueSupplied)
                     });
                 }
@@ -226,7 +225,7 @@ namespace Cashflow.Api.Services
                     {
                         Description = $"Gastos em Combustível (Estimado)",
                         MonthYear = date.ToString("MM/yyyy"),
-                        Type = types.First(p => p.Id == (int)PaymentTypeEnum.Expense),
+                        Type = types.First(p => p.Id == (int)Enums.PaymentType.Expense),
                         Value = date.SameMonthYear(CurrentDate.AddMonths(1)) ? nextMonthAverage : average
                     });
                 }
@@ -258,7 +257,7 @@ namespace Cashflow.Api.Services
                     {
                         Description = $"Despesas Domésticas ({card.Name})",
                         MonthYear = CurrentDate.ToString("MM/yyyy"),
-                        Type = types.First(p => p.Id == (int)PaymentTypeEnum.Expense),
+                        Type = types.First(p => p.Id == (int)Enums.PaymentType.Expense),
                         Value = currentInvoiceSum,
                         CreditCard = card
                     });
@@ -270,7 +269,7 @@ namespace Cashflow.Api.Services
                     {
                         Description = $"Despesas Domésticas ({card.Name})",
                         MonthYear = CurrentDate.AddMonths(1).ToString("MM/yyyy"),
-                        Type = types.First(p => p.Id == (int)PaymentTypeEnum.Expense),
+                        Type = types.First(p => p.Id == (int)Enums.PaymentType.Expense),
                         Value = nextInvoiceSum,
                         CreditCard = card
                     });
@@ -287,7 +286,7 @@ namespace Cashflow.Api.Services
                     {
                         Description = $"Despesas Domésticas",
                         MonthYear = date.ToString("MM/yyyy"),
-                        Type = types.First(p => p.Id == (int)PaymentTypeEnum.Expense),
+                        Type = types.First(p => p.Id == (int)Enums.PaymentType.Expense),
                         Value = householdExpenses.Where(p => !p.CreditCardId.HasValue).Sum(p => p.Value)
                     });
                 else if (average > 0 && nextMonthAverage > 0)
@@ -295,7 +294,7 @@ namespace Cashflow.Api.Services
                     {
                         Description = $"Despesas Domésticas (Estimado)",
                         MonthYear = date.ToString("MM/yyyy"),
-                        Type = types.First(p => p.Id == (int)PaymentTypeEnum.Expense),
+                        Type = types.First(p => p.Id == (int)Enums.PaymentType.Expense),
                         Value = date.SameMonthYear(CurrentDate.AddMonths(1)) ? nextMonthAverage : average
                     });
             }
@@ -316,7 +315,7 @@ namespace Cashflow.Api.Services
                             Description = $"{item.Description} (Recorrente)",
                             CreditCard = cards.FirstOrDefault(p => p.Id == item.CreditCardId),
                             MonthYear = date.ToString("MM/yyyy"),
-                            Type = types.First(p => p.Id == (int)PaymentTypeEnum.Expense),
+                            Type = types.First(p => p.Id == (int)Enums.PaymentType.Expense),
                             Value = item.History.First(p => date.SameMonthYear(p.Date)).PaidValue
                         });
 
@@ -326,7 +325,7 @@ namespace Cashflow.Api.Services
                             Description = $"{item.Description} (Recorrente)",
                             CreditCard = cards.FirstOrDefault(p => p.Id == item.CreditCardId),
                             MonthYear = date.ToString("MM/yyyy"),
-                            Type = types.First(p => p.Id == (int)PaymentTypeEnum.Expense),
+                            Type = types.First(p => p.Id == (int)Enums.PaymentType.Expense),
                             Value = item.Value
                         });
                 }
@@ -338,7 +337,7 @@ namespace Cashflow.Api.Services
                             Description = $"{item.Description} (Recorrente)",
                             CreditCard = cards.FirstOrDefault(p => p.Id == item.CreditCardId),
                             MonthYear = date.ToString("MM/yyyy"),
-                            Type = types.First(p => p.Id == (int)PaymentTypeEnum.Expense),
+                            Type = types.First(p => p.Id == (int)Enums.PaymentType.Expense),
                             Value = item.Value
                         });
                 }
@@ -354,7 +353,7 @@ namespace Cashflow.Api.Services
                 {
                     Description = Constants.PREVIOUS_MONTH_BALANCE,
                     MonthYear = now.ToString("MM/yyyy"),
-                    Type = types.First(p => p.Id == (remainingBalance.Value >= 0 ? (int)PaymentTypeEnum.Gain : (int)PaymentTypeEnum.Expense)),
+                    Type = types.First(p => p.Id == (remainingBalance.Value >= 0 ? (int)Enums.PaymentType.Gain : (int)Enums.PaymentType.Expense)),
                     Value = Math.Abs(remainingBalance.Value)
                 });
         }

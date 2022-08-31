@@ -10,7 +10,7 @@ namespace Cashflow.Api.Controllers
     [Route("api/[controller]")]
     public class CreditCardController : BaseController
     {
-        private CreditCardService _service;
+        private readonly CreditCardService _service;
 
         public CreditCardController(CreditCardService service) => _service = service;
 

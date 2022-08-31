@@ -11,7 +11,7 @@ namespace Cashflow.Api.Controllers
     [Route("api/[controller]")]
     public class PaymentController : BaseController
     {
-        private PaymentService _service;
+        private readonly PaymentService _service;
 
         public PaymentController(PaymentService service) => _service = service;
 

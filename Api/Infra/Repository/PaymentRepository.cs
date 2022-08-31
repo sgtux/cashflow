@@ -13,18 +13,14 @@ namespace Cashflow.Api.Infra.Repository
 {
     public class PaymentRepository : BaseRepository<Payment>, IPaymentRepository
     {
-        private ICreditCardRepository _creditCardRepository;
+        private readonly ICreditCardRepository _creditCardRepository;
 
         public PaymentRepository(IDatabaseContext conn, LogService logService, ICreditCardRepository creditCardRepository) : base(conn, logService)
         {
             _creditCardRepository = creditCardRepository;
         }
 
-        public async Task<IEnumerable<PaymentType>> GetTypes()
-        {
-            var list = new List<Payment>();
-            return await Query<PaymentType>(PaymentResources.Types);
-        }
+        public Task<IEnumerable<PaymentType>> GetTypes() => Query<PaymentType>(PaymentResources.Types);
 
         public async Task<IEnumerable<Payment>> GetSome(BaseFilter filter)
         {

@@ -11,7 +11,7 @@ namespace Cashflow.Api.Controllers
     [Route("api/[controller]")]
     public class RemainingBalanceController : BaseController
     {
-        private RemainingBalanceService _remainingBalanceService;
+        private readonly RemainingBalanceService _remainingBalanceService;
 
         public RemainingBalanceController(RemainingBalanceService remainingBalanceService)
         {

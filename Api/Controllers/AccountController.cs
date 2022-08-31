@@ -15,9 +15,9 @@ namespace Cashflow.Api.Controllers
     [Route("api/[controller]")]
     public class AccountController : BaseController
     {
-        private AccountService _service;
+        private readonly AccountService _service;
 
-        private IAppConfig _config;
+        private readonly IAppConfig _config;
 
         public AccountController(AccountService service, IAppConfig config)
         {

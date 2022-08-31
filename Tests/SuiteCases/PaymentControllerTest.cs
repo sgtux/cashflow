@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Cashflow.Api.Enums;
+using Enums = Cashflow.Api.Enums;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Tests.Tests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -19,8 +19,8 @@ namespace Cashflow.Tests
             UserId = 1,
             CreditCardId = 1,
             Description = "First Payment",
-            Type = new PaymentType() { Id = (int)PaymentTypeEnum.Expense },
-            TypeId = PaymentTypeEnum.Expense,
+            Type = new PaymentType() { Id = (int)Enums.PaymentType.Expense },
+            TypeId = Enums.PaymentType.Expense,
             Installments = new List<Installment>()
                     {
                       new Installment() { Number = 1, Id = 1, Value = 1500.6M, PaidValue = 1500.6M, Date = new DateTime(2020, 1, 1) },

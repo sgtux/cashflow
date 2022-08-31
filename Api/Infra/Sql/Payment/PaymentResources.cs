@@ -1,6 +1,6 @@
 namespace Cashflow.Api.Infra.Sql.Payment
 {
-    public class PaymentResources
+    public static class PaymentResources
     {
         public static ResourceBuilder Delete => new ResourceBuilder("Payment.Delete.sql");
 

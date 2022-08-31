@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Cashflow.Api.Enums;
 using Cashflow.Api.Extensions;
 
 namespace Cashflow.Api.Infra.Entity
@@ -16,7 +15,7 @@ namespace Cashflow.Api.Infra.Entity
 
         public PaymentType Type { get; set; }
 
-        public PaymentTypeEnum TypeId { get; set; }
+        public Enums.PaymentType TypeId { get; set; }
 
         public int? CreditCardId { get; set; }
 
@@ -32,7 +31,7 @@ namespace Cashflow.Api.Infra.Entity
 
         public IList<Installment> Installments { get; set; }
 
-        public int PaidInstallments => Installments?.Where(p => p.PaidDate.HasValue).Count() ?? 0;
+        public int PaidInstallments => Installments?.Count(p => p.PaidDate.HasValue) ?? 0;
 
         public decimal Total => Installments?.Sum(p => p.Value) ?? 0;
 

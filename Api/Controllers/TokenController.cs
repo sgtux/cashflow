@@ -14,11 +14,11 @@ namespace Cashflow.Api.Controllers
     [Route("api/token")]
     public class TokenController : BaseController
     {
-        private IAppConfig _config;
+        private readonly IAppConfig _config;
 
-        private AccountService _accountService;
+        private readonly AccountService _accountService;
 
-        private RemainingBalanceService _remainingBalanceService;
+        private readonly RemainingBalanceService _remainingBalanceService;
 
         public TokenController(IAppConfig config,
             AccountService accountService,
