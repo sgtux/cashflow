@@ -6,43 +6,43 @@ using Cashflow.Api.Validators;
 
 namespace Cashflow.Api.Services
 {
-    public class FuelExpensesService : BaseService
+    public class FuelExpenseService : BaseService
     {
         private readonly IVehicleRepository _vehicleRepository;
 
-        private readonly IFuelExpensesRepository _fuelExpensesRepository;
+        private readonly IFuelExpenseRepository _fuelExpenseRepository;
 
         private readonly ICreditCardRepository _creditCardRepository;
 
-        public FuelExpensesService(IVehicleRepository vehicleRepository,
-            IFuelExpensesRepository fuelExpensesRepository,
+        public FuelExpenseService(IVehicleRepository vehicleRepository,
+            IFuelExpenseRepository fuelExpenseRepository,
             ICreditCardRepository creditCardRepository)
         {
             _vehicleRepository = vehicleRepository;
-            _fuelExpensesRepository = fuelExpensesRepository;
+            _fuelExpenseRepository = fuelExpenseRepository;
             _creditCardRepository = creditCardRepository;
         }
 
-        public async Task<ResultModel> Add(FuelExpenses fuelExpenses, int userId)
+        public async Task<ResultModel> Add(FuelExpense fuelExpense, int userId)
         {
             var result = new ResultModel();
-            var validatorResult = new FuelExpensesValidator(_vehicleRepository, _fuelExpensesRepository, _creditCardRepository, userId).Validate(fuelExpenses);
+            var validatorResult = new FuelExpenseValidator(_vehicleRepository, _fuelExpenseRepository, _creditCardRepository, userId).Validate(fuelExpense);
 
             if (validatorResult.IsValid)
-                await _fuelExpensesRepository.Add(fuelExpenses);
+                await _fuelExpenseRepository.Add(fuelExpense);
             else
                 result.AddNotification(validatorResult.Errors);
 
             return result;
         }
 
-        public async Task<ResultModel> Update(FuelExpenses fuelExpenses, int userId)
+        public async Task<ResultModel> Update(FuelExpense fuelExpense, int userId)
         {
             var result = new ResultModel();
-            var validatorResult = new FuelExpensesValidator(_vehicleRepository, _fuelExpensesRepository, _creditCardRepository, userId).Validate(fuelExpenses);
+            var validatorResult = new FuelExpenseValidator(_vehicleRepository, _fuelExpenseRepository, _creditCardRepository, userId).Validate(fuelExpense);
 
             if (validatorResult.IsValid)
-                await _fuelExpensesRepository.Update(fuelExpenses);
+                await _fuelExpenseRepository.Update(fuelExpense);
             else
                 result.AddNotification(validatorResult.Errors);
 
@@ -53,18 +53,18 @@ namespace Cashflow.Api.Services
         {
             var result = new ResultModel();
 
-            var fuelExpenses = await _fuelExpensesRepository.GetById(id);
-            if (fuelExpenses is null)
+            var fuelExpense = await _fuelExpenseRepository.GetById(id);
+            if (fuelExpense is null)
             {
                 result.AddNotification(ValidatorMessages.NotFound("Despesa de Combustível"));
                 return result;
             }
 
-            var vehicle = await _vehicleRepository.GetById(fuelExpenses.VehicleId);
+            var vehicle = await _vehicleRepository.GetById(fuelExpense.VehicleId);
             if (vehicle is null || vehicle.UserId != userId)
                 result.AddNotification(ValidatorMessages.NotFound("Despesa de Combustível"));
             else
-                await _fuelExpensesRepository.Remove(id);
+                await _fuelExpenseRepository.Remove(id);
             return result;
         }
     }

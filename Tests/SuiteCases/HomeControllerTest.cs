@@ -13,10 +13,10 @@ namespace Cashflow.Tests
         [TestMethod]
         public async Task GetProjection()
         {
-            var date = DateTime.Now.AddMonths(10);
+            var now = DateTime.Now;
+            var date = now.AddMonths(10);
             var payments = (await Get<Dictionary<string, PaymentProjectionResultModel>>($"/api/Projection?month={date.Month}&year={date.Year}", 4)).Data;
 
-            var now = DateTime.Now;
 
             Assert.AreEqual(11, payments.Count);
 

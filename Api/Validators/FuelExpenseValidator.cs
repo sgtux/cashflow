@@ -7,24 +7,24 @@ using FluentValidation;
 
 namespace Cashflow.Api.Validators
 {
-    public class FuelExpensesValidator : AbstractValidator<FuelExpenses>
+    public class FuelExpenseValidator : AbstractValidator<FuelExpense>
     {
         private readonly IVehicleRepository _vehicleRepository;
 
-        private readonly IFuelExpensesRepository _fuelExpensesRepository;
+        private readonly IFuelExpenseRepository _fuelExpenseRepository;
 
         private readonly ICreditCardRepository _creditCardRepository;
 
         private int _userId;
 
-        public FuelExpensesValidator(IVehicleRepository vehicleRepository,
-            IFuelExpensesRepository fuelExpensesRepository,
+        public FuelExpenseValidator(IVehicleRepository vehicleRepository,
+            IFuelExpenseRepository fuelExpenseRepository,
             ICreditCardRepository creditCardRepository,
             int userId)
         {
             _userId = userId;
             _vehicleRepository = vehicleRepository;
-            _fuelExpensesRepository = fuelExpensesRepository;
+            _fuelExpenseRepository = fuelExpenseRepository;
             _creditCardRepository = creditCardRepository;
             RuleFor(c => c.Miliage).GreaterThan(0).WithMessage(ValidatorMessages.MinValue("Quilometragem", 0));
             RuleFor(c => c.Miliage).LessThan(1000000000).WithMessage(ValidatorMessages.MaxValue("Quilometragem", 999999999));
@@ -34,32 +34,19 @@ namespace Cashflow.Api.Validators
             RuleFor(c => c.ValueSupplied).LessThan(1000000000).WithMessage(ValidatorMessages.MaxValue("Valor Abastecido", 999999999));
             RuleFor(c => c.Date).NotEqual(default(DateTime)).WithMessage(ValidatorMessages.FieldIsRequired("Data"));
             RuleFor(c => c).Must(VehicleExists).WithMessage(ValidatorMessages.NotFound("Veículo"));
-            RuleFor(c => c).Must(FuelExpensesExists).When(c => c.Id > 0).WithMessage(ValidatorMessages.NotFound("Despesa de combustível"));
-            RuleFor(c => c).Must(CreditCardExists).WithMessage(ValidatorMessages.NotFound("Cartão de Crédito"));
+            RuleFor(c => c).Must(FuelExpenseExists).When(c => c.Id > 0).WithMessage(ValidatorMessages.NotFound("Despesa de combustível"));
             RuleFor(c => c).Must(DataMiliageIsMatch).WithMessage("Data e Quilometragem não batem devido à outro abastecimento");
         }
 
-        private bool VehicleExists(FuelExpenses fuelExpenses)
+        private bool VehicleExists(FuelExpense fuelExpense)
         {
-            var vehicle = _vehicleRepository.GetById(fuelExpenses.VehicleId).Result;
+            var vehicle = _vehicleRepository.GetById(fuelExpense.VehicleId).Result;
             return vehicle?.UserId == _userId;
         }
 
-        private bool FuelExpensesExists(FuelExpenses fuelExpenses) => _fuelExpensesRepository.GetById(fuelExpenses.Id).Result != null;
+        private bool FuelExpenseExists(FuelExpense fuelExpense) => _fuelExpenseRepository.GetById(fuelExpense.Id).Result != null;
 
-        private bool CreditCardExists(FuelExpenses fuelExpenses)
-        {
-            if (fuelExpenses.CreditCardId > 0)
-            {
-                var cards = _creditCardRepository.GetSome(new BaseFilter() { UserId = _userId }).Result;
-                return cards.Any(p => p.Id == fuelExpenses.CreditCardId);
-            }
-            else
-                fuelExpenses.CreditCardId = null;
-            return true;
-        }
-
-        private bool DataMiliageIsMatch(FuelExpenses fuelExpense)
+        private bool DataMiliageIsMatch(FuelExpense fuelExpense)
         {
             var vehicle = _vehicleRepository.GetById(fuelExpense.VehicleId).Result;
             if (vehicle == null)

@@ -58,10 +58,10 @@
     <EmbeddedResource Include="Infra/Sql/Vehicle/Insert.sql" />
     <EmbeddedResource Include="Infra/Sql/Vehicle/Update.sql" />
 
-    <EmbeddedResource Include="Infra/Sql/FuelExpenses/Delete.sql" />
-    <EmbeddedResource Include="Infra/Sql/FuelExpenses/GetById.sql" />
-    <EmbeddedResource Include="Infra/Sql/FuelExpenses/Insert.sql" />
-    <EmbeddedResource Include="Infra/Sql/FuelExpenses/Update.sql" />
+    <EmbeddedResource Include="Infra/Sql/FuelExpense/Delete.sql" />
+    <EmbeddedResource Include="Infra/Sql/FuelExpense/GetById.sql" />
+    <EmbeddedResource Include="Infra/Sql/FuelExpense/Insert.sql" />
+    <EmbeddedResource Include="Infra/Sql/FuelExpense/Update.sql" />
 
     <EmbeddedResource Include="Infra/Sql/RemainingBalance/Delete.sql" />
     <EmbeddedResource Include="Infra/Sql/RemainingBalance/GetByMonthYear.sql" />

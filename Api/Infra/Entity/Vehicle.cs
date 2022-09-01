@@ -12,7 +12,7 @@ namespace Cashflow.Api.Infra.Entity
 
         public int UserId { get; set; }
 
-        public List<FuelExpenses> FuelExpenses { get; set; }
+        public List<FuelExpense> FuelExpenses { get; set; }
 
         public decimal MiliageTraveled => HasExpenses ? FuelExpenses.Max(p => p.Miliage) - FuelExpenses.Min(p => p.Miliage) : 0;
 

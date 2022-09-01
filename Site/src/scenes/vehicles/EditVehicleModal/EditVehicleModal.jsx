@@ -76,7 +76,7 @@ export function EditVehicleModal({ vehicle, onCancel }) {
             vehicleId: vehicle.id,
             creditCardId: card || undefined
         }
-        vehicleService.saveFuelExpenses(item)
+        vehicleService.saveFuelExpense(item)
             .then(() => {
                 clear()
                 refresh()
@@ -101,10 +101,10 @@ export function EditVehicleModal({ vehicle, onCancel }) {
         setCard('')
     }
 
-    function remove(id) {
-        vehicleService.removeFuelExpenses(id)
+    function remove(removeId) {
+        vehicleService.removeFuelExpense(removeId)
             .then(() => {
-                setFuelExpenses(fuelExpenses.filter(p => p.id !== id))
+                setFuelExpenses(fuelExpenses.filter(p => p.id !== removeId))
                 clear()
             })
     }

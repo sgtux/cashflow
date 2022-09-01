@@ -54,7 +54,6 @@ namespace Cashflow.Api.Services
             if (current != null && !force)
                 return new ResultDataModel<RemainingBalance>(current);
 
-            date = date.AddMonths(-1);
             var filter = new BaseFilter()
             {
                 StartDate = date.FixFirstDayInMonth().FixStartTimeFilter(),
@@ -87,8 +86,6 @@ namespace Cashflow.Api.Services
 
             foreach (var item in (await _recurringExpenseRepository.GetSome(filter)))
                 total -= item.History.First().PaidValue;
-
-            date = date.AddMonths(1);
 
             var newRemainingBalance = new RemainingBalance()
             {
@@ -132,16 +129,12 @@ namespace Cashflow.Api.Services
             var vehicles = await _vehicleRepository.GetSome(new BaseFilter()
             {
                 UserId = filter.UserId,
-                StartDate = filter.StartDate.Value.AddMonths(-1),
-                EndDate = filter.EndDate
+                StartDate = filter.StartDate.Value.FixStartTimeFilter(),
+                EndDate = filter.EndDate.FixEndTimeFilter()
             });
 
             foreach (var item in vehicles)
-                total += item.FuelExpenses
-                    .Where(p => (p.NextInvoice && p.Date.SameMonthYear(filter.StartDate.Value.AddMonths(-1)))
-                        || ((!p.HasCreditCard || p.CurrentInvoice)
-                            && (p.Date.SameMonthYear(filter.StartDate.Value))))
-                    .Sum(p => p.ValueSupplied);
+                total += item.FuelExpenses.Sum(p => p.ValueSupplied);
 
             return total;
         }
@@ -152,7 +145,7 @@ namespace Cashflow.Api.Services
             var expenses = await _householdExpenseRepository.GetSome(new BaseFilter()
             {
                 UserId = filter.UserId,
-                StartDate = filter.StartDate?.AddMonths(-1),
+                StartDate = filter.StartDate,
                 EndDate = filter.EndDate
             });
 

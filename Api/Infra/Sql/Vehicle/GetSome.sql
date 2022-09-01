@@ -7,11 +7,10 @@ SELECT
     f."ValueSupplied",
     f."PricePerLiter",
     f."VehicleId",
-    f."Date",
-    f."CreditCardId"
+    f."Date"
 FROM
     "Vehicle" v
-    LEFT JOIN "FuelExpenses" f ON v."Id" = f."VehicleId"
+    LEFT JOIN "FuelExpense" f ON v."Id" = f."VehicleId"
     AND (
         @StartDate IS NULL
         OR f."Date" >= @StartDate

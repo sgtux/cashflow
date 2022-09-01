@@ -1,10 +1,9 @@
-UPDATE "FuelExpenses"
+UPDATE "FuelExpense"
 SET
   "Miliage" = @Miliage,
   "ValueSupplied" = @ValueSupplied,
   "PricePerLiter" = @PricePerLiter,
   "VehicleId" = @VehicleId,
-  "Date" = @Date,
-  "CreditCardId" = @CreditCardId
+  "Date" = @Date
 WHERE
   "Id" = @Id

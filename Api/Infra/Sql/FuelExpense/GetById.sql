@@ -3,9 +3,8 @@ SELECT
     "ValueSupplied",
     "PricePerLiter",
     "VehicleId",
-    "Date",
-    "CreditCardId"
+    "Date"
 FROM
-    "FuelExpenses"
+    "FuelExpense"
 WHERE
     "Id" = @Id

@@ -4,11 +4,11 @@ using FluentMigrator;
 namespace Cashflow.Tests.Mocks.Database.Seeders
 {
     [Migration(202112162003)]
-    public class InsertFuelExpenses : Migration
+    public class InsertFuelExpense : Migration
     {
         public override void Up()
         {
-            Insert.IntoTable("FuelExpenses")
+            Insert.IntoTable("FuelExpense")
                 .Row(new { Id = 1, Miliage = 100, PricePerLiter = 9.5, ValueSupplied = 30.5, VehicleId = 1, Date = new DateTime(2020, 10, 1) })
                 .Row(new { Id = 2, Miliage = 100, PricePerLiter = 9.5, ValueSupplied = 30.5, VehicleId = 1, Date = new DateTime(2020, 10, 1) })
                 .Row(new { Id = 3, Miliage = 150, PricePerLiter = 6.5, ValueSupplied = 30.5, VehicleId = 2, Date = new DateTime(2020, 11, 8) })

@@ -25,24 +25,17 @@ namespace Cashflow.Api.Infra.Repository
         public async Task<Vehicle> GetById(long id)
         {
             Vehicle vehicle = null;
-            await Query<FuelExpenses>(VehicleResources.ById, (x, y) =>
+            await Query<FuelExpense>(VehicleResources.ById, (x, y) =>
             {
                 if (vehicle == null)
                 {
                     vehicle = x;
-                    vehicle.FuelExpenses = new List<FuelExpenses>();
+                    vehicle.FuelExpenses = new List<FuelExpense>();
                 }
                 if (y != null)
                     vehicle.FuelExpenses.Add(y);
                 return x;
             }, new { Id = id });
-
-            if (vehicle != null && vehicle.FuelExpenses.Any())
-            {
-                var cards = await _creditCardRepository.GetSome(new BaseFilter() { UserId = vehicle.UserId });
-                foreach (var item in vehicle.FuelExpenses.Where(p => p.CreditCardId.HasValue))
-                    item.CreditCard = cards.FirstOrDefault(p => p.Id == item.CreditCardId);
-            }
 
             return vehicle;
         }
@@ -50,27 +43,19 @@ namespace Cashflow.Api.Infra.Repository
         public async Task<IEnumerable<Vehicle>> GetSome(BaseFilter filter)
         {
             var list = new List<Vehicle>();
-            await Query<FuelExpenses>(VehicleResources.Some, (x, y) =>
+            await Query<FuelExpense>(VehicleResources.Some, (x, y) =>
             {
                 var vehicle = list.FirstOrDefault(p => p.Id == x.Id);
                 if (vehicle == null)
                 {
                     vehicle = x;
-                    vehicle.FuelExpenses = new List<FuelExpenses>();
+                    vehicle.FuelExpenses = new List<FuelExpense>();
                     list.Add(vehicle);
                 }
                 if (y != null)
                     vehicle.FuelExpenses.Add(y);
                 return x;
             }, filter);
-
-            if (list.Any())
-            {
-                var cards = await _creditCardRepository.GetSome(new BaseFilter() { UserId = list.First().UserId });
-                foreach (var vehicle in list.Where(p => p.FuelExpenses.Any()))
-                    foreach (var item in vehicle.FuelExpenses.Where(p => p.CreditCardId.HasValue))
-                        item.CreditCard = cards.FirstOrDefault(p => p.Id == item.CreditCardId);
-            }
 
             return list;
         }
