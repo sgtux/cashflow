@@ -45,7 +45,7 @@ namespace Cashflow.Api.Services
             var list = (await _remainingBalanceRepository.GetSome(new BaseFilter() { UserId = userId })).ToList();
             var result = await Recalculate(userId, DateTime.Now, false, true);
             list.Add(result.Data);
-            return new ResultDataModel<IEnumerable<RemainingBalance>>(list);
+            return new ResultDataModel<IEnumerable<RemainingBalance>>(list.OrderByDescending(p => p.Date));
         }
 
         public async Task<ResultDataModel<RemainingBalance>> Recalculate(int userId, DateTime date, bool force = false, bool simulation = false)
@@ -80,7 +80,7 @@ namespace Cashflow.Api.Services
                     total -= item.Installments.Where(p => p.PaidDate?.SameMonthYear(date) ?? false).Sum(p => p.PaidValue.Value);
             }
 
-            var lastRemainingBalance = await _remainingBalanceRepository.GetByMonthYear(userId, date);
+            var lastRemainingBalance = await _remainingBalanceRepository.GetByMonthYear(userId, date.AddMonths(-1));
             if (lastRemainingBalance != null)
                 total += lastRemainingBalance.Value;
 

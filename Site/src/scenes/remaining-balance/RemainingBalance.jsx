@@ -98,7 +98,7 @@ export function RemainingBalances() {
                                     style={{ width: '100px', textAlign: 'center' }}
                                     secondary={<MoneySpan gain={p.value >= 0}>{toReal(p.value)}</MoneySpan>}
                                 />
-                                <ListItemSecondaryAction>
+                                <ListItemSecondaryAction hidden={!p.id}>
                                     <IconButton color="primary" aria-label="Edit" onClick={() => edit(p)}>
                                         <EditIcon />
                                     </IconButton>

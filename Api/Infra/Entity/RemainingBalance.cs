@@ -14,6 +14,8 @@ namespace Cashflow.Api.Infra.Entity
 
         public int UserId { get; set; }
 
-        public string MonthYearText => new DateTime(Year, Month, 1).ToString("MM/yyyy");
+        public string MonthYearText => Date.ToString("MM/yyyy");
+
+        public DateTime Date => new DateTime(Year, Month, 1);
     }
 }
