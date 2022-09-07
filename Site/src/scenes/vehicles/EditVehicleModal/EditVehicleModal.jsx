@@ -8,10 +8,6 @@ import {
     DialogContent,
     Zoom,
     IconButton,
-    FormControl,
-    InputLabel,
-    MenuItem,
-    Select,
     Card
 } from '@material-ui/core'
 
@@ -21,7 +17,7 @@ import {
 } from '@material-ui/icons'
 
 import { toReal, fromReal, dateToString } from '../../../helpers'
-import { vehicleService, creditCardService } from '../../../services'
+import { vehicleService } from '../../../services'
 import { InputMoney, InputText, DatePickerContainer, DatePickerInput } from '../../../components/inputs'
 
 import { FuelExpensesTable } from './styles'
@@ -37,13 +33,6 @@ export function EditVehicleModal({ vehicle, onCancel }) {
     const [valueSupplied, setValueSupplied] = useState('')
     const [formIsValid, setFormIsValid] = useState(false)
     const [fuelExpenses, setFuelExpenses] = useState([])
-    const [cards, setCards] = useState([])
-    const [card, setCard] = useState('')
-
-    useEffect(() => {
-        creditCardService.get()
-            .then(res => setCards(res))
-    }, [])
 
     useEffect(() => {
         if (vehicle) {
@@ -74,7 +63,6 @@ export function EditVehicleModal({ vehicle, onCancel }) {
             pricePerLiter: fromReal(pricePerLiter),
             valueSupplied: fromReal(valueSupplied),
             vehicleId: vehicle.id,
-            creditCardId: card || undefined
         }
         vehicleService.saveFuelExpense(item)
             .then(() => {
@@ -89,7 +77,6 @@ export function EditVehicleModal({ vehicle, onCancel }) {
         setPricePerLiter(toReal(item.pricePerLiter))
         setValueSupplied(toReal(item.valueSupplied))
         setDate(new Date(item.date))
-        setCard(item.creditCardId || '')
     }
 
     function clear() {
@@ -98,7 +85,6 @@ export function EditVehicleModal({ vehicle, onCancel }) {
         setValueSupplied('')
         setDate('')
         setId(0)
-        setCard('')
     }
 
     function remove(removeId) {
@@ -129,7 +115,6 @@ export function EditVehicleModal({ vehicle, onCancel }) {
                                     <th>Preço por Litro</th>
                                     <th>Valor Abastecido</th>
                                     <th>Litros Abastecidos</th>
-                                    <th>Cartão</th>
                                     <th>Data</th>
                                     <th>Ações</th>
                                 </tr>
@@ -141,7 +126,6 @@ export function EditVehicleModal({ vehicle, onCancel }) {
                                         <td>{toReal(p.pricePerLiter)}</td>
                                         <td>{toReal(p.valueSupplied)}</td>
                                         <td>{p.litersSupplied}</td>
-                                        <td>{p.creditCardText || '-'}</td>
                                         <td>{dateToString(p.date)}</td>
                                         <td>
                                             <IconButton onClick={() => edit(p)} color="primary" aria-label="Edit">
@@ -174,19 +158,6 @@ export function EditVehicleModal({ vehicle, onCancel }) {
                             Data: <DatePicker onChange={e => setDate(e)}
                                 customInput={<DatePickerInput />}
                                 dateFormat="dd/MM/yyyy" locale={ptBr} selected={date} />
-                            {!!cards.length &&
-                                <div style={{ marginBottom: 20 }}>
-                                    <FormControl>
-                                        <InputLabel htmlFor="select-tipo">Cartão de Crédito</InputLabel>
-                                        <Select style={{ width: '200px' }} value={card || ''}
-                                            onChange={e => setCard(e.target.value)}>
-                                            <MenuItem value={0}><span style={{ color: 'gray' }}>LIMPAR</span></MenuItem>
-                                            {cards.map(p => <MenuItem key={p.id} value={p.id}>{p.name}</MenuItem>)}
-                                        </Select>
-                                    </FormControl>
-                                    <br />
-                                </div>
-                            }
                             <Button onClick={() => clear()} autoFocus>limpar</Button>
                             <Button onClick={() => save()}
                                 disabled={!formIsValid}
