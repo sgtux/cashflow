@@ -21,8 +21,9 @@ class _ResumeScreenState extends State<ResumeScreen> {
     Colors.orange.shade800,
     Colors.blue.shade300,
     Colors.blue.shade800,
-    Colors.green.shade400,
-    Colors.green.shade900
+    Colors.green.shade700,
+    Colors.green.shade900,
+    Colors.green.shade500,
   ];
 
   @override
