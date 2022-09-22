@@ -1,6 +1,8 @@
 import 'package:cashflow_app/src/pages/household_expense_list.dart';
-import 'package:cashflow_app/src/pages/resume_screen.dart';
-import 'package:cashflow_app/src/pages/vehicle_list.screen.dart';
+import 'package:cashflow_app/src/pages/resume/projection_screen.dart';
+import 'package:cashflow_app/src/pages/resume/resume_screen.dart';
+import 'package:cashflow_app/src/pages/vehicle/fuel_expense_list.screen.dart';
+import 'package:cashflow_app/src/pages/vehicle/vehicle_list.screen.dart';
 import "package:flutter/material.dart";
 
 class Home extends StatefulWidget {
@@ -15,8 +17,10 @@ class _HomeState extends State<Home> {
 
   final List<Widget> _screens = const [
     ResumeScreen(),
+    HouseholdExpenseList(),
+    FuelExpenseListScreen(),
     VehicleListScreen(),
-    HouseholdExpenseList()
+    ProjectionScreen()
   ];
 
   _incrementTap(index) {
@@ -31,6 +35,7 @@ class _HomeState extends State<Home> {
       appBar: AppBar(title: const Text("CASHFLOW")),
       body: _screens[_index],
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         selectedIconTheme: const IconThemeData(size: 40),
         unselectedLabelStyle: const TextStyle(fontSize: 12),
         selectedLabelStyle: const TextStyle(fontSize: 10),
@@ -43,9 +48,13 @@ class _HomeState extends State<Home> {
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.motorcycle), label: 'Veículos'),
+              icon: Icon(Icons.shopping_cart), label: 'Despesas'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.bar_chart), label: 'Despesas'),
+              icon: Icon(Icons.local_gas_station), label: 'Combustível'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.car_rental), label: 'Veículos'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.bar_chart), label: 'Projeção'),
         ],
       ),
     );

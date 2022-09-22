@@ -24,7 +24,12 @@ class _VehicleDetailScreenState extends State<VehicleDetailScreen> {
 
     final vehicle =
         (ModalRoute.of(context)?.settings.arguments as VehicleModel?) ??
-            VehicleModel(id: 0, description: '');
+            VehicleModel(
+                id: 0,
+                description: '',
+                fuelExpenses: [],
+                miliagePerLiter: 0,
+                miliageTraveled: 0);
 
     descriptionController.text = vehicle.description;
 
@@ -77,7 +82,10 @@ class _VehicleDetailScreenState extends State<VehicleDetailScreen> {
                                           final model = VehicleModel(
                                               id: vehicle.id,
                                               description:
-                                                  descriptionController.text);
+                                                  descriptionController.text,
+                                              fuelExpenses: [],
+                                              miliageTraveled: 0,
+                                              miliagePerLiter: 0);
                                           vehicleService
                                               .save(model)
                                               .then((value) {

@@ -1,5 +1,5 @@
 import 'package:cashflow_app/src/models/household-expense/household_expense_model.dart';
-import 'package:cashflow_app/src/services/household-expense.service.dart';
+import 'package:cashflow_app/src/services/household_expense.service.dart';
 import 'package:cashflow_app/src/utils/constants.dart';
 import 'package:cashflow_app/src/utils/exception_handler.dart';
 import 'package:cashflow_app/src/utils/string_extensions.dart';
@@ -20,6 +20,7 @@ class _HouseholdExpenseListState extends State<HouseholdExpenseList> {
   late bool isLoading = true;
   late String? selectedYear;
   late String? selectedMonth;
+  double total = 0;
 
   @override
   void initState() {
@@ -38,14 +39,19 @@ class _HouseholdExpenseListState extends State<HouseholdExpenseList> {
     setState(() {
       isLoading = true;
       list = [];
+      total = 0;
     });
     final month = getMonthList().indexOf(selectedMonth.toString()) + 1;
     householdExpenseService
-        .getAll(month.toString(), selectedYear.toString())
-        .then((value) => {
-              setState(() => {list = value, isLoading = false})
-            })
-        .catchError((err) {
+        .getSome(month.toString(), selectedYear.toString())
+        .then((value) {
+      double sum = 0;
+      for (var item in value) {
+        sum += item.value;
+      }
+
+      setState(() => {list = value, isLoading = false, total = sum});
+    }).catchError((err) {
       setState(() {
         isLoading = false;
       });
@@ -58,13 +64,13 @@ class _HouseholdExpenseListState extends State<HouseholdExpenseList> {
     householdExpenseService = HouseholdExpenseService(context);
 
     return Scaffold(
-      body: Column(children: [
-        const SizedBox(
-          height: 10,
-        ),
-        isLoading
-            ? const CircularProgressIndicator()
-            : Row(children: [
+      body: isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : Column(children: [
+              const SizedBox(
+                height: 10,
+              ),
+              Row(children: [
                 const SizedBox(width: 40),
                 DropdownButton(
                     value: selectedYear,
@@ -98,76 +104,95 @@ class _HouseholdExpenseListState extends State<HouseholdExpenseList> {
                     onPressed: () {
                       refresh();
                     },
-                    child: const Text('BUSCAR'))
+                    child: const Text('FILTRAR'))
               ]),
-        Expanded(
-            child: ListView.builder(
-                itemCount: list.length,
-                itemBuilder: (BuildContext ctx, int idx) {
-                  return Card(
-                      child: ListTile(
-                          onLongPress: () {
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: const Text("Deletar este item?"),
-                                    content: Text(list[idx].description),
-                                    actions: [
-                                      TextButton(
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                          child: const Text("Cancelar")),
-                                      ElevatedButton(
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                            setState(() {
-                                              isLoading = true;
-                                            });
-                                            householdExpenseService
-                                                .remove(list[idx].id)
-                                                .then((res) {
-                                              refresh();
-                                            }).catchError((error) {
-                                              handleHttpException(
-                                                  error, context);
-                                              setState(() {
-                                                isLoading = false;
-                                              });
-                                            });
-                                          },
-                                          child: const Text("Remover"),
-                                          style: ButtonStyle(
-                                            backgroundColor:
-                                                MaterialStateProperty.all(
-                                                    Colors.red.shade400),
-                                          ))
-                                    ],
-                                  );
-                                });
-                          },
-                          title: Text(elipsis(list[idx].description, 30)),
-                          subtitle: Row(children: [
-                            Text(
-                              toReal(value: list[idx].value),
-                              style: TextStyle(
-                                  color: Colors.red.shade300,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            const Text(" - "),
-                            Text(toDateString(value: list[idx].date)),
-                          ]),
-                          trailing: IconButton(
-                              icon: const Icon(Icons.more_vert),
-                              onPressed: () {
-                                Navigator.pushNamed(
-                                        context, Routes.householdExpenseDetail,
-                                        arguments: list[idx])
-                                    .then((value) => refresh());
-                              })));
-                }))
-      ]),
+              list.isEmpty
+                  ? const Center(child: Text("Sem registros."))
+                  : Text(
+                      toReal(value: total),
+                      style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.red.shade300,
+                          fontWeight: FontWeight.bold),
+                    ),
+              Expanded(
+                  child: ListView.builder(
+                      itemCount: list.length,
+                      itemBuilder: (BuildContext ctx, int idx) {
+                        return Card(
+                            child: ListTile(
+                                onLongPress: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title:
+                                              const Text("Deletar este item?"),
+                                          content: Text(list[idx].description),
+                                          actions: [
+                                            TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: const Text("Cancelar")),
+                                            ElevatedButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                  setState(() {
+                                                    isLoading = true;
+                                                  });
+                                                  householdExpenseService
+                                                      .remove(list[idx].id)
+                                                      .then((res) {
+                                                    refresh();
+                                                  }).catchError((error) {
+                                                    handleHttpException(
+                                                        error, context);
+                                                    setState(() {
+                                                      isLoading = false;
+                                                    });
+                                                  });
+                                                },
+                                                child: const Text("Remover"),
+                                                style: ButtonStyle(
+                                                  backgroundColor:
+                                                      MaterialStateProperty.all(
+                                                          Colors.red.shade400),
+                                                ))
+                                          ],
+                                        );
+                                      });
+                                },
+                                title: Text(elipsis(list[idx].description, 30)),
+                                subtitle: Row(children: [
+                                  Text(
+                                    toReal(value: list[idx].value),
+                                    style: TextStyle(
+                                        color: Colors.red.shade300,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  const Text(" - "),
+                                  Text(toDateString(value: list[idx].date)),
+                                  const Text(" - "),
+                                  Text(list[idx].typeDescription!),
+                                  const Text(" - "),
+                                  list[idx].vehicleId != null
+                                      ? const Icon(
+                                          Icons.car_rental,
+                                          color: Colors.grey,
+                                        )
+                                      : const SizedBox()
+                                ]),
+                                trailing: IconButton(
+                                    icon: const Icon(Icons.more_vert),
+                                    onPressed: () {
+                                      Navigator.pushNamed(context,
+                                              Routes.householdExpenseDetail,
+                                              arguments: list[idx])
+                                          .then((value) => refresh());
+                                    })));
+                      }))
+            ]),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.pushNamed(context, Routes.householdExpenseDetail)

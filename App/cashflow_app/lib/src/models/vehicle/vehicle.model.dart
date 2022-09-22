@@ -4,23 +4,29 @@ import 'package:cashflow_app/src/models/vehicle/fuel_expense.model.dart';
 class VehicleModel extends ModelBase {
   final int id;
   final String description;
-  late double miliageTraveled;
-  late double miliagePerLiter;
-  late List<FuelExpenseModel> fuelExpenses;
+  final num miliageTraveled;
+  final num miliagePerLiter;
+  final List<FuelExpenseModel> fuelExpenses;
 
   VehicleModel(
       {required this.id,
       required this.description,
-      miliageTraveled,
-      miliagePerLiter,
-      fuelExpenses});
+      required this.miliageTraveled,
+      required this.miliagePerLiter,
+      required this.fuelExpenses});
 
-  factory VehicleModel.fromMap(Map<String, dynamic> map) => VehicleModel(
-      id: map['id'],
-      description: map['description'],
-      miliagePerLiter: map['milagePerLiter'],
-      miliageTraveled: map['miliageTraveled'],
-      fuelExpenses: []);
+  factory VehicleModel.fromMap(Map<String, dynamic> map) {
+    List<FuelExpenseModel> fuelExpenses = [];
+    for (var e in (map['fuelExpenses'] as List)) {
+      fuelExpenses.add(FuelExpenseModel.fromMap(e, map['description']));
+    }
+    return VehicleModel(
+        id: map['id'],
+        description: map['description'],
+        miliagePerLiter: map['miliagePerLiter'],
+        miliageTraveled: map['miliageTraveled'],
+        fuelExpenses: fuelExpenses);
+  }
 
   @override
   Map<String, dynamic> toMap() {

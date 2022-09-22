@@ -4,7 +4,7 @@ String toReal({required double value}) {
   final controller =
       MoneyMaskedTextController(decimalSeparator: '.', thousandSeparator: ',');
   controller.updateValue(value);
-  return "R\$${controller.text}";
+  return "R\$ ${controller.text}";
 }
 
 String toDateString({required DateTime? value, String? separator}) {
@@ -44,4 +44,9 @@ List<String> getMonthList() {
     'Novembro',
     'Dezembro'
   ];
+}
+
+String toMonthYearText(String monthYear) {
+  var arr = monthYear.split("/");
+  return "${getMonthList()[int.parse(arr[0]) - 1]} - ${arr[1]}";
 }
