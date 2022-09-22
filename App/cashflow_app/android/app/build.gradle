@@ -49,13 +49,13 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.household_expences_control"
+        applicationId "com.household_expences_control_1"
         minSdkVersion 16
-        targetSdkVersion 30
+        targetSdkVersion 31
         // versionCode flutterVersionCode.toInteger()
         // versionName flutterVersionName
-        versionCode 21
-        versionName "Versão: 21"
+        versionCode 24
+        versionName "Versão: 24"
     }
 
     signingConfigs {

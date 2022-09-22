@@ -18,7 +18,7 @@ class VehicleModel extends ModelBase {
   factory VehicleModel.fromMap(Map<String, dynamic> map) {
     List<FuelExpenseModel> fuelExpenses = [];
     for (var e in (map['fuelExpenses'] as List)) {
-      fuelExpenses.add(FuelExpenseModel.fromMap(e));
+      fuelExpenses.add(FuelExpenseModel.fromMap(e, map['description']));
     }
     return VehicleModel(
         id: map['id'],

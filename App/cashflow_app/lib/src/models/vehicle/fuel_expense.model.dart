@@ -7,7 +7,8 @@ class FuelExpenseModel extends ModelBase {
   final num pricePerLiter;
   final DateTime date;
   final int vehicleId;
-  late num litersSupplied;
+  final String vehicleName;
+  late num litersSupplied;  
 
   FuelExpenseModel(
       {required this.id,
@@ -16,9 +17,10 @@ class FuelExpenseModel extends ModelBase {
       required this.pricePerLiter,
       required this.date,
       required this.vehicleId,
+      required this.vehicleName,
       litersSupplied});
 
-  factory FuelExpenseModel.fromMap(Map<String, dynamic> map) {
+  factory FuelExpenseModel.fromMap(Map<String, dynamic> map, String vehicleName) {
     return FuelExpenseModel(
       id: map['id'],
       miliage: map['miliage'],
@@ -26,6 +28,7 @@ class FuelExpenseModel extends ModelBase {
       pricePerLiter: map['pricePerLiter'],
       date: DateTime.parse(map['date']),
       vehicleId: map['vehicleId'],
+      vehicleName: vehicleName,
       litersSupplied: map['litersSupplied'],
     );
   }

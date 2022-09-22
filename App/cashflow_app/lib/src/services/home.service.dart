@@ -7,7 +7,8 @@ class HomeService extends HttpService {
   HomeService(BuildContext context) : super(context: context);
 
   Future<List<ProjectionModel>> getProjection() async {
-    final result = await get('Projection?month=12&year=2022');
+    var date = DateTime.now().add(const Duration(days: 366));
+    final result = await get('Projection?month=${date.month}&year=${date.year}');
     List<ProjectionModel> list = [];
     if (result.errors.isEmpty && result.data.isNotEmpty) {
       Map map = result.data as Map<String, dynamic>;

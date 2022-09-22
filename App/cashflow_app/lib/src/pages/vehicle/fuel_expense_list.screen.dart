@@ -20,7 +20,6 @@ class _FuelExpenseListScreenState extends State<FuelExpenseListScreen> {
   List<VehicleModel> vehicles = [];
   List<FuelExpenseModel> list = [];
   bool isLoading = false;
-  VehicleModel? selectedVehicle;
 
   @override
   void initState() {
@@ -35,9 +34,13 @@ class _FuelExpenseListScreenState extends State<FuelExpenseListScreen> {
     _vehicleService.getAll().then((value) {
       setState(() {
         vehicles = value;
-        selectedVehicle = value.isNotEmpty ? value.first : null;
         isLoading = false;
-        list = value.first.fuelExpenses;
+
+        list.clear();
+        for (var item in value) {
+          list.addAll(item.fuelExpenses);
+        }
+        list.sort((a, b) => b.date.compareTo(a.date));
       });
     }).catchError((error) {
       setState(() {
@@ -56,28 +59,6 @@ class _FuelExpenseListScreenState extends State<FuelExpenseListScreen> {
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : Column(children: [
-              const SizedBox(
-                height: 10,
-              ),
-              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                const SizedBox(width: 40),
-                DropdownButton(
-                    value: selectedVehicle,
-                    items: vehicles
-                        .map((VehicleModel e) => DropdownMenuItem<VehicleModel>(
-                              value: e,
-                              child: Text(e.description),
-                            ))
-                        .toList(),
-                    onChanged: (VehicleModel? newValue) {
-                      setState(() {
-                        selectedVehicle = newValue;
-                        list = vehicles
-                            .firstWhere((e) => e.id == newValue!.id)
-                            .fuelExpenses;
-                      });
-                    })
-              ]),
               Expanded(
                   child: ListView.builder(
                       itemCount: list.length,
@@ -115,53 +96,62 @@ class _FuelExpenseListScreenState extends State<FuelExpenseListScreen> {
                                                     });
                                                   });
                                                 },
-                                                child: const Text("Remover"),
                                                 style: ButtonStyle(
                                                   backgroundColor:
                                                       MaterialStateProperty.all(
                                                           Colors.red.shade400),
-                                                ))
+                                                ),
+                                                child: const Text("Remover"))
                                           ],
                                         );
                                       });
                                 },
-                                title: Row(children: [
-                                  Text("${list[idx].miliage.toString()} Km"),
-                                  const Text(" - "),
-                                  Text(
-                                    toReal(
-                                        value:
-                                            list[idx].valueSupplied.toDouble()),
-                                    style: TextStyle(
-                                        color: Colors.red.shade300,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ]),
-                                subtitle:
-                                    Text(toDateString(value: list[idx].date)),
+                                title: Text(list[idx].vehicleName),
+                                subtitle: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                          "${list[idx].miliage.toString()} Km"),
+                                      Text(
+                                        toReal(
+                                            value: list[idx]
+                                                .valueSupplied
+                                                .toDouble()),
+                                        style: TextStyle(
+                                            color: Colors.red.shade300,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(toDateString(value: list[idx].date)),
+                                    ]),
                                 trailing: IconButton(
                                     icon: const Icon(Icons.more_vert),
                                     onPressed: () {
+                                      Map<String, dynamic> args = {};
+                                      args['vehicles'] = vehicles;
+                                      args['fuelExpenseModel'] = list[idx];
                                       Navigator.pushNamed(
                                               context, Routes.fuelExpenseDetail,
-                                              arguments: list[idx])
+                                              arguments: args)
                                           .then((value) => refresh());
                                     })));
                       }))
             ]),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          if (selectedVehicle != null && selectedVehicle!.id > 0) {
-            Navigator.pushNamed(context, Routes.fuelExpenseDetail,
-                    arguments: FuelExpenseModel(
-                        id: 0,
-                        vehicleId: selectedVehicle!.id,
-                        miliage: 0,
-                        pricePerLiter: 0,
-                        valueSupplied: 0,
-                        date: DateTime.now()))
-                .then((value) => refresh());
-          }
+          Map<String, dynamic> args = {};
+          args['vehicles'] = vehicles;
+          args['fuelExpenseModel'] = FuelExpenseModel(
+              id: 0,
+              vehicleId: 0,
+              miliage: 0,
+              pricePerLiter: 0,
+              valueSupplied: 0,
+              date: DateTime.now(),
+              vehicleName: "");
+          Navigator.pushNamed(context, Routes.fuelExpenseDetail,
+                  arguments: args)
+              .then((value) => refresh());
         },
         backgroundColor: Colors.green,
         child: const Icon(Icons.addchart),

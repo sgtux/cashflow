@@ -8,13 +8,13 @@ class FuelExpenseService extends HttpService {
 
   Future<ResultModel> save(FuelExpenseModel fuelExpense) async {
     if (fuelExpense.id > 0) {
-      return await put('FuelExpenses/${fuelExpense.id}', fuelExpense);
+      return await put('FuelExpense/${fuelExpense.id}', fuelExpense);
     } else {
-      return await post('FuelExpenses', fuelExpense);
+      return await post('FuelExpense', fuelExpense);
     }
   }
 
   Future<ResultModel> remove(int id) async {
-    return await delete('FuelExpenses/$id');
+    return await delete('FuelExpense/$id');
   }
 }

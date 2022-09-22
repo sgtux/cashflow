@@ -1,8 +1,10 @@
 import 'package:cashflow_app/src/models/vehicle/fuel_expense.model.dart';
+import 'package:cashflow_app/src/models/vehicle/vehicle.model.dart';
 import 'package:cashflow_app/src/services/fuel_expense.service.dart';
 import 'package:cashflow_app/src/utils/exception_handler.dart';
 import 'package:cashflow_app/src/utils/string_extensions.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:intl/intl.dart';
 
@@ -18,6 +20,8 @@ class _FuelExpenseDetailScreenState extends State<FuelExpenseDetailScreen> {
   late FuelExpenseService _fuelExpenseService;
   late bool isLoading = false;
   FuelExpenseModel? fuelExpense;
+  List<VehicleModel> vehicles = [];
+  VehicleModel? selectedVehicle;
 
   final _formKey = GlobalKey<FormState>();
   final miliageController = TextEditingController();
@@ -34,8 +38,10 @@ class _FuelExpenseDetailScreenState extends State<FuelExpenseDetailScreen> {
   }
 
   void refresh() {
+    dynamic args = ModalRoute.of(context)!.settings.arguments;
     FuelExpenseModel fuelExpenseTemp =
-        (ModalRoute.of(context)!.settings.arguments as FuelExpenseModel);
+        args['fuelExpenseModel'] as FuelExpenseModel;
+    List<VehicleModel> vehiclesTemp = args['vehicles'] as List<VehicleModel>;
 
     miliageController.text = fuelExpenseTemp.miliage.toString();
     valueSuppliedController
@@ -47,6 +53,13 @@ class _FuelExpenseDetailScreenState extends State<FuelExpenseDetailScreen> {
 
     setState(() {
       fuelExpense = fuelExpenseTemp;
+      vehicles = vehiclesTemp;
+      if (fuelExpenseTemp.vehicleId > 0) {
+        selectedVehicle = vehiclesTemp
+            .firstWhere((element) => element.id == fuelExpenseTemp.vehicleId);
+      } else {
+        selectedVehicle = vehiclesTemp.first;
+      }
     });
   }
 
@@ -66,8 +79,31 @@ class _FuelExpenseDetailScreenState extends State<FuelExpenseDetailScreen> {
                       // child: Expanded(
                       child: Column(
                         children: [
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const SizedBox(width: 40),
+                                DropdownButton(
+                                    value: selectedVehicle,
+                                    items: vehicles
+                                        .map((VehicleModel e) =>
+                                            DropdownMenuItem<VehicleModel>(
+                                              value: e,
+                                              child: Text(e.description),
+                                            ))
+                                        .toList(),
+                                    onChanged: (VehicleModel? newValue) {
+                                      setState(() {
+                                        selectedVehicle = newValue;
+                                      });
+                                    })
+                              ]),
                           TextFormField(
                             keyboardType: TextInputType.number,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                  RegExp(r'[0-9]'))
+                            ],
                             controller: miliageController,
                             decoration: const InputDecoration(
                                 labelText: 'Quilometragem'),
@@ -152,19 +188,20 @@ class _FuelExpenseDetailScreenState extends State<FuelExpenseDetailScreen> {
                                             isLoading = true;
                                           });
                                           final model = FuelExpenseModel(
-                                            id: fuelExpense!.id,
-                                            vehicleId: fuelExpense!.vehicleId,
-                                            miliage: int.parse(
-                                                miliageController.text),
-                                            pricePerLiter:
-                                                pricePerLiterController
-                                                    .numberValue,
-                                            valueSupplied:
-                                                valueSuppliedController
-                                                    .numberValue,
-                                            date: DateFormat('dd/MM/yyyy')
-                                                .parse(dateController.text),
-                                          );
+                                              id: fuelExpense!.id,
+                                              vehicleId: selectedVehicle!.id,
+                                              miliage: int.parse(
+                                                  miliageController.text),
+                                              pricePerLiter:
+                                                  pricePerLiterController
+                                                      .numberValue,
+                                              valueSupplied:
+                                                  valueSuppliedController
+                                                      .numberValue,
+                                              date: DateFormat('dd/MM/yyyy')
+                                                  .parse(dateController.text),
+                                              vehicleName:
+                                                  fuelExpense!.vehicleName);
                                           _fuelExpenseService
                                               .save(model)
                                               .then((value) {
