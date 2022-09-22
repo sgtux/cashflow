@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Cashflow.Api.Contracts;
+using Cashflow.Api.Extensions;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Infra.Filters;
 using Cashflow.Api.Models;
@@ -40,7 +42,11 @@ namespace Cashflow.Api.Services
             return new ResultDataModel<Vehicle>(p?.UserId == userId ? p : null);
         }
 
-        public async Task<ResultDataModel<IEnumerable<Vehicle>>> GetByUserId(int userId) => new ResultDataModel<IEnumerable<Vehicle>>(await _vehicleRepository.GetSome(new BaseFilter() { UserId = userId }));
+        public async Task<ResultDataModel<IEnumerable<Vehicle>>> GetByUserId(int userId)
+        {
+            var filter = new BaseFilter() { UserId = userId, StartDate = DateTime.Now.AddMonths(-2).FixFirstDayInMonth() };
+            return new ResultDataModel<IEnumerable<Vehicle>>(await _vehicleRepository.GetSome(filter));
+        }
 
         public async Task<ResultModel> Update(Vehicle vehicle)
         {
