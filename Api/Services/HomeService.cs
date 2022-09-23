@@ -17,16 +17,19 @@ namespace Cashflow.Api.Services
 
         private readonly IVehicleRepository _vehicleRepository;
 
+        private readonly IEarningRepository _earningRepository;
+
         public HomeService(IPaymentRepository paymentRepository,
             ICreditCardRepository creditCardRepository,
             IHouseholdExpenseRepository householdExpenseRepository,
             IVehicleRepository vehicleRepository,
-            EarningService earningService
+            IEarningRepository earningRepository
             )
         {
             _paymentRepository = paymentRepository;
             _householdExpenseRepository = householdExpenseRepository;
             _vehicleRepository = vehicleRepository;
+            _earningRepository = earningRepository;
         }
 
         public async Task<ResultDataModel<List<HomeChartModel>>> GetInfo(int userId, int month, int year)
@@ -55,6 +58,8 @@ namespace Cashflow.Api.Services
                 householdExpenseModel.Value += item.Value;
 
             var payments = await _paymentRepository.GetSome(filter);
+
+            earningsModel.Value = (await _earningRepository.GetSome(filter)).Sum(p => p.Value);
 
             expensesModel.Value += CalculatePaymentHomeChartModel(payments, month, year, Enums.PaymentType.Expense);
             contributionsModel.Value += CalculatePaymentHomeChartModel(payments, month, year, Enums.PaymentType.Contributions);

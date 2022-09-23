@@ -45,7 +45,7 @@ namespace Cashflow.Api.Services
                 EndDate = new DateTime(year, month, DateTime.DaysInMonth(year, month)).FixEndTimeFilter(),
                 UserId = userId
             });
-            return new ResultDataModel<IEnumerable<HouseholdExpense>>(list);
+            return new ResultDataModel<IEnumerable<HouseholdExpense>>(list.OrderByDescending(p => p.Date));
         }
 
         public async Task<ResultDataModel<HouseholdExpense>> GetById(long id, int userId)
