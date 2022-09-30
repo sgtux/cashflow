@@ -7,4 +7,5 @@ const config = {
 export default {
     error: message => toast.error(message, config),
     success: message => toast.success(message, config),
+    warning: message => toast.warning(message, config),
 }

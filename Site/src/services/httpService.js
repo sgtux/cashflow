@@ -22,7 +22,11 @@ const sendRequest = (method, url, headers, data) => {
     headers: headers,
     url: API_URL + url,
     data: data
-  }).then(res => res.data.data)
+  }).then(res => {
+    if (res.data.requestElapsedTime > 500)
+      toast.warning(`${url} is too slow around ${res.data.requestElapsedTime}ms`)
+    return res.data.data
+  })
     .catch(err => {
       const result = {
         message: err.response.data.message,

@@ -17,5 +17,7 @@ namespace Cashflow.Api.Models
         public void AddNotification(IList<ValidationFailure> errors) => Notifications.AddRange(errors.Select(p => p.ErrorMessage));
 
         public bool IsValid => !Notifications.Any();
+
+        public long RequestElapsedTime { get; set; }
     }
 }

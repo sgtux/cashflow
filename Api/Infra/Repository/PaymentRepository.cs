@@ -24,50 +24,26 @@ namespace Cashflow.Api.Infra.Repository
 
         public async Task<IEnumerable<Payment>> GetSome(BaseFilter filter)
         {
-            var list = new List<Payment>();
-            var types = await GetTypes();
-            var cards = await _creditCardRepository.GetSome(filter);
-            await Query<Installment>(PaymentResources.Some, (p, i) =>
-            {
-                var pay = list.FirstOrDefault(x => x.Id == p.Id);
-                if (pay == null)
-                {
-                    pay = p;
-                    if (p.CreditCardId.HasValue)
-                        p.CreditCard = cards.FirstOrDefault(c => c.Id == p.CreditCardId.Value);
-                    list.Add(p);
-                    pay.Type = types.FirstOrDefault(t => t.Id == (int)p.TypeId);
-                    pay.Installments = new List<Installment>();
-                }
-                pay.Installments.Add(i);
-                return p;
-            }, filter);
-            return list;
+            var data = await Query<dynamic>(PaymentResources.Some, filter);
+
+            Slapper.AutoMapper.Configuration.AddIdentifiers(typeof(Payment), new List<string> { "Id" });
+            Slapper.AutoMapper.Configuration.AddIdentifiers(typeof(Installment), new List<string> { "Id" });
+            Slapper.AutoMapper.Configuration.AddIdentifiers(typeof(CreditCard), new List<string> { "Id" });
+            Slapper.AutoMapper.Configuration.AddIdentifiers(typeof(PaymentType), new List<string> { "Id" });
+
+            return (Slapper.AutoMapper.MapDynamic<Payment>(data));
         }
 
         public async Task<Payment> GetById(long id)
         {
-            Payment payment = null;
-            var types = await GetTypes();
-            await Query<Installment>(PaymentResources.ById, (p, i) =>
-            {
-                if (payment == null)
-                {
-                    payment = p;
-                    payment.Installments = new List<Installment>();
-                    payment.Type = types.FirstOrDefault(t => t.Id == (int)p.TypeId);
-                }
-                payment.Installments.Add(i);
-                return p;
-            }, new { Id = id });
+            var data = await Query<dynamic>(PaymentResources.ById, new { Id = id });
 
-            if (payment != null)
-            {
-                var cards = await _creditCardRepository.GetSome(new BaseFilter() { UserId = payment.UserId });
-                if (payment.CreditCardId.HasValue)
-                    payment.CreditCard = cards.FirstOrDefault(c => c.Id == payment.CreditCardId.Value);
-            }
-            return payment;
+            Slapper.AutoMapper.Configuration.AddIdentifiers(typeof(Payment), new List<string> { "Id" });
+            Slapper.AutoMapper.Configuration.AddIdentifiers(typeof(Installment), new List<string> { "Id" });
+            Slapper.AutoMapper.Configuration.AddIdentifiers(typeof(CreditCard), new List<string> { "Id" });
+            Slapper.AutoMapper.Configuration.AddIdentifiers(typeof(PaymentType), new List<string> { "Id" });
+
+            return (Slapper.AutoMapper.MapDynamic<Payment>(data)).FirstOrDefault();
         }
 
         public async Task Add(Payment payment)
