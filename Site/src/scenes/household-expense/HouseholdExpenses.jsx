@@ -15,13 +15,15 @@ import {
 import {
     Delete as DeleteIcon,
     EditOutlined as EditIcon,
-    Refresh as RefreshIcon
+    Refresh as RefreshIcon,
+    AddCircle as AddCircleIcon
 } from '@material-ui/icons'
 
 import { MainContainer, InputMonth } from '../../components'
 
 import { householdExpenseService } from '../../services'
 import { toReal, dateToString, ellipsisText } from '../../helpers'
+import { EditHouseholdExpenseModal } from './edit-household-expense-modal/EditHouseholdExpenseModal'
 
 export function HouseholdExpenses() {
 
@@ -31,6 +33,7 @@ export function HouseholdExpenses() {
     const [selectedYear, setSelectedYear] = useState('')
     const [totals, setTotals] = useState([])
     const [total, setTotal] = useState(0)
+    const [editHouseholdExpense, setEditHouseholdExpense] = useState()
 
     useEffect(() => {
         const now = new Date()
@@ -101,9 +104,9 @@ export function HouseholdExpenses() {
             {householdExpenses.length ?
                 <div>
                     <div style={{ textTransform: 'none', fontSize: '18px', textAlign: 'center' }}>
-                        <Link to="/edit-household-expense/0">
-                            <Button variant="contained" color="primary">Adicionar Despesa</Button>
-                        </Link>
+                        <IconButton onClick={() => setEditHouseholdExpense({})} variant="contained" color="primary">
+                            <AddCircleIcon />
+                        </IconButton>
                     </div>
                     <Paper style={{ marginTop: '20px' }}>
 
@@ -131,13 +134,11 @@ export function HouseholdExpenses() {
                                         secondary={dateToString(p.date)}
                                     />
                                     <ListItemSecondaryAction>
-                                        <Link to={`/edit-household-expense/${p.id}`}>
-                                            <Tooltip title="Editar esta Despesa">
-                                                <IconButton color="primary" aria-label="Edit">
-                                                    <EditIcon />
-                                                </IconButton>
-                                            </Tooltip>
-                                        </Link>
+                                        <Tooltip title="Editar esta Despesa">
+                                            <IconButton onClick={() => setEditHouseholdExpense(p)} color="primary" aria-label="Edit">
+                                                <EditIcon />
+                                            </IconButton>
+                                        </Tooltip>
                                         <Tooltip title="Remover Despesa">
                                             <IconButton color="secondary" aria-label="Delete"
                                                 onClick={() => removeHouseholdExpense(p.id)}>
@@ -155,11 +156,15 @@ export function HouseholdExpenses() {
                     <div style={{ marginBottom: 40 }}>
                         <span>Sem despesas para o filtro selecionado.</span>
                     </div>
-                    <Link to="/edit-household-expense/0">
-                        <Button variant="contained" color="primary">Adicionar Despesa</Button>
-                    </Link>
+                    <IconButton onClick={() => setEditHouseholdExpense({})} variant="contained" color="primary">
+                        <AddCircleIcon />
+                    </IconButton>
                 </div>
             }
+            <EditHouseholdExpenseModal onClose={() => setEditHouseholdExpense(null)}
+                editHouseholdExpense={editHouseholdExpense}
+                onSave={() => { setEditHouseholdExpense(null); refresh(selectedMonth, selectedYear) }}
+            />
         </MainContainer>
     )
 }

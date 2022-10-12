@@ -171,6 +171,6 @@ export function EditVehicleModal({ vehicle, onCancel }) {
                     </div>
                 </div>
             </DialogContent>
-        </Dialog >
+        </Dialog>
     )
 }
