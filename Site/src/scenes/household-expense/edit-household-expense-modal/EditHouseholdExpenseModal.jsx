@@ -59,6 +59,14 @@ export function EditHouseholdExpenseModal({ editHouseholdExpense, onClose, onSav
             } catch (ex) {
                 console.log(ex)
             }
+        } else {
+            setId(0)
+            setDescription('')
+            setDate('')
+            setValue('')
+            setVehicleId('')
+            setType('')
+            setCard('')
         }
     }, [editHouseholdExpense])
 
