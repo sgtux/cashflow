@@ -31,7 +31,7 @@ namespace Cashflow.Api.Infra.Entity
 
         public IList<Installment> Installments { get; set; }
 
-        public int PaidInstallments => Installments?.Count(p => p.PaidDate.HasValue) ?? 0;
+        public int PaidInstallments => Installments?.Count(p => p.PaidDate.HasValue || p.Exempt) ?? 0;
 
         public decimal Total => Installments?.Sum(p => p.Value) ?? 0;
 

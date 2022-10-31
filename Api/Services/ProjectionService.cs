@@ -153,6 +153,7 @@ namespace Cashflow.Api.Services
                         Number = string.Join("-", installments.Select(p => p.Number)),
                         PaidDate = installments.First().PaidDate,
                         QtdInstallments = payMonth.Installments.Count,
+                        QtdPaidInstallments = payMonth.PaidInstallments,
                         Type = payMonth.Type,
                         Value = value
                     });

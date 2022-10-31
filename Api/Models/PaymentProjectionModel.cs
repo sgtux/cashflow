@@ -13,6 +13,8 @@ namespace Cashflow.Api.Models
 
         public int QtdInstallments { get; set; }
 
+        public int QtdPaidInstallments { get; set; }
+
         public decimal Value { get; set; }
 
         public PaymentType Type { get; set; }
