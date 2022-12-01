@@ -35,16 +35,16 @@ export function Earnings() {
         let year = now.getFullYear() - 1
         let month = now.getMonth() + 1
         const list = []
-        while (year < now.getFullYear() || (year === now.getFullYear() && month <= (now.getMonth() + 1))) {
+        while (year < now.getFullYear() || (year === now.getFullYear() && month <= now.getMonth())) {
             month++
             if (month > 12) {
                 year++
                 month = 1
             }
-            list.push(`${month - 1}/${year}`)
+            list.push(`${month}/${year}`)
         }
         setMonthYearList(list)
-        setSelectedMonthYear(`${month - 1}/${year}`)
+        setSelectedMonthYear(`${month}/${year}`)
     }, [])
 
     useEffect(() => refresh(), [selectedMonthYear])
