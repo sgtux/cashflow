@@ -72,7 +72,6 @@ export function EditEarning() {
 
         }).then(() => {
             toast.success('Salvo com sucesso.')
-            console.log(id)
             if (!id)
                 navigate('/earnings')
         })

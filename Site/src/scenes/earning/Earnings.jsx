@@ -11,7 +11,8 @@ import {
 import {
     Delete as DeleteIcon,
     Edit as EditIcon,
-    AddCircle as AddCircleIcon
+    AddCircle as AddCircleIcon,
+    FileCopy as CopyIcon
 } from '@material-ui/icons'
 
 import { EarningTable, Container } from './styles'
@@ -19,7 +20,7 @@ import { EarningTable, Container } from './styles'
 import { earningService } from '../../services'
 
 import { MainContainer, ConfirmModal } from '../../components/main'
-import { toReal, toast, dateToString } from '../../helpers'
+import { toReal, toast, dateToString, isSameMonth } from '../../helpers'
 
 export function Earnings() {
 
@@ -74,6 +75,20 @@ export function Earnings() {
             })
     }
 
+    function copyEarning(earning) {
+        let date = new Date(earning.date)
+        date = new Date(date.getFullYear(), new Date().getMonth(), date.getDate())
+        earning = { ...earning, id: 0, date }
+        setLoading(true)
+        earningService.save(earning)
+            .then(() => {
+                toast.success('Salvo com sucesso.')
+                refresh()
+            })
+            .catch(err => console.log(err))
+            .finally(() => setLoading(false))
+    }
+
     return (
         <MainContainer title="Ganhos/Benefícios" loading={loading}>
 
@@ -107,6 +122,13 @@ export function Earnings() {
                                     <td>{toReal(p.value)}</td>
                                     <td>{dateToString(p.date)}</td>
                                     <td>
+                                        {!isSameMonth(new Date(), p.date) &&
+                                            <Tooltip title="Copiar para o mês atual">
+                                                <IconButton onClick={() => copyEarning(p)} color="primary" aria-label="Edit">
+                                                    <CopyIcon />
+                                                </IconButton>
+                                            </Tooltip>
+                                        }
                                         <Tooltip title="Editar">
                                             <Link to={`/edit-earning/${p.id}`}>
                                                 <IconButton color="primary" aria-label="Edit">
@@ -134,7 +156,7 @@ export function Earnings() {
             <ConfirmModal show={!!removeItem}
                 onClose={() => setRemoveItem(null)}
                 onConfirm={() => remove()}
-                text={`Deseja realmente remover este ganho? (${(removeItem || {}).description})`} />
+                text={`Deseja realmente remover este benefício? (${(removeItem || {}).description})`} />
         </MainContainer>
     )
 }

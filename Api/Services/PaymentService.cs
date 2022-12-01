@@ -136,6 +136,13 @@ namespace Cashflow.Api.Services
                     return result;
                 }
 
+                month++;
+                if (month > 12)
+                {
+                    month = 1;
+                    year++;
+                }
+
                 if (day > creditCard.InvoiceClosingDay)
                 {
                     month++;
