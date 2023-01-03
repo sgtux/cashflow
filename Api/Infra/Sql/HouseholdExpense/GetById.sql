@@ -5,8 +5,7 @@ SELECT
   p."UserId",
   p."Value",
   p."VehicleId",
-  p."Type",
-  p."CreditCardId"
+  p."Type"
 FROM
   "HouseholdExpense" p
 WHERE

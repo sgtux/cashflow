@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
 
 import {
     Paper,
@@ -8,8 +7,7 @@ import {
     ListItemSecondaryAction,
     IconButton,
     ListItemText,
-    Tooltip,
-    Button
+    Tooltip
 } from '@material-ui/core'
 
 import {

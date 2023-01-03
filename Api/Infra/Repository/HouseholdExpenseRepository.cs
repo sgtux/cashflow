@@ -22,17 +22,7 @@ namespace Cashflow.Api.Infra.Repository
 
         public Task Add(HouseholdExpense t) => Execute(HouseholdExpenseResources.Insert, t);
 
-        public async Task<IEnumerable<HouseholdExpense>> GetSome(BaseFilter filter)
-        {
-            var list = await Query(HouseholdExpenseResources.Some, filter);
-            if (list.Any(p => p.CreditCardId > 0))
-            {
-                var cards = await _creditCardRepository.GetSome(filter);
-                foreach (var item in list)
-                    item.CreditCard = cards.FirstOrDefault(p => p.Id == item.CreditCardId);
-            }
-            return list;
-        }
+        public Task<IEnumerable<HouseholdExpense>> GetSome(BaseFilter filter) => Query(HouseholdExpenseResources.Some, filter);
 
         public async Task<HouseholdExpense> GetById(long id)
         {

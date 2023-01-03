@@ -9,7 +9,6 @@ import {
   EditEarning,
   EditPayment,
   HouseholdExpenses,
-  EditHouseholdExpense,
   Vehicles,
   Home,
   RecurringExpenses,
@@ -44,7 +43,6 @@ export default function () {
       <Route path="/edit-earning/:id" element={<EditEarning />} />
       <Route path="/edit-payment/:id" element={<EditPayment />} />
       <Route path="/household-expenses" element={<HouseholdExpenses />} />
-      <Route path="/edit-household-expense/:id" element={<EditHouseholdExpense />} />
       <Route path="/vehicles" element={<Vehicles />} />
       <Route path="/recurring-expenses" element={<RecurringExpenses />} />
       <Route path="/edit-recurring-expenses/:id" element={<EditRecurringExpense />} />

@@ -17,7 +17,7 @@ import {
 import { InputMoney, DatePickerContainer, DatePickerInput } from '../../../components/inputs'
 import { toReal, fromReal } from '../../../helpers'
 
-import { householdExpenseService, vehicleService, creditCardService } from '../../../services'
+import { householdExpenseService, vehicleService } from '../../../services'
 
 export function EditHouseholdExpenseModal({ editHouseholdExpense, onClose, onSave }) {
 
@@ -30,22 +30,17 @@ export function EditHouseholdExpenseModal({ editHouseholdExpense, onClose, onSav
     const [vehicles, setVehicles] = useState([])
     const [types, setTypes] = useState([])
     const [type, setType] = useState('')
-    const [cards, setCards] = useState([])
-    const [card, setCard] = useState('')
 
     useEffect(async () => {
         if (editHouseholdExpense) {
             try {
                 const taskVehicle = vehicleService.getAll()
                 const taskTypes = householdExpenseService.getTypes()
-                const taskCards = creditCardService.get()
                 const listVehicles = await taskVehicle
                 const listTypes = await taskTypes
-                const listCards = await taskCards
 
                 setVehicles(listVehicles)
                 setTypes(listTypes)
-                setCards(listCards)
 
                 if (editHouseholdExpense.id) {
                     setId(editHouseholdExpense.id)
@@ -54,7 +49,6 @@ export function EditHouseholdExpenseModal({ editHouseholdExpense, onClose, onSav
                     setValue(toReal(editHouseholdExpense.value))
                     setVehicleId(editHouseholdExpense.vehicleId)
                     setType(editHouseholdExpense.type)
-                    setCard(editHouseholdExpense.creditCardId)
                 }
             } catch (ex) {
                 console.log(ex)
@@ -66,7 +60,6 @@ export function EditHouseholdExpenseModal({ editHouseholdExpense, onClose, onSav
             setValue('')
             setVehicleId('')
             setType('')
-            setCard('')
         }
     }, [editHouseholdExpense])
 
@@ -81,8 +74,7 @@ export function EditHouseholdExpenseModal({ editHouseholdExpense, onClose, onSav
             date,
             value: fromReal(value),
             vehicleId: vehicleId ? Number(vehicleId) : 0,
-            type: Number(type),
-            creditCardId: card || undefined
+            type: Number(type)
         })
             .then(() => onSave())
             .catch(err => console.log(err))
@@ -135,19 +127,6 @@ export function EditHouseholdExpenseModal({ editHouseholdExpense, onClose, onSav
                                 onChange={e => setVehicleId(e.target.value)}>
                                 <MenuItem value={0}><span style={{ color: 'gray' }}>LIMPAR</span></MenuItem>
                                 {vehicles.map(p => <MenuItem key={p.id} value={p.id}>{p.description}</MenuItem>)}
-                            </Select>
-                        </FormControl>
-                        <br />
-                    </div>
-                }
-                {!!cards.length &&
-                    <div>
-                        <FormControl>
-                            <InputLabel htmlFor="select-tipo">Cartão de Crédito</InputLabel>
-                            <Select style={{ width: '200px' }} value={card || ''}
-                                onChange={e => setCard(e.target.value)}>
-                                <MenuItem value={0}><span style={{ color: 'gray' }}>LIMPAR</span></MenuItem>
-                                {cards.map(p => <MenuItem key={p.id} value={p.id}>{p.name}</MenuItem>)}
                             </Select>
                         </FormControl>
                         <br />
