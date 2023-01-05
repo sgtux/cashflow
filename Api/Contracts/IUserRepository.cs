@@ -6,5 +6,7 @@ namespace Cashflow.Api.Contracts
     public interface IUserRepository : IRepository<User>
     {
         Task<User> FindByNickName(string nickName);
+        
+        Task UpdateSpendingCeiling(int userId, decimal spendingCeiling);
     }
 }

@@ -63,5 +63,15 @@ namespace Cashflow.Api.Services
 
             return result;
         }
+
+        public async Task<ResultModel> UpdateSpendingCeiling(int userId, decimal spendingCeiling)
+        {
+            var result = new ResultModel();
+            if (spendingCeiling < 0 || spendingCeiling > 99999)
+                result.AddNotification("Valor inválido.");
+            else
+                await _userRepository.UpdateSpendingCeiling(userId, spendingCeiling);
+            return result;
+        }
     }
 }

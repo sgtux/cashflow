@@ -10,6 +10,8 @@ namespace Cashflow.Api.Infra.Entity
 
         public string Password { get; set; }
 
+        public decimal SpendingCeiling { get; set; }
+
         public DateTime CreatedAt { get; set; }
     }
 }

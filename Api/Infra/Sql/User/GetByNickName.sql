@@ -2,6 +2,7 @@ SELECT
     "Id",
     "NickName",
     "Password",
-    "CreatedAt"
+    "CreatedAt",
+    "SpendingCeiling"
 FROM "User"
 WHERE "NickName" = @NickName

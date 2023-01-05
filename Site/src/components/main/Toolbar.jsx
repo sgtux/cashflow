@@ -4,9 +4,11 @@ import { AppBar, Toolbar, Button } from '@material-ui/core/'
 import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
 import * as Icons from '@material-ui/icons'
+import { Link } from 'react-router-dom'
 
 import { userChanged } from '../../actions'
 import { authService } from '../../services'
+import { UsernameSpan } from './styles'
 
 const styles = {
   root: {
@@ -52,7 +54,7 @@ export function AppToolbar({ openSideBar, dockedMenu }) {
           <Typography variant="h2" color="inherit" style={styles.grow}>
             Fluxo de Caixa (R$)
           </Typography>
-          {appState.user.nickName}
+          <Link to="/account"><UsernameSpan>{appState.user.nickName}</UsernameSpan></Link>
           <Button color="secondary" onClick={() => logout()}>
             <Icons.ExitToApp style={{ color: '#FFF' }} />
           </Button>

@@ -141,21 +141,13 @@ namespace Cashflow.Api.Services
 
         private async Task<decimal> CalculateHouseholdExpenses(BaseFilter filter)
         {
-            decimal total = 0;
             var expenses = await _householdExpenseRepository.GetSome(new BaseFilter()
             {
                 UserId = filter.UserId,
                 StartDate = filter.StartDate,
                 EndDate = filter.EndDate
             });
-
-            expenses = expenses.Where(p => (p.NextInvoice && p.Date.SameMonthYear(filter.StartDate.Value.AddMonths(-1)))
-               || ((!p.HasCreditCard || p.CurrentInvoice) && p.Date.SameMonthYear(filter.StartDate.Value)));
-
-            foreach (var item in expenses)
-                total += item.Value;
-
-            return total;
+            return expenses.Sum(p => p.Value);
         }
     }
 }

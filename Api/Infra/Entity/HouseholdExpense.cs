@@ -18,33 +18,10 @@ namespace Cashflow.Api.Infra.Entity
 
         public int? VehicleId { get; set; }
 
-        public int? CreditCardId { get; set; }
-
-        public CreditCard CreditCard { get; set; }
-
-        public bool HasCreditCard => CreditCardId.HasValue;
-
-        public string CreditCardText => CreditCard?.Name;
-
-        public bool CurrentInvoice => HasCreditCard && Date.Day <= CreditCard.InvoiceClosingDay;
-
-        public bool NextInvoice => HasCreditCard && Date.Day > CreditCard.InvoiceClosingDay;
-
         public HouseholdExpenseType Type { get; set; }
 
         public string TypeDescription => Type.GetDescription();
 
         public bool IsRecurrent => Type != HouseholdExpenseType.DelayInterest && Type != HouseholdExpenseType.Others;
-
-        public bool IsEstimated
-        {
-            get
-            {
-                return Type != HouseholdExpenseType.DelayInterest
-                        && Type != HouseholdExpenseType.Others
-                        && Type != HouseholdExpenseType.HardDrink
-                        && Type != HouseholdExpenseType.Party;
-            }
-        }
     }
 }

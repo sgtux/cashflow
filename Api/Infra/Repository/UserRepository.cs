@@ -21,6 +21,8 @@ namespace Cashflow.Api.Infra.Repository
 
         public Task Update(User t) => throw new NotImplementedException();
 
+        public Task UpdateSpendingCeiling(int userId, decimal spendingCeiling) => Execute(UserResources.UpdateSpendingCeiling, new { Id = userId, SpendingCeiling = spendingCeiling });
+
         public Task Remove(long id) => throw new NotImplementedException();
 
         public Task<IEnumerable<User>> GetSome(BaseFilter filter) => throw new NotImplementedException();

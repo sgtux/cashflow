@@ -10,10 +10,13 @@ namespace Cashflow.Api.Models
         {
             Id = user.Id;
             NickName = user.NickName;
+            SpendingCeiling = user.SpendingCeiling;
         }
 
         public int Id { get; set; }
 
         public string NickName { get; set; }
+
+        public decimal SpendingCeiling { get; set; }
     }
 }

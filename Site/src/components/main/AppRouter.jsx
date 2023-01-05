@@ -13,7 +13,8 @@ import {
   Home,
   RecurringExpenses,
   EditRecurringExpense,
-  RemainingBalances
+  RemainingBalances,
+  Account
 } from '../../scenes'
 
 const history = createHashHistory()
@@ -47,6 +48,7 @@ export default function () {
       <Route path="/recurring-expenses" element={<RecurringExpenses />} />
       <Route path="/edit-recurring-expenses/:id" element={<EditRecurringExpense />} />
       <Route path="/remaining-balance" element={<RemainingBalances />} />
+      <Route path="/account" element={<Account />} />
     </Routes>
   )
 }
