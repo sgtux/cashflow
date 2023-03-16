@@ -11,7 +11,7 @@ import { SidebarContent } from './'
 import AppRouter from './AppRouter'
 import { Auth } from '../../scenes'
 import { AlertModal } from '../main/Modal'
-import { userChanged } from '../../actions'
+import { userChanged } from '../../store/actions'
 import { registerCallbackUnauthorized } from '../../services/httpService'
 
 export function MainComponent() {

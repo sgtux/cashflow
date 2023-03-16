@@ -1,6 +1,5 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
-import { createHashHistory } from 'history'
 import {
   CreditCards,
   Payments,
@@ -16,22 +15,6 @@ import {
   RemainingBalances,
   Account
 } from '../../scenes'
-
-const history = createHashHistory()
-const isAuthenticated = true
-const freeRoutes = ['/', '/about']
-
-let currentPath = location.hash.replace('#', '')
-
-export const getCurrentPath = () => currentPath
-
-history.listen((location, action) => {
-  if (freeRoutes.indexOf(location.pathname) === -1 && !isAuthenticated) {
-    window.location.hash = '#/'
-    currentPath = '/'
-  } else
-    currentPath = location.pathname
-})
 
 export default function () {
   return (

@@ -9,7 +9,6 @@ import {
   IconButton,
   ListItemText,
   Tooltip,
-  Button,
   Typography
 } from '@material-ui/core'
 
@@ -44,7 +43,7 @@ export function Payments() {
 
   const [loading, setLoading] = useState(false)
   const [payments, setPayments] = useState([])
-  const [filter, setFilter] = useState({ done: false })
+  const [filter, setFilter] = useState({ description: '', done: false, startDate: null, endDate: null })
 
   useEffect(() => refresh(), [filter])
 
@@ -61,9 +60,17 @@ export function Payments() {
       .finally(() => setLoading(false))
   }
 
+  function filterChanged(newFilter) {
+    if (newFilter.description !== filter.description
+      || newFilter.done !== filter.done
+      || newFilter.startDate !== filter.startDate
+      || newFilter.endDate !== filter.endDate)
+      setFilter(newFilter)
+  }
+
   return (
     <MainContainer title="Pagamentos" loading={loading}>
-      <PaymentFilter filterChanged={e => setFilter(e)} />
+      <PaymentFilter filterChanged={e => filterChanged(e)} />
       {payments.length ?
         <div>
           <div style={styles.divNewPayment}>
@@ -90,7 +97,7 @@ export function Payments() {
                   />
                   <ListItemText
                     style={{ width: '40px' }}
-                    primary={<span style={{color: '#666'}}>{`${p.firstPaymentDate} - ${p.lastPaymentDate}`}</span>}
+                    primary={<span style={{ color: '#666' }}>{`${p.firstPaymentDate} - ${p.lastPaymentDate}`}</span>}
                     secondary={`${toReal(p.installmentValue)} - ${toReal(p.total)}`}
                   />
                   <ListItemText

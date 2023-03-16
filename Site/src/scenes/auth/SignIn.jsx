@@ -10,7 +10,7 @@ import {
 } from '@material-ui/core'
 
 import IconTextInput from '../../components/main/IconTextInput'
-import { userChanged } from '../../actions'
+import { userChanged } from '../../store/actions'
 import { authService } from '../../services'
 
 const styles = {

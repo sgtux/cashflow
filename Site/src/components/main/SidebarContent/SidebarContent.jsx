@@ -5,8 +5,6 @@ import ListItemText from '@material-ui/core/ListItemText'
 import Divider from '@material-ui/core/Divider'
 import { Link } from 'react-router-dom'
 
-import { getCurrentPath } from '../AppRouter'
-
 const styles = {
   mainIcon: {
     color: 'white'
@@ -28,14 +26,9 @@ const styles = {
 }
 
 const LinkListItem = props => {
-  const clickHandle = e => {
-    if (getCurrentPath() === props.to)
-      e.preventDefault()
-    props.onClick()
-  }
   return (
     <Link to={props.to}
-      onClick={e => clickHandle(e)}
+      onClick={e => props.onClick()}
       style={{ textDecoration: 'none' }}>
       <ListItem button >
         <ListItemText primary={<span style={styles.subMainText}>{props.text}</span>} />

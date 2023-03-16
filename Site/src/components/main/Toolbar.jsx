@@ -6,7 +6,7 @@ import IconButton from '@material-ui/core/IconButton'
 import * as Icons from '@material-ui/icons'
 import { Link } from 'react-router-dom'
 
-import { userChanged } from '../../actions'
+import { userChanged } from '../../store/actions'
 import { authService } from '../../services'
 import { UsernameSpan } from './styles'
 

@@ -1,4 +1,4 @@
-export const STORAGE_KEYS = {
-  USER: 'CASHFLOW_USER',
-  TOKEN: 'CASHFLOW_TOKEN'
+export const StorageKeys = {
+  USER: '@CASHFLOW_USER',
+  TOKEN: '@CASHFLOW_TOKEN'
 }

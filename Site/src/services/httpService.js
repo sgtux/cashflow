@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { toast } from '../helpers'
 
-import { STORAGE_KEYS } from '../helpers/storageKeys'
+import {StorageService} from './storage.service'
 
 let callbackTokenExpired = null
 
@@ -14,7 +14,7 @@ axios.interceptors.response.use(response => response, err => {
   return Promise.reject(err)
 })
 
-const getToken = () => localStorage.getItem(STORAGE_KEYS.TOKEN)
+const getToken = () => StorageService.getToken()
 
 const sendRequest = (method, url, headers, data) => {
   return axios({

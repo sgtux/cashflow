@@ -1,4 +1,3 @@
-export { SalaryEvolution } from './SalaryEvolution/SalaryEvolution'
 export {
     InputDate,
     InputNumbers,
