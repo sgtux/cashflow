@@ -10,10 +10,12 @@ namespace Cashflow.Migrations.DDL
             Create.Table("Installment")
                 .WithColumn("Id").AsInt32().PrimaryKey().Identity()
                 .WithColumn("PaymentId").AsInt32().NotNullable()
-                .WithColumn("Cost").AsDecimal(10, 2).NotNullable()
+                .WithColumn("Value").AsDecimal(10, 2).NotNullable()
                 .WithColumn("Number").AsInt32().NotNullable()
                 .WithColumn("Date").AsDateTime().NotNullable()
-                .WithColumn("Paid").AsBoolean();
+                .WithColumn("Exempt").AsBoolean().WithDefaultValue(false)
+                .WithColumn("PaidValue").AsDecimal(10, 2).Nullable()
+                .WithColumn("PaidDate").AsDateTime().Nullable();
 
             Create.ForeignKey()
                 .FromTable("Installment").ForeignColumn("PaymentId")

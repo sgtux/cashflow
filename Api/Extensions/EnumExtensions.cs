@@ -6,16 +6,20 @@ namespace Cashflow.Api.Extensions
 {
     public static class EnumExtensions
     {
-        public static string GetDescription(this PaymentCondition conditionEnum)
+        public static string GetDescription(this PaymentType type)
         {
-            switch (conditionEnum)
+            switch (type)
             {
-                case PaymentCondition.Cash:
-                    return "À Vista";
-                case PaymentCondition.Monthly:
-                    return "Mensal";
-                case PaymentCondition.Installment:
-                    return "Parcelado";
+                case PaymentType.Spending:
+                    return "Gastos";
+                case PaymentType.Financing:
+                    return "Financiamento";
+                case PaymentType.Education:
+                    return "Educação";
+                case PaymentType.Loan:
+                    return "Empréstimo";
+                case PaymentType.Donation:
+                    return "Doação";
                 default:
                     return "Desconhecido";
             }
@@ -63,9 +67,9 @@ namespace Cashflow.Api.Extensions
             switch (e)
             {
                 case EarningType.MonthyBenefit:
-                    return "Benefício Mensal";
+                    return "Provento Mensal";
                 case EarningType.Benefit:
-                    return "Benefício";
+                    return "Provento";
                 default:
                     return "Desconhecido";
             }

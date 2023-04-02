@@ -20,7 +20,7 @@ namespace Cashflow.Migrations.DDL
 
             Create.UniqueConstraint()
                 .OnTable("RemainingBalance")
-                .Columns("Month", "Year");
+                .Columns("UserId", "Month", "Year");
         }
 
         public override void Down()

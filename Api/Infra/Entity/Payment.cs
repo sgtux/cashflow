@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Cashflow.Api.Enums;
 using Cashflow.Api.Extensions;
 
 namespace Cashflow.Api.Infra.Entity
@@ -14,8 +15,6 @@ namespace Cashflow.Api.Infra.Entity
         public int UserId { get; set; }
 
         public PaymentType Type { get; set; }
-
-        public Enums.PaymentType TypeId { get; set; }
 
         public int? CreditCardId { get; set; }
 

@@ -1,11 +1,11 @@
 SELECT
-  "Id",
-  "Description",
-  "Value",
-  "Date",
-  "UserId",
-  "Type"
+  Id,
+  Description,
+  Value,
+  Date,
+  UserId,
+  Type
 FROM
-  "Earning"
+  Earning
 WHERE
-  "Id" = @Id
+  Id = @Id

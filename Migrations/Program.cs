@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Microsoft.Extensions.DependencyInjection;
-using FluentMigrator.Runner;
 using Cashflow.Migrations.DDL;
 
 namespace Cashflow.Migrations

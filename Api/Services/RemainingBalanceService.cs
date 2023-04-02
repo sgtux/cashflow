@@ -73,12 +73,8 @@ namespace Cashflow.Api.Services
             total -= await CalculateHouseholdExpenses(filter);
 
             foreach (var item in (await _paymentRepository.GetSome(new BaseFilter() { UserId = filter.UserId })))
-            {
-                if (item.Type.In)
-                    total += item.Installments.Where(p => p.PaidDate?.SameMonthYear(date) ?? false).Sum(p => p.PaidValue.Value);
-                else
-                    total -= item.Installments.Where(p => p.PaidDate?.SameMonthYear(date) ?? false).Sum(p => p.PaidValue.Value);
-            }
+                total -= item.Installments.Where(p => p.PaidDate?.SameMonthYear(date) ?? false).Sum(p => p.PaidValue.Value);
+
 
             var lastRemainingBalance = await _remainingBalanceRepository.GetByMonthYear(userId, date.AddMonths(-1));
             if (lastRemainingBalance != null)

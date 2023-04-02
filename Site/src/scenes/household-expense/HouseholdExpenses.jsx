@@ -62,6 +62,8 @@ export function HouseholdExpenses() {
                 setHouseholdExpenses(res)
                 if (res.length)
                     setTotal(res.map(p => p.value).reduce((x, y) => x + y))
+                else
+                    setTotal(0)
             })
             .catch(err => console.log(err))
             .finally(() => setLoading(false))

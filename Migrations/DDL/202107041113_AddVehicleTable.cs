@@ -2,7 +2,7 @@ using FluentMigrator;
 
 namespace Cashflow.Migrations.DDL
 {
-    [Migration(202111071413)]
+    [Migration(202107041113)]
     public class AddVehicleTable : Migration
     {
         public override void Up()

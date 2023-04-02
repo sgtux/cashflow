@@ -14,13 +14,12 @@
     <PackageReference Include="log4net" Version="2.0.12" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.9" />
     <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="6.0.9" />
-    <PackageReference Include="Npgsql" Version="6.0.7" />
+    <PackageReference Include="MySqlConnector" Version="2.2.5" />
     <PackageReference Include="Slapper.AutoMapper" Version="2.0.5" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.4" />
   </ItemGroup>
   
   <ItemGroup>
-    <EmbeddedResource Include="Infra/Sql/User/GetByNickName.sql" />
+    <EmbeddedResource Include="Infra/Sql/User/GetByEmail.sql" />
     <EmbeddedResource Include="Infra/Sql/User/GetById.sql" />
     <EmbeddedResource Include="Infra/Sql/User/Insert.sql" />
     <EmbeddedResource Include="Infra/Sql/User/UpdateSpendingCeiling.sql" />
@@ -41,7 +40,6 @@
     <EmbeddedResource Include="Infra/Sql/Payment/Delete.sql" />
     <EmbeddedResource Include="Infra/Sql/Payment/GetById.sql" />
     <EmbeddedResource Include="Infra/Sql/Payment/GetSome.sql" />
-    <EmbeddedResource Include="Infra/Sql/Payment/GetTypes.sql" />
     <EmbeddedResource Include="Infra/Sql/Payment/Insert.sql" />
     <EmbeddedResource Include="Infra/Sql/Payment/Update.sql" />
 

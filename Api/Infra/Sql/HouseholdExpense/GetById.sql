@@ -1,12 +1,12 @@
 SELECT
-  p."Id",
-  p."Description",
-  p."Date",
-  p."UserId",
-  p."Value",
-  p."VehicleId",
-  p."Type"
+  p.Id,
+  p.Description,
+  p.Date,
+  p.UserId,
+  p.Value,
+  p.VehicleId,
+  p.Type
 FROM
-  "HouseholdExpense" p
+  HouseholdExpense p
 WHERE
-  p."Id" = @Id
+  p.Id = @Id

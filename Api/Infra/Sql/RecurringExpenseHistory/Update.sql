@@ -1,7 +1,7 @@
 UPDATE
-    "RecurringExpenseHistory"
+    RecurringExpenseHistory
 SET
-    "PaidValue" = @PaidValue,
-    "Date" = @Date
+    PaidValue = @PaidValue,
+    Date = @Date
 WHERE
-    "Id" = @Id
+    Id = @Id

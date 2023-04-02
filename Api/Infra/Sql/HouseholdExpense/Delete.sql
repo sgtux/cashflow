@@ -1,4 +1,4 @@
 DELETE FROM
-    "HouseholdExpense"
+    HouseholdExpense
 WHERE
-    "Id" = @Id
+    Id = @Id

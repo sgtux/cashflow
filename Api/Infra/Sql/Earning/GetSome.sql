@@ -1,21 +1,21 @@
 SELECT
-  "Id",
-  "Description",
-  "Value",
-  "Date",
-  "UserId",
-  "Type"
+  Id,
+  Description,
+  Value,
+  Date,
+  UserId,
+  Type
 FROM
-  "Earning"
+  Earning
 WHERE
-  "UserId" = @UserId
+  UserId = @UserId
   AND (
     @StartDate IS NULL
-    OR "Date" >= @StartDate
+    OR Date >= @StartDate
   )
   AND (
     @EndDate IS NULL
-    OR "Date" <= @EndDate
+    OR Date <= @EndDate
   )
 ORDER BY
-  "Date" DESC
+  Date DESC

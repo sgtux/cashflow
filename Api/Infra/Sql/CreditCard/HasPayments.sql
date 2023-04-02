@@ -1,6 +1,6 @@
 SELECT
     COUNT(1)
 FROM
-    "Payment"
+    Payment
 WHERE
-    "CreditCardId" = @Id
+    CreditCardId = @Id

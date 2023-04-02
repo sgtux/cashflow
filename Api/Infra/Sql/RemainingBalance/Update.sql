@@ -1,9 +1,9 @@
 UPDATE
-  "RemainingBalance"
+  RemainingBalance
 SET
-  "Value" = @Value,
-  "Month" = @Month,
-  "Year" = @Year,
-  "UserId" = @UserId
+  Value = @Value,
+  Month = @Month,
+  Year = @Year,
+  UserId = @UserId
 WHERE
-  "Id" = @Id
+  Id = @Id

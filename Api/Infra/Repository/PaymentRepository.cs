@@ -20,8 +20,6 @@ namespace Cashflow.Api.Infra.Repository
             _creditCardRepository = creditCardRepository;
         }
 
-        public Task<IEnumerable<PaymentType>> GetTypes() => Query<PaymentType>(PaymentResources.Types);
-
         public async Task<IEnumerable<Payment>> GetSome(BaseFilter filter)
         {
             var data = await Query<dynamic>(PaymentResources.Some, filter);
@@ -29,7 +27,6 @@ namespace Cashflow.Api.Infra.Repository
             Slapper.AutoMapper.Configuration.AddIdentifiers(typeof(Payment), new List<string> { "Id" });
             Slapper.AutoMapper.Configuration.AddIdentifiers(typeof(Installment), new List<string> { "Id" });
             Slapper.AutoMapper.Configuration.AddIdentifiers(typeof(CreditCard), new List<string> { "Id" });
-            Slapper.AutoMapper.Configuration.AddIdentifiers(typeof(PaymentType), new List<string> { "Id" });
 
             return (Slapper.AutoMapper.MapDynamic<Payment>(data));
         }
@@ -41,7 +38,6 @@ namespace Cashflow.Api.Infra.Repository
             Slapper.AutoMapper.Configuration.AddIdentifiers(typeof(Payment), new List<string> { "Id" });
             Slapper.AutoMapper.Configuration.AddIdentifiers(typeof(Installment), new List<string> { "Id" });
             Slapper.AutoMapper.Configuration.AddIdentifiers(typeof(CreditCard), new List<string> { "Id" });
-            Slapper.AutoMapper.Configuration.AddIdentifiers(typeof(PaymentType), new List<string> { "Id" });
 
             return (Slapper.AutoMapper.MapDynamic<Payment>(data)).FirstOrDefault();
         }

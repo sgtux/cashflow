@@ -60,7 +60,7 @@ export function Invoices(props) {
                                                     <span>{p.description}</span>
                                                 </ImageListItem>
                                                 <ImageListItem cols={1} style={{ textAlign: 'center' }}>
-                                                    <span style={{ fontFamily: '"Roboto", "Helvetica", "Arial", "sans-serif"' }}>{p.qtdInstallments ? `${p.number}/${p.qtdInstallments}` : ''}</span>
+                                                    <span style={{ fontFamily: '"Roboto", "Helvetica", "Arial", "sans-serif"' }}>{p.qtdInstallments ? `N°: ${p.number} - P: ${p.qtdPaidInstallments}/${p.qtdInstallments}` : ''}</span>
                                                 </ImageListItem>
                                                 <ImageListItem cols={1} style={{ textAlign: 'center' }}>
                                                     <InvoiceCostSmall in={p.in}>{toReal(p.value)}</InvoiceCostSmall>

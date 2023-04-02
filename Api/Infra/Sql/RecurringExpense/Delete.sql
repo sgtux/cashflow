@@ -1,4 +1,4 @@
 DELETE FROM
-    "RecurringExpense"
+    RecurringExpense
 WHERE
-    "Id" = @Id
+    Id = @Id

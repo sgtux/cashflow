@@ -11,11 +11,11 @@ namespace Cashflow.Tests
     public class AccountTest : BaseControllerTest
     {
         [TestMethod]
-        public async Task AddWithInvalidNickName()
+        public async Task AddWithInvalidEmail()
         {
             var model = new AccountModel()
             {
-                NickName = "",
+                Email = "",
                 Password = "12345678"
             };
 
@@ -23,7 +23,7 @@ namespace Cashflow.Tests
 
             Trace.WriteLine(JsonSerializer.Serialize(result));
 
-            TestErrors(model, result, "O campo 'Nick Name' deve ter pelo menos 4 caracteres.");
+            TestErrors(model, result, "O campo 'Email' deve ter pelo menos 6 caracteres.");
         }
 
         [TestMethod]
@@ -31,7 +31,7 @@ namespace Cashflow.Tests
         {
             var model = new AccountModel()
             {
-                NickName = "mstest",
+                Email = "mstest",
                 Password = "123"
             };
             var result = await Post<AccountModel>("/api/account", model);
@@ -43,11 +43,11 @@ namespace Cashflow.Tests
         {
             var model = new AccountModel()
             {
-                NickName = "User1",
+                Email = "User1",
                 Password = "12345678"
             };
             var result = await Post<AccountModel>("/api/account", model);
-            TestErrors(model, result, "O Nick Name informado já está sendo utilizado.");
+            TestErrors(model, result, "O Email informado já está sendo utilizado.");
         }
 
         [TestMethod]
@@ -55,11 +55,11 @@ namespace Cashflow.Tests
         {
             var model = new AccountModel()
             {
-                NickName = "Primeiro Usuario",
+                Email = "Primeiro Usuario",
                 Password = "12345678"
             };
             var result = await Post<AccountModel>("/api/account", model);
-            TestErrors(model, result, "O Nick Name deve conter apenas números, letras ou os símbolos _$#@!&.");
+            TestErrors(model, result, "Deve ser informado um Email válido.");
         }
 
         [TestMethod]
@@ -67,7 +67,7 @@ namespace Cashflow.Tests
         {
             var model = new AccountModel()
             {
-                NickName = "Mstest",
+                Email = "Mstest@mail.com",
                 Password = "12345678"
             };
             var result = await Post<AccountModel>("/api/account", model);
@@ -78,7 +78,7 @@ namespace Cashflow.Tests
         public async Task GetDataOk()
         {
             var result = await Get<UserDataModel>("/api/account", 3);
-            Assert.AreEqual("User3", result.Data.NickName);
+            Assert.AreEqual("User3", result.Data.Email);
         }
     }
 }

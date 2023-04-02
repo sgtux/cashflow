@@ -43,11 +43,11 @@ namespace Cashflow.Api.Services
             };
 
             var householdExpenseModel = new HomeChartModel() { Index = 0, Description = "Despesas Domésticas" };
-            var expensesModel = new HomeChartModel() { Index = 1, Description = "Outros Gastos" };
+            var spendingModel = new HomeChartModel() { Index = 1, Description = "Outros Gastos" };
             var vehicleModel = new HomeChartModel() { Index = 2, Description = "Combustível" };
             var financingsModel = new HomeChartModel() { Index = 3, Description = "Financiamentos" };
             var loanModel = new HomeChartModel() { Index = 4, Description = "Empréstimos" };
-            var contributionsModel = new HomeChartModel() { Index = 5, Description = "Aportes (Investimentos)" };
+            var donationModel = new HomeChartModel() { Index = 5, Description = "Doações" };
             var educationModel = new HomeChartModel() { Index = 6, Description = "Educação" };
             var earningsModel = new HomeChartModel() { Index = 7, Description = "Benefícios" };
 
@@ -61,18 +61,18 @@ namespace Cashflow.Api.Services
 
             earningsModel.Value = (await _earningRepository.GetSome(filter)).Sum(p => p.Value);
 
-            expensesModel.Value += CalculatePaymentHomeChartModel(payments, month, year, Enums.PaymentType.Expense);
-            contributionsModel.Value += CalculatePaymentHomeChartModel(payments, month, year, Enums.PaymentType.Contributions);
+            spendingModel.Value += CalculatePaymentHomeChartModel(payments, month, year, Enums.PaymentType.Spending);
+            donationModel.Value += CalculatePaymentHomeChartModel(payments, month, year, Enums.PaymentType.Donation);
             financingsModel.Value += CalculatePaymentHomeChartModel(payments, month, year, Enums.PaymentType.Financing);
             educationModel.Value += CalculatePaymentHomeChartModel(payments, month, year, Enums.PaymentType.Education);
             loanModel.Value += CalculatePaymentHomeChartModel(payments, month, year, Enums.PaymentType.Loan);
 
-            result.Data.Add(expensesModel);
+            result.Data.Add(spendingModel);
             result.Data.Add(householdExpenseModel);
             result.Data.Add(vehicleModel);
             result.Data.Add(financingsModel);
             result.Data.Add(loanModel);
-            result.Data.Add(contributionsModel);
+            result.Data.Add(donationModel);
             result.Data.Add(educationModel);
             result.Data.Add(earningsModel);
 
@@ -82,7 +82,7 @@ namespace Cashflow.Api.Services
         private decimal CalculatePaymentHomeChartModel(IEnumerable<Payment> payments, int month, int year, Enums.PaymentType type)
         {
             decimal value = 0;
-            foreach (var item in payments.Where(p => p.TypeId == type))
+            foreach (var item in payments.Where(p => p.Type == type))
                 value += item.Installments.Where(p => p.Date.Year == year && p.Date.Month == month).Sum(p => p.Value);
             return value;
         }

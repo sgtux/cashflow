@@ -32,7 +32,7 @@ namespace Cashflow.Api.Services
                 model.CreatedAt = CurrentDate;
 
                 await _userRepository.Add(model);
-                var user = await _userRepository.FindByNickName(model.NickName);
+                var user = await _userRepository.FindByEmail(model.Email);
                 user.Map(result.Data);
             }
             else
@@ -41,17 +41,17 @@ namespace Cashflow.Api.Services
             return result;
         }
 
-        public async Task<ResultDataModel<UserDataModel>> Login(string nickName, string password)
+        public async Task<ResultDataModel<UserDataModel>> Login(string email, string password)
         {
             var result = new ResultDataModel<UserDataModel>();
 
-            if (string.IsNullOrEmpty(nickName) || string.IsNullOrEmpty(password))
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
             {
                 result.AddNotification(ValidatorMessages.User.LoginFailed);
                 return result;
             }
 
-            var user = await _userRepository.FindByNickName(nickName);
+            var user = await _userRepository.FindByEmail(email);
 
             if (user == null || user.Password != Utils.Sha1(password))
             {

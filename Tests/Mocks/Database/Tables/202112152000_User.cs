@@ -9,9 +9,10 @@ namespace Cashflow.Tests.Mocks.Database.Tables
         {
             Create.Table("User")
                 .WithColumn("Id").AsInt32().PrimaryKey().Identity()
-                .WithColumn("NickName").AsString(255).NotNullable()
+                .WithColumn("Email").AsString(255).NotNullable()
                 .WithColumn("Password").AsString(255).NotNullable()
-                .WithColumn("CreatedAt").AsDateTime().NotNullable();
+                .WithColumn("CreatedAt").AsDateTime().NotNullable()
+                .WithColumn("SpendingCeiling").AsDecimal().Nullable();
         }
 
         public override void Down()

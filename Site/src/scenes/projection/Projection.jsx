@@ -39,13 +39,16 @@ export function Projection() {
     setEndDate(date)
     homeService.getProjection(date.month, date.year)
       .then(res => {
-        const dates = Object.keys(res)
         let total = 0
-        dates.forEach(d => {
-          res[d].payments.sort((a, b) => a.description > b.description ? 1 : a.description < b.description ? -1 : 0)
-          total += res[d].total
-          total += res[d].previousMonthBalanceValue
-        })
+        const dates = []
+
+        for (let item of res) {
+          dates.push(item.monthYear)
+          total += item.total
+          total += item.previousMonthBalanceValue
+          item.payments.sort((a, b) => a.description > b.description ? 1 : a.description < b.description ? -1 : 0)
+        }
+
         setTotalValue(total)
         setAllPayments(res)
         setDates(dates)
@@ -76,10 +79,8 @@ export function Projection() {
         </div>
 
         <List dense={true}>
-          {dates.map((d, i) => allPayments[d] && <PaymentMonth key={i} paymentMonth={allPayments[d]}
-            hideShowMonth={() => hideShowMonth(d)}
-            show={shownMonths[d]}
-            monthYear={getMonthYear(d)} />)}
+          {!!allPayments.length && allPayments.map((p, i) => <PaymentMonth key={i} paymentMonth={p} />)
+          }
         </List>
 
         <div style={{

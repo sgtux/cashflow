@@ -1,12 +1,12 @@
 INSERT INTO
-  "Installment" (
-    "PaymentId",
-    "Value",
-    "Number",
-    "Date",
-    "PaidDate",
-    "PaidValue",
-    "Exempt"
+  Installment (
+    PaymentId,
+    Value,
+    Number,
+    Date,
+    PaidDate,
+    PaidValue,
+    Exempt
   )
 VALUES
   (

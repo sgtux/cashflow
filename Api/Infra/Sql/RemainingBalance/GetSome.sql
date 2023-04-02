@@ -1,13 +1,13 @@
 SELECT
-  "Id",
-  "Value",
-  "Month",
-  "Year",
-  "UserId"
+  Id,
+  Value,
+  Month,
+  Year,
+  UserId
 FROM
-  "RemainingBalance"
+  RemainingBalance
 WHERE
-  "UserId" = @UserId
+  UserId = @UserId
 ORDER BY
-  "Year" DESC,
-  "Month" DESC
+  Year DESC,
+  Month DESC

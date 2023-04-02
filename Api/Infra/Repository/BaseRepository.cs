@@ -12,7 +12,7 @@ namespace Cashflow.Api.Infra.Repository
 {
     public abstract class BaseRepository<T> where T : class
     {
-        private readonly IDbConnection _conn;
+        protected readonly IDbConnection _conn;
 
         private readonly IDatabaseContext _context;
 
@@ -89,9 +89,9 @@ namespace Cashflow.Api.Infra.Repository
 
         public Task<long> NextId()
         {
-            var query = $"SELECT MAX(\"Id\") FROM \"{typeof(T).Name}\"";
+            var query = $"SELECT MAX(Id) FROM {typeof(T).Name}";
             Log(query);
-            return _conn.ExecuteScalarAsync<long>(query);
+            return _conn.ExecuteScalarAsync<long>(query, null, Transaction);
         }
 
         private void Log(string query) => _logService.Info($"Query: {query}\n\n");

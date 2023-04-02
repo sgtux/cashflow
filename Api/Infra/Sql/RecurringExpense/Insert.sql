@@ -1,10 +1,10 @@
 INSERT INTO
-    "RecurringExpense" (
-        "Description",
-        "Value",
-        "InactiveAt",
-        "CreditCardId",
-        "UserId"
+    RecurringExpense (
+        Description,
+        Value,
+        InactiveAt,
+        CreditCardId,
+        UserId
     )
 VALUES
     (

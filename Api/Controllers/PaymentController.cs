@@ -22,7 +22,7 @@ namespace Cashflow.Api.Controllers
         public async Task<IActionResult> Get(int id) => HandleResult(await _service.Get(id, UserId));
 
         [HttpGet("Types")]
-        public async Task<IActionResult> GetTypes() => HandleResult(await _service.GetTypes());
+        public IActionResult GetTypes() => HandleResult(_service.GetTypes());
 
         [HttpGet("GenerateInstallments")]
         public async Task<IActionResult> GenerateInstallments([FromQuery] GenerateInstallmentsModel model) => HandleResult(await _service.GenerateInstallments(model, UserId));

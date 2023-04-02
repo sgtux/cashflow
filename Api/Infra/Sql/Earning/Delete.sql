@@ -1,4 +1,4 @@
 DELETE FROM
-    "Earning"
+    Earning
 WHERE
-    "Id" = @Id
+    Id = @Id

@@ -37,7 +37,7 @@ namespace Cashflow.Api.Controllers
             if (model is null)
                 return HandleUnprocessableEntity();
 
-            var result = await _accountService.Login(model.NickName, model.Password);
+            var result = await _accountService.Login(model.Email, model.Password);
 
             if (!result.IsValid)
                 return HandleUnauthorized(result.Notifications.First());
@@ -50,7 +50,7 @@ namespace Cashflow.Api.Controllers
             var token = new AccountResultModel()
             {
                 Id = result.Data.Id,
-                NickName = result.Data.NickName,
+                Email = result.Data.Email,
                 Token = new JwtTokenBuilder(_config.SecretJwtKey, _config.CookieExpiresInMinutes, claims).Build().Value
             };
             return Ok(new ResultDataModel<AccountResultModel>() { Data = token });

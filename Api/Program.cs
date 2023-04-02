@@ -8,7 +8,6 @@ namespace Cashflow.Api
     {
         public static void Main(string[] args)
         {
-            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
             BuildWebHost(args).Run();
         }
 

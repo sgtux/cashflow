@@ -1,12 +1,12 @@
 SELECT
-  "Id",
-  "Name",
-  "UserId",
-  "InvoiceClosingDay",
-  "InvoiceDueDay"
+  Id,
+  Name,
+  UserId,
+  InvoiceClosingDay,
+  InvoiceDueDay
 FROM
-  "CreditCard"
+  CreditCard
 WHERE
-  "UserId" = @UserId
+  UserId = @UserId
 ORDER BY
-  "Name"
+  Name

@@ -2,18 +2,14 @@ namespace Cashflow.Api.Enums
 {
     public enum PaymentType : byte
     {
-        Expense = 1,
+        Spending = 1,
 
-        Gain = 2,
+        Financing = 2,
 
-        Contributions = 3,
+        Education = 3,
 
-        Dividends = 4,
+        Loan = 4,
 
-        Financing = 5,
-
-        Education = 6,
-
-        Loan = 7
+        Donation = 5
     }
 }

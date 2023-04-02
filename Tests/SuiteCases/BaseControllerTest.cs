@@ -122,7 +122,7 @@ namespace Cashflow.Tests.Tests
 
             var user = new AccountModel()
             {
-                NickName = $"User{userId}",
+                Email = $"User{userId}",
                 Password = "123"
             };
 

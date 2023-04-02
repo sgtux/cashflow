@@ -14,7 +14,7 @@ namespace Tests
         {
             var user = new AccountModel()
             {
-                NickName = "User1",
+                Email = "User1",
                 Password = "123488"
             };
 
@@ -28,7 +28,7 @@ namespace Tests
         {
             var user = new AccountModel()
             {
-                NickName = "User1",
+                Email = "User1",
                 Password = "123"
             };
 

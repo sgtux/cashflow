@@ -35,8 +35,8 @@ export function SignInScreen({ changeScene }) {
 
   const [password, setPassword] = useState('')
   const [passwordValid, setPasswordValid] = useState('')
-  const [nickName, setNickName] = useState(false)
-  const [nickNameValid, setNickNameValid] = useState(false)
+  const [email, setEmail] = useState(false)
+  const [emailValid, setEmailValid] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
 
@@ -44,9 +44,9 @@ export function SignInScreen({ changeScene }) {
 
 
   function onInputChange(e) {
-    if (e.name === 'nickName') {
-      setNickName(e.value)
-      setNickNameValid(e.valid)
+    if (e.name === 'email') {
+      setEmail(e.value)
+      setEmailValid(e.valid)
     } else if (e.name === 'password') {
       setPassword(e.value)
       setPasswordValid(e.valid)
@@ -59,7 +59,7 @@ export function SignInScreen({ changeScene }) {
     if (loading)
       return
     setLoading(true)
-    authService.login({ nickName, password })
+    authService.login({ email, password })
       .then(user => dispatch(userChanged(user)))
       .catch(() => { })
       .finally(() => setLoading(false))
@@ -74,7 +74,7 @@ export function SignInScreen({ changeScene }) {
               label="Apelido"
               required
               disabled={loading}
-              name="nickName"
+              name="email"
               onChange={e => onInputChange(e)}
               Icon={<Person />}
             />
@@ -96,7 +96,7 @@ export function SignInScreen({ changeScene }) {
           <div hidden={loading}>
             <Button style={{ width: '250px' }}
               variant="contained"
-              disabled={!nickNameValid || !passwordValid}
+              disabled={!emailValid || !passwordValid}
               type="submit"
               onClick={e => login(e)}
               color="primary">Entrar</Button>

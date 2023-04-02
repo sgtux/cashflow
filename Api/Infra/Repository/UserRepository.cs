@@ -6,6 +6,7 @@ using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Infra.Filters;
 using Cashflow.Api.Infra.Sql.User;
 using Cashflow.Api.Services;
+using Dapper;
 
 namespace Cashflow.Api.Infra.Repository
 {
@@ -13,7 +14,7 @@ namespace Cashflow.Api.Infra.Repository
     {
         public UserRepository(IDatabaseContext conn, LogService logService) : base(conn, logService) { }
 
-        public Task<User> FindByNickName(string nickName) => FirstOrDefault(UserResources.ByNickName, new { NickName = nickName });
+        public Task<User> FindByEmail(string email) => FirstOrDefault(UserResources.ByEmail, new { Email = email });
 
         public Task<User> GetById(long id) => FirstOrDefault(UserResources.ById, new { Id = id });
 

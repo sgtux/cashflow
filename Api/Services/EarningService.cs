@@ -24,11 +24,7 @@ namespace Cashflow.Api.Services
 
         public ResultDataModel<IEnumerable<TypeModel>> GetTypes()
         {
-            var types = Enum.GetValues<EarningType>().Select(p => new TypeModel()
-            {
-                Id = (int)p,
-                Description = p.GetDescription()
-            });
+            var types = Enum.GetValues<EarningType>().Select(p => new TypeModel(p));
             return new ResultDataModel<IEnumerable<TypeModel>>(types);
         }
 

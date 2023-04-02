@@ -1,10 +1,10 @@
 UPDATE
-  "Payment"
+  Payment
 SET
-  "Description" = @Description,
-  "UserId" = @UserId,
-  "Type" = @TypeId,
-  "CreditCardId" = @CreditCardId,
-  "Date" = @Date
+  Description = @Description,
+  UserId = @UserId,
+  Type = @Type,
+  CreditCardId = @CreditCardId,
+  Date = @Date
 WHERE
-  "Id" = @Id
+  Id = @Id

@@ -54,7 +54,7 @@ export function AppToolbar({ openSideBar, dockedMenu }) {
           <Typography variant="h2" color="inherit" style={styles.grow}>
             Fluxo de Caixa (R$)
           </Typography>
-          <Link to="/account"><UsernameSpan>{appState.user.nickName}</UsernameSpan></Link>
+          <Link to="/account"><UsernameSpan>{appState.user.email}</UsernameSpan></Link>
           <Button color="secondary" onClick={() => logout()}>
             <Icons.ExitToApp style={{ color: '#FFF' }} />
           </Button>

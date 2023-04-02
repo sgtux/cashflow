@@ -28,8 +28,8 @@ const styles = {
 
 export function SignUpScreen({ changeScene }) {
 
-  const [nickName, setNickName] = useState('')
-  const [nickNameValid, setNickNameValid] = useState(false)
+  const [email, setEmail] = useState('')
+  const [emailValid, setEmailValid] = useState(false)
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [passwordValid, setPasswordValid] = useState(false)
@@ -41,10 +41,10 @@ export function SignUpScreen({ changeScene }) {
   const dispatch = useDispatch()
 
   function onInputChange(e) {
-    if (e.name == 'nickName') {
+    if (e.name == 'email') {
       if (/^[a-zA-Z0-9_$#@!&]{1,}$/.test(e.value || '')) {
-        setNickName(e.value)
-        setNickNameValid(e.valid)
+        setEmail(e.value)
+        setEmailValid(e.valid)
       }
     } else if (e.name == 'password') {
       setPassword(e.value)
@@ -59,7 +59,7 @@ export function SignUpScreen({ changeScene }) {
     if (e)
       e.preventDefault()
     setLoading(true)
-    authService.createAccount({ nickName, password, confirm })
+    authService.createAccount({ email, password, confirm })
       .then(res => dispatch(userChanged(res)))
       .catch(err => console.log(err))
       .finally(() => setLoading(false))
@@ -73,8 +73,8 @@ export function SignUpScreen({ changeScene }) {
             label="Apelido"
             required
             minlength={5}
-            name="nickName"
-            value={nickName}
+            name="email"
+            value={email}
             onChange={e => onInputChange(e)}
             Icon={<Person />}
           />
@@ -104,7 +104,7 @@ export function SignUpScreen({ changeScene }) {
         <Button style={{ width: '250px' }}
           variant="contained"
           onClick={e => send(e)}
-          disabled={loading || !nickNameValid || !passwordValid || !confirmValid}
+          disabled={loading || !emailValid || !passwordValid || !confirmValid}
           color="primary">Enviar</Button>
         <br /><br />
         <div style={{ marginBottom: '10px' }} hidden={!loading}>

@@ -8,6 +8,7 @@ using Cashflow.Api.Infra.Filters;
 using Cashflow.Api.Models;
 using Cashflow.Api.Validators;
 using Cashflow.Api.Extensions;
+using Cashflow.Api.Enums;
 
 namespace Cashflow.Api.Services
 {
@@ -60,7 +61,11 @@ namespace Cashflow.Api.Services
             return new ResultDataModel<IEnumerable<Payment>>(list);
         }
 
-        public async Task<ResultDataModel<IEnumerable<PaymentType>>> GetTypes() => new ResultDataModel<IEnumerable<PaymentType>>(await _paymentRepository.GetTypes());
+        public ResultDataModel<IEnumerable<TypeModel>> GetTypes()
+        {
+            var types = Enum.GetValues<PaymentType>().Select(p => new TypeModel(p));
+            return new ResultDataModel<IEnumerable<TypeModel>>(types);
+        }
 
         public async Task<ResultModel> Add(Payment payment)
         {
@@ -134,13 +139,6 @@ namespace Cashflow.Api.Services
                 {
                     result.AddNotification(ValidatorMessages.NotFound("Cartão de Crédito"));
                     return result;
-                }
-
-                month++;
-                if (month > 12)
-                {
-                    month = 1;
-                    year++;
                 }
 
                 if (day > creditCard.InvoiceClosingDay)

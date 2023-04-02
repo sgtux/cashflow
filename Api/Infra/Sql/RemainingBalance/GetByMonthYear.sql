@@ -1,12 +1,12 @@
 SELECT
-  "Id",
-  "Value",
-  "Month",
-  "Year",
-  "UserId"
+  Id,
+  Value,
+  Month,
+  Year,
+  UserId
 FROM
-  "RemainingBalance"
+  RemainingBalance
 WHERE
-  "UserId" = @UserId
-  AND "Month" = @Month
-  AND "Year" = @Year
+  UserId = @UserId
+  AND Month = @Month
+  AND Year = @Year

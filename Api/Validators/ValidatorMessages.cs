@@ -32,9 +32,9 @@ namespace Cashflow.Api.Validators
 
         public class UserMessages
         {
-            public string NickNameAlreadyInUse = "O Nick Name informado já está sendo utilizado.";
+            public string EmailAlreadyInUse = "O Email informado já está sendo utilizado.";
 
-            public string NickNamePattern = "O Nick Name deve conter apenas números, letras ou os símbolos _$#@!&.";
+            public string EmailPattern = "Deve ser informado um Email válido.";
 
             public string LoginFailed = "Usuário ou senha inválidos.";
         }

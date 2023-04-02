@@ -3,11 +3,11 @@ using FluentMigrator;
 namespace Cashflow.Migrations.DDL
 {
     [Migration(202111171900)]
-    public class AddFuelExpensesTable : Migration
+    public class AddFuelExpenseTable : Migration
     {
         public override void Up()
         {
-            Create.Table("FuelExpenses")
+            Create.Table("FuelExpense")
                 .WithColumn("Id").AsInt32().PrimaryKey().Identity()
                 .WithColumn("Miliage").AsInt32().NotNullable()
                 .WithColumn("ValueSupplied").AsDecimal(10, 2).NotNullable()
@@ -16,13 +16,13 @@ namespace Cashflow.Migrations.DDL
                 .WithColumn("VehicleId").AsInt32().NotNullable();
 
             Create.ForeignKey()
-                .FromTable("FuelExpenses").ForeignColumn("VehicleId")
+                .FromTable("FuelExpense").ForeignColumn("VehicleId")
                 .ToTable("Vehicle").PrimaryColumn("Id");
         }
 
         public override void Down()
         {
-            Delete.Table("FuelExpenses");
+            Delete.Table("FuelExpense");
         }
     }
 }

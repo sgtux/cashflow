@@ -1,10 +1,10 @@
 SELECT
-    "Miliage",
-    "ValueSupplied",
-    "PricePerLiter",
-    "VehicleId",
-    "Date"
+    Miliage,
+    ValueSupplied,
+    PricePerLiter,
+    VehicleId,
+    Date
 FROM
-    "FuelExpense"
+    FuelExpense
 WHERE
-    "Id" = @Id
+    Id = @Id

@@ -1,9 +1,9 @@
 INSERT INTO
-  "CreditCard" (
-    "Name",
-    "UserId",
-    "InvoiceClosingDay",
-    "InvoiceDueDay"
+  CreditCard (
+    Name,
+    UserId,
+    InvoiceClosingDay,
+    InvoiceDueDay
   )
 VALUES
   (

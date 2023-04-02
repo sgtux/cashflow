@@ -6,6 +6,7 @@ using Enums = Cashflow.Api.Enums;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Tests.Tests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Cashflow.Api.Models;
 
 namespace Cashflow.Tests
 {
@@ -19,8 +20,7 @@ namespace Cashflow.Tests
             UserId = 1,
             CreditCardId = 1,
             Description = "First Payment",
-            Type = new PaymentType() { Id = (int)Enums.PaymentType.Expense },
-            TypeId = Enums.PaymentType.Expense,
+            Type = Enums.PaymentType.Spending,
             Installments = new List<Installment>()
                     {
                       new Installment() { Number = 1, Id = 1, Value = 1500.6M, PaidValue = 1500.6M, Date = new DateTime(2020, 1, 1) },
@@ -159,7 +159,7 @@ namespace Cashflow.Tests
         [TestMethod]
         public async Task GetPaymentTypesOK()
         {
-            var result = await Get<IEnumerable<PaymentType>>("/api/Payment/Types", 1);
+            var result = await Get<IEnumerable<TypeModel>>("/api/Payment/Types", 1);
             Assert.IsTrue(result.Data.Any());
         }
     }

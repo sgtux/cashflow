@@ -16,5 +16,17 @@ namespace Cashflow.Api.Models
             Id = (int)type;
             Description = type.GetDescription();
         }
+
+        public TypeModel(PaymentType type)
+        {
+            Id = (int)type;
+            Description = type.GetDescription();
+        }
+
+        public TypeModel(EarningType type)
+        {
+            Id = (int)type;
+            Description = type.GetDescription();
+        }
     }
 }

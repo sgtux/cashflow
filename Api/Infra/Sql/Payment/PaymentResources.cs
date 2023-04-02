@@ -8,8 +8,6 @@ namespace Cashflow.Api.Infra.Sql.Payment
 
         public static ResourceBuilder Some => new ResourceBuilder("Payment.GetSome.sql");
 
-        public static ResourceBuilder Types => new ResourceBuilder("Payment.GetTypes.sql");
-
         public static ResourceBuilder Insert => new ResourceBuilder("Payment.Insert.sql");
 
         public static ResourceBuilder Update => new ResourceBuilder("Payment.Update.sql");

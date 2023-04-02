@@ -1,9 +1,9 @@
 UPDATE
-    "RecurringExpense"
+    RecurringExpense
 SET
-    "Description" = @Description,
-    "Value" = @Value,
-    "InactiveAt" = @InactiveAt,
-    "CreditCardId" = @CreditCardId
+    Description = @Description,
+    Value = @Value,
+    InactiveAt = @InactiveAt,
+    CreditCardId = @CreditCardId
 WHERE
-    "Id" = @Id
+    Id = @Id

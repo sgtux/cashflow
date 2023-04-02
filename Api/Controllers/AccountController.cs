@@ -43,7 +43,7 @@ namespace Cashflow.Api.Controllers
                 var token = new AccountResultModel()
                 {
                     Id = result.Data.Id,
-                    NickName = result.Data.NickName,
+                    Email = result.Data.Email,
                     Token = new JwtTokenBuilder(_config.SecretJwtKey, _config.CookieExpiresInMinutes, claims).Build().Value
                 };
                 return HandleResult(new ResultDataModel<AccountResultModel>() { Data = token });

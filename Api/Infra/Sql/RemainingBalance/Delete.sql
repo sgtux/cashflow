@@ -1,4 +1,4 @@
 DELETE FROM
-    "RemainingBalance"
+    RemainingBalance
 WHERE
-    "Id" = @Id
+    Id = @Id

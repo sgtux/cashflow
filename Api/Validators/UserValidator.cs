@@ -12,20 +12,17 @@ namespace Cashflow.Api.Validators
         public UserValidator(IUserRepository userRepository)
         {
             _userRepository = userRepository;
-            RuleFor(u => u.NickName).MinimumLength(4).WithMessage(ValidatorMessages.FieldMinLength("Nick Name", 4));
+            RuleFor(u => u.Email).MinimumLength(4).WithMessage(ValidatorMessages.FieldMinLength("Email", 6));
             RuleFor(u => u.Password).MinimumLength(8).WithMessage(ValidatorMessages.FieldMinLength("Senha", 8));
-            RuleFor(u => u).Must(ValidNickNameInUse).WithMessage(ValidatorMessages.User.NickNameAlreadyInUse);
-            RuleFor(u => u).Must(ValidNickNamePattern).WithMessage(ValidatorMessages.User.NickNamePattern);
+            RuleFor(u => u).Must(ValidEmailInUse).WithMessage(ValidatorMessages.User.EmailAlreadyInUse);
+            RuleFor(u => u).Must(ValidEmailPattern).WithMessage(ValidatorMessages.User.EmailPattern);
         }
 
-        private bool ValidNickNamePattern(User user)
-        {
-            return Regex.IsMatch(user.NickName, "^[a-zA-Z0-9_$#@!&]{1,}$");
-        }
+        private bool ValidEmailPattern(User user) => Regex.IsMatch(user.Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$");
 
-        private bool ValidNickNameInUse(User user)
+        private bool ValidEmailInUse(User user)
         {
-            var resultDb = _userRepository.FindByNickName(user.NickName).Result;
+            var resultDb = _userRepository.FindByEmail(user.Email).Result;
             return resultDb == null || resultDb.Id == user.Id;
         }
     }

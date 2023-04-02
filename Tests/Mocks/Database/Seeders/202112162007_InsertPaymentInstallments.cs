@@ -22,7 +22,6 @@ namespace Cashflow.Tests.Mocks.Database.Seeders
                 .Row(new Installment() { Id = 8, Value = 2000, Date = date.AddMonths(3), PaidDate = date.AddMonths(3), PaidValue = 1500, PaymentId = 5, Number = 4 }.ToSqliteEntity())
                 .Row(new Installment() { Id = 9, Value = 2000, Date = date.AddMonths(4), PaymentId = 5, Number = 5 }.ToSqliteEntity())
                 .Row(new Installment() { Id = 10, Value = 2000, Date = date.AddMonths(5), PaymentId = 5, Number = 6 }.ToSqliteEntity());
-
         }
 
         public override void Down()

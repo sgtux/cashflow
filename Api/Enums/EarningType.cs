@@ -1,6 +1,6 @@
 namespace Cashflow.Api.Enums
 {
-    public enum EarningType : short
+    public enum EarningType : byte
     {
         MonthyBenefit = 1,
 

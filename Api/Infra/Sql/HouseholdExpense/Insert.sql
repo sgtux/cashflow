@@ -1,11 +1,11 @@
 INSERT INTO
-  "HouseholdExpense" (
-    "Description",
-    "Date",
-    "UserId",
-    "Value",
-    "VehicleId",
-    "Type"
+  HouseholdExpense (
+    Description,
+    Date,
+    UserId,
+    Value,
+    VehicleId,
+    Type
   )
 VALUES
   (

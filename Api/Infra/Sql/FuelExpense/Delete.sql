@@ -1,1 +1,1 @@
-DELETE FROM "FuelExpense" WHERE "Id" = @Id
+DELETE FROM FuelExpense WHERE Id = @Id

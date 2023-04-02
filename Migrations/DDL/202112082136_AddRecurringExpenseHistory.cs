@@ -13,7 +13,7 @@ namespace Cashflow.Migrations.DDL
                 .WithColumn("Date").AsDateTime()
                 .WithColumn("RecurringExpenseId").AsInt32();
 
-            Create.ForeignKey()
+            Create.ForeignKey("FK_RecurringExpenseHistory_RecurringExpense")
                 .FromTable("RecurringExpenseHistory").ForeignColumn("RecurringExpenseId")
                 .ToTable("RecurringExpense").PrimaryColumn("Id");
         }

@@ -10,7 +10,9 @@ namespace Cashflow.Migrations.DDL
             Create.Table("CreditCard")
                 .WithColumn("Id").AsInt32().PrimaryKey().Identity()
                 .WithColumn("Name").AsString(255).NotNullable()
-                .WithColumn("UserId").AsInt32().NotNullable();
+                .WithColumn("UserId").AsInt32().NotNullable()
+                .WithColumn("InvoiceClosingDay").AsInt16().WithDefaultValue(20)
+                .WithColumn("InvoiceDueDay").AsInt16().WithDefaultValue(20);
 
             Create.ForeignKey()
                 .FromTable("CreditCard").ForeignColumn("UserId")

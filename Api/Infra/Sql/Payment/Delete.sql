@@ -1,4 +1,4 @@
 DELETE FROM
-    "Payment"
+    Payment
 WHERE
-    "Id" = @Id
+    Id = @Id

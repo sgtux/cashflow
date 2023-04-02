@@ -1,10 +1,10 @@
 SELECT
-  "Id",
-  "Name",
-  "UserId",
-  "InvoiceClosingDay",
-  "InvoiceDueDay"
+  Id,
+  Name,
+  UserId,
+  InvoiceClosingDay,
+  InvoiceDueDay
 FROM
-  "CreditCard"
+  CreditCard
 WHERE
-  "Id" = @Id
+  Id = @Id

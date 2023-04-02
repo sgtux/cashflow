@@ -1,6 +1,6 @@
 UPDATE
-    "User"
+    User
 SET
-    "SpendingCeiling" = @SpendingCeiling
+    SpendingCeiling = @SpendingCeiling
 WHERE
-    "Id" = @Id
+    Id = @Id

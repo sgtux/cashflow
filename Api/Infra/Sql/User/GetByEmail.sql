@@ -5,4 +5,4 @@ SELECT
     CreatedAt,
     SpendingCeiling
 FROM User
-WHERE Id = @Id
+WHERE Email = @Email

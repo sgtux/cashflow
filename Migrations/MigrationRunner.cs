@@ -54,7 +54,7 @@ namespace Cashflow.Migrations
                 {
                     if (_type == DatabaseType.Postgres)
                     {
-                        rb.AddPostgres()
+                        rb.AddMySql5()
                             .WithGlobalConnectionString(_connectionString)
                             .ScanIn(_assembliesToScan).For.Migrations();
                     }

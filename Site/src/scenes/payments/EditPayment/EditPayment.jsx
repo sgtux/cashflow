@@ -22,7 +22,7 @@ import { EditInstallmentModal } from './EditInstallmentModal/EditInstallmentModa
 export function EditPayment() {
 
   const [description, setDescription] = useState('')
-  const [type, setType] = useState(2)
+  const [type, setType] = useState(1)
   const [qtdInstallments, setQtdInstallments] = useState(10)
   const [card, setCard] = useState(0)
   const [valueByInstallment, setValueByInstallment] = useState(false)
@@ -47,32 +47,15 @@ export function EditPayment() {
     paymentService.getTypes().then(res => setTypes(res))
     creditCardService.get().then(res => setCards(res))
 
-    paymentService.get(params.id)
-      .then(res => {
-
-        const payment = res || {}
-        setId(payment.id)
-
-        const firstInstallment = (payment.installments || [])[0] || {}
-        const qtdInstallments = (payment.installments || []).length || 1
-        const values = (payment.installments || []).map(p => p.value)
-
-        setDescription(payment.description || '')
-        setType((payment.type || {}).id || 1)
-        setCard(payment.creditCardId)
-        setActive(params.id == 0 || payment.active)
-        setValueByInstallment(false)
-        setQtdInstallments(qtdInstallments)
-
-        setValueText(toReal(values.length ? values.reduce((a, b) => a + b) : 0))
-
-        setFirstPayment(firstInstallment.date ? new Date(firstInstallment.date) : null)
-        setInstallments(payment.installments || [])
-        if (payment.id)
-          setInstallmentsUpdated(true)
-      })
-      .catch(ex => console.log(ex))
-      .finally(() => setLoading(false))
+    if (params.id > 0)
+      paymentService.get(params.id)
+        .then(res => fillPayment(res || {}))
+        .catch(ex => console.log(ex))
+        .finally(() => setLoading(false))
+    else {
+      fillPayment({})
+      setLoading(false)
+    }
   }, [])
 
   useEffect(() => {
@@ -83,6 +66,28 @@ export function EditPayment() {
     if (!editInstallment)
       setInstallmentsUpdated(false)
   }, [valueByInstallment, firstPayment, qtdInstallments, valueText])
+
+  function fillPayment(payment) {
+    setId(payment.id)
+
+    const firstInstallment = (payment.installments || [])[0] || {}
+    const qtdInstallments = (payment.installments || []).length || 1
+    const values = (payment.installments || []).map(p => p.value)
+
+    setDescription(payment.description || '')
+    setType(payment.type || 1)
+    setCard(payment.creditCardId)
+    setActive(params.id == 0 || payment.active)
+    setValueByInstallment(false)
+    setQtdInstallments(qtdInstallments)
+
+    setValueText(toReal(values.length ? values.reduce((a, b) => a + b) : 0))
+
+    setFirstPayment(firstInstallment.date ? new Date(firstInstallment.date) : null)
+    setInstallments(payment.installments || [])
+    if (payment.id)
+      setInstallmentsUpdated(true)
+  }
 
   function updateInstallments() {
 
@@ -103,8 +108,8 @@ export function EditPayment() {
 
     const payment = {
       id,
-      description: description,
-      typeId: type,
+      description,
+      type,
       installments,
       creditCardId: card,
       active
@@ -145,7 +150,7 @@ export function EditPayment() {
           onChange={e => setDescription(e.value)}
         />
 
-        {types.length &&
+        {!!types.length &&
           <PaymentTypeBox types={types} paymentType={type}
             paymentTypeChanged={e => setType(e)} />
         }

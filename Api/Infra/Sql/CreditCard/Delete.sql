@@ -1,4 +1,4 @@
 DELETE FROM
-    "CreditCard"
+    CreditCard
 WHERE
-    "Id" = @Id
+    Id = @Id

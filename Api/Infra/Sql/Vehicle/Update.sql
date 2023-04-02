@@ -1,5 +1,5 @@
-UPDATE "Vehicle"
+UPDATE Vehicle
 SET
-  "Description" = @Description
+  Description = @Description
 WHERE
-  "Id" = @Id
+  Id = @Id

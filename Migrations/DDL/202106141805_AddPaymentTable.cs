@@ -1,3 +1,4 @@
+using System;
 using FluentMigrator;
 
 namespace Cashflow.Migrations.DDL
@@ -12,9 +13,8 @@ namespace Cashflow.Migrations.DDL
                 .WithColumn("Description").AsString(255).NotNullable()
                 .WithColumn("UserId").AsInt32().NotNullable()
                 .WithColumn("Type").AsInt32().NotNullable()
-                .WithColumn("CreditCardId").AsInt32()
-                .WithColumn("FixedPayment").AsBoolean()
-                .WithColumn("Invoice").AsBoolean();
+                .WithColumn("CreditCardId").AsInt32().Nullable()
+                .WithColumn("Date").AsDateTime().WithDefaultValue(DateTime.Now);
 
             Create.ForeignKey()
                 .FromTable("Payment").ForeignColumn("UserId")
@@ -23,10 +23,6 @@ namespace Cashflow.Migrations.DDL
             Create.ForeignKey()
                 .FromTable("Payment").ForeignColumn("CreditCardId")
                 .ToTable("CreditCard").PrimaryColumn("Id");
-
-            Create.ForeignKey()
-                .FromTable("Payment").ForeignColumn("Type")
-                .ToTable("PaymentType").PrimaryColumn("Id");
         }
 
         public override void Down()

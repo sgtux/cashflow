@@ -1,16 +1,16 @@
 INSERT INTO
-  "Payment" (
-    "Description",
-    "UserId",
-    "Type",
-    "CreditCardId",
-    "Date"
+  Payment (
+    Description,
+    UserId,
+    Type,
+    CreditCardId,
+    Date
   )
 VALUES
   (
     @Description,
     @UserId,
-    @TypeId,
+    @Type,
     @CreditCardId,
     @Date
   )
