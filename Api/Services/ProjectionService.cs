@@ -230,8 +230,9 @@ namespace Cashflow.Api.Services
         {
             var now = CurrentDate;
             var remainingBalance = await _remainingBalanceRepository.GetByMonthYear(filter.UserId, now.AddMonths(-1));
+            var type = remainingBalance.Value >= 0 ? MovementProjectionType.RemainingBalanceIn : MovementProjectionType.RemainingBalanceOut;
             if (remainingBalance != null)
-                list.Add(new PaymentProjectionModel(Constants.PREVIOUS_MONTH_BALANCE, now, Math.Abs(remainingBalance.Value), MovementProjectionType.RemainingBalance));
+                list.Add(new PaymentProjectionModel(Constants.PREVIOUS_MONTH_BALANCE, now, Math.Abs(remainingBalance.Value), type));
         }
     }
 }

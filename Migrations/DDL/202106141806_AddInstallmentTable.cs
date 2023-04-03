@@ -16,10 +16,6 @@ namespace Cashflow.Migrations.DDL
                 .WithColumn("Exempt").AsBoolean().WithDefaultValue(false)
                 .WithColumn("PaidValue").AsDecimal(10, 2).Nullable()
                 .WithColumn("PaidDate").AsDateTime().Nullable();
-
-            Create.ForeignKey()
-                .FromTable("Installment").ForeignColumn("PaymentId")
-                .ToTable("Payment").PrimaryColumn("Id");
         }
 
         public override void Down()

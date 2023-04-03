@@ -42,10 +42,8 @@ export function SignUpScreen({ changeScene }) {
 
   function onInputChange(e) {
     if (e.name == 'email') {
-      if (/^[a-zA-Z0-9_$#@!&]{1,}$/.test(e.value || '')) {
-        setEmail(e.value)
-        setEmailValid(e.valid)
-      }
+      setEmail(e.value)
+      setEmailValid(e.valid)
     } else if (e.name == 'password') {
       setPassword(e.value)
       setPasswordValid(e.valid)
@@ -70,7 +68,7 @@ export function SignUpScreen({ changeScene }) {
       <Card style={styles.Card}>
         <CardContent>
           <IconTextInput
-            label="Apelido"
+            label="Email"
             required
             minlength={5}
             name="email"

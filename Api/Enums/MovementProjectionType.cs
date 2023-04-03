@@ -12,6 +12,8 @@ namespace Cashflow.Api.Enums
 
         RecurringExpenses = 4,
         
-        RemainingBalance = 5,
+        RemainingBalanceIn = 5,
+
+        RemainingBalanceOut = 6
     }
 }

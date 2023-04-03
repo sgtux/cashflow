@@ -71,7 +71,7 @@ export function SignInScreen({ changeScene }) {
         <form onSubmit={e => login(e)}>
           <CardContent>
             <IconTextInput
-              label="Apelido"
+              label="Email"
               required
               disabled={loading}
               name="email"

@@ -13,10 +13,6 @@ namespace Cashflow.Migrations.DDL
                 .WithColumn("UserId").AsInt32().NotNullable()
                 .WithColumn("InvoiceClosingDay").AsInt16().WithDefaultValue(20)
                 .WithColumn("InvoiceDueDay").AsInt16().WithDefaultValue(20);
-
-            Create.ForeignKey()
-                .FromTable("CreditCard").ForeignColumn("UserId")
-                .ToTable("User").PrimaryColumn("Id");
         }
 
         public override void Down()

@@ -14,10 +14,6 @@ namespace Cashflow.Migrations.DDL
                 .WithColumn("Year").AsInt16().NotNullable()
                 .WithColumn("UserId").AsInt32().NotNullable();
 
-            Create.ForeignKey()
-                .FromTable("RemainingBalance").ForeignColumn("UserId")
-                .ToTable("User").PrimaryColumn("Id");
-
             Create.UniqueConstraint()
                 .OnTable("RemainingBalance")
                 .Columns("UserId", "Month", "Year");

@@ -14,10 +14,6 @@ namespace Cashflow.Migrations.DDL
                 .WithColumn("PricePerLiter").AsDecimal(10, 2).NotNullable()
                 .WithColumn("Date").AsDateTime().NotNullable()
                 .WithColumn("VehicleId").AsInt32().NotNullable();
-
-            Create.ForeignKey()
-                .FromTable("FuelExpense").ForeignColumn("VehicleId")
-                .ToTable("Vehicle").PrimaryColumn("Id");
         }
 
         public override void Down()

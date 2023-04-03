@@ -12,10 +12,6 @@ namespace Cashflow.Migrations.DDL
                 .WithColumn("PaidValue").AsDecimal(10, 2)
                 .WithColumn("Date").AsDateTime()
                 .WithColumn("RecurringExpenseId").AsInt32();
-
-            Create.ForeignKey("FK_RecurringExpenseHistory_RecurringExpense")
-                .FromTable("RecurringExpenseHistory").ForeignColumn("RecurringExpenseId")
-                .ToTable("RecurringExpense").PrimaryColumn("Id");
         }
 
         public override void Down()

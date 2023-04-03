@@ -14,10 +14,6 @@ namespace Cashflow.Migrations.DDL
                 .WithColumn("Date").AsDateTime()
                 .WithColumn("UserId").AsInt32()
                 .WithColumn("Type").AsInt16();
-
-            Create.ForeignKey()
-                .FromTable("Earning").ForeignColumn("UserId")
-                .ToTable("User").PrimaryColumn("Id");
         }
 
         public override void Down()

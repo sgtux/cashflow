@@ -64,7 +64,7 @@ namespace Cashflow.Api.Models
             QtdPaidInstallments = qtdPaidInstallments;
         }
 
-        public bool In => Type == MovementProjectionType.Earning || (Type == MovementProjectionType.RemainingBalance && Value >= 0);
+        public bool In => Type == MovementProjectionType.Earning || (Type == MovementProjectionType.RemainingBalanceIn);
 
         public string CreditCardName => CreditCard?.Name ?? "";
     }

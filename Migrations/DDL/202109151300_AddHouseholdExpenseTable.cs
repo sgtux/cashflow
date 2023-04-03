@@ -15,14 +15,6 @@ namespace Cashflow.Migrations.DDL
                 .WithColumn("VehicleId").AsInt32().Nullable()
                 .WithColumn("Type").AsInt32().WithDefaultValue(20)
                 .WithColumn("Value").AsDecimal(10, 2).WithDefaultValue(0);
-
-            Create.ForeignKey()
-                .FromTable("HouseholdExpense").ForeignColumn("VehicleId")
-                .ToTable("Vehicle").PrimaryColumn("Id");
-
-            Create.ForeignKey()
-                .FromTable("HouseholdExpense").ForeignColumn("UserId")
-                .ToTable("User").PrimaryColumn("Id");
         }
 
         public override void Down()

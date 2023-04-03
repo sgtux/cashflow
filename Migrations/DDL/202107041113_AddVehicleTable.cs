@@ -11,10 +11,6 @@ namespace Cashflow.Migrations.DDL
                 .WithColumn("Id").AsInt32().PrimaryKey().Identity()
                 .WithColumn("Description").AsString(255).NotNullable()
                 .WithColumn("UserId").AsInt32().NotNullable();
-
-            Create.ForeignKey()
-                .FromTable("Vehicle").ForeignColumn("UserId")
-                .ToTable("User").PrimaryColumn("Id");
         }
 
         public override void Down()

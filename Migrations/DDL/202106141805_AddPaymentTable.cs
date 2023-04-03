@@ -15,14 +15,6 @@ namespace Cashflow.Migrations.DDL
                 .WithColumn("Type").AsInt32().NotNullable()
                 .WithColumn("CreditCardId").AsInt32().Nullable()
                 .WithColumn("Date").AsDateTime().WithDefaultValue(DateTime.Now);
-
-            Create.ForeignKey()
-                .FromTable("Payment").ForeignColumn("UserId")
-                .ToTable("User").PrimaryColumn("Id");
-
-            Create.ForeignKey()
-                .FromTable("Payment").ForeignColumn("CreditCardId")
-                .ToTable("CreditCard").PrimaryColumn("Id");
         }
 
         public override void Down()
