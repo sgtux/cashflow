@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Cashflow.Api.Enums;
 using Cashflow.Api.Models;
 using Cashflow.Tests.Tests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -46,12 +47,14 @@ namespace Cashflow.Tests
 
             if (expected != actual)
             {
-                var totalEarnings = paymentsMonth.Payments.Where(p => p.Type == Api.Enums.MovementProjectionType.Earning).Sum(p => p.Value);
-                var totalFuelExpenses = paymentsMonth.Payments.Where(p => p.Type == Api.Enums.MovementProjectionType.FuelExpense).Sum(p => p.Value);
-                var totalHouseholdExpenses = paymentsMonth.Payments.Where(p => p.Type == Api.Enums.MovementProjectionType.HouseholdExpense).Sum(p => p.Value);
-                var totalPayments = paymentsMonth.Payments.Where(p => p.Type == Api.Enums.MovementProjectionType.Payment).Sum(p => p.Value);
-                var totalRecurringExpenses = paymentsMonth.Payments.Where(p => p.Type == Api.Enums.MovementProjectionType.RecurringExpenses).Sum(p => p.Value);
-                var totalRemainingBalance = paymentsMonth.Payments.Where(p => p.Type == Api.Enums.MovementProjectionType.RemainingBalance).Sum(p => p.Value);
+                var totalEarnings = paymentsMonth.Payments.Where(p => p.Type == MovementProjectionType.Earning).Sum(p => p.Value);
+                var totalFuelExpenses = paymentsMonth.Payments.Where(p => p.Type == MovementProjectionType.FuelExpense).Sum(p => p.Value);
+                var totalHouseholdExpenses = paymentsMonth.Payments.Where(p => p.Type == MovementProjectionType.HouseholdExpense).Sum(p => p.Value);
+                var totalPayments = paymentsMonth.Payments.Where(p => p.Type == MovementProjectionType.Payment).Sum(p => p.Value);
+                var totalRecurringExpenses = paymentsMonth.Payments.Where(p => p.Type == MovementProjectionType.RecurringExpenses).Sum(p => p.Value);
+
+                var remainingBalance = paymentsMonth.Payments.First(p => p.Type == MovementProjectionType.RemainingBalanceIn || p.Type == MovementProjectionType.RemainingBalanceOut);
+                var totalRemainingBalance = remainingBalance.In ? remainingBalance.Value : remainingBalance.Value * -1;
 
                 System.Diagnostics.Trace.WriteLine($"Earnings: {totalEarnings}");
                 System.Diagnostics.Trace.WriteLine($"Fuel Expense: {totalFuelExpenses}");

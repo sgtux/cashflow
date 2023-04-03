@@ -7,12 +7,12 @@ parameters:
   - name: runSonar
     displayName: Rodar Sonar
     type: boolean
-    default: true
+    default: false
 
   - name: runDependencyCheck
     displayName: Rodar Dependency Check
     type: boolean
-    default: true
+    default: false
 
   - name: runPublish
     displayName: Publicar
