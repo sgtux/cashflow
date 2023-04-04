@@ -90,7 +90,7 @@ export function Earnings() {
     }
 
     return (
-        <MainContainer title="Ganhos/Benefícios" loading={loading}>
+        <MainContainer title="Proventos" loading={loading}>
 
             <Paper>
                 <span style={{ margin: 10, fontSize: 16, color: '#666' }}>Desde: </span>
@@ -156,7 +156,7 @@ export function Earnings() {
             <ConfirmModal show={!!removeItem}
                 onClose={() => setRemoveItem(null)}
                 onConfirm={() => remove()}
-                text={`Deseja realmente remover este benefício? (${(removeItem || {}).description})`} />
+                text={`Deseja realmente remover este Provento? (${(removeItem || {}).description})`} />
         </MainContainer>
     )
 }

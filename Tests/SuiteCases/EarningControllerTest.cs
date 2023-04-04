@@ -62,7 +62,7 @@ namespace Cashflow.Tests
                 Date = DateTime.Now,
                 Value = 0,
                 UserId = 1,
-                Type = EarningType.MonthyBenefit,
+                Type = EarningType.Monthy,
                 Description = "Salário"
             };
             var result = await Post("/api/Earning", model, model.UserId);
@@ -92,7 +92,7 @@ namespace Cashflow.Tests
                 Date = new DateTime(2021, 4, 1),
                 Value = 1000,
                 UserId = 2,
-                Type = EarningType.MonthyBenefit,
+                Type = EarningType.Monthy,
                 Description = "Salário"
             };
             var result = await Post("/api/Earning", model, model.UserId);
@@ -100,14 +100,14 @@ namespace Cashflow.Tests
         }
 
         [TestMethod]
-        public async Task AddBenefitOk()
+        public async Task AddEarningOk()
         {
             var model = new Earning()
             {
                 Date = new DateTime(2020, 12, 1),
                 Value = 1000,
                 UserId = 1,
-                Type = EarningType.Benefit,
+                Type = EarningType.Normal,
                 Description = "Salário"
             };
             Thread.Sleep(500);
@@ -139,7 +139,7 @@ namespace Cashflow.Tests
                 Date = DateTime.Now,
                 Value = 0,
                 UserId = 1,
-                Type = EarningType.Benefit,
+                Type = EarningType.Normal,
                 Description = "Salário"
             };
             var result = await Put("/api/Earning", model, model.UserId);
@@ -155,7 +155,7 @@ namespace Cashflow.Tests
                 Date = DateTime.Now,
                 Value = 1000,
                 UserId = 1,
-                Type = EarningType.Benefit
+                Type = EarningType.Normal
             };
             var result = await Put("/api/Earning", model, model.UserId);
             TestErrors(model, result, "O campo 'Descrição' é obrigatório.");
@@ -173,7 +173,7 @@ namespace Cashflow.Tests
                 UserId = 1
             };
             var result = await Put("/api/Earning", model, model.UserId);
-            TestErrors(model, result, "Benefício/Salário não encontrado(a).");
+            TestErrors(model, result, "Provento não encontrado(a).");
         }
 
         [TestMethod]
@@ -202,7 +202,7 @@ namespace Cashflow.Tests
                 Date = new DateTime(2020, 4, 1),
                 Value = 1000,
                 UserId = 1,
-                Type = EarningType.MonthyBenefit
+                Type = EarningType.Monthy
             };
             var result = await Put("/api/Earning", model, model.UserId);
             TestErrors(model, result);
@@ -212,7 +212,7 @@ namespace Cashflow.Tests
         public async Task RemoveEarningNotFound()
         {
             var result = await Delete($"/api/Earning/99", 3);
-            TestErrors(new { a = 99, b = 3 }, result, "Benefício/Salário não encontrado(a).");
+            TestErrors(new { a = 99, b = 3 }, result, "Provento não encontrado(a).");
         }
 
         [TestMethod]

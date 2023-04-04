@@ -49,7 +49,7 @@ namespace Cashflow.Api.Services
             var loanModel = new HomeChartModel() { Index = 4, Description = "Empréstimos" };
             var donationModel = new HomeChartModel() { Index = 5, Description = "Doações" };
             var educationModel = new HomeChartModel() { Index = 6, Description = "Educação" };
-            var earningsModel = new HomeChartModel() { Index = 7, Description = "Benefícios" };
+            var earningsModel = new HomeChartModel() { Index = 7, Description = "Provento" };
 
             foreach (var item in (await _vehicleRepository.GetSome(filter)))
                 vehicleModel.Value += item.FuelExpenses.Sum(p => p.ValueSupplied);

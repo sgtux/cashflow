@@ -57,7 +57,7 @@ namespace Cashflow.Api.Services
 
             var earning = await _earningRepository.GetById(earningId);
             if (earning is null || earning.UserId != userId)
-                result.AddNotification(ValidatorMessages.NotFound("Benefício/Salário"));
+                result.AddNotification(ValidatorMessages.NotFound("Provento"));
             else
                 await _earningRepository.Remove(earningId);
             return result;

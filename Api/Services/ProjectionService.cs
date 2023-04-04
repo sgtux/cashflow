@@ -63,7 +63,7 @@ namespace Cashflow.Api.Services
             var dates = LoadDates(month, year);
             var list = new List<PaymentProjectionModel>();
 
-            await FillBenefits(list, dates, baseFilter);
+            await FillEarnings(list, dates, baseFilter);
             await FillPayments(list, dates, cards, baseFilter);
             await FillFuelExpenses(list, cards, dates, baseFilter);
             await FillHouseholdExpense(list, cards, dates, baseFilter);
@@ -112,19 +112,19 @@ namespace Cashflow.Api.Services
             return dates;
         }
 
-        private async Task FillBenefits(List<PaymentProjectionModel> list, List<DateTime> dates, BaseFilter filter)
+        private async Task FillEarnings(List<PaymentProjectionModel> list, List<DateTime> dates, BaseFilter filter)
         {
-            var benefits = await _earningRepository.GetSome(filter);
-            if (benefits.Any())
+            var earnings = await _earningRepository.GetSome(filter);
+            if (earnings.Any())
             {
-                var monthyBenefits = benefits.Where(p => p.Date.SameMonthYear(DateTime.Now) && p.Type == Enums.EarningType.MonthyBenefit);
+                var monthyEarnings = earnings.Where(p => p.Date.SameMonthYear(DateTime.Now) && p.Type == Enums.EarningType.Monthy);
                 foreach (var date in dates)
                 {
-                    foreach (var item in monthyBenefits)
+                    foreach (var item in monthyEarnings)
                         list.Add(new PaymentProjectionModel($"{item.Description} ({item.TypeDescription})", date, item.Value, MovementProjectionType.Earning));
 
-                    foreach (var item in benefits.Where(p => p.Type != Enums.EarningType.MonthyBenefit && p.Date.SameMonthYear(date)))
-                        list.Add(new PaymentProjectionModel($"{item.Description} (Benefício)", date, item.Value, MovementProjectionType.Earning));
+                    foreach (var item in earnings.Where(p => p.Type != Enums.EarningType.Monthy && p.Date.SameMonthYear(date)))
+                        list.Add(new PaymentProjectionModel($"{item.Description} (Provento)", date, item.Value, MovementProjectionType.Earning));
                 }
             }
         }

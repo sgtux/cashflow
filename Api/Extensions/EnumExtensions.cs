@@ -66,10 +66,10 @@ namespace Cashflow.Api.Extensions
         {
             switch (e)
             {
-                case EarningType.MonthyBenefit:
-                    return "Provento Mensal";
-                case EarningType.Benefit:
-                    return "Provento";
+                case EarningType.Monthy:
+                    return "Mensal";
+                case EarningType.Normal:
+                    return "";
                 default:
                     return "Desconhecido";
             }
