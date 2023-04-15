@@ -14,10 +14,6 @@ namespace Cashflow.Api.Services
 {
     public class ProjectionService : BaseService
     {
-        private const int PAYMENT_OUT = 1;
-
-        private const int PAYMENT_IN = 2;
-
         private readonly IPaymentRepository _paymentRepository;
 
         private readonly ICreditCardRepository _creditCardRepository;
@@ -34,6 +30,8 @@ namespace Cashflow.Api.Services
 
         private readonly IUserRepository _userRepository;
 
+        private readonly ProjectionCache _projectionCache;
+
         public ProjectionService(IPaymentRepository paymentRepository,
            ICreditCardRepository creditCardRepository,
            IEarningRepository earningRepository,
@@ -41,7 +39,8 @@ namespace Cashflow.Api.Services
            IVehicleRepository vehicleRepository,
            IRemainingBalanceRepository remainingBalanceRepository,
            IRecurringExpenseRepository recurringExpenseRepository,
-           IUserRepository userRepository
+           IUserRepository userRepository,
+           ProjectionCache projectionCache
            )
         {
             _paymentRepository = paymentRepository;
@@ -52,11 +51,16 @@ namespace Cashflow.Api.Services
             _remainingBalanceRepository = remainingBalanceRepository;
             _recurringExpenseRepository = recurringExpenseRepository;
             _userRepository = userRepository;
+            _projectionCache = projectionCache;
         }
 
         public async Task<ResultDataModel<List<PaymentMonthProjectionModel>>> GetProjection(int userId, int month, int year)
         {
-            var result = new ResultDataModel<List<PaymentMonthProjectionModel>>();
+            var monthPaymentList = _projectionCache.Get(userId);
+            if (monthPaymentList != null)
+                return new ResultDataModel<List<PaymentMonthProjectionModel>>(monthPaymentList);
+
+            monthPaymentList = new List<PaymentMonthProjectionModel>();
             var baseFilter = new BaseFilter() { UserId = userId };
             var cards = await _creditCardRepository.GetSome(baseFilter);
 
@@ -76,11 +80,13 @@ namespace Cashflow.Api.Services
             {
                 var monthYear = date.ToString("MM/yyyy");
                 var monthPayment = new PaymentMonthProjectionModel(monthYear, list);
-                result.Data.Add(monthPayment);
-                monthPayment.AccumulatedValue = result.Data.Sum(p => p.Total + p.PreviousMonthBalanceValue);
+                monthPaymentList.Add(monthPayment);
+                monthPayment.AccumulatedValue = monthPaymentList.Sum(p => p.Total + p.PreviousMonthBalanceValue);
             });
 
-            return result;
+            _projectionCache.Update(userId, monthPaymentList);
+
+            return new ResultDataModel<List<PaymentMonthProjectionModel>>(monthPaymentList);
         }
 
         private List<DateTime> LoadDates(int month, int year)

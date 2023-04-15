@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using Cashflow.Api.Contracts;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Models;
+using Cashflow.Api.Shared;
 using Cashflow.Api.Validators;
 
 namespace Cashflow.Api.Services
@@ -14,13 +15,17 @@ namespace Cashflow.Api.Services
 
         private readonly ICreditCardRepository _creditCardRepository;
 
+        private readonly ProjectionCache _projectionCache;
+
         public FuelExpenseService(IVehicleRepository vehicleRepository,
             IFuelExpenseRepository fuelExpenseRepository,
-            ICreditCardRepository creditCardRepository)
+            ICreditCardRepository creditCardRepository,
+            ProjectionCache projectionCache)
         {
             _vehicleRepository = vehicleRepository;
             _fuelExpenseRepository = fuelExpenseRepository;
             _creditCardRepository = creditCardRepository;
+            _projectionCache = projectionCache;
         }
 
         public async Task<ResultModel> Add(FuelExpense fuelExpense, int userId)
@@ -29,7 +34,10 @@ namespace Cashflow.Api.Services
             var validatorResult = new FuelExpenseValidator(_vehicleRepository, _fuelExpenseRepository, _creditCardRepository, userId).Validate(fuelExpense);
 
             if (validatorResult.IsValid)
+            {
                 await _fuelExpenseRepository.Add(fuelExpense);
+                _projectionCache.Clear(userId);
+            }
             else
                 result.AddNotification(validatorResult.Errors);
 
@@ -42,7 +50,10 @@ namespace Cashflow.Api.Services
             var validatorResult = new FuelExpenseValidator(_vehicleRepository, _fuelExpenseRepository, _creditCardRepository, userId).Validate(fuelExpense);
 
             if (validatorResult.IsValid)
+            {
                 await _fuelExpenseRepository.Update(fuelExpense);
+                _projectionCache.Clear(userId);
+            }
             else
                 result.AddNotification(validatorResult.Errors);
 
@@ -64,7 +75,10 @@ namespace Cashflow.Api.Services
             if (vehicle is null || vehicle.UserId != userId)
                 result.AddNotification(ValidatorMessages.NotFound("Despesa de Combustível"));
             else
+            {
                 await _fuelExpenseRepository.Remove(id);
+                _projectionCache.Clear(userId);
+            }
             return result;
         }
     }

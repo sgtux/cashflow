@@ -19,6 +19,7 @@ namespace Cashflow.Api
             services.AddRouting();
             services.AddSingleton<IAppConfig>(appConfig);
             services.ConfigureServices();
+            services.ConfigureCaches();
             services.ConfigureRepositories();
             services.ConfigureDatabaseContext();
         }

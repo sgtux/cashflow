@@ -24,7 +24,13 @@ namespace Cashflow.Api.Extensions
             services.AddScoped<RemainingBalanceService>();
             services.AddScoped<RecurringExpenseService>();
             services.AddScoped<ProjectionService>();
-            services.AddScoped<LogService>();
+            services.AddScoped<LogService>();            
+        }
+
+        public static void ConfigureCaches(this IServiceCollection services)
+        {
+            services.AddMemoryCache();
+            services.AddScoped<ProjectionCache>();
         }
 
         public static void ConfigureRepositories(this IServiceCollection services)

@@ -9,6 +9,7 @@ using Cashflow.Api.Models;
 using Cashflow.Api.Validators;
 using Cashflow.Api.Extensions;
 using Cashflow.Api.Enums;
+using Cashflow.Api.Shared;
 
 namespace Cashflow.Api.Services
 {
@@ -22,16 +23,20 @@ namespace Cashflow.Api.Services
 
         private readonly IVehicleRepository _vehicleRepository;
 
+        private readonly ProjectionCache _projectionCache;
+
         public PaymentService(IPaymentRepository paymentRepository,
             ICreditCardRepository creditCardRepository,
             IHouseholdExpenseRepository householdExpenseRepository,
-            IVehicleRepository vehicleRepository
+            IVehicleRepository vehicleRepository,
+            ProjectionCache projectionCache
             )
         {
             _paymentRepository = paymentRepository;
             _creditCardRepository = creditCardRepository;
             _householdExpenseRepository = householdExpenseRepository;
             _vehicleRepository = vehicleRepository;
+            _projectionCache = projectionCache;
         }
 
         public async Task<ResultDataModel<Payment>> Get(int id, int userId)
@@ -78,6 +83,7 @@ namespace Cashflow.Api.Services
             }
 
             await _paymentRepository.Add(payment);
+            _projectionCache.Clear(payment.UserId);
 
             return result;
         }
@@ -93,6 +99,7 @@ namespace Cashflow.Api.Services
             }
 
             await _paymentRepository.Update(payment);
+            _projectionCache.Clear(payment.UserId);
 
             return result;
         }
@@ -104,7 +111,10 @@ namespace Cashflow.Api.Services
             if (payment is null || payment.UserId != userId)
                 result.AddNotification(ValidatorMessages.NotFound("Pagamento"));
             else
+            {
                 await _paymentRepository.Remove(paymentId);
+                _projectionCache.Clear(payment.UserId);
+            }
             return result;
         }
 

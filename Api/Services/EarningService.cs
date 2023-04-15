@@ -8,6 +8,7 @@ using Cashflow.Api.Extensions;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Infra.Filters;
 using Cashflow.Api.Models;
+using Cashflow.Api.Shared;
 using Cashflow.Api.Validators;
 
 namespace Cashflow.Api.Services
@@ -16,7 +17,13 @@ namespace Cashflow.Api.Services
     {
         private readonly IEarningRepository _earningRepository;
 
-        public EarningService(IEarningRepository earningRepository) => _earningRepository = earningRepository;
+        private readonly ProjectionCache _projectionCache;
+
+        public EarningService(IEarningRepository earningRepository, ProjectionCache projectionCache)
+        {
+            _earningRepository = earningRepository;
+            _projectionCache = projectionCache;
+        }
 
         public async Task<ResultDataModel<Earning>> GetById(int id) => new ResultDataModel<Earning>(await _earningRepository.GetById(id));
 
@@ -33,7 +40,10 @@ namespace Cashflow.Api.Services
             var result = new ResultModel();
             var validatorResult = new EarningValidator(_earningRepository).Validate(earning);
             if (validatorResult.IsValid)
+            {
                 await _earningRepository.Add(earning);
+                _projectionCache.Clear(earning.UserId);
+            }
             else
                 result.AddNotification(validatorResult.Errors);
             return result;
@@ -44,7 +54,10 @@ namespace Cashflow.Api.Services
             var result = new ResultModel();
             var validatorResult = new EarningValidator(_earningRepository).Validate(earning);
             if (validatorResult.IsValid)
+            {
                 await _earningRepository.Update(earning);
+                _projectionCache.Clear(earning.UserId);
+            }
             else
                 result.AddNotification(validatorResult.Errors);
 
@@ -59,7 +72,10 @@ namespace Cashflow.Api.Services
             if (earning is null || earning.UserId != userId)
                 result.AddNotification(ValidatorMessages.NotFound("Provento"));
             else
+            {
                 await _earningRepository.Remove(earningId);
+                _projectionCache.Clear(earning.UserId);
+            }
             return result;
         }
     }

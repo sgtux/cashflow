@@ -8,6 +8,7 @@ using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Models;
 using Cashflow.Api.Validators;
 using System.Collections.Generic;
+using Cashflow.Api.Shared;
 
 namespace Cashflow.Api.Services
 {
@@ -25,12 +26,15 @@ namespace Cashflow.Api.Services
 
         private readonly IRecurringExpenseRepository _recurringExpenseRepository;
 
+        private readonly ProjectionCache _projectionCache;
+
         public RemainingBalanceService(IRemainingBalanceRepository remainingBalanceRepository,
             IHouseholdExpenseRepository householdExpenseRepository,
             IVehicleRepository vehicleRepository,
             IPaymentRepository paymentRepository,
             IEarningRepository earningRepository,
-            IRecurringExpenseRepository recurringExpenseRepository)
+            IRecurringExpenseRepository recurringExpenseRepository,
+            ProjectionCache projectionCache)
         {
             _remainingBalanceRepository = remainingBalanceRepository;
             _vehicleRepository = vehicleRepository;
@@ -38,6 +42,7 @@ namespace Cashflow.Api.Services
             _paymentRepository = paymentRepository;
             _earningRepository = earningRepository;
             _recurringExpenseRepository = recurringExpenseRepository;
+            _projectionCache = projectionCache;
         }
 
         public async Task<ResultModel> GetAll(int userId)
@@ -97,11 +102,13 @@ namespace Cashflow.Api.Services
             if (current == null)
             {
                 await _remainingBalanceRepository.Add(newRemainingBalance);
+                _projectionCache.Clear(userId);
                 return new ResultDataModel<RemainingBalance>(newRemainingBalance);
             }
 
             current.Value = total;
             await _remainingBalanceRepository.Update(current);
+            _projectionCache.Clear(userId);
             return new ResultDataModel<RemainingBalance>(current);
         }
 
@@ -116,6 +123,7 @@ namespace Cashflow.Api.Services
             }
             remainingBalance.Value = model.Value;
             await _remainingBalanceRepository.Update(remainingBalance);
+            _projectionCache.Clear(userId);
             return result;
         }
 

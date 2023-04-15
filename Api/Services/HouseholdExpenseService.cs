@@ -8,22 +8,26 @@ using Cashflow.Api.Extensions;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Infra.Filters;
 using Cashflow.Api.Models;
+using Cashflow.Api.Shared;
 using Cashflow.Api.Validators;
 
 namespace Cashflow.Api.Services
 {
     public class HouseholdExpenseService : BaseService
     {
-        private IHouseholdExpenseRepository _householdExpenseRepository;
+        private readonly IHouseholdExpenseRepository _householdExpenseRepository;
 
-        private IVehicleRepository _vehicleRepository;
+        private readonly IVehicleRepository _vehicleRepository;
+
+        private readonly ProjectionCache _projectionCache;
 
         public HouseholdExpenseService(IHouseholdExpenseRepository householdExpenseRepository,
             IVehicleRepository vehicleRepository,
-            ICreditCardRepository creditCardRepository)
+            ProjectionCache projectionCache)
         {
             _householdExpenseRepository = householdExpenseRepository;
             _vehicleRepository = vehicleRepository;
+            _projectionCache = projectionCache;
         }
 
         public async Task<ResultDataModel<IEnumerable<HouseholdExpense>>> GetByUser(int userId, int month, int year)
@@ -70,7 +74,10 @@ namespace Cashflow.Api.Services
                 result.AddNotification(validatorResult.Errors);
 
             if (result.IsValid)
+            {
                 await _householdExpenseRepository.Add(householdExpense);
+                _projectionCache.Clear(householdExpense.UserId);
+            }
             return result;
         }
 
@@ -79,7 +86,10 @@ namespace Cashflow.Api.Services
             var result = new ResultModel();
             var validatorResult = new HouseholdExpenseValidator(_householdExpenseRepository, _vehicleRepository).Validate(householdExpense);
             if (validatorResult.IsValid)
+            {
                 await _householdExpenseRepository.Update(householdExpense);
+                _projectionCache.Clear(householdExpense.UserId);
+            }
             else
                 result.AddNotification(validatorResult.Errors);
 
@@ -94,7 +104,10 @@ namespace Cashflow.Api.Services
             if (householdExpense is null || householdExpense.UserId != userId)
                 result.AddNotification(ValidatorMessages.NotFound("Despesa Doméstica"));
             else
+            {
                 await _householdExpenseRepository.Remove(id);
+                _projectionCache.Clear(householdExpense.UserId);
+            }
             return result;
         }
     }

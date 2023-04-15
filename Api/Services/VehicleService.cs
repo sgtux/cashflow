@@ -7,6 +7,7 @@ using Cashflow.Api.Extensions;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Infra.Filters;
 using Cashflow.Api.Models;
+using Cashflow.Api.Shared;
 using Cashflow.Api.Validators;
 
 namespace Cashflow.Api.Services
@@ -17,10 +18,16 @@ namespace Cashflow.Api.Services
 
         private readonly IUserRepository _userRepository;
 
-        public VehicleService(IVehicleRepository vehicleRepository, IUserRepository userRepository)
+        private readonly ProjectionCache _projectionCache;
+
+        public VehicleService(
+            IVehicleRepository vehicleRepository,
+            IUserRepository userRepository,
+            ProjectionCache projectionCache)
         {
             _vehicleRepository = vehicleRepository;
             _userRepository = userRepository;
+            _projectionCache = projectionCache;
         }
 
         public async Task<ResultModel> Add(Vehicle vehicle)
@@ -29,7 +36,10 @@ namespace Cashflow.Api.Services
             var validatorResult = new VehicleValidator(_vehicleRepository, _userRepository).Validate(vehicle);
 
             if (validatorResult.IsValid)
+            {
                 await _vehicleRepository.Add(vehicle);
+                _projectionCache.Clear(vehicle.UserId);
+            }
             else
                 result.AddNotification(validatorResult.Errors);
 
@@ -54,7 +64,10 @@ namespace Cashflow.Api.Services
             var validatorResult = new VehicleValidator(_vehicleRepository, _userRepository).Validate(vehicle);
 
             if (validatorResult.IsValid)
+            {
                 await _vehicleRepository.Update(vehicle);
+                _projectionCache.Clear(vehicle.UserId);
+            }
             else
                 result.AddNotification(validatorResult.Errors);
 
@@ -71,7 +84,10 @@ namespace Cashflow.Api.Services
             else if (vehicle.FuelExpenses.Any())
                 result.AddNotification(ValidatorMessages.Vehicle.HasFuelExpenses);
             else
+            {
                 await _vehicleRepository.Remove(id);
+                _projectionCache.Clear(vehicle.UserId);
+            }
 
             return result;
         }
