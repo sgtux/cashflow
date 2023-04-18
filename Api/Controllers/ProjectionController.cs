@@ -24,7 +24,7 @@ namespace Cashflow.Api.Controllers
         public async Task<IActionResult> GetProjection([FromQuery] int month, [FromQuery] int year)
         {
             await _remainingBalanceService.Recalculate(UserId, DateTime.Now.AddMonths(-1));
-            return HandleResult(await _projectionService.GetProjection(UserId, month, year));
+            return HandleResult(await _projectionService.GetProjection(UserId));
         }
     }
 }

@@ -14,7 +14,6 @@ export function Projection() {
   const [loading, setLoading] = useState('')
   const [allPayments, setAllPayments] = useState({})
   const [totalValue, setTotalValue] = useState(0)
-  const [shownMonths, setShownMonths] = useState({})
 
   useEffect(() => refresh(), [])
 
@@ -23,10 +22,8 @@ export function Projection() {
     homeService.getProjection()
       .then(res => {
         let total = 0
-        const dates = []
 
         for (let item of res) {
-          dates.push(item.monthYear)
           total += item.total
           total += item.previousMonthBalanceValue
           item.payments.sort((a, b) => a.description > b.description ? 1 : a.description < b.description ? -1 : 0)
@@ -34,19 +31,8 @@ export function Projection() {
 
         setTotalValue(total)
         setAllPayments(res)
-        setDates(dates)
-        if (dates.length)
-          hideShowMonth(dates[0])
       }).catch(err => console.log(err))
       .finally(() => setLoading(false))
-  }
-
-  function hideShowMonth(month) {
-    const temp = {}
-    for (let m in shownMonths)
-      temp[m] = shownMonths[m]
-    temp[month] = !temp[month]
-    setShownMonths(temp)
   }
 
   return (
@@ -54,8 +40,7 @@ export function Projection() {
       <Paper>
 
         <List dense={true}>
-          {!!allPayments.length && allPayments.map((p, i) => <PaymentMonth key={i} paymentMonth={p} />)
-          }
+          {!!allPayments.length && allPayments.map((p, i) => <PaymentMonth key={i} paymentMonth={p} />)}
         </List>
 
         <div style={{

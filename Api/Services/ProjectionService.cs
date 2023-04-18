@@ -54,7 +54,7 @@ namespace Cashflow.Api.Services
             _projectionCache = projectionCache;
         }
 
-        public async Task<ResultDataModel<List<PaymentMonthProjectionModel>>> GetProjection(int userId, int month, int year)
+        public async Task<ResultDataModel<List<PaymentMonthProjectionModel>>> GetProjection(int userId)
         {
             var monthPaymentList = _projectionCache.Get(userId);
             if (monthPaymentList != null)
@@ -64,7 +64,7 @@ namespace Cashflow.Api.Services
             var baseFilter = new BaseFilter() { UserId = userId };
             var cards = await _creditCardRepository.GetSome(baseFilter);
 
-            var dates = LoadDates(month, year);
+            var dates = LoadDates(12, DateTime.Now.Year + 1);
             var list = new List<PaymentProjectionModel>();
 
             await FillEarnings(list, dates, baseFilter);

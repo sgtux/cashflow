@@ -15,6 +15,8 @@ import {
     FileCopy as CopyIcon
 } from '@material-ui/icons'
 
+import { EditEarning } from './EditEarningModal/EditEarningModal'
+
 import { EarningTable, Container } from './styles'
 
 import { earningService } from '../../services'
@@ -29,6 +31,7 @@ export function Earnings() {
     const [removeItem, setRemoveItem] = useState(null)
     const [selectedMonthYear, setSelectedMonthYear] = useState('')
     const [monthYearList, setMonthYearList] = useState([])
+    const [editEarning, setEditEarning] = useState(null)
 
     useEffect(() => {
 
@@ -118,7 +121,7 @@ export function Earnings() {
                             {earnings.map((p, i) =>
                                 <tr key={i}>
                                     <td>{p.id}</td>
-                                    <td>{p.description} ({p.typeDescription})</td>
+                                    <td>{p.description} {p.type !== 2 ? `(${p.typeDescription})` : ''}</td>
                                     <td>{toReal(p.value)}</td>
                                     <td>{dateToString(p.date)}</td>
                                     <td>
@@ -130,11 +133,9 @@ export function Earnings() {
                                             </Tooltip>
                                         }
                                         <Tooltip title="Editar">
-                                            <Link to={`/edit-earning/${p.id}`}>
-                                                <IconButton color="primary" aria-label="Edit">
-                                                    <EditIcon />
-                                                </IconButton>
-                                            </Link>
+                                            <IconButton onClick={() => setEditEarning(p)} color="primary" aria-label="Edit">
+                                                <EditIcon />
+                                            </IconButton>
                                         </Tooltip>
                                         <Tooltip title="Remover">
                                             <IconButton onClick={() => setRemoveItem(p)} color="secondary" aria-label="Delete">
@@ -147,16 +148,17 @@ export function Earnings() {
                         </tbody>
                     </table>
                 </EarningTable>
-                <Link to="/edit-earning/0">
-                    <IconButton variant="contained" color="primary">
-                        <AddCircleIcon />
-                    </IconButton>
-                </Link>
+                <IconButton onClick={() => setEditEarning({})} variant="contained" color="primary">
+                    <AddCircleIcon />
+                </IconButton>
             </Container>
             <ConfirmModal show={!!removeItem}
                 onClose={() => setRemoveItem(null)}
                 onConfirm={() => remove()}
                 text={`Deseja realmente remover este Provento? (${(removeItem || {}).description})`} />
+            <EditEarning editEarning={editEarning}
+                onSave={() => { setEditEarning(null); refresh() }}
+                onClose={() => setEditEarning(null)} />
         </MainContainer>
     )
 }
