@@ -1,7 +1,4 @@
 name: 1.0.$(BuildID)$(Rev:.r)-$(SourceBranchName)
-
-trigger:
-  - main
   
 pool:
   vmImage: windows-2022
@@ -102,25 +99,27 @@ steps:
       pollingTimeoutSec: '300'
 
   - task: Yarn@3
+    condition: eq(variables['Build.SourceBranchName'], 'main')
     displayName: Yarn Install
     inputs:
       projectDirectory: 'Site'
 
   - task: Yarn@3
+    condition: eq(variables['Build.SourceBranchName'], 'main')
     displayName: Yarn Build
     inputs:
       projectDirectory: 'Site'
       arguments: 'build:prod'
 
   - task: DotNetCoreCLI@2
-    condition: and(succeeded(), eq(variables.runPublish, 'true'))
+    condition: and(and(succeeded(), eq(variables.runPublish, 'true')), eq(variables['Build.SourceBranchName'], 'main'))
     displayName: DB Migrations
     inputs:
       command: 'run'
       projects: 'Migrations'
 
   - task: Bash@3
-    condition: and(succeeded(), eq(variables.runPublish, 'true'))
+    condition: and(and(succeeded(), eq(variables.runPublish, 'true')), eq(variables['Build.SourceBranchName'], 'main'))
     displayName: Publish to Heroku
     inputs:
       filePath: 'heroku-deploy.sh'

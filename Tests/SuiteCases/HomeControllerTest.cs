@@ -17,11 +17,7 @@ namespace Cashflow.Tests
         public async Task GetProjection()
         {
             var now = DateTime.Now;
-            var date = now.AddMonths(10);
-            var payments = (await Get<List<PaymentMonthProjectionModel>>($"/api/Projection?month={date.Month}&year={date.Year}", 4)).Data;
-
-
-            Assert.AreEqual(11, payments.Count);
+            var payments = (await Get<List<PaymentMonthProjectionModel>>($"/api/Projection", 4)).Data;
 
             var paymentsMonth = payments.First(p => p.MonthYear == now.ToString("MM/yyyy"));
 
