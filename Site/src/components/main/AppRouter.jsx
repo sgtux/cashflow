@@ -5,7 +5,6 @@ import {
   Payments,
   Projection,
   Earnings,
-  EditEarning,
   EditPayment,
   HouseholdExpenses,
   Vehicles,
@@ -24,7 +23,6 @@ export default function () {
       <Route path="/credit-cards" element={<CreditCards />} />
       <Route path="/projection" element={<Projection />} />
       <Route path="/earnings" element={<Earnings />} />
-      <Route path="/edit-earning/:id" element={<EditEarning />} />
       <Route path="/edit-payment/:id" element={<EditPayment />} />
       <Route path="/household-expenses" element={<HouseholdExpenses />} />
       <Route path="/vehicles" element={<Vehicles />} />

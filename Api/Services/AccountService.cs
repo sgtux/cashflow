@@ -11,9 +11,12 @@ namespace Cashflow.Api.Services
     {
         private readonly IUserRepository _userRepository;
 
-        public AccountService(IUserRepository repository)
+        private readonly ProjectionCache _projectionCache;
+
+        public AccountService(IUserRepository repository, ProjectionCache projectionCache)
         {
             _userRepository = repository;
+            _projectionCache = projectionCache;
         }
 
         public async Task<ResultModel> GetById(int userId)
@@ -70,7 +73,10 @@ namespace Cashflow.Api.Services
             if (spendingCeiling < 0 || spendingCeiling > 99999)
                 result.AddNotification("Valor inválido.");
             else
+            {
                 await _userRepository.UpdateSpendingCeiling(userId, spendingCeiling);
+                _projectionCache.Clear(userId);
+            }
             return result;
         }
     }

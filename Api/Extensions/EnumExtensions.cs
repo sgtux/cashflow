@@ -69,7 +69,7 @@ namespace Cashflow.Api.Extensions
                 case EarningType.Monthy:
                     return "Mensal";
                 case EarningType.Normal:
-                    return "";
+                    return "Normal";
                 default:
                     return "Desconhecido";
             }
