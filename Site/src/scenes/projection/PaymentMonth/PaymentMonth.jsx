@@ -14,7 +14,7 @@ import {
 
 import { ExpandMore } from '@material-ui/icons'
 
-import { toReal } from '../../../helpers/utils'
+import { toReal, getMonthYear } from '../../../helpers/utils'
 import { Invoices, MoneySpan } from '../../../components'
 import { PaidSpan, ContainerCosts, BoxCosts } from '../styles'
 
@@ -25,7 +25,7 @@ export function PaymentMonth({ paymentMonth }) {
       <ListItemText>
         <Accordion>
           <AccordionSummary expandIcon={<ExpandMore />}>
-            <Typography>{paymentMonth.monthYear} - {<MoneySpan bold gain={paymentMonth.accumulatedValue > 0}>{toReal(paymentMonth.accumulatedValue)}</MoneySpan>}</Typography>
+            <Typography>{getMonthYear(paymentMonth.monthYear)} - {<MoneySpan bold gain={paymentMonth.accumulatedValue > 0}>{toReal(paymentMonth.accumulatedValue)}</MoneySpan>}</Typography>
           </AccordionSummary>
 
           <AccordionDetails>

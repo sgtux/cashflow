@@ -3,41 +3,24 @@ import React, { useState, useEffect } from 'react'
 import { Paper, List } from '@material-ui/core'
 
 import { MainContainer, MoneySpan } from '../../components'
-import { InputMonth } from '../../components/inputs'
 
 import { homeService } from '../../services'
 
-import { toReal, getMonthYear } from '../../helpers/utils'
+import { toReal } from '../../helpers/utils'
 import { PaymentMonth } from './PaymentMonth/PaymentMonth'
 
 export function Projection() {
 
   const [loading, setLoading] = useState('')
   const [allPayments, setAllPayments] = useState({})
-  const [dates, setDates] = useState([])
-  const [endDate, setEndDate] = useState({ month: '', year: '' })
   const [totalValue, setTotalValue] = useState(0)
   const [shownMonths, setShownMonths] = useState({})
 
-  useEffect(() => {
+  useEffect(() => refresh(), [])
 
-    const now = new Date()
-    let month = now.getMonth() + 12
-    let year = now.getFullYear()
-
-    if (month > 12) {
-      month = month - 12
-      year++
-    }
-
-    setEndDate({ month, year })
-    refresh({ month, year })
-  }, [])
-
-  function refresh(date) {
+  function refresh() {
     setLoading(true)
-    setEndDate(date)
-    homeService.getProjection(date.month, date.year)
+    homeService.getProjection()
       .then(res => {
         let total = 0
         const dates = []
@@ -69,14 +52,6 @@ export function Projection() {
   return (
     <MainContainer title="Projeção" loading={loading}>
       <Paper>
-        <div style={{ margin: 20, paddingTop: 20 }}>
-          <InputMonth
-            startYear={new Date().getFullYear()}
-            selectedMonth={endDate.month}
-            selectedYear={endDate.year}
-            label="Previsão até"
-            onChange={(month, year) => refresh({ month, year })} />
-        </div>
 
         <List dense={true}>
           {!!allPayments.length && allPayments.map((p, i) => <PaymentMonth key={i} paymentMonth={p} />)
