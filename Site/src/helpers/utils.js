@@ -44,7 +44,7 @@ export const isSameMonth = (d1, d2) => {
 
 export const getMonthYear = (date) => {
   const d = date.split('/')
-  return `${Months[Number(d[0]) - 1]} - ${d[1]}`
+  return `${Months[Number(d[0]) - 1]}/${d[1]}`
 }
 
 export const debounce = (callback, delay) => {
