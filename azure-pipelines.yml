@@ -1,5 +1,8 @@
 name: 1.0.$(BuildID)$(Rev:.r)-$(SourceBranchName)
 
+trigger:
+  - main
+  
 pool:
   vmImage: windows-2022
 

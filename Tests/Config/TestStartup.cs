@@ -22,6 +22,7 @@ namespace Cashflow.Tests.Config
             services.AddRouting();
             services.AddSingleton<IAppConfig>(appConfig);
             services.ConfigureServices();
+            services.ConfigureCaches();
             services.ConfigureRepositories();
             services.AddScoped<IDatabaseContext, TestDatabaseContext>();
         }
