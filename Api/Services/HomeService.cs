@@ -6,6 +6,7 @@ using Cashflow.Api.Contracts;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Infra.Filters;
 using Cashflow.Api.Models;
+using Cashflow.Api.Shared.Cache;
 
 namespace Cashflow.Api.Services
 {
@@ -19,22 +20,32 @@ namespace Cashflow.Api.Services
 
         private readonly IEarningRepository _earningRepository;
 
+        private readonly AppCache _appCache;
+
         public HomeService(IPaymentRepository paymentRepository,
             ICreditCardRepository creditCardRepository,
             IHouseholdExpenseRepository householdExpenseRepository,
             IVehicleRepository vehicleRepository,
-            IEarningRepository earningRepository
+            IEarningRepository earningRepository,
+            AppCache appCache
             )
         {
             _paymentRepository = paymentRepository;
             _householdExpenseRepository = householdExpenseRepository;
             _vehicleRepository = vehicleRepository;
             _earningRepository = earningRepository;
+            _appCache = appCache;
         }
 
         public async Task<ResultDataModel<List<HomeChartModel>>> GetInfo(int userId, int month, int year)
         {
-            var result = new ResultDataModel<List<HomeChartModel>>();
+            var list = _appCache.Home.Get(userId);
+
+            if (list != null)
+                return new ResultDataModel<List<HomeChartModel>>(list, true);
+
+            list = new List<HomeChartModel>();
+
             var filter = new BaseFilter()
             {
                 StartDate = new DateTime(year, month, 1),
@@ -67,16 +78,18 @@ namespace Cashflow.Api.Services
             educationModel.Value += CalculatePaymentHomeChartModel(payments, month, year, Enums.PaymentType.Education);
             loanModel.Value += CalculatePaymentHomeChartModel(payments, month, year, Enums.PaymentType.Loan);
 
-            result.Data.Add(spendingModel);
-            result.Data.Add(householdExpenseModel);
-            result.Data.Add(vehicleModel);
-            result.Data.Add(financingsModel);
-            result.Data.Add(loanModel);
-            result.Data.Add(donationModel);
-            result.Data.Add(educationModel);
-            result.Data.Add(earningsModel);
+            list.Add(spendingModel);
+            list.Add(householdExpenseModel);
+            list.Add(vehicleModel);
+            list.Add(financingsModel);
+            list.Add(loanModel);
+            list.Add(donationModel);
+            list.Add(educationModel);
+            list.Add(earningsModel);
 
-            return result;
+            _appCache.Home.Update(userId, list);
+
+            return new ResultDataModel<List<HomeChartModel>>(list);
         }
 
         private decimal CalculatePaymentHomeChartModel(IEnumerable<Payment> payments, int month, int year, Enums.PaymentType type)

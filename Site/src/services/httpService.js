@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { toast } from '../helpers'
 
-import {StorageService} from './storage.service'
+import { StorageService } from './storage.service'
 
 let callbackTokenExpired = null
 
@@ -25,6 +25,8 @@ const sendRequest = (method, url, headers, data) => {
   }).then(res => {
     if (res.data.requestElapsedTime > 500)
       toast.warning(`${url} is too slow around ${res.data.requestElapsedTime}ms`)
+    if (res.data.fromCache)
+      toast.info('Obtido do cache.')
     return res.data.data
   })
     .catch(err => {

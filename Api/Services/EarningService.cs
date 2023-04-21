@@ -8,7 +8,7 @@ using Cashflow.Api.Extensions;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Infra.Filters;
 using Cashflow.Api.Models;
-using Cashflow.Api.Shared;
+using Cashflow.Api.Shared.Cache;
 using Cashflow.Api.Validators;
 
 namespace Cashflow.Api.Services
@@ -17,12 +17,12 @@ namespace Cashflow.Api.Services
     {
         private readonly IEarningRepository _earningRepository;
 
-        private readonly ProjectionCache _projectionCache;
+        private readonly AppCache _appCache;
 
-        public EarningService(IEarningRepository earningRepository, ProjectionCache projectionCache)
+        public EarningService(IEarningRepository earningRepository, AppCache appCache)
         {
             _earningRepository = earningRepository;
-            _projectionCache = projectionCache;
+            _appCache = appCache;
         }
 
         public async Task<ResultDataModel<Earning>> GetById(int id) => new ResultDataModel<Earning>(await _earningRepository.GetById(id));
@@ -42,7 +42,7 @@ namespace Cashflow.Api.Services
             if (validatorResult.IsValid)
             {
                 await _earningRepository.Add(earning);
-                _projectionCache.Clear(earning.UserId);
+                _appCache.Clear(earning.UserId);
             }
             else
                 result.AddNotification(validatorResult.Errors);
@@ -56,7 +56,7 @@ namespace Cashflow.Api.Services
             if (validatorResult.IsValid)
             {
                 await _earningRepository.Update(earning);
-                _projectionCache.Clear(earning.UserId);
+                _appCache.Clear(earning.UserId);
             }
             else
                 result.AddNotification(validatorResult.Errors);
@@ -74,7 +74,7 @@ namespace Cashflow.Api.Services
             else
             {
                 await _earningRepository.Remove(earningId);
-                _projectionCache.Clear(earning.UserId);
+                _appCache.Clear(earning.UserId);
             }
             return result;
         }

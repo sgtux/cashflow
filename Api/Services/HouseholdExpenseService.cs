@@ -8,7 +8,7 @@ using Cashflow.Api.Extensions;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Infra.Filters;
 using Cashflow.Api.Models;
-using Cashflow.Api.Shared;
+using Cashflow.Api.Shared.Cache;
 using Cashflow.Api.Validators;
 
 namespace Cashflow.Api.Services
@@ -19,15 +19,15 @@ namespace Cashflow.Api.Services
 
         private readonly IVehicleRepository _vehicleRepository;
 
-        private readonly ProjectionCache _projectionCache;
+        private readonly AppCache _appCache;
 
         public HouseholdExpenseService(IHouseholdExpenseRepository householdExpenseRepository,
             IVehicleRepository vehicleRepository,
-            ProjectionCache projectionCache)
+            AppCache appCache)
         {
             _householdExpenseRepository = householdExpenseRepository;
             _vehicleRepository = vehicleRepository;
-            _projectionCache = projectionCache;
+            _appCache = appCache;
         }
 
         public async Task<ResultDataModel<IEnumerable<HouseholdExpense>>> GetByUser(int userId, int month, int year)
@@ -76,7 +76,7 @@ namespace Cashflow.Api.Services
             if (result.IsValid)
             {
                 await _householdExpenseRepository.Add(householdExpense);
-                _projectionCache.Clear(householdExpense.UserId);
+                _appCache.Clear(householdExpense.UserId);
             }
             return result;
         }
@@ -88,7 +88,7 @@ namespace Cashflow.Api.Services
             if (validatorResult.IsValid)
             {
                 await _householdExpenseRepository.Update(householdExpense);
-                _projectionCache.Clear(householdExpense.UserId);
+                _appCache.Clear(householdExpense.UserId);
             }
             else
                 result.AddNotification(validatorResult.Errors);
@@ -106,7 +106,7 @@ namespace Cashflow.Api.Services
             else
             {
                 await _householdExpenseRepository.Remove(id);
-                _projectionCache.Clear(householdExpense.UserId);
+                _appCache.Clear(householdExpense.UserId);
             }
             return result;
         }

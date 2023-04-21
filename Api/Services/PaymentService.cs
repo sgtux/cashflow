@@ -9,7 +9,7 @@ using Cashflow.Api.Models;
 using Cashflow.Api.Validators;
 using Cashflow.Api.Extensions;
 using Cashflow.Api.Enums;
-using Cashflow.Api.Shared;
+using Cashflow.Api.Shared.Cache;
 
 namespace Cashflow.Api.Services
 {
@@ -23,20 +23,20 @@ namespace Cashflow.Api.Services
 
         private readonly IVehicleRepository _vehicleRepository;
 
-        private readonly ProjectionCache _projectionCache;
+        private readonly AppCache _appCache;
 
         public PaymentService(IPaymentRepository paymentRepository,
             ICreditCardRepository creditCardRepository,
             IHouseholdExpenseRepository householdExpenseRepository,
             IVehicleRepository vehicleRepository,
-            ProjectionCache projectionCache
+            AppCache appCache
             )
         {
             _paymentRepository = paymentRepository;
             _creditCardRepository = creditCardRepository;
             _householdExpenseRepository = householdExpenseRepository;
             _vehicleRepository = vehicleRepository;
-            _projectionCache = projectionCache;
+            _appCache = appCache;
         }
 
         public async Task<ResultDataModel<Payment>> Get(int id, int userId)
@@ -83,7 +83,7 @@ namespace Cashflow.Api.Services
             }
 
             await _paymentRepository.Add(payment);
-            _projectionCache.Clear(payment.UserId);
+            _appCache.Clear(payment.UserId);
 
             return result;
         }
@@ -99,7 +99,7 @@ namespace Cashflow.Api.Services
             }
 
             await _paymentRepository.Update(payment);
-            _projectionCache.Clear(payment.UserId);
+            _appCache.Clear(payment.UserId);
 
             return result;
         }
@@ -113,7 +113,7 @@ namespace Cashflow.Api.Services
             else
             {
                 await _paymentRepository.Remove(paymentId);
-                _projectionCache.Clear(payment.UserId);
+                _appCache.Clear(payment.UserId);
             }
             return result;
         }

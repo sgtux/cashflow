@@ -7,7 +7,7 @@ using Cashflow.Api.Extensions;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Infra.Filters;
 using Cashflow.Api.Models;
-using Cashflow.Api.Shared;
+using Cashflow.Api.Shared.Cache;
 using Cashflow.Api.Validators;
 
 namespace Cashflow.Api.Services
@@ -18,16 +18,16 @@ namespace Cashflow.Api.Services
 
         private readonly IUserRepository _userRepository;
 
-        private readonly ProjectionCache _projectionCache;
+        private readonly AppCache _appCache;
 
         public VehicleService(
             IVehicleRepository vehicleRepository,
             IUserRepository userRepository,
-            ProjectionCache projectionCache)
+            AppCache appCache)
         {
             _vehicleRepository = vehicleRepository;
             _userRepository = userRepository;
-            _projectionCache = projectionCache;
+            _appCache = appCache;
         }
 
         public async Task<ResultModel> Add(Vehicle vehicle)
@@ -38,7 +38,7 @@ namespace Cashflow.Api.Services
             if (validatorResult.IsValid)
             {
                 await _vehicleRepository.Add(vehicle);
-                _projectionCache.Clear(vehicle.UserId);
+                _appCache.Clear(vehicle.UserId);
             }
             else
                 result.AddNotification(validatorResult.Errors);
@@ -66,7 +66,7 @@ namespace Cashflow.Api.Services
             if (validatorResult.IsValid)
             {
                 await _vehicleRepository.Update(vehicle);
-                _projectionCache.Clear(vehicle.UserId);
+                _appCache.Clear(vehicle.UserId);
             }
             else
                 result.AddNotification(validatorResult.Errors);
@@ -86,7 +86,7 @@ namespace Cashflow.Api.Services
             else
             {
                 await _vehicleRepository.Remove(id);
-                _projectionCache.Clear(vehicle.UserId);
+                _appCache.Clear(vehicle.UserId);
             }
 
             return result;

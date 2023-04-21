@@ -11,9 +11,10 @@ namespace Cashflow.Api.Models
             Data = (T)Activator.CreateInstance(typeof(T));
         }
 
-        public ResultDataModel(T data)
+        public ResultDataModel(T data, bool fromCache = false)
         {
             Data = data;
+            FromCache = fromCache;
         }
     }
 }

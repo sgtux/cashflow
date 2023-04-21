@@ -19,5 +19,7 @@ namespace Cashflow.Api.Models
         public bool IsValid => !Notifications.Any();
 
         public long RequestElapsedTime { get; set; }
+
+        public bool FromCache { get; set; }
     }
 }
