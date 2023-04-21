@@ -9,6 +9,7 @@ using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Infra.Filters;
 using Cashflow.Api.Models;
 using Cashflow.Api.Shared;
+using Cashflow.Api.Shared.Cache;
 
 namespace Cashflow.Api.Services
 {
@@ -30,7 +31,7 @@ namespace Cashflow.Api.Services
 
         private readonly IUserRepository _userRepository;
 
-        private readonly ProjectionCache _projectionCache;
+        private readonly AppCache _appCache;
 
         public ProjectionService(IPaymentRepository paymentRepository,
            ICreditCardRepository creditCardRepository,
@@ -40,7 +41,7 @@ namespace Cashflow.Api.Services
            IRemainingBalanceRepository remainingBalanceRepository,
            IRecurringExpenseRepository recurringExpenseRepository,
            IUserRepository userRepository,
-           ProjectionCache projectionCache
+           AppCache appCache
            )
         {
             _paymentRepository = paymentRepository;
@@ -51,14 +52,14 @@ namespace Cashflow.Api.Services
             _remainingBalanceRepository = remainingBalanceRepository;
             _recurringExpenseRepository = recurringExpenseRepository;
             _userRepository = userRepository;
-            _projectionCache = projectionCache;
+            _appCache = appCache;
         }
 
         public async Task<ResultDataModel<List<PaymentMonthProjectionModel>>> GetProjection(int userId)
         {
-            var monthPaymentList = _projectionCache.Get(userId);
+            var monthPaymentList = _appCache.Projection.Get(userId);
             if (monthPaymentList != null)
-                return new ResultDataModel<List<PaymentMonthProjectionModel>>(monthPaymentList);
+                return new ResultDataModel<List<PaymentMonthProjectionModel>>(monthPaymentList, true);
 
             monthPaymentList = new List<PaymentMonthProjectionModel>();
             var baseFilter = new BaseFilter() { UserId = userId };
@@ -84,7 +85,7 @@ namespace Cashflow.Api.Services
                 monthPayment.AccumulatedValue = monthPaymentList.Sum(p => p.Total + p.PreviousMonthBalanceValue);
             });
 
-            _projectionCache.Update(userId, monthPaymentList);
+            _appCache.Projection.Update(userId, monthPaymentList);
 
             return new ResultDataModel<List<PaymentMonthProjectionModel>>(monthPaymentList);
         }

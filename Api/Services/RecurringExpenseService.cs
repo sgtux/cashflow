@@ -5,7 +5,7 @@ using Cashflow.Api.Contracts;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Infra.Filters;
 using Cashflow.Api.Models;
-using Cashflow.Api.Shared;
+using Cashflow.Api.Shared.Cache;
 using Cashflow.Api.Validators;
 
 namespace Cashflow.Api.Services
@@ -16,16 +16,16 @@ namespace Cashflow.Api.Services
 
         private readonly ICreditCardRepository _creditCardRepository;
 
-        private readonly ProjectionCache _projectionCache;
+        private readonly AppCache _appCache;
 
         public RecurringExpenseService(
             IRecurringExpenseRepository recurringExpenseRepository,
             ICreditCardRepository creditCardRepository,
-            ProjectionCache projectionCache)
+            AppCache appCache)
         {
             _recurringExpenseRepository = recurringExpenseRepository;
             _creditCardRepository = creditCardRepository;
-            _projectionCache = projectionCache;
+            _appCache = appCache;
         }
 
         public async Task<ResultDataModel<RecurringExpense>> GetById(long id, int userId)
@@ -44,7 +44,7 @@ namespace Cashflow.Api.Services
             if (validatorResult.IsValid)
             {
                 await _recurringExpenseRepository.Add(recurringExpense);
-                _projectionCache.Clear(recurringExpense.UserId);
+                _appCache.Clear(recurringExpense.UserId);
             }
             else
                 result.AddNotification(validatorResult.Errors);
@@ -60,7 +60,7 @@ namespace Cashflow.Api.Services
             if (validatorResult.IsValid)
             {
                 await _recurringExpenseRepository.Update(recurringExpense);
-                _projectionCache.Clear(recurringExpense.UserId);
+                _appCache.Clear(recurringExpense.UserId);
             }
             else
                 result.AddNotification(validatorResult.Errors);
@@ -80,7 +80,7 @@ namespace Cashflow.Api.Services
             else
             {
                 await _recurringExpenseRepository.Remove(id);
-                _projectionCache.Clear(recurringExpense.UserId);
+                _appCache.Clear(recurringExpense.UserId);
             }
 
             return result;
@@ -94,7 +94,7 @@ namespace Cashflow.Api.Services
             if (validatorResult.IsValid)
             {
                 await _recurringExpenseRepository.AddHistory(history);
-                _projectionCache.Clear(userId);
+                _appCache.Clear(userId);
             }
             else
                 result.AddNotification(validatorResult.Errors);
@@ -110,7 +110,7 @@ namespace Cashflow.Api.Services
             if (validatorResult.IsValid)
             {
                 await _recurringExpenseRepository.UpdateHistory(history);
-                _projectionCache.Clear(userId);
+                _appCache.Clear(userId);
             }
             else
                 result.AddNotification(validatorResult.Errors);
@@ -132,7 +132,7 @@ namespace Cashflow.Api.Services
             if (recurringExpense.History.Any(p => p.Id == id))
             {
                 await _recurringExpenseRepository.RemoveHistory(id);
-                _projectionCache.Clear(userId);
+                _appCache.Clear(userId);
             }
             else
                 result.AddNotification(ValidatorMessages.NotFound("Histórico"));

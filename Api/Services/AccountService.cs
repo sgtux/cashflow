@@ -3,6 +3,7 @@ using Cashflow.Api.Contracts;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Models;
 using Cashflow.Api.Shared;
+using Cashflow.Api.Shared.Cache;
 using Cashflow.Api.Validators;
 
 namespace Cashflow.Api.Services
@@ -11,12 +12,12 @@ namespace Cashflow.Api.Services
     {
         private readonly IUserRepository _userRepository;
 
-        private readonly ProjectionCache _projectionCache;
+        private readonly AppCache _appCache;
 
-        public AccountService(IUserRepository repository, ProjectionCache projectionCache)
+        public AccountService(IUserRepository repository, AppCache appCache)
         {
             _userRepository = repository;
-            _projectionCache = projectionCache;
+            _appCache = appCache;
         }
 
         public async Task<ResultModel> GetById(int userId)
@@ -75,7 +76,7 @@ namespace Cashflow.Api.Services
             else
             {
                 await _userRepository.UpdateSpendingCeiling(userId, spendingCeiling);
-                _projectionCache.Clear(userId);
+                _appCache.Clear(userId);
             }
             return result;
         }

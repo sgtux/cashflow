@@ -8,7 +8,7 @@ using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Models;
 using Cashflow.Api.Validators;
 using System.Collections.Generic;
-using Cashflow.Api.Shared;
+using Cashflow.Api.Shared.Cache;
 
 namespace Cashflow.Api.Services
 {
@@ -26,7 +26,7 @@ namespace Cashflow.Api.Services
 
         private readonly IRecurringExpenseRepository _recurringExpenseRepository;
 
-        private readonly ProjectionCache _projectionCache;
+        private readonly AppCache _appCache;
 
         public RemainingBalanceService(IRemainingBalanceRepository remainingBalanceRepository,
             IHouseholdExpenseRepository householdExpenseRepository,
@@ -34,7 +34,7 @@ namespace Cashflow.Api.Services
             IPaymentRepository paymentRepository,
             IEarningRepository earningRepository,
             IRecurringExpenseRepository recurringExpenseRepository,
-            ProjectionCache projectionCache)
+            AppCache appCache)
         {
             _remainingBalanceRepository = remainingBalanceRepository;
             _vehicleRepository = vehicleRepository;
@@ -42,7 +42,7 @@ namespace Cashflow.Api.Services
             _paymentRepository = paymentRepository;
             _earningRepository = earningRepository;
             _recurringExpenseRepository = recurringExpenseRepository;
-            _projectionCache = projectionCache;
+            _appCache = appCache;
         }
 
         public async Task<ResultModel> GetAll(int userId)
@@ -102,13 +102,13 @@ namespace Cashflow.Api.Services
             if (current == null)
             {
                 await _remainingBalanceRepository.Add(newRemainingBalance);
-                _projectionCache.Clear(userId);
+                _appCache.Clear(userId);
                 return new ResultDataModel<RemainingBalance>(newRemainingBalance);
             }
 
             current.Value = total;
             await _remainingBalanceRepository.Update(current);
-            _projectionCache.Clear(userId);
+            _appCache.Clear(userId);
             return new ResultDataModel<RemainingBalance>(current);
         }
 
@@ -123,7 +123,7 @@ namespace Cashflow.Api.Services
             }
             remainingBalance.Value = model.Value;
             await _remainingBalanceRepository.Update(remainingBalance);
-            _projectionCache.Clear(userId);
+            _appCache.Clear(userId);
             return result;
         }
 

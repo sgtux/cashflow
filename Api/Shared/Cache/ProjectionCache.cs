@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Cashflow.Api.Models;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace Cashflow.Api.Shared
+namespace Cashflow.Api.Shared.Cache
 {
     public class ProjectionCache
     {

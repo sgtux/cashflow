@@ -3,6 +3,7 @@ using Cashflow.Api.Contracts;
 using Cashflow.Api.Infra.Repository;
 using Cashflow.Api.Services;
 using Cashflow.Api.Shared;
+using Cashflow.Api.Shared.Cache;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -30,6 +31,8 @@ namespace Cashflow.Api.Extensions
         public static void ConfigureCaches(this IServiceCollection services)
         {
             services.AddMemoryCache();
+            services.AddScoped<AppCache>();
+            services.AddScoped<HomeCache>();
             services.AddScoped<ProjectionCache>();
         }
 
