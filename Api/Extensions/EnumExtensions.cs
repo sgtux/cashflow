@@ -55,6 +55,8 @@ namespace Cashflow.Api.Extensions
                     return "Juros de Atraso";
                 case HouseholdExpenseType.Clothes:
                     return "Roupas";
+                case HouseholdExpenseType.Utensil:
+                    return "Utensílio";
                 case HouseholdExpenseType.Others:
                     return "Outros";
                 default:
