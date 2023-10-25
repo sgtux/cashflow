@@ -28,6 +28,8 @@ namespace Cashflow.Api.Enums
 
         Clothes = 13,
 
+        Utensil = 14,
+
         Others = 20
     }
 }
