@@ -46,7 +46,7 @@ namespace Cashflow.Api.Extensions
                 case HouseholdExpenseType.Leisure:
                     return "Lazer";
                 case HouseholdExpenseType.HardDrink:
-                    return "Bebida Alcólica";
+                    return "Bebida Alcoólica";
                 case HouseholdExpenseType.Party:
                     return "Festa";
                 case HouseholdExpenseType.Uber:
@@ -57,6 +57,8 @@ namespace Cashflow.Api.Extensions
                     return "Roupas";
                 case HouseholdExpenseType.Utensil:
                     return "Utensílio";
+                case HouseholdExpenseType.Cleaning:
+                    return "Limpeza";
                 case HouseholdExpenseType.Others:
                     return "Outros";
                 default:
@@ -75,16 +77,6 @@ namespace Cashflow.Api.Extensions
                 default:
                     return "Desconhecido";
             }
-        }
-
-        public static List<HouseholdExpenseType> FilterInactives(this IEnumerable<HouseholdExpenseType> list)
-        {
-            List<HouseholdExpenseType> inactives = new List<HouseholdExpenseType>()
-            {
-                HouseholdExpenseType.Food,
-                HouseholdExpenseType.HardDrink
-            };
-            return list.Where(p => !inactives.Contains(p)).ToList();
         }
     }
 }
