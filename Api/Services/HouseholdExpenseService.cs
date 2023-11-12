@@ -59,7 +59,6 @@ namespace Cashflow.Api.Services
         {
             var types = Enum.GetValues<HouseholdExpenseType>()
                 .Where(p => p != HouseholdExpenseType.Others)
-                .FilterInactives()
                 .Select(p => new TypeModel(p))
                 .OrderBy(p => p.Description)
                 .Append(new TypeModel(HouseholdExpenseType.Others));

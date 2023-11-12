@@ -30,6 +30,8 @@ namespace Cashflow.Api.Enums
 
         Utensil = 14,
 
+        Cleaning = 15,
+
         Others = 20
     }
 }
