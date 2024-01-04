@@ -80,7 +80,8 @@ export function Earnings() {
 
     function copyEarning(earning) {
         let date = new Date(earning.date)
-        date = new Date(date.getFullYear(), new Date().getMonth(), date.getDate())
+        const now = new Date()
+        date = new Date(now.getFullYear(), now.getMonth(), date.getDate())
         earning = { ...earning, id: 0, date }
         setLoading(true)
         earningService.save(earning)
