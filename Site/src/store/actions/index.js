@@ -1,11 +1,13 @@
 export const LANGUAGE_CHANGED = 'LANGUAGE_CHANGED'
 export const USER_CHANGED = 'USER_CHANGED'
 export const CHANGE_VISIBLE_ALERT = 'CHANGE_VISIBLE_ALERT'
+export const MENU_CHANGED = 'MENU_CHANGED'
 
 export const ActionTypes = {
   LANGUAGE_CHANGED: LANGUAGE_CHANGED,
   USER_CHANGED: USER_CHANGED,
-  CHANGE_VISIBLE_ALERT: CHANGE_VISIBLE_ALERT
+  CHANGE_VISIBLE_ALERT: CHANGE_VISIBLE_ALERT,
+  MENU_CHANGED: MENU_CHANGED
 }
 
 export const languageChanged = newLanguage => ({
@@ -31,4 +33,9 @@ export const showSuccess = (message) => ({
 export const hideAlert = () => ({
   type: CHANGE_VISIBLE_ALERT,
   payload: { message: '', show: false }
+})
+
+export const menuChanged = newMenu => ({
+  type: MENU_CHANGED,
+  payload: newMenu
 })
