@@ -7,5 +7,9 @@ namespace Cashflow.Api.Models
         public string Description { get; set; }
 
         public decimal Value { get; set; }
+
+        public short Month { get; set; }
+
+        public short Year { get; set; }
     }
 }
