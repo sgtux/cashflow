@@ -37,11 +37,11 @@ namespace Cashflow.Api.Services
             _appCache = appCache;
         }
 
-        public async Task<ResultDataModel<List<HomeChartModel>>> GetInfo(int userId, int month, int year)
+        public async Task<ResultDataModel<List<HomeChartModel>>> GetInfo(int userId, short month, short year)
         {
             var list = _appCache.Home.Get(userId);
 
-            if (list != null)
+            if (list != null && list.First().Month == month && list.First().Year == year)
                 return new ResultDataModel<List<HomeChartModel>>(list, true);
 
             list = new List<HomeChartModel>();
@@ -62,10 +62,10 @@ namespace Cashflow.Api.Services
             var educationModel = new HomeChartModel() { Index = 6, Description = "Educação" };
             var earningsModel = new HomeChartModel() { Index = 7, Description = "Provento" };
 
-            foreach (var item in (await _vehicleRepository.GetSome(filter)))
+            foreach (var item in await _vehicleRepository.GetSome(filter))
                 vehicleModel.Value += item.FuelExpenses.Sum(p => p.ValueSupplied);
 
-            foreach (var item in (await _householdExpenseRepository.GetSome(filter)))
+            foreach (var item in await _householdExpenseRepository.GetSome(filter))
                 householdExpenseModel.Value += item.Value;
 
             var payments = await _paymentRepository.GetSome(filter);
@@ -86,6 +86,12 @@ namespace Cashflow.Api.Services
             list.Add(donationModel);
             list.Add(educationModel);
             list.Add(earningsModel);
+
+            foreach (var item in list)
+            {
+                item.Month = month;
+                item.Year = year;
+            }
 
             _appCache.Home.Update(userId, list);
 

@@ -14,6 +14,6 @@ namespace Cashflow.Api.Controllers
         public HomeController(HomeService homeService) => _homeService = homeService;
 
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] int month, [FromQuery] int year) => HandleResult(await _homeService.GetInfo(UserId, month, year));
+        public async Task<IActionResult> Get([FromQuery] short month, [FromQuery] short year) => HandleResult(await _homeService.GetInfo(UserId, month, year));
     }
 }
