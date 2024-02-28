@@ -4,6 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using Cashflow.Api.Shared;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Cashflow.Api.Auth
@@ -27,7 +28,7 @@ namespace Cashflow.Api.Auth
         {
             var token = new JwtSecurityToken(
               claims: _claims.Select(item => new Claim(item.Key, item.Value)).ToList(),
-                expires: DateTime.UtcNow.AddMinutes(_expiryInMinutes),
+                expires: Utils.CurrentDate.AddMinutes(_expiryInMinutes),
                 signingCredentials: new SigningCredentials(
                     _key,
                     SecurityAlgorithms.HmacSha256

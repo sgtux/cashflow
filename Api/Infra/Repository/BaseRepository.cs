@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Threading;
 using System.Threading.Tasks;
 using Cashflow.Api.Contracts;
 using Cashflow.Api.Infra.Sql;
 using Cashflow.Api.Services;
+using Cashflow.Api.Shared;
 using Dapper;
 
 namespace Cashflow.Api.Infra.Repository
@@ -96,6 +96,13 @@ namespace Cashflow.Api.Infra.Repository
 
         private void Log(string query) => _logService.Info($"Query: {query}\n\n");
 
-        public DateTime CurrentDate => DateTime.Now;
+        public DateTime CurrentDate => Utils.CurrentDate;
+
+        public Task<DateTime> DbCurrentDate()
+        {
+            var query = "SELECT SYSDATE()";
+            Log(query);
+            return _conn.ExecuteScalarAsync<DateTime>(query, null, Transaction);
+        }
     }
 }

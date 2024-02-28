@@ -49,5 +49,15 @@ namespace Cashflow.Api.Shared
             }
             return target;
         }
+
+        public static DateTime CurrentDate
+        {
+            get
+            {
+                DateTime dateTime = DateTime.UtcNow;
+                TimeZoneInfo hrBrasilia = TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time");
+                return TimeZoneInfo.ConvertTimeFromUtc(dateTime, hrBrasilia);
+            }
+        }
     }
 }
