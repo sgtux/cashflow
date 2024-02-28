@@ -6,7 +6,7 @@ using log4net.Config;
 
 namespace Cashflow.Api.Services
 {
-    public class LogService
+    public class LogService : BaseService
     {
         private readonly ILog _log;
 

@@ -6,7 +6,6 @@ using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Infra.Filters;
 using Cashflow.Api.Infra.Sql.User;
 using Cashflow.Api.Services;
-using Dapper;
 
 namespace Cashflow.Api.Infra.Repository
 {

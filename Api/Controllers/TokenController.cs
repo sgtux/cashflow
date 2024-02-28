@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -7,6 +6,7 @@ using Cashflow.Api.Auth;
 using Cashflow.Api.Contracts;
 using Cashflow.Api.Models;
 using Cashflow.Api.Services;
+using Cashflow.Api.Shared;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cashflow.Api.Controllers
@@ -42,7 +42,7 @@ namespace Cashflow.Api.Controllers
             if (!result.IsValid)
                 return HandleUnauthorized(result.Notifications.First());
 
-            await _remainingBalanceService.Recalculate(result.Data.Id, DateTime.Now.AddMonths(-1));
+            await _remainingBalanceService.Recalculate(result.Data.Id, Utils.CurrentDate.AddMonths(-1));
 
             var claims = new Dictionary<string, string>();
             claims.Add(ClaimTypes.Sid, result.Data.Id.ToString());

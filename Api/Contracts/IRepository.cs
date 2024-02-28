@@ -10,6 +10,8 @@ namespace Cashflow.Api.Contracts
 
         DateTime CurrentDate { get; }
 
+        Task<DateTime> DbCurrentDate();
+
         Task<bool> Exists(long id);
 
         Task<T> GetById(long id);
