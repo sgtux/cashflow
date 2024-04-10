@@ -7,7 +7,7 @@ namespace Cashflow.Migrations
 {
     public enum DatabaseType
     {
-        Postgres,
+        MsSql,
 
         Sqlite
     }
@@ -52,9 +52,9 @@ namespace Cashflow.Migrations
                 .AddFluentMigratorCore()
                 .ConfigureRunner(rb =>
                 {
-                    if (_type == DatabaseType.Postgres)
+                    if (_type == DatabaseType.MsSql)
                     {
-                        rb.AddMySql5()
+                        rb. AddSqlServer()
                             .WithGlobalConnectionString(_connectionString)
                             .ScanIn(_assembliesToScan).For.Migrations();
                     }

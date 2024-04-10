@@ -1,6 +1,6 @@
 using System.Data;
+using System.Data.SqlClient;
 using Cashflow.Api.Contracts;
-using MySqlConnector;
 
 namespace Cashflow.Api.Shared
 {
@@ -17,7 +17,7 @@ namespace Cashflow.Api.Shared
         public DatabaseContext(IAppConfig config)
         {
             _connectionString = config.DatabaseConnectionString;
-            _conn = new MySqlConnection(_connectionString);
+            _conn = new SqlConnection(_connectionString);
         }
 
         public IDbTransaction BeginTransaction()

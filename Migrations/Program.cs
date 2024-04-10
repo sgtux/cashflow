@@ -13,7 +13,7 @@ namespace Cashflow.Migrations
             if (string.IsNullOrWhiteSpace(connectionString))
                 throw new Exception("Environment variable DATABASE_CONNECTION_STRING was not found.");
 
-            var runner = new MigrationRunner(DatabaseType.Postgres, connectionString, true, typeof(AddUserTable).Assembly);
+            var runner = new MigrationRunner(DatabaseType.MsSql, connectionString, true, typeof(AddUserTable).Assembly);
             runner.Run(downMigrations);
         }
     }
