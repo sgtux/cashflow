@@ -19,9 +19,15 @@ namespace Cashflow.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
+            string dbDate = "ERRO";
+            try
+            {
+                dbDate = (await _repository.DbCurrentDate()).ToString("dd/MM/yyyy HH:mm:ss");
+            }
+            catch { }
             var status = new
             {
-                DbCurrentDate = (await _repository.DbCurrentDate()).ToString("dd/MM/yyyy HH:mm:ss"),
+                DbCurrentDate = dbDate,
                 ApiCurrentDate = Utils.CurrentDate.ToString("dd/MM/yyyy HH:mm:ss")
             };
             return HandleResult(new ResultDataModel<object>(status));

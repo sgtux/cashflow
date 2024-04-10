@@ -1,5 +1,5 @@
 UPDATE
-    User
+    [User]
 SET
     SpendingCeiling = @SpendingCeiling
 WHERE

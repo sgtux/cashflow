@@ -4,5 +4,5 @@ SELECT
     Password,
     CreatedAt,
     SpendingCeiling
-FROM User
+FROM [User]
 WHERE Email = @Email

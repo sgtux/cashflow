@@ -15,7 +15,7 @@ namespace Cashflow.Api.Controllers
         public RecurringExpenseController(RecurringExpenseService service) => _service = service;
 
         [HttpGet]
-        public async Task<IActionResult> GetByUser([FromQuery] bool? active) => HandleResult(await _service.GetByUser(UserId, active));
+        public async Task<IActionResult> GetByUser([FromQuery] byte? active) => HandleResult(await _service.GetByUser(UserId, active));
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id) => HandleResult(await _service.GetById(id, UserId));

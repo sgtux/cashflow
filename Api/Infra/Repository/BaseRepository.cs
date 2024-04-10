@@ -100,7 +100,7 @@ namespace Cashflow.Api.Infra.Repository
 
         public Task<DateTime> DbCurrentDate()
         {
-            var query = "SELECT SYSDATE()";
+            var query = "SELECT GETDATE()";
             Log(query);
             return _conn.ExecuteScalarAsync<DateTime>(query, null, Transaction);
         }

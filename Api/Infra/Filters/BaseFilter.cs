@@ -16,6 +16,6 @@ namespace Cashflow.Api.Infra.Filters
 
         public DateTime? InactiveTo { get; set; }
 
-        public bool? Active { get; set; }
+        public byte? Active { get; set; }
     }
 }

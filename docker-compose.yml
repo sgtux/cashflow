@@ -2,16 +2,14 @@ version: '2.2'
 
 services:
 
-
-
     db:
-        image: mariadb
+        image: mcr.microsoft.com/mssql/server:2022-latest
         environment:
-            MARIADB_ROOT_PASSWORD: Mysql123
+            MSSQL_SA_PASSWORD: Mssql123
+            ACCEPT_EULA: Y
         networks:
             lan:
                 ipv4_address: 172.31.31.10
-  
 networks:
     lan:
         ipam:

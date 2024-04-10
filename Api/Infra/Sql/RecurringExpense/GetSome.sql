@@ -18,11 +18,11 @@ WHERE
 		@Active IS NULL
 		OR (
 			(
-				@Active = TRUE
+				@Active = 1
 				AND re.InactiveAt IS NULL
 			)
 			OR (
-				@Active = FALSE
+				@Active = 0
 				AND re.InactiveAt IS NOT NULL
 			)
 		)
