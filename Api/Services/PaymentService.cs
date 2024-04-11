@@ -82,6 +82,9 @@ namespace Cashflow.Api.Services
                 return result;
             }
 
+            if(payment.Date == default)
+                payment.Date = payment.Installments.First().Date;
+
             await _paymentRepository.Add(payment);
             _appCache.Clear(payment.UserId);
 
@@ -97,6 +100,9 @@ namespace Cashflow.Api.Services
                 result.AddNotification(validatorResult.Errors);
                 return result;
             }
+
+            if(payment.Date == default)
+                payment.Date = payment.Installments.First().Date;
 
             await _paymentRepository.Update(payment);
             _appCache.Clear(payment.UserId);
