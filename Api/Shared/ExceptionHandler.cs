@@ -13,13 +13,18 @@ namespace Cashflow.Api.Shared
     {
         private readonly RequestDelegate _next;
 
+        private readonly Stopwatch _stopWatch;
+
         public ExceptionHandler(RequestDelegate next)
         {
+            _stopWatch = new Stopwatch();
+            _stopWatch.Start();
             _next = next;
         }
 
         public async Task Invoke(HttpContext context, IDatabaseContext databaseContext, LogService logService)
         {
+            string status = "Success";
             try
             {
                 await _next(context);
@@ -28,11 +33,19 @@ namespace Cashflow.Api.Shared
             catch (Exception ex)
             {
                 var error = ex.ToString();
+                status = "Error";
                 Debug.WriteLine(error);
                 Console.Write(error);
                 databaseContext.Rollback();
                 logService.Error(error);
                 await HandleExceptionAsync(context, ex);
+            }
+            finally
+            {
+                var log = $"Path: {context.Request.Path} - Finished in {_stopWatch.ElapsedMilliseconds}ms with {status}";
+                logService.Info(log);
+                Debug.WriteLine(log);
+                Console.WriteLine(log);
             }
         }
 
