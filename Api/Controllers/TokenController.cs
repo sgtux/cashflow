@@ -22,9 +22,7 @@ namespace Cashflow.Api.Controllers
 
         public TokenController(IAppConfig config,
             AccountService accountService,
-            PaymentService paymentService,
-            RemainingBalanceService remainingBalanceService,
-            LogService logService)
+            RemainingBalanceService remainingBalanceService)
         {
             _config = config;
             _accountService = accountService;
@@ -44,8 +42,10 @@ namespace Cashflow.Api.Controllers
 
             await _remainingBalanceService.Recalculate(result.Data.Id, Utils.CurrentDate.AddMonths(-1));
 
-            var claims = new Dictionary<string, string>();
-            claims.Add(ClaimTypes.Sid, result.Data.Id.ToString());
+            var claims = new Dictionary<string, string>
+            {
+                { ClaimTypes.Sid, result.Data.Id.ToString() }
+            };
 
             var token = new AccountResultModel()
             {

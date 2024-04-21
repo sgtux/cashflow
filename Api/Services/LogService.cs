@@ -25,11 +25,7 @@ namespace Cashflow.Api.Services
                 _log.Debug($"{message}\n");
         }
 
-        public void Info(string message)
-        {
-            if (_appConfig.IsDevelopment)
-                _log.Info($"{message}\n");
-        }
+        public void Info(string message) => _log.Info($"{message}\n");
 
         public void Error(string message) => _log.Error($"{message}\n");
     }
