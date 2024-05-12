@@ -10,7 +10,7 @@ import {
     Dialog,
     DialogContent,
     Zoom
-} from '@material-ui/core'
+} from '@mui/material'
 
 import { InputMoney, DatePickerInput, DatePickerContainer } from '../../../components/inputs'
 

@@ -8,14 +8,15 @@ import {
     IconButton,
     ListItemText,
     Tooltip
-} from '@material-ui/core'
+} from '@mui/material'
 
 import {
     Delete as DeleteIcon,
     EditOutlined as EditIcon,
     Refresh as RefreshIcon,
-    AddCircle as AddCircleIcon
-} from '@material-ui/icons'
+    AddCircle as AddCircleIcon,
+    SafetyDivider
+} from '@mui/icons-material'
 
 import { MainContainer, InputMonth } from '../../components'
 
@@ -93,6 +94,7 @@ export function HouseholdExpenses() {
                 onClick={() => refresh(selectedMonth, selectedYear)}>
                 <RefreshIcon />
             </IconButton>
+            <div style={{ height: 10 }}></div>
             {
                 totals.map((e, i) => <div key={i} style={{ fontSize: 12 }}>
                     <span>{e.description}: {toReal(e.value)}</span>

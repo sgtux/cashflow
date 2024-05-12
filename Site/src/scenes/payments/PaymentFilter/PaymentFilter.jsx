@@ -6,7 +6,7 @@ import {
     FormControlLabel,
     Checkbox,
     Button
-} from '@material-ui/core'
+} from '@mui/material'
 
 import { InputText, DatePickerInput, DatePickerContainer, InputLabel } from '../../../components/inputs'
 

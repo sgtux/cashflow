@@ -12,7 +12,7 @@ import {
     Dialog,
     DialogContent,
     Zoom
-} from '@material-ui/core'
+} from '@mui/material'
 
 import { InputMoney, DatePickerContainer, DatePickerInput } from '../../../components/inputs'
 import { toReal, fromReal } from '../../../helpers'
@@ -31,36 +31,39 @@ export function EditHouseholdExpenseModal({ editHouseholdExpense, onClose, onSav
     const [types, setTypes] = useState([])
     const [type, setType] = useState('')
 
-    useEffect(async () => {
-        if (editHouseholdExpense) {
-            try {
-                const taskVehicle = vehicleService.getAll()
-                const taskTypes = householdExpenseService.getTypes()
-                const listVehicles = await taskVehicle
-                const listTypes = await taskTypes
+    useEffect(() => {
+        async function fetchData() {
+            if (editHouseholdExpense) {
+                try {
+                    const taskVehicle = vehicleService.getAll()
+                    const taskTypes = householdExpenseService.getTypes()
+                    const listVehicles = await taskVehicle
+                    const listTypes = await taskTypes
 
-                setVehicles(listVehicles)
-                setTypes(listTypes)
+                    setVehicles(listVehicles)
+                    setTypes(listTypes)
 
-                if (editHouseholdExpense.id) {
-                    setId(editHouseholdExpense.id)
-                    setDescription(editHouseholdExpense.description)
-                    setDate(new Date(editHouseholdExpense.date))
-                    setValue(toReal(editHouseholdExpense.value))
-                    setVehicleId(editHouseholdExpense.vehicleId)
-                    setType(editHouseholdExpense.type)
+                    if (editHouseholdExpense.id) {
+                        setId(editHouseholdExpense.id)
+                        setDescription(editHouseholdExpense.description)
+                        setDate(new Date(editHouseholdExpense.date))
+                        setValue(toReal(editHouseholdExpense.value))
+                        setVehicleId(editHouseholdExpense.vehicleId)
+                        setType(editHouseholdExpense.type)
+                    }
+                } catch (ex) {
+                    console.log(ex)
                 }
-            } catch (ex) {
-                console.log(ex)
+            } else {
+                setId(0)
+                setDescription('')
+                setDate('')
+                setValue('')
+                setVehicleId('')
+                setType('')
             }
-        } else {
-            setId(0)
-            setDescription('')
-            setDate('')
-            setValue('')
-            setVehicleId('')
-            setType('')
         }
+        fetchData()
     }, [editHouseholdExpense])
 
     useEffect(() => {

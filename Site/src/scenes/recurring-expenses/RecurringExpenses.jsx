@@ -11,13 +11,13 @@ import {
     Tooltip,
     FormControlLabel,
     Checkbox
-} from '@material-ui/core'
+} from '@mui/material'
 
 import {
     Delete as DeleteIcon,
     Edit as EditIcon,
     History as HistoryIcon
-} from '@material-ui/icons'
+} from '@mui/icons-material'
 
 import { MainContainer, ConfirmModal } from '../../components/main'
 import { TableActionPayButton } from '../../components'

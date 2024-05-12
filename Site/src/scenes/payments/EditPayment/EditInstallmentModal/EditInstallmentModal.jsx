@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Dialog, DialogTitle, DialogContent, Zoom, Checkbox, FormControlLabel } from '@material-ui/core'
+import { Button, Dialog, DialogTitle, DialogContent, Zoom, Checkbox, FormControlLabel } from '@mui/material'
 import ptBr from 'date-fns/locale/pt-BR'
 import DatePicker from 'react-datepicker'
 

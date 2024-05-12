@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { Person, Visibility, VisibilityOff } from '@material-ui/icons'
+import { Person, Visibility, VisibilityOff } from '@mui/icons-material'
 import {
   CardContent,
   Card,
   Button,
   Zoom,
   CircularProgress
-} from '@material-ui/core'
+} from '@mui/material'
 
 import IconTextInput from '../../components/main/IconTextInput'
 import { userChanged } from '../../store/actions'

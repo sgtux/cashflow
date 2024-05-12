@@ -3,7 +3,7 @@ import {
   InputLabel,
   Select,
   MenuItem
-} from '@material-ui/core'
+} from '@mui/material'
 
 import { Months } from '../../helpers/utils'
 
@@ -23,17 +23,17 @@ export function InputMonth({ startYear, onChange, selectedMonth, selectedYear, l
   return (
     <span>
       <div>
-        <InputLabel style={{ height: '8px', fontSize: '10px' }}>{label}</InputLabel>
+        <InputLabel style={{ height: 16, fontSize: 10 }}>{label}</InputLabel>
       </div>
       <Select
         value={selectedMonth}
-        style={{ width: '130px' }}
+        style={{ width: 150 }}
         onChange={e => onChange(e.target.value, selectedYear)}>
         {Months.map((p, i) => <MenuItem key={i} value={i + 1}>{p}</MenuItem>)}
       </Select>
       <Select
         value={selectedYear}
-        style={{ width: '80px', marginLeft: '10px' }}
+        style={{ width: 100, marginLeft: 10 }}
         onChange={e => onChange(selectedMonth, e.target.value)}>
         {years.map((p, i) => <MenuItem key={i} value={p}>{p}</MenuItem>)}
       </Select>

@@ -8,9 +8,9 @@ import {
     AccordionSummary,
     AccordionDetails,
     Typography
-} from '@material-ui/core'
+} from '@mui/material'
 
-import { ExpandMore } from '@material-ui/icons'
+import { ExpandMore } from '@mui/icons-material'
 
 import { toReal } from '../../helpers/utils'
 
@@ -52,7 +52,7 @@ export function Invoices(props) {
                         {cards.map((c, j) =>
                             <div key={j}>
                                 <span style={{ fontWeight: 'bold' }}>{c.name}</span>
-                                <List dense={true} style={{ marginLeft: '50px' }}>
+                                <List dense={true} style={{ marginLeft: 50, marginRight: 10 }}>
                                     {c.payments.map((p, k) =>
                                         <ListItem style={{ backgroundColor: k % 2 == 0 ? '#ddd' : '#eee' }} key={k}>
                                             <ImageList rowHeight={18} cols={5} style={{ width: '100%' }}>

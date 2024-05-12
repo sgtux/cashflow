@@ -1,13 +1,11 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-
 import {
   TextField,
   InputAdornment,
   IconButton,
   FormControl,
   FormHelperText
-} from '@material-ui/core'
+} from '@mui/material'
 
 const emailRegex = /^[a-zA-Z0-9!#$.%&*()]{3,20}@[a-zA-Z0-9]{1,20}[.][a-zA-Z0-9]{1,20}([.][a-zA-Z0-9]{1,20})?$/
 
@@ -97,24 +95,6 @@ class IconTextInput extends React.Component {
       </FormControl>
     )
   }
-}
-
-IconTextInput.propTypes = {
-  required: PropTypes.bool,
-  minlength: PropTypes.number,
-  maxlength: PropTypes.number,
-  email: PropTypes.bool,
-  pattern: PropTypes.string,
-  patternMessage: PropTypes.string,
-  validChanged: PropTypes.func,
-  onChange: PropTypes.func,
-  patternMessage: PropTypes.string,
-  name: PropTypes.string,
-  label: PropTypes.string.isRequired,
-  value: PropTypes.string,
-  rowsMax: PropTypes.string,
-  multiline: PropTypes.bool,
-  variant: PropTypes.string
 }
 
 export default IconTextInput

@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 import {
     FormControl
-} from '@material-ui/core'
+} from '@mui/material'
 
 export const Container = styled(FormControl)`
     width: 200px;

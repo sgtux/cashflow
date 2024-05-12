@@ -10,9 +10,9 @@ import {
   AccordionSummary,
   AccordionDetails,
   Typography
-} from '@material-ui/core'
+} from '@mui/material'
 
-import { ExpandMore } from '@material-ui/icons'
+import { ExpandMore } from '@mui/icons-material'
 
 import { toReal, getMonthYear } from '../../../helpers/utils'
 import { Invoices, MoneySpan } from '../../../components'

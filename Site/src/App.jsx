@@ -1,7 +1,8 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client'
+
 import { Provider } from 'react-redux'
-import { MuiThemeProvider } from '@material-ui/core'
+import { ThemeProvider } from '@mui/material/styles'
 import { MainComponent } from './components/main/MainComponent'
 
 import { AppTheme } from './helpers/themes'
@@ -15,9 +16,9 @@ class App extends React.Component {
   render() {
     return (
       <Provider store={Store}>
-        <MuiThemeProvider theme={AppTheme}>
+        <ThemeProvider theme={AppTheme}>
           <MainComponent />
-        </MuiThemeProvider>
+        </ThemeProvider>
       </Provider>
     )
   }
@@ -26,4 +27,6 @@ class App extends React.Component {
 if (!location.host.includes('localhost') && location.protocol === 'http:')
   location = location.href.replace('http', 'https')
 
-ReactDOM.render(<App />, document.getElementById('app'))
+const domNode = document.getElementById('app')
+const root = createRoot(domNode)
+root.render(<App />)

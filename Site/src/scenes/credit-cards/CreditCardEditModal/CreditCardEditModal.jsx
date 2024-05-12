@@ -6,9 +6,9 @@ import {
     DialogTitle,
     Button,
     Zoom
-} from '@material-ui/core'
+} from '@mui/material'
 
-import CardIcon from '@material-ui/icons/CreditCardOutlined'
+import CardIcon from '@mui/icons-material/CreditCardOutlined'
 
 import IconTextInput from '../../../components/main/IconTextInput'
 

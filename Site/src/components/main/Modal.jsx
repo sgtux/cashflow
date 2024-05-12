@@ -5,7 +5,7 @@ import {
   DialogTitle,
   Button,
   Zoom
-} from '@material-ui/core'
+} from '@mui/material'
 
 import { SuccessAnimatedIcon, ErrorAnimatedIcon } from './Icons'
 

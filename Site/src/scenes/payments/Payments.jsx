@@ -11,13 +11,13 @@ import {
   Tooltip,
   Typography,
   Divider
-} from '@material-ui/core'
+} from '@mui/material'
 
 import {
   Delete as DeleteIcon,
   EditOutlined as EditIcon,
   AddCircle as AddCircleIcon
-} from '@material-ui/icons'
+} from '@mui/icons-material'
 
 import { MainContainer } from '../../components/main'
 import { paymentService } from '../../services'
