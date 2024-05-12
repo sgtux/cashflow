@@ -7,9 +7,9 @@ import {
   Button,
   Zoom,
   CircularProgress
-} from '@material-ui/core'
+} from '@mui/material'
 
-import { Visibility, VisibilityOff, Person } from '@material-ui/icons'
+import { Visibility, VisibilityOff, Person } from '@mui/icons-material'
 
 import IconTextInput from '../../components/main/IconTextInput'
 import { authService } from '../../services'

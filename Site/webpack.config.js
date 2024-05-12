@@ -24,7 +24,7 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: ['*', '.js', '.jsx', '.ttf']
+    extensions: ['.js', '.jsx', '.ttf']
   },
   output: {
     path: path.join(__dirname, '..', 'Api', 'wwwroot'),
@@ -45,8 +45,11 @@ module.exports = {
   ],
   devServer: {
     static: './public',
-    proxy: {
-      '/api': 'http://localhost:5000'
-    }
+    proxy: [
+      {
+        context: ['/api'],
+        target: 'http://localhost:5000'
+      }
+    ]
   }
 }

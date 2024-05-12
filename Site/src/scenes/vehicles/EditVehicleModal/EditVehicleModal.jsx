@@ -9,12 +9,12 @@ import {
     Zoom,
     IconButton,
     Card
-} from '@material-ui/core'
+} from '@mui/material'
 
 import {
     Delete as DeleteIcon,
     Edit as EditIcon,
-} from '@material-ui/icons'
+} from '@mui/icons-material'
 
 import { toReal, fromReal, dateToString } from '../../../helpers'
 import { vehicleService } from '../../../services'

@@ -11,13 +11,13 @@ import {
   ListItemText,
   Tooltip,
   Button
-} from '@material-ui/core'
+} from '@mui/material'
 
 import {
   Delete as DeleteIcon,
   EditOutlined as EditIcon,
   CreditCardOutlined as CardIcon
-} from '@material-ui/icons'
+} from '@mui/icons-material'
 
 import { MainContainer } from '../../components/main'
 import { CreditCardDetailModal } from './CreditCardEditModal/CreditCardEditModal'

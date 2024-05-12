@@ -14,12 +14,12 @@ import {
     DialogContent,
     FormControlLabel,
     Checkbox
-} from '@material-ui/core'
+} from '@mui/material'
 
 import {
     EditOutlined as EditIcon,
     RefreshOutlined as RefreshIcon
-} from '@material-ui/icons'
+} from '@mui/icons-material'
 
 import { MainContainer, InputMoney, MoneySpan } from '../../components'
 import { ConfirmModal } from '../../components/main'

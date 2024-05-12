@@ -6,14 +6,14 @@ import {
     Tooltip,
     Paper, Select,
     MenuItem
-} from '@material-ui/core'
+} from '@mui/material'
 
 import {
     Delete as DeleteIcon,
     Edit as EditIcon,
     AddCircle as AddCircleIcon,
     FileCopy as CopyIcon
-} from '@material-ui/icons'
+} from '@mui/icons-material'
 
 import { EditEarning } from './EditEarningModal/EditEarningModal'
 

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Dialog, DialogContent, Zoom, IconButton, Card } from '@material-ui/core'
+import { Button, Dialog, DialogContent, Zoom, IconButton, Card } from '@mui/material'
 import ptBr from 'date-fns/locale/pt-BR'
 import DatePicker from 'react-datepicker'
 
 import {
     Delete as DeleteIcon,
     Edit as EditIcon
-} from '@material-ui/icons'
+} from '@mui/icons-material'
 
 import { toReal, fromReal, dateToString, toast } from '../../../helpers'
 import { InputMoney, DatePickerContainer, DatePickerInput } from '../../../components/inputs'

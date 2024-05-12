@@ -8,14 +8,14 @@ import {
     IconButton,
     Button,
     Tooltip
-} from '@material-ui/core'
+} from '@mui/material'
 
 import {
     Delete as DeleteIcon,
     Edit as EditIcon,
-    Motorcycle as MotorcycleIcon,
+    TwoWheeler as MotorcycleIcon,
     LocalGasStation
-} from '@material-ui/icons'
+} from '@mui/icons-material'
 
 import { MainContainer, IconTextInput, ConfirmModal } from '../../components/main'
 

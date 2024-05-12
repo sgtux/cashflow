@@ -1,5 +1,5 @@
 import React from 'react'
-import { Paper, CircularProgress } from '@material-ui/core';
+import { Paper, CircularProgress } from '@mui/material';
 
 import { ContainerLoader } from './styles'
 

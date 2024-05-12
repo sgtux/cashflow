@@ -4,7 +4,6 @@ const Arrow = styled.i`
     border: solid grey;
     border-width: 0 3px 3px 0;
     display: inline-block;
-    padding: 3px;
     width: 2px;
     height: 2px;
     &:hover {

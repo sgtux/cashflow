@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 
-import { Paper, List } from '@material-ui/core'
+import { Paper, List } from '@mui/material'
 
 import { MainContainer, MoneySpan } from '../../components'
 

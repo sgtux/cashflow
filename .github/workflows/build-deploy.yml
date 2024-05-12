@@ -9,26 +9,30 @@ on:
 jobs:
   build:
     runs-on: windows-latest
+    name: Build and Tests
 
     steps:
-      - uses: actions/checkout@v4
+      - name: git-checkout
+        uses: actions/checkout@v4
 
       - name: Use Node.JS 18.x
         uses: actions/setup-node@v4
         with:
-          node-version: '18.x'
+          node-version: 18
 
-      - name: Run Yarn Install
-        uses: borales/actions-yarn@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
         with:
-          cmd: install
-          dir: 'Site'
+          version: 8
+          run_install: false
+      
+      - name: Install dependencies
+        working-directory: ./Site
+        run: pnpm install
 
       - name: Build Production Bundle
-        uses: borales/actions-yarn@v4
-        with:
-          cmd: build:prod
-          dir: 'Site'
+        working-directory: ./Site
+        run: pnpm build:prod
 
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
@@ -45,7 +49,7 @@ jobs:
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
-          name: .net-app
+          name: cashflow-app
           path: ${{env.DOTNET_ROOT}}/myapp
 
   deploy:
@@ -61,7 +65,7 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
         with:
-          name: .net-app
+          name: cashflow-app
       
       - name: Login to Azure
         uses: azure/login@v1

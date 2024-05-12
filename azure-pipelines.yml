@@ -7,17 +7,17 @@ parameters:
   - name: runSonar
     displayName: Rodar Sonar
     type: boolean
-    default: false
+    default: true
 
   - name: runDependencyCheck
     displayName: Rodar Dependency Check
     type: boolean
-    default: false
+    default: true
 
   - name: runPublish
     displayName: Publicar
     type: boolean
-    default: true
+    default: false
 
 variables:
   solution: '**/*.sln'

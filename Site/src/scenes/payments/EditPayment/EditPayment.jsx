@@ -7,7 +7,7 @@ import {
   InputLabel,
   MenuItem,
   Select
-} from '@material-ui/core'
+} from '@mui/material'
 
 import { InstallmentList } from './InstallmentList/InstallmentList'
 import { InstallmentSetBox } from './InstallmnetSetBox/InstallmentSetBox'

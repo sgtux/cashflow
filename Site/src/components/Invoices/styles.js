@@ -5,7 +5,7 @@ import { Colors } from '../../helpers/themes'
 const InvoiceCostSpan = styled.span`
     color: ${Colors.AppRed};
     margin-top: 6px;
-    padding: 3px;
+    margin-right: 10px;
     font-family: "Roboto","Helvetica","Arial",sans-serif;
 `
 

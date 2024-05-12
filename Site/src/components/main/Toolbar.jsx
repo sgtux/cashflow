@@ -1,9 +1,7 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { AppBar, Toolbar, Button } from '@material-ui/core/'
-import Typography from '@material-ui/core/Typography'
-import IconButton from '@material-ui/core/IconButton'
-import * as Icons from '@material-ui/icons'
+import { AppBar, Toolbar, Button, Typography, IconButton } from '@mui/material'
+import * as Icons from '@mui/icons-material'
 import { Link } from 'react-router-dom'
 
 import { userChanged } from '../../store/actions'
