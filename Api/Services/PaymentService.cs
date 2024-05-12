@@ -62,7 +62,7 @@ namespace Cashflow.Api.Services
                 else
                     list = list.Where(p => !p.Done);
             }
-            list = list.OrderByDescending(p => p.Date);
+            list = list.OrderBy(p => p.Description);
             return new ResultDataModel<IEnumerable<Payment>>(list);
         }
 
@@ -82,7 +82,7 @@ namespace Cashflow.Api.Services
                 return result;
             }
 
-            if(payment.Date == default)
+            if (payment.Date == default)
                 payment.Date = payment.Installments.First().Date;
 
             await _paymentRepository.Add(payment);
@@ -101,7 +101,7 @@ namespace Cashflow.Api.Services
                 return result;
             }
 
-            if(payment.Date == default)
+            if (payment.Date == default)
                 payment.Date = payment.Installments.First().Date;
 
             await _paymentRepository.Update(payment);
