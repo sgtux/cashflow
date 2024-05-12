@@ -9,7 +9,8 @@ import {
   IconButton,
   ListItemText,
   Tooltip,
-  Typography
+  Typography,
+  Divider
 } from '@material-ui/core'
 
 import {
@@ -82,8 +83,8 @@ export function Payments() {
           </div>
           <Paper>
             <List dense={true}>
-              {payments.map(p =>
-                <ListItem key={p.id}>
+              {payments.map((p, index) =>
+                <ListItem key={index} style={{ backgroundColor: index % 2 === 0 ? '#eee' : '#fff' }}>
                   <ListItemText
                     primary={p.description}
                     style={{ width: '100px' }}
