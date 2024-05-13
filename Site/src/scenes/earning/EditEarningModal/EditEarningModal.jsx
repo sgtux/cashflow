@@ -81,9 +81,9 @@ export function EditEarning({ editEarning, onClose, onSave }) {
                             dateFormat="dd/MM/yyyy" locale={ptBr} selected={date} />
                     </DatePickerContainer>
                     <div style={{ marginTop: 20 }}>
-                        <span style={{ fontSize: 16 }}>Valor:</span> <InputMoney
-                            onChangeText={e => setValue(e)}
-                            kind="money"
+                        <span style={{ fontSize: 16 }}>Valor:</span>
+                        <InputMoney
+                            onChangeValue={(event, value, maskedValue) => setValue(value)}
                             value={value} />
                     </div>
                     <div>

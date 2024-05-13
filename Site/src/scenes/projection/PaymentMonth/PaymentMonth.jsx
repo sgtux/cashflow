@@ -25,7 +25,7 @@ export function PaymentMonth({ paymentMonth }) {
       <ListItemText>
         <Accordion>
           <AccordionSummary expandIcon={<ExpandMore />}>
-            <Typography>{getMonthYear(paymentMonth.monthYear)} - {<MoneySpan bold gain={paymentMonth.accumulatedValue > 0}>{toReal(paymentMonth.accumulatedValue)}</MoneySpan>}</Typography>
+            <Typography>{getMonthYear(paymentMonth.monthYear)} - {<MoneySpan $bold={true} $gain={paymentMonth.accumulatedValue > 0}>{toReal(paymentMonth.accumulatedValue)}</MoneySpan>}</Typography>
           </AccordionSummary>
 
           <AccordionDetails>
@@ -50,7 +50,7 @@ export function PaymentMonth({ paymentMonth }) {
                         {p.paidDate && <PaidSpan>PAGA</PaidSpan>}
                       </ImageListItem>
                       <ImageListItem cols={1} style={{ textAlign: 'end' }}>
-                        <MoneySpan gain={p.in}>{toReal(p.value)}</MoneySpan>
+                        <MoneySpan $gain={p.in}>{toReal(p.value)}</MoneySpan>
                       </ImageListItem>
                     </ImageList>
                   </div>
@@ -65,15 +65,15 @@ export function PaymentMonth({ paymentMonth }) {
             </BoxCosts>
             <BoxCosts>
               <span style={{ color: 'grey', marginRight: 20 }}>Ganhos:</span>
-              <MoneySpan gain>{toReal(paymentMonth.totalIn)}</MoneySpan>
+              <MoneySpan $gain>{toReal(paymentMonth.totalIn)}</MoneySpan>
             </BoxCosts>
             <BoxCosts>
               <span style={{ color: 'grey', marginRight: 20 }}>Líquido:</span>
-              <MoneySpan gain={paymentMonth.total >= 0}>{toReal(paymentMonth.total)}</MoneySpan>
+              <MoneySpan $gain={paymentMonth.total >= 0}>{toReal(paymentMonth.total)}</MoneySpan>
             </BoxCosts>
           </ContainerCosts>
           <div style={{ textAlign: 'center', padding: 10 }}>
-            <MoneySpan bold gain={paymentMonth.accumulatedValue >= 0}>{toReal(paymentMonth.accumulatedValue)}</MoneySpan>
+            <MoneySpan $bold $gain={paymentMonth.accumulatedValue >= 0}>{toReal(paymentMonth.accumulatedValue)}</MoneySpan>
           </div>
         </Accordion>
       </ListItemText>

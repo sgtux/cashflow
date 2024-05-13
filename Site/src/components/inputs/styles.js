@@ -1,7 +1,7 @@
 import styled from 'styled-components'
-import TextInputMask from 'react-masked-text'
+import { CurrencyInput } from 'react-currency-mask'
 
-const DefaultInput = styled(TextInputMask)`
+export const InputMoney = styled(CurrencyInput)`
     color: #666;
     background-color: white;
     border: solid 0;
@@ -11,11 +11,17 @@ const DefaultInput = styled(TextInputMask)`
     font-family: Roboto Helvetica Arial sans-serif;
 `
 
-export const InputMoney = DefaultInput
+const DefaultInput = styled.input`
+    color: #666;
+    background-color: white;
+    border: solid 0;
+    border-bottom: solid 1px #666;
+    margin: 10px;
+    width: 100px;
+    font-family: Roboto Helvetica Arial sans-serif;
+`
 
 export const InputNumbers = DefaultInput
-
-export const InputDate = DefaultInput
 
 export const DatePickerInput = styled.input`
     color: #666;

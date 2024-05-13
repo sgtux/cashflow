@@ -46,8 +46,7 @@ export function EditInstallmentModal({ installment, onCancel, onSave }) {
                     Vencimento: <span>{toDateFormat(installment.date)}</span><br />
                     <div hidden={exempt}>
                         Valor Pago: <InputMoney
-                            onChangeText={e => setPaidValue(e)}
-                            kind="money"
+                            onChangeValue={(event, value, maskedValue) => setPaidValue(value)}
                             value={paidValue} /><br />
                         <div style={{ marginTop: 10 }}>
                             Pago em: <DatePicker onChange={e => setPaidDate(e)}

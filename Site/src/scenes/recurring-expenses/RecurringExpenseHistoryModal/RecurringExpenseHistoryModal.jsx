@@ -115,8 +115,7 @@ export function RecurringExpenseHistoryModal({ recurringExpense, onCancel, show,
                         <DatePickerContainer style={{ padding: 10 }}>
                             Valor Pago:
                             <InputMoney
-                                onChangeText={e => setPaidValue(e)}
-                                kind="money"
+                                onChangeValue={(event, value, maskedValue) => setPaidValue(value)}
                                 value={paidValue} />
                             <br />
                             Data: <DatePicker onChange={e => setDate(e)}

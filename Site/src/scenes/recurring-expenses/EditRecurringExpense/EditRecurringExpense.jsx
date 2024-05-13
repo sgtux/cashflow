@@ -88,8 +88,7 @@ export function EditRecurringExpense() {
                 <br />
                 <br />
                 Valor: <InputMoney
-                    onChangeText={e => setValue(e)}
-                    kind="money"
+                    onChangeValue={(event, value, maskedValue) => setValue(value)}
                     value={value} />
                 <br />
                 {!!cards.length &&

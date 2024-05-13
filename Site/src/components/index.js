@@ -1,5 +1,4 @@
 export {
-    InputDate,
     InputNumbers,
     InputMoney,
     InputMonth,
