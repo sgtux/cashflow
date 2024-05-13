@@ -51,7 +51,7 @@ export function Projection() {
           color: 'grey'
         }}>
           <span>Total Acumulado:</span><br />
-          <MoneySpan bold bigger gain={totalValue >= 0}>{toReal(totalValue)}</MoneySpan>
+          <MoneySpan $bold $bigger $gain={totalValue >= 0}>{toReal(totalValue)}</MoneySpan>
         </div>
       </Paper>
     </MainContainer>

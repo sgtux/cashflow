@@ -10,8 +10,7 @@ export function ValueDateBox({ value, valueChanged, date, dateChanged }) {
             <span>Valor:</span>
             <InputMoney
                 style={{ fontSize: 16, width: 190 }}
-                onChangeText={e => valueChanged(e)}
-                kind="money"
+                onChangeValue={(event, value, maskedValue) => valueChanged(value)}
                 value={value} />
             <span style={{ marginLeft: 6 }}>Data:</span>
             <DatePicker customInput={<DatePickerInput style={{ width: 150 }} />} onChange={e => dateChanged(e)}

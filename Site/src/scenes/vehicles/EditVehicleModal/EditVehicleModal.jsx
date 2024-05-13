@@ -148,11 +148,10 @@ export function EditVehicleModal({ vehicle, onCancel }) {
                                 onChange={e => setMiliage((e.target.value).replace(/[^0-9]/g, ''))}
                             />
                             Preço por Litro: <InputMoney
-                                onChangeText={e => setPricePerLiter(e)}
-                                kind="money"
+                                onChangeValue={(event, value, maskedValue) => setPricePerLiter(value)}
                                 value={pricePerLiter} />
                             Valor Abastecido: <InputMoney
-                                onChangeText={e => setValueSupplied(e)}
+                                onChangeValue={(event, value, maskedValue) => setValueSupplied(value)}
                                 kind="money"
                                 value={valueSupplied} />
                             Data: <DatePicker onChange={e => setDate(e)}

@@ -107,8 +107,7 @@ export function EditHouseholdExpenseModal({ editHouseholdExpense, onClose, onSav
                 <div style={{ marginTop: 20 }}>
                     <span style={{ fontSize: 16 }}>Valor:</span>
                     <InputMoney
-                        onChangeText={e => setValue(e)}
-                        kind="money"
+                        onChangeValue={(event, value, maskedValue) => setValue(value)}
                         value={value} />
                 </div>
                 <div>

@@ -96,7 +96,7 @@ export function RemainingBalances() {
                                 />
                                 <ListItemText
                                     style={{ width: '100px', textAlign: 'center' }}
-                                    secondary={<MoneySpan gain={p.value >= 0}>{toReal(p.value)}</MoneySpan>}
+                                    secondary={<MoneySpan $gain={p.value >= 0}>{toReal(p.value)}</MoneySpan>}
                                 />
                                 <ListItemSecondaryAction hidden={!p.id}>
                                     <IconButton color="primary" aria-label="Edit" onClick={() => edit(p)}>
@@ -131,8 +131,7 @@ export function RemainingBalances() {
                     <div style={{ textAlign: 'center', padding: 30 }}>
                         <span style={{ fontSize: 16 }}>Valor:</span>
                         <InputMoney
-                            onChangeText={e => setValue(e)}
-                            kind="money"
+                            onChangeValue={(event, value, maskedValue) => setValue(value)}
                             value={value} />
                         <br />
                         <FormControlLabel label="Devedor"

@@ -35,15 +35,15 @@ importers:
       html-webpack-plugin:
         specifier: ^5.5.0
         version: 5.6.0(webpack@5.91.0(webpack-cli@5.1.4))
+      react-currency-mask:
+        specifier: ^1.3.2
+        version: 1.3.2
       react-router-dom:
         specifier: ^6.0.2
         version: 6.23.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-sidebar:
         specifier: ^3.0.2
         version: 3.0.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      react-text-mask:
-        specifier: ^5.4.3
-        version: 5.5.0(react@18.3.1)
       reactstrap:
         specifier: ^9.0.1
         version: 9.2.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -102,9 +102,6 @@ importers:
       react-hot-loader:
         specifier: ^4.13.0
         version: 4.13.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      react-masked-text:
-        specifier: ^1.0.2
-        version: 1.0.2
       react-number-format:
         specifier: ^5.3.4
         version: 5.3.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -3178,6 +3175,9 @@ packages:
     resolution: {integrity: sha512-8zGqypfENjCIqGhgXToC8aB2r7YrBX+AQAfIPs/Mlk+BtPTztOvTS01NRW/3Eh60J+a48lt8qsCzirQ6loCVfA==}
     engines: {node: '>= 0.8'}
 
+  react-currency-mask@1.3.2:
+    resolution: {integrity: sha512-+1LVLyuFWZXpdGULGpNayVUxm7r2u6WYJdzz+uDReuO4Vswie4S59nRFSRLu7MubtrF5QLtBDqwcKzWzgCotPQ==}
+
   react-datepicker@6.9.0:
     resolution: {integrity: sha512-QTxuzeem7BUfVFWv+g5WuvzT0c5BPo+XTCNbMTZKSZQLU+cMMwSUHwspaxuIcDlwNcOH0tiJ+bh1fJ2yxOGYWA==}
     peerDependencies:
@@ -3211,9 +3211,6 @@ packages:
 
   react-lifecycles-compat@3.0.4:
     resolution: {integrity: sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==}
-
-  react-masked-text@1.0.2:
-    resolution: {integrity: sha512-VQCpCbvpzqyRI+2EeQU8qvO56T5Wn8YTvQXugQt+aoxITpb14gUUoTLon358yDG6/6TSNDP+NhmxI6HM8hJqvA==}
 
   react-number-format@5.3.4:
     resolution: {integrity: sha512-2hHN5mbLuCDUx19bv0Q8wet67QqYK6xmtLQeY5xx+h7UXiMmRtaCwqko4mMPoKXLc6xAzwRrutg8XbTRlsfjRg==}
@@ -3270,11 +3267,6 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
       react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-
-  react-text-mask@5.5.0:
-    resolution: {integrity: sha512-SLJlJQxa0uonMXsnXRpv5abIepGmHz77ylQcra0GNd7Jtk4Wj2Mtp85uGQHv1avba2uI8ZvRpIEQPpJKsqRGYw==}
-    peerDependencies:
-      react: ^0.14.0 || ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
 
   react-toastify@10.0.5:
     resolution: {integrity: sha512-mNKt2jBXJg4O7pSdbNUfDdTsK9FIdikfsIE/yUCxbAEXl4HMyJaivrVFcn3Elvt5xvCQYhUZm+hqTIu1UXM3Pw==}
@@ -7453,6 +7445,10 @@ snapshots:
       iconv-lite: 0.4.24
       unpipe: 1.0.0
 
+  react-currency-mask@1.3.2:
+    dependencies:
+      react: 18.3.1
+
   react-datepicker@6.9.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       '@floating-ui/react': 0.26.13(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -7489,8 +7485,6 @@ snapshots:
   react-is@18.3.1: {}
 
   react-lifecycles-compat@3.0.4: {}
-
-  react-masked-text@1.0.2: {}
 
   react-number-format@5.3.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
@@ -7545,11 +7539,6 @@ snapshots:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
       react-transition-group: 4.4.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-
-  react-text-mask@5.5.0(react@18.3.1):
-    dependencies:
-      prop-types: 15.8.1
-      react: 18.3.1
 
   react-toastify@10.0.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:

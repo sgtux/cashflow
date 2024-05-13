@@ -33,8 +33,7 @@ export function Account() {
             <div style={{ marginTop: 20 }}>
                 <span style={{ fontSize: 16 }}>Teto de Gastos:</span>
                 <InputMoney
-                    onChangeText={e => setSpendingceiling(e)}
-                    kind="money"
+                    onChangeValue={(event, value, maskedValue) => setSpendingceiling(value)}
                     value={spendingCeiling} />
             </div>
             <div style={{ display: 'flex', justifyContent: 'end', marginTop: 100, marginBottom: 10, width: 300 }}>

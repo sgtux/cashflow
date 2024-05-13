@@ -14,8 +14,7 @@ export function InstallmentSetBox({ hide, qtdInstallments, costByInstallment, co
                 />} />
             <span>Qtd. Parcelas:</span>
             <InputNumbers
-                onChangeText={e => qtdInstallmentsChanged(e)}
-                kind="only-numbers"
+                onChange={e => qtdInstallmentsChanged(e.target.value.replace(/\D/g, ""))}
                 value={qtdInstallments} />
         </div>
     )
