@@ -9,3 +9,5 @@ logs
 dist
 coverage
 .sonarqube
+Api/Api.sln
+Migrations/Migrations.sln

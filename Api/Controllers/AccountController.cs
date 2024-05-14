@@ -37,8 +37,10 @@ namespace Cashflow.Api.Controllers
             var result = await _service.Add(model.Map<AccountModel, User>());
             if (result.IsValid)
             {
-                var claims = new Dictionary<string, string>();
-                claims.Add(ClaimTypes.Sid, result.Data.Id.ToString());
+                var claims = new Dictionary<string, string>
+                {
+                    { ClaimTypes.Sid, result.Data.Id.ToString() }
+                };
 
                 var token = new AccountResultModel()
                 {
