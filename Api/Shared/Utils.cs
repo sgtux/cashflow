@@ -1,20 +1,14 @@
 using System;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
+using BCrypt.Net;
 
 namespace Cashflow.Api.Shared
 {
     public static class Utils
     {
-        public static string Sha1(string input)
-        {
-            var enc = Encoding.GetEncoding(0);
-            byte[] buffer = enc.GetBytes(input);
-            var sha1 = SHA1.Create();
-            var hash = BitConverter.ToString(sha1.ComputeHash(buffer)).Replace("-", "");
-            return hash;
-        }
+        public static string PasswordHash(string password) => BCrypt.Net.BCrypt.EnhancedHashPassword(password, 12, HashType.SHA512);
+
+        public static bool PasswordHashVarify(string password, string hash) => BCrypt.Net.BCrypt.EnhancedVerify(password, hash, HashType.SHA512);
 
         public static U Map<T, U>(this T source)
         {

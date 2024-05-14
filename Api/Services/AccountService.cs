@@ -32,7 +32,7 @@ namespace Cashflow.Api.Services
             var validationResults = new UserValidator(_userRepository).Validate(model);
             if (validationResults.IsValid)
             {
-                model.Password = Utils.Sha1(model.Password);
+                model.Password = Utils.PasswordHash(model.Password);
                 model.CreatedAt = CurrentDate;
 
                 await _userRepository.Add(model);
@@ -57,7 +57,7 @@ namespace Cashflow.Api.Services
 
             var user = await _userRepository.FindByEmail(email);
 
-            if (user == null || user.Password != Utils.Sha1(password))
+            if (user == null || !Utils.PasswordHashVarify(password, user.Password))
             {
                 result.AddNotification(ValidatorMessages.User.LoginFailed);
                 return result;
