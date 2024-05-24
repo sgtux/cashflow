@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using Cashflow.Api.Services;
-using Cashflow.Api.Shared;
+using Cashflow.Api.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,7 +23,7 @@ namespace Cashflow.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetProjection()
         {
-            await _remainingBalanceService.Recalculate(UserId, Utils.CurrentDate.AddMonths(-1));
+            await _remainingBalanceService.Recalculate(UserId, DateTimeUtils.CurrentDate.AddMonths(-1));
             return HandleResult(await _projectionService.GetProjection(UserId));
         }
     }

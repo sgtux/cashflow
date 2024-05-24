@@ -8,6 +8,12 @@ namespace Cashflow.Api.Contracts
 
         string SecretJwtKey { get; }
 
+        string DataEncryptionKey { get; }
+
         bool IsDevelopment { get; }
+
+        string GoogleOauthUrl { get; }
+
+        string GoogleClientId { get; }
     }
 }

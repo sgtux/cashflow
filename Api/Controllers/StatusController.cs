@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Cashflow.Api.Contracts;
 using Cashflow.Api.Models;
-using Cashflow.Api.Shared;
+using Cashflow.Api.Utils;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cashflow.Api.Controllers
@@ -28,7 +28,7 @@ namespace Cashflow.Api.Controllers
             var status = new
             {
                 DbCurrentDate = dbDate,
-                ApiCurrentDate = Utils.CurrentDate.ToString("dd/MM/yyyy HH:mm:ss")
+                ApiCurrentDate = DateTimeUtils.CurrentDate.ToString("dd/MM/yyyy HH:mm:ss")
             };
             return HandleResult(new ResultDataModel<object>(status));
         }

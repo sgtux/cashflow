@@ -9,7 +9,7 @@ using Cashflow.Api.Models;
 using Cashflow.Api.Validators;
 using System.Collections.Generic;
 using Cashflow.Api.Shared.Cache;
-using Cashflow.Api.Shared;
+using Cashflow.Api.Utils;
 
 namespace Cashflow.Api.Services
 {
@@ -49,7 +49,7 @@ namespace Cashflow.Api.Services
         public async Task<ResultModel> GetAll(int userId)
         {
             var list = (await _remainingBalanceRepository.GetSome(new BaseFilter() { UserId = userId })).ToList();
-            var result = await Recalculate(userId, Utils.CurrentDate, false, true);
+            var result = await Recalculate(userId, DateTimeUtils.CurrentDate, false, true);
             list.Add(result.Data);
             return new ResultDataModel<IEnumerable<RemainingBalance>>(list.OrderByDescending(p => p.Date));
         }
@@ -97,7 +97,7 @@ namespace Cashflow.Api.Services
                 UserId = userId
             };
 
-            if (simulation || date.SameMonthYear(Utils.CurrentDate))
+            if (simulation || date.SameMonthYear(DateTimeUtils.CurrentDate))
                 return new ResultDataModel<RemainingBalance>(newRemainingBalance);
 
             if (current == null)
