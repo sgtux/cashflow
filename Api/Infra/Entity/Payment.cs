@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Cashflow.Api.Enums;
 using Cashflow.Api.Extensions;
-using Cashflow.Api.Shared;
+using Cashflow.Api.Utils;
 
 namespace Cashflow.Api.Infra.Entity
 {
@@ -27,7 +27,7 @@ namespace Cashflow.Api.Infra.Entity
 
         public bool Done => Installments?.All(p => p.PaidDate.HasValue || p.Exempt) ?? false;
 
-        public bool DoneInThisMonth => HasInstallments && Done && (Installments?.Where(p => p.PaidDate.HasValue).Max(p => p.PaidDate.Value).SameMonthYear(Utils.CurrentDate) ?? false);
+        public bool DoneInThisMonth => HasInstallments && Done && (Installments?.Where(p => p.PaidDate.HasValue).Max(p => p.PaidDate.Value).SameMonthYear(DateTimeUtils.CurrentDate) ?? false);
 
         public IList<Installment> Installments { get; set; }
 
@@ -37,13 +37,13 @@ namespace Cashflow.Api.Infra.Entity
 
         public decimal TotalPaid => Installments?.Sum(p => p.PaidValue) ?? 0;
 
-        public decimal InstallmentValue => Installments?.FirstOrDefault(p => p.Date.SameMonthYear(Utils.CurrentDate))?.Value ?? Installments?.FirstOrDefault()?.Value ?? 0;
+        public decimal InstallmentValue => Installments?.FirstOrDefault(p => p.Date.SameMonthYear(DateTimeUtils.CurrentDate))?.Value ?? Installments?.FirstOrDefault()?.Value ?? 0;
 
         public string FirstPaymentDate => Installments?.OrderBy(p => p.Number).FirstOrDefault()?.Date.ToString("dd/MM/yyyy");
 
         public string LastPaymentDate => Installments?.OrderByDescending(p => p.Number).FirstOrDefault()?.Date.ToString("dd/MM/yyyy");
 
-        public bool CurrentMonthPaid => Installments?.FirstOrDefault(p => p.Date.SameMonthYear(Utils.CurrentDate))?.PaidDate.HasValue ?? false;
+        public bool CurrentMonthPaid => Installments?.FirstOrDefault(p => p.Date.SameMonthYear(DateTimeUtils.CurrentDate))?.PaidDate.HasValue ?? false;
 
         private bool HasInstallments => Installments?.Any() ?? false;
     }

@@ -1,5 +1,5 @@
 import httpService from './httpService'
-import {StorageService} from './storage.service'
+import { StorageService } from './storage.service'
 
 const login = user =>
   httpService.postNotAuthenticated('/token', user)
@@ -7,6 +7,13 @@ const login = user =>
       StorageService.setToken(res.token)
       return httpService.get('/account')
     })
+
+const getGoogleClientId = () => httpService.getNotAuthenticated('/account/GoogleClientId')
+const googleSignIn = token => httpService.postNotAuthenticated('/account/GoogleSignIn', `"${token}"`)
+  .then(res => {
+    StorageService.setToken(res.token)
+    return httpService.get('/account')
+  })
 
 const createAccount = account =>
   httpService.postNotAuthenticated('/account', account)
@@ -27,5 +34,7 @@ export default {
   login,
   createAccount,
   getAccount,
-  updateSpendingCeiling
+  updateSpendingCeiling,
+  getGoogleClientId,
+  googleSignIn
 }

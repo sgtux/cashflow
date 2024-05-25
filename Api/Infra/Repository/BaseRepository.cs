@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Cashflow.Api.Contracts;
 using Cashflow.Api.Infra.Sql;
 using Cashflow.Api.Services;
-using Cashflow.Api.Shared;
+using Cashflow.Api.Utils;
 using Dapper;
 
 namespace Cashflow.Api.Infra.Repository
@@ -96,7 +96,7 @@ namespace Cashflow.Api.Infra.Repository
 
         private void Log(string query) => _logService.Info($"Query: {query}\n\n");
 
-        public DateTime CurrentDate => Utils.CurrentDate;
+        public DateTime CurrentDate => DateTimeUtils.CurrentDate;
 
         public Task<DateTime> DbCurrentDate()
         {

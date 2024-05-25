@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Tests
 {
+    [TestCategory("TokenTest")]
     [TestClass]
     public class TokenControllerTest : BaseControllerTest
     {
@@ -14,7 +15,7 @@ namespace Tests
         {
             var user = new AccountModel()
             {
-                Email = "User1",
+                Email = "User1@mail.com",
                 Password = "123488"
             };
 
@@ -28,8 +29,8 @@ namespace Tests
         {
             var user = new AccountModel()
             {
-                Email = "User1",
-                Password = "123"
+                Email = "User1@mail.com",
+                Password = "12345678"
             };
 
             var result = await Post<AccountResultModel>("/api/token", user);

@@ -24,7 +24,10 @@
         "ASPNETCORE_ENVIRONMENT": "Development",
         "DATABASE_CONNECTION_STRING": "Server=172.31.31.10,1433;Database=cashflow;Pooling=true;user=sa;Password=Mssql123",
         "COOKIE_EXPIRES_IN_MINUTES": "1440",
-        "SECRET_JWT_KEY": "!@#$%&*()SecretKey!WebApi!@#$%&*()"
+        "SECRET_JWT_KEY": "!@#$%&*()SecretKey!WebApi!@#$%&*()",
+        "DATA_ENCRYPTION_KEY": "1234567890123456",
+        "GOOGLE_CLIENT_ID": "123.apps.googleusercontent.com",
+        "GOOGLE_OAUTH_URL": "https://oauth2.googleapis.com"
       }
     }
   }

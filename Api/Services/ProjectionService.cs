@@ -10,6 +10,7 @@ using Cashflow.Api.Infra.Filters;
 using Cashflow.Api.Models;
 using Cashflow.Api.Shared;
 using Cashflow.Api.Shared.Cache;
+using Cashflow.Api.Utils;
 
 namespace Cashflow.Api.Services
 {
@@ -65,7 +66,7 @@ namespace Cashflow.Api.Services
             var baseFilter = new BaseFilter() { UserId = userId };
             var cards = await _creditCardRepository.GetSome(baseFilter);
 
-            var dates = LoadDates(12, Utils.CurrentDate.Year + 1);
+            var dates = LoadDates(12, DateTimeUtils.CurrentDate.Year + 1);
             var list = new List<PaymentProjectionModel>();
 
             await FillEarnings(list, dates, baseFilter);
@@ -124,7 +125,7 @@ namespace Cashflow.Api.Services
             var earnings = await _earningRepository.GetSome(filter);
             if (earnings.Any())
             {
-                var monthyEarnings = earnings.Where(p => p.Date.SameMonthYear(Utils.CurrentDate) && p.Type == Enums.EarningType.Monthy);
+                var monthyEarnings = earnings.Where(p => p.Date.SameMonthYear(DateTimeUtils.CurrentDate) && p.Type == Enums.EarningType.Monthy);
                 foreach (var date in dates)
                 {
                     foreach (var item in monthyEarnings)
@@ -161,7 +162,7 @@ namespace Cashflow.Api.Services
 
         private async Task FillFuelExpenses(List<PaymentProjectionModel> list, IEnumerable<CreditCard> cards, List<DateTime> dates, BaseFilter filter)
         {
-            var fromDate = Utils.CurrentDate.AddMonths(-3).FixFirstDayInMonth();
+            var fromDate = DateTimeUtils.CurrentDate.AddMonths(-3).FixFirstDayInMonth();
             var vehicles = await _vehicleRepository.GetSome(new BaseFilter() { UserId = filter.UserId, StartDate = fromDate });
             List<FuelExpense> allFuelExpenses = new List<FuelExpense>();
             vehicles.ToList().ForEach(p => allFuelExpenses.AddRange(p.FuelExpenses));

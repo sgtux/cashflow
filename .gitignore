@@ -11,3 +11,4 @@ coverage
 .sonarqube
 Api/Api.sln
 Migrations/Migrations.sln
+Tests/Tests.sln

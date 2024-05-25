@@ -42,11 +42,11 @@ const sendRequest = (method, url, headers, data) => {
     })
 }
 
-const getHeaders = () => ({ Authorization: `Bearer ${getToken()}` })
+const getHeaders = () => ({ Authorization: `Bearer ${getToken()}`, 'Content-Type': 'application/json' })
 
 export default {
   getNotAuthenticated: url => sendRequest('get', `/api${url}`),
-  postNotAuthenticated: (url, body) => sendRequest('post', `/api${url}`, null, body),
+  postNotAuthenticated: (url, body) => sendRequest('post', `/api${url}`, { 'Content-Type': 'application/json' }, body),
   get: url => sendRequest('get', `/api${url}`, getHeaders()),
   post: (url, body) => sendRequest('post', `/api${url}`, getHeaders(), body),
   put: (url, body) => sendRequest('put', `/api${url}`, getHeaders(), body),

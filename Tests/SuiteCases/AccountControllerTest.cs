@@ -43,7 +43,7 @@ namespace Cashflow.Tests
         {
             var model = new AccountModel()
             {
-                Email = "User1",
+                Email = "User1@mail.com",
                 Password = "12345678"
             };
             var result = await Post<AccountModel>("/api/account", model);
@@ -78,7 +78,7 @@ namespace Cashflow.Tests
         public async Task GetDataOk()
         {
             var result = await Get<UserDataModel>("/api/account", 3);
-            Assert.AreEqual("User3", result.Data.Email);
+            Assert.AreEqual("User3@mail.com", result.Data.Email);
         }
     }
 }

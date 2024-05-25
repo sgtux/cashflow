@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { Person, Visibility, VisibilityOff } from '@mui/icons-material'
 import {
@@ -6,7 +6,8 @@ import {
   Card,
   Button,
   Zoom,
-  CircularProgress
+  CircularProgress,
+  Divider
 } from '@mui/material'
 
 import IconTextInput from '../../components/main/IconTextInput'
@@ -42,6 +43,9 @@ export function SignInScreen({ changeScene }) {
 
   const dispatch = useDispatch()
 
+  useEffect(() => {
+    initializeGoogleOauth()
+  }, [])
 
   function onInputChange(e) {
     if (e.name === 'email') {
@@ -63,6 +67,31 @@ export function SignInScreen({ changeScene }) {
       .then(user => dispatch(userChanged(user)))
       .catch(() => { })
       .finally(() => setLoading(false))
+  }
+
+  async function initializeGoogleOauth() {
+    const googleClientId = await authService.getGoogleClientId()
+    google.accounts.id.initialize({
+      client_id: googleClientId,
+      callback: handleCredentialResponse
+    })
+    google.accounts.id.renderButton(
+      document.getElementById('buttonDiv'),
+      {
+        theme: 'outline',
+        size: 'large',
+      }
+    )
+    google.accounts.id.prompt()
+  }
+
+  async function handleCredentialResponse(response) {
+    try {
+      const user = await authService.googleSignIn(response.credential)
+      dispatch(userChanged(user))
+    } catch (ex) {
+      console.log(ex)
+    }
   }
 
   return (
@@ -106,6 +135,9 @@ export function SignInScreen({ changeScene }) {
               onClick={changeScene}
               color="primary">Criar Conta</Button>
           </div>
+          <br />
+          <Divider />
+          <div style={{ margin: '0 auto', marginTop: 20, width: 240 }} id="buttonDiv"></div>
         </form>
       </Card>
     </Zoom>

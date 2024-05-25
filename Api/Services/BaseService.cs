@@ -1,10 +1,10 @@
 using System;
-using Cashflow.Api.Shared;
+using Cashflow.Api.Utils;
 
 namespace Cashflow.Api.Services
 {
     public abstract class BaseService
     {
-        public DateTime CurrentDate => Utils.CurrentDate;
+        public DateTime CurrentDate => DateTimeUtils.CurrentDate;
     }
 }

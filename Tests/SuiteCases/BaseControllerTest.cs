@@ -96,7 +96,7 @@ namespace Cashflow.Tests.Tests
             if (!string.IsNullOrEmpty(token))
                 client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
-            HttpResponseMessage response = null;
+            HttpResponseMessage response;
             StringContent requestContent = body == null ? null : new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json");
 
             if (method == HttpMethod.Post)
@@ -122,8 +122,8 @@ namespace Cashflow.Tests.Tests
 
             var user = new AccountModel()
             {
-                Email = $"User{userId}",
-                Password = "123"
+                Email = $"User{userId}@mail.com",
+                Password = "12345678"
             };
 
             StringContent requestContent = new StringContent(JsonSerializer.Serialize(user), Encoding.UTF8, "application/json");

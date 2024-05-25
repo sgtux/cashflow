@@ -4,22 +4,18 @@ namespace Cashflow.Tests.Config
 {
     public class TestAppConfig : IAppConfig
     {
-        private readonly string _environmentName;
+        public string DatabaseConnectionString => "Data Source=test.db";
 
-        public TestAppConfig()
-        {
-            _environmentName = "Development";
-            DatabaseConnectionString = "Data Source=test.db";
-            CookieExpiresInMinutes = 1440;
-            SecretJwtKey = "!@#$TestSecretKey!WebApi!@#$%&*()";
-        }
+        public int CookieExpiresInMinutes => 1440;
 
-        public string DatabaseConnectionString { get; }
+        public string SecretJwtKey => "!@#$TestSecretKey!WebApi!@#$%&*()";
 
-        public int CookieExpiresInMinutes { get; }
+        public bool IsDevelopment => true;
 
-        public string SecretJwtKey { get; }
+        public string GoogleOauthUrl => "https://oauth2.googleapis.com";
 
-        public bool IsDevelopment => _environmentName == "Development";
+        public string DataEncryptionKey => "1234567890123456";
+
+        public string GoogleClientId => "123.apps.googleusercontent.com";
     }
 }

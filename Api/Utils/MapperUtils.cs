@@ -1,15 +1,10 @@
 using System;
 using System.Linq;
-using BCrypt.Net;
 
-namespace Cashflow.Api.Shared
+namespace Cashflow.Api.Utils
 {
-    public static class Utils
+    public static class MapperUtils
     {
-        public static string PasswordHash(string password) => BCrypt.Net.BCrypt.EnhancedHashPassword(password, 12, HashType.SHA512);
-
-        public static bool PasswordHashVarify(string password, string hash) => BCrypt.Net.BCrypt.EnhancedVerify(password, hash, HashType.SHA512);
-
         public static U Map<T, U>(this T source)
         {
             var result = default(U);
@@ -42,16 +37,6 @@ namespace Cashflow.Api.Shared
                 }
             }
             return target;
-        }
-
-        public static DateTime CurrentDate
-        {
-            get
-            {
-                DateTime dateTime = DateTime.UtcNow;
-                TimeZoneInfo hrBrasilia = TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time");
-                return TimeZoneInfo.ConvertTimeFromUtc(dateTime, hrBrasilia);
-            }
         }
     }
 }
