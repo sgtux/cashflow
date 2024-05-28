@@ -87,6 +87,13 @@ namespace Cashflow.Api.Infra.Repository
             return await _conn.ExecuteScalarAsync<long>(query, new { Id = id }) > 0;
         }
 
+        public async Task<int> Count()
+        {
+            var query = $"SELECT COUNT(1) FROM \"{typeof(T).Name}\"";
+            Log(query);
+            return await _conn.ExecuteScalarAsync<int>(query);
+        }
+
         public Task<long> NextId()
         {
             var query = $"SELECT MAX(Id) FROM {typeof(T).Name}";

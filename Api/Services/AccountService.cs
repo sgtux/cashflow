@@ -16,11 +16,14 @@ namespace Cashflow.Api.Services
 
         private readonly IAppConfig _config;
 
-        public AccountService(IUserRepository repository, AppCache appCache, IAppConfig config)
+        private readonly ISystemParameterRepository _systemParameterRepository;
+
+        public AccountService(IUserRepository repository, AppCache appCache, IAppConfig config, ISystemParameterRepository systemParameterRepository)
         {
             _userRepository = repository;
             _appCache = appCache;
             _config = config;
+            _systemParameterRepository = systemParameterRepository;
         }
 
         public async Task<ResultModel> GetById(int userId)
@@ -29,25 +32,33 @@ namespace Cashflow.Api.Services
 
             if (!user.Email.Contains("@"))
                 user.Email = CryptographyUtils.AesDecrypt(user.Email, _config.DataEncryptionKey);
-                
+
             return new ResultDataModel<UserDataModel>(new UserDataModel(user));
         }
 
         public async Task<ResultDataModel<UserDataModel>> Add(User model)
         {
             var result = new ResultDataModel<UserDataModel>();
-            var validationResults = new UserValidator(_userRepository).Validate(model);
-            if (validationResults.IsValid)
-            {
-                model.Password = CryptographyUtils.PasswordHash(model.Password);
-                model.CreatedAt = CurrentDate;
 
-                await _userRepository.Add(model);
-                var user = await _userRepository.FindByEmail(model.Email);
-                user.Map(result.Data);
+            if (await _userRepository.Count() >= await _systemParameterRepository.MaximumSystemUsers())
+            {
+                result.AddNotification(ValidatorMessages.User.MaximumSystemUsers);
+                return result;
             }
-            else
+
+            var validationResults = new UserValidator(_userRepository).Validate(model);
+            if (!validationResults.IsValid)
+            {
                 result.AddNotification(validationResults.Errors);
+                return result;
+            }
+
+            model.Password = CryptographyUtils.PasswordHash(model.Password);
+            model.CreatedAt = CurrentDate;
+
+            await _userRepository.Add(model);
+            var user = await _userRepository.FindByEmail(model.Email);
+            user.Map(result.Data);
 
             return result;
         }
@@ -80,8 +91,16 @@ namespace Cashflow.Api.Services
             var encryptedEmail = CryptographyUtils.AesEncrypt(googleUserModel.email, _config.DataEncryptionKey);
             var user = await _userRepository.FindByEmail(encryptedEmail);
 
+            var result = new ResultDataModel<UserDataModel>();
+
             if (user == null)
             {
+                if (await _userRepository.Count() >= await _systemParameterRepository.MaximumSystemUsers())
+                {
+                    result.AddNotification(ValidatorMessages.User.MaximumSystemUsers);
+                    return result;
+                }
+
                 await _userRepository.Add(new User()
                 {
                     CreatedAt = CurrentDate,
@@ -91,8 +110,9 @@ namespace Cashflow.Api.Services
 
             user = await _userRepository.FindByEmail(encryptedEmail);
             user.Email = googleUserModel.email;
+            result.Data = new UserDataModel(user);
 
-            return new ResultDataModel<UserDataModel>(new UserDataModel(user));
+            return result;
         }
 
         public async Task<ResultModel> UpdateSpendingCeiling(int userId, decimal spendingCeiling)

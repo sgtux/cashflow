@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     name: Build and Tests
 
     steps:
@@ -46,6 +46,11 @@ jobs:
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
+      - name: Run Db Migrations
+        run: dotnet run --project Migrations/Migrations.csproj
+        env:
+          DATABASE_CONNECTION_STRING: ${{ secrets.DATABASE_CONNECTION_STRING }}
+
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
@@ -81,4 +86,3 @@ jobs:
           app-name: 'cashfloweb'
           slot-name: 'Production'
           package: .
-          

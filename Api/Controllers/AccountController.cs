@@ -98,6 +98,8 @@ namespace Cashflow.Api.Controllers
                 var googleUserModel = JsonSerializer.Deserialize<GoogleUserModel>(responseBody);
 
                 var result = await _service.Login(googleUserModel);
+                if (!result.IsValid)
+                    return HandleResult(result);
 
                 await _remainingBalanceService.Recalculate(result.Data.Id, DateTimeUtils.CurrentDate.AddMonths(-1));
 
