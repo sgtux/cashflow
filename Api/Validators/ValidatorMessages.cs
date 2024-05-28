@@ -37,6 +37,8 @@ namespace Cashflow.Api.Validators
             public string EmailPattern = "Deve ser informado um Email válido.";
 
             public string LoginFailed = "Usuário ou senha inválidos.";
+
+            public string MaximumSystemUsers = "Número máximo de usuários atingido.";
         }
 
         public class PaymentMessages

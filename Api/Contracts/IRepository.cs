@@ -14,6 +14,8 @@ namespace Cashflow.Api.Contracts
 
         Task<bool> Exists(long id);
 
+        Task<int> Count();
+
         Task<T> GetById(long id);
 
         Task<IEnumerable<T>> GetSome(BaseFilter filter);

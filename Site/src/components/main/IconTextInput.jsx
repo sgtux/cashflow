@@ -68,7 +68,6 @@ class IconTextInput extends React.Component {
           style={{ marginTop: (this.props.style || {}).marginTop || '10px' }}
           value={this.state.text}
           multiline={this.props.multiline}
-          rowsMax={this.props.rowsMax}
           rows={this.props.rows}
           variant={this.props.variant || 'standard'}
           className="teste"

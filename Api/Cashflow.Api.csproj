@@ -79,6 +79,8 @@
     <EmbeddedResource Include="Infra/Sql/RecurringExpenseHistory/Delete.sql" />
     <EmbeddedResource Include="Infra/Sql/RecurringExpenseHistory/Insert.sql" />
     <EmbeddedResource Include="Infra/Sql/RecurringExpenseHistory/Update.sql" />
+
+    <EmbeddedResource Include="Infra/Sql/SystemParameter/GetByKey.sql" />
   </ItemGroup>
 
 </Project>

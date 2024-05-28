@@ -47,6 +47,7 @@ namespace Cashflow.Api.Extensions
             services.AddScoped<IFuelExpenseRepository, FuelExpenseRepository>();
             services.AddScoped<IRemainingBalanceRepository, RemainingBalanceRepository>();
             services.AddScoped<IRecurringExpenseRepository, RecurringExpenseRepository>();
+            services.AddScoped<ISystemParameterRepository, SystemParameterRepository>();
         }
 
         public static void ConfigureDatabaseContext(this IServiceCollection services)
