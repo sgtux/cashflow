@@ -2,6 +2,7 @@ SELECT
   p.Id,
   p.Description,
   p.UserId,
+  p.Date,
   p.Type,
   p.CreditCardId,
   i.Id AS Installments_Id,

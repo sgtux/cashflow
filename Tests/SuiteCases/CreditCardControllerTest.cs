@@ -14,14 +14,14 @@ namespace Cashflow.Tests
         public async Task GetByUSer1()
         {
             var result = await Get<IEnumerable<CreditCard>>("/api/CreditCard", 1);
-            Assert.IsTrue(result.Data.Count() == 2);
+            Assert.AreEqual(result.Data.Count(), 4, "Quantidade de cartões");
         }
 
         [TestMethod]
         public async Task GetByUSer2()
         {
             var result = await Get<IEnumerable<CreditCard>>("/api/CreditCard", 2);
-            Assert.IsTrue(result.Data.Count() == 1);
+            Assert.AreEqual(result.Data.Count(), 1, "Quantidade de cartões");
         }
 
         [TestMethod]

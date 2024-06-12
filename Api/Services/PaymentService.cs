@@ -19,23 +19,12 @@ namespace Cashflow.Api.Services
 
         private readonly ICreditCardRepository _creditCardRepository;
 
-        private readonly IHouseholdExpenseRepository _householdExpenseRepository;
-
-        private readonly IVehicleRepository _vehicleRepository;
-
         private readonly AppCache _appCache;
 
-        public PaymentService(IPaymentRepository paymentRepository,
-            ICreditCardRepository creditCardRepository,
-            IHouseholdExpenseRepository householdExpenseRepository,
-            IVehicleRepository vehicleRepository,
-            AppCache appCache
-            )
+        public PaymentService(IPaymentRepository paymentRepository, ICreditCardRepository creditCardRepository, AppCache appCache)
         {
             _paymentRepository = paymentRepository;
             _creditCardRepository = creditCardRepository;
-            _householdExpenseRepository = householdExpenseRepository;
-            _vehicleRepository = vehicleRepository;
             _appCache = appCache;
         }
 
@@ -129,7 +118,7 @@ namespace Cashflow.Api.Services
             var installments = new List<Installment>();
             var result = new ResultDataModel<List<Installment>>(installments);
 
-            if (model.Value <= 0 || model.Amount <= 0 || model.Amount > 72 || model.Date == default(DateTime))
+            if (model.Value <= 0 || model.Amount <= 0 || model.Amount > 72 || model.Date == default)
             {
                 if (model.Value <= 0)
                     result.AddNotification("Valor deve ser maior que 0.");
@@ -137,15 +126,14 @@ namespace Cashflow.Api.Services
                 if (model.Amount <= 0 || model.Amount > 72)
                     result.AddNotification("Quantidade de parcelas deve estar entre 1 e 72.");
 
-                if (model.Date == default(DateTime))
+                if (model.Date == default)
                     result.AddNotification("Data inválida.");
 
                 return result;
             }
 
-            var day = model.Date.Day;
-            var month = model.Date.Month;
-            var year = model.Date.Year;
+            var purchaseDate = model.Date;
+            var paymentDate = model.Date;
 
             if (model.CreditCardId > 0)
             {
@@ -157,42 +145,32 @@ namespace Cashflow.Api.Services
                     return result;
                 }
 
-                if (day > creditCard.InvoiceClosingDay)
+                if (purchaseDate.Day >= creditCard.InvoiceClosingDay)
                 {
-                    month++;
-                    if (month > 12)
-                    {
-                        month = 1;
-                        year++;
-                    }
+                    paymentDate = paymentDate.AddMonths(creditCard.InvoiceClosingDay > creditCard.InvoiceDueDay ? 2 : 1);
                 }
-                day = creditCard.InvoiceDueDay;
+                else if (creditCard.InvoiceClosingDay > creditCard.InvoiceDueDay)
+                {
+                    paymentDate = paymentDate.AddMonths(1);
+                }
+
+                paymentDate = new DateTime(paymentDate.Year, paymentDate.Month, creditCard.InvoiceDueDay);
             }
 
-            var firstValue = model.Value;
-
-            if (!model.ValueByInstallment)
-            {
-                var total = model.Value;
-                model.Value = Math.Round(total / model.Amount, 2, MidpointRounding.ToZero);
-                var sum = Math.Round(model.Value * model.Amount, 2);
-                firstValue = model.Value + (total > sum ? total - sum : sum - total);
-            }
+            var total = model.Value;
+            model.Value = Math.Round(total / model.Amount, 2, MidpointRounding.ToZero);
+            var sum = Math.Round(model.Value * model.Amount, 2);
+            var firstValue = model.Value + (total > sum ? total - sum : sum - total);
 
             for (short i = 1; i <= model.Amount; i++)
             {
-                if (month > 12)
-                {
-                    month = 1;
-                    year++;
-                }
                 installments.Add(new Installment()
                 {
                     Number = i,
                     Value = model.Value,
-                    Date = new DateTime(year, month, day)
+                    Date = paymentDate
                 });
-                month++;
+                paymentDate = paymentDate.AddMonths(1);
             }
 
             installments.First().Value = firstValue;

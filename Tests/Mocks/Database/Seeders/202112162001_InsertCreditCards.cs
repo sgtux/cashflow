@@ -9,8 +9,10 @@ namespace Cashflow.Tests.Mocks.Database.Seeders
         {
             Insert.IntoTable("CreditCard")
                 .Row(new { Id = 1, Name = "Primeiro Cartão", UserId = 1, InvoiceDueDay = 20, InvoiceClosingDay = 10 })
-                .Row(new { Id = 2, Name = "Segundo Cartão", UserId = 1, InvoiceDueDay = 20, InvoiceClosingDay = 10 })
-                .Row(new { Id = 3, Name = "Terceiro Cartão", UserId = 2, InvoiceDueDay = 20, InvoiceClosingDay = 10 });
+                .Row(new { Id = 2, Name = "Segundo Cartão", UserId = 1, InvoiceDueDay = 10, InvoiceClosingDay = 20 })
+                .Row(new { Id = 3, Name = "Terceiro Cartão", UserId = 2, InvoiceDueDay = 20, InvoiceClosingDay = 10 })
+                .Row(new { Id = 4, Name = "Quinto Cartão", UserId = 1, InvoiceDueDay = 20, InvoiceClosingDay = 10 })
+                .Row(new { Id = 5, Name = "Sexto Cartão", UserId = 1, InvoiceDueDay = 10, InvoiceClosingDay = 20 });
         }
 
         public override void Down()
