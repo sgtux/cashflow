@@ -11,6 +11,7 @@ using Cashflow.Api.Models;
 namespace Cashflow.Tests
 {
     [TestClass]
+    [TestCategory("PaymentTest")]
     public class PaymentControllerTest : BaseControllerTest
     {
         private Payment DefaultPayment
@@ -161,6 +162,49 @@ namespace Cashflow.Tests
         {
             var result = await Get<IEnumerable<TypeModel>>("/api/Payment/Types", 1);
             Assert.IsTrue(result.Data.Any());
+        }
+
+        [TestMethod]
+        public async Task GetGenerateInstallmentsOK()
+        {
+            string queryString = "value=1000&amount=10&date=2024-06-10T03:00:00.000Z";
+            var result = await Get<IEnumerable<Installment>>($"/api/Payment/GenerateInstallments?{queryString}", 1);
+            var first = result.Data.First();
+            Assert.AreEqual(100, first.Value);
+            Assert.AreEqual(6, first.Date.Month);
+        }
+
+        [TestMethod]
+        public async Task GetGenerateInstallmentsWithCreditCardOK()
+        {
+            // CreditCard 4 with UserId 1, InvoiceDueDay 20, InvoiceClosingDay = 10
+            string queryString = "value=1000&amount=10&date=2024-06-09T03:00:00.000Z&creditCardId=4";
+            var result = await Get<IEnumerable<Installment>>($"/api/Payment/GenerateInstallments?{queryString}", 1);
+            var first = result.Data.First();
+            Assert.AreEqual(100, first.Value);
+            Assert.AreEqual(6, first.Date.Month);
+        }
+
+        [TestMethod]
+        public async Task GetGenerateInstallmentsWithCreditCardNextMonthOK()
+        {
+            // CreditCard 5 with UserId 1, InvoiceDueDay 10, InvoiceClosingDay = 20
+            string queryString = "value=1000&amount=10&date=2024-06-10T03:00:00.000Z&creditCardId=5";
+            var result = await Get<IEnumerable<Installment>>($"/api/Payment/GenerateInstallments?{queryString}", 1);
+            var first = result.Data.First();
+            Assert.AreEqual(100, first.Value);
+            Assert.AreEqual(7, first.Date.Month);
+        }
+
+        [TestMethod]
+        public async Task GetGenerateInstallmentsWithCreditCardNextNextMonthOK()
+        {
+            // CreditCard 5 with UserId 1, InvoiceDueDay 10, InvoiceClosingDay = 20
+            string queryString = "value=1000&amount=10&date=2024-06-20T03:00:00.000Z&creditCardId=5";
+            var result = await Get<IEnumerable<Installment>>($"/api/Payment/GenerateInstallments?{queryString}", 1);
+            var first = result.Data.First();
+            Assert.AreEqual(100, first.Value);
+            Assert.AreEqual(8, first.Date.Month);
         }
     }
 }

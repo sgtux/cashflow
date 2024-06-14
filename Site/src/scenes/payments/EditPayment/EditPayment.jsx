@@ -25,25 +25,22 @@ export function EditPayment() {
   const [type, setType] = useState(1)
   const [qtdInstallments, setQtdInstallments] = useState(10)
   const [card, setCard] = useState(0)
-  const [valueByInstallment, setValueByInstallment] = useState(false)
   const [valueText, setValueText] = useState('')
   const [installments, setInstallments] = useState([])
-  const [firstPayment, setFirstPayment] = useState('')
-  const [loading, setLoading] = useState(false)
+  const [purchaseDate, setPurchaseDate] = useState('')
+  const [loading, setLoading] = useState(true)
   const [types, setTypes] = useState([])
   const [id, setId] = useState(0)
   const [cards, setCards] = useState([])
   const [editInstallment, setEditInstallment] = useState()
-  const [installmentsUpdated, setInstallmentsUpdated] = useState(false)
+  const [installmentsUpdated, setInstallmentsUpdated] = useState(true)
   const [formIsValid, setFormIsValid] = useState(false)
-  const [active, setActive] = useState(true)
 
 
   const params = useParams()
   const navigate = useNavigate()
 
   useEffect(() => {
-    setLoading(true)
     paymentService.getTypes().then(res => setTypes(res))
     creditCardService.get().then(res => setCards(res))
 
@@ -59,13 +56,9 @@ export function EditPayment() {
   }, [])
 
   useEffect(() => {
-    setFormIsValid(!!description && installmentsUpdated && firstPayment)
-  }, [description, installmentsUpdated, firstPayment])
-
-  useEffect(() => {
-    if (!editInstallment)
-      setInstallmentsUpdated(false)
-  }, [valueByInstallment, firstPayment, qtdInstallments, valueText])
+    if (!loading)
+      setFormIsValid(!!description && installmentsUpdated && purchaseDate)
+  }, [description, installmentsUpdated, purchaseDate])
 
   function fillPayment(payment) {
     setId(payment.id)
@@ -77,13 +70,11 @@ export function EditPayment() {
     setDescription(payment.description || '')
     setType(payment.type || 1)
     setCard(payment.creditCardId)
-    setActive(params.id == 0 || payment.active)
-    setValueByInstallment(false)
     setQtdInstallments(qtdInstallments)
 
     setValueText(toReal(values.length ? values.reduce((a, b) => a + b) : 0))
 
-    setFirstPayment(firstInstallment.date ? new Date(firstInstallment.date) : null)
+    setPurchaseDate((payment.date || firstInstallment.date) ? new Date(payment.date || firstInstallment.date) : null)
     setInstallments(payment.installments || [])
     if (payment.id)
       setInstallmentsUpdated(true)
@@ -94,9 +85,8 @@ export function EditPayment() {
     paymentService.generateInstallments({
       value: fromReal(valueText),
       amount: qtdInstallments,
-      date: firstPayment,
-      CreditCardId: card,
-      ValueByInstallment: valueByInstallment
+      date: purchaseDate,
+      CreditCardId: card
     }).then(res => {
       setInstallments(res.map(({ number, value, date }) => ({ number, value, date })))
       setInstallmentsUpdated(true)
@@ -112,7 +102,7 @@ export function EditPayment() {
       type,
       installments,
       creditCardId: card,
-      active
+      date: purchaseDate
     }
 
     setLoading(true)
@@ -140,6 +130,34 @@ export function EditPayment() {
     setTimeout(() => setEditInstallment(null), 200)
   }
 
+  function creditCardHasChanged(card) {
+    if (!loading) {
+      setInstallmentsUpdated(false)
+      setCard(card)
+    }
+  }
+
+  function purchaseDateHasChanged(date) {
+    if (!loading) {
+      setInstallmentsUpdated(false)
+      setPurchaseDate(date)
+    }
+  }
+
+  function purchaseValueHasChanged(value) {
+    if (!loading) {
+      setInstallmentsUpdated(false)
+      setValueText(value)
+    }
+  }
+
+  function qtdInstallmentsHasChanged(qtd) {
+    if (!loading) {
+      setInstallmentsUpdated(false)
+      setQtdInstallments(qtd)
+    }
+  }
+
   return (
     <MainContainer title="Pagamento" loading={loading}>
       <div style={{ textAlign: 'start', fontSize: 14, color: '#666', fontFamily: '"Roboto", "Helvetica", "Arial", "sans-serif"' }} >
@@ -159,7 +177,7 @@ export function EditPayment() {
           <FormControl>
             <InputLabel htmlFor="select-tipo">Cartão de Crédito</InputLabel>
             <Select style={{ width: '200px' }} value={card || ''}
-              onChange={e => setCard(e.target.value)}>
+              onChange={e => creditCardHasChanged(e.target.value)}>
               <MenuItem value={0}><span style={{ color: 'gray' }}>LIMPAR</span></MenuItem>
               {cards.map(p => <MenuItem key={p.id} value={p.id}>{p.name}</MenuItem>)}
             </Select>
@@ -167,19 +185,17 @@ export function EditPayment() {
         </div>
 
         <ValueDateBox value={valueText}
-          valueChanged={e => setValueText(e)}
-          date={firstPayment}
-          dateChanged={e => setFirstPayment(e)}
+          valueChanged={e => purchaseValueHasChanged(e)}
+          date={purchaseDate}
+          dateChanged={e => purchaseDateHasChanged(e)}
         />
 
-        <InstallmentSetBox valueByInstallment={valueByInstallment}
+        <InstallmentSetBox
           qtdInstallments={qtdInstallments}
-          valueByInstallmentChanged={checked => setValueByInstallment(checked)}
-          qtdInstallmentsChanged={v => setQtdInstallments(v)}
-        />
+          qtdInstallmentsChanged={v => qtdInstallmentsHasChanged(v)} />
 
         <div>
-          <Button disabled={installmentsUpdated} onClick={() => updateInstallments()} variant="contained" autoFocus>atualizar parcelas</Button>
+          <Button disabled={installmentsUpdated} onClick={() => updateInstallments()} variant="contained" autoFocus>gerar parcelas</Button>
 
           {editInstallment && <EditInstallmentModal installment={editInstallment} onCancel={() => setEditInstallment()} onSave={p => installmentChanged(p)} />}
         </div>

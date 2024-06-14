@@ -28,7 +28,7 @@ namespace Cashflow.Api.Infra.Repository
             Slapper.AutoMapper.Configuration.AddIdentifiers(typeof(Installment), new List<string> { "Id" });
             Slapper.AutoMapper.Configuration.AddIdentifiers(typeof(CreditCard), new List<string> { "Id" });
 
-            return (Slapper.AutoMapper.MapDynamic<Payment>(data));
+            return Slapper.AutoMapper.MapDynamic<Payment>(data);
         }
 
         public async Task<Payment> GetById(long id)
@@ -39,7 +39,7 @@ namespace Cashflow.Api.Infra.Repository
             Slapper.AutoMapper.Configuration.AddIdentifiers(typeof(Installment), new List<string> { "Id" });
             Slapper.AutoMapper.Configuration.AddIdentifiers(typeof(CreditCard), new List<string> { "Id" });
 
-            return (Slapper.AutoMapper.MapDynamic<Payment>(data)).FirstOrDefault();
+            return Slapper.AutoMapper.MapDynamic<Payment>(data).FirstOrDefault();
         }
 
         public async Task Add(Payment payment)

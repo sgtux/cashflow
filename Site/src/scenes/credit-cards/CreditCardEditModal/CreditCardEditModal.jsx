@@ -19,15 +19,22 @@ export function CreditCardDetailModal({ onClose, onSave, card }) {
     const [invoiceDueDay, setInvoiceDueDay] = useState('')
     const [cardIdValid, setCardIdValid] = useState(false)
 
-    useEffect(() => setCardIdValid(!!name && invoiceDueDay > 0 && invoiceClosingDay > 0), [name, invoiceClosingDay, invoiceDueDay])
+    useEffect(() => {
+        setCardIdValid(!!name && invoiceDueDay > 0 && invoiceClosingDay > 0)
+    }, [name, invoiceClosingDay, invoiceDueDay])
 
     useEffect(() => {
         if (card) {
+            console.log(card)
             setName(card.name || '')
             setInvoiceClosingDay((card.invoiceClosingDay || '') + '')
             setInvoiceDueDay((card.invoiceDueDay || '') + '')
         }
     }, [card])
+
+    useEffect(() => {
+        console.log(name)
+    }, [name])
 
     return (
         <Dialog
@@ -48,7 +55,7 @@ export function CreditCardDetailModal({ onClose, onSave, card }) {
                 <IconTextInput
                     label="Nome do cartão"
                     value={name}
-                    onChange={(e) => setName(e.value)}
+                    onChange={e => setName(e.value)}
                     Icon={<CardIcon />}
                 />
                 <br />

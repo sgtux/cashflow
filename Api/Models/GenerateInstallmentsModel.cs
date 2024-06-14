@@ -11,7 +11,5 @@ namespace Cashflow.Api.Models
         public DateTime Date { get; set; }
 
         public int CreditCardId { get; set; }
-
-        public bool ValueByInstallment { get; set; }
     }
 }
