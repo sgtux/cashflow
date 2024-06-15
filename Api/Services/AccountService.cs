@@ -88,8 +88,7 @@ namespace Cashflow.Api.Services
 
         public async Task<ResultDataModel<UserDataModel>> Login(GoogleUserModel googleUserModel)
         {
-            var encryptedEmail = CryptographyUtils.AesEncrypt(googleUserModel.email, _config.DataEncryptionKey);
-            var user = await _userRepository.FindByEmail(encryptedEmail);
+            var user = await _userRepository.FindByEmail(googleUserModel.email);
 
             var result = new ResultDataModel<UserDataModel>();
 
@@ -104,12 +103,11 @@ namespace Cashflow.Api.Services
                 await _userRepository.Add(new User()
                 {
                     CreatedAt = CurrentDate,
-                    Email = encryptedEmail
+                    Email = googleUserModel.email
                 });
             }
 
-            user = await _userRepository.FindByEmail(encryptedEmail);
-            user.Email = googleUserModel.email;
+            user = await _userRepository.FindByEmail(googleUserModel.email);
             result.Data = new UserDataModel(user);
 
             return result;
