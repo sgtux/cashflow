@@ -49,16 +49,18 @@ namespace Cashflow.Api.Extensions
                     return "Bebida Alcoólica";
                 case HouseholdExpenseType.Party:
                     return "Festa";
-                case HouseholdExpenseType.Uber:
-                    return "Uber";
-                case HouseholdExpenseType.DelayInterest:
+                case HouseholdExpenseType.Transport:
+                    return "Transporte";
+                case HouseholdExpenseType.LateFees:
                     return "Juros de Atraso";
                 case HouseholdExpenseType.Clothes:
                     return "Roupas";
-                case HouseholdExpenseType.Utensil:
-                    return "Utensílio";
+                case HouseholdExpenseType.Utilities:
+                    return "Utilidades";
                 case HouseholdExpenseType.Cleaning:
                     return "Limpeza";
+                case HouseholdExpenseType.Exchange:
+                    return "Câmbio";
                 case HouseholdExpenseType.Others:
                     return "Outros";
                 default:

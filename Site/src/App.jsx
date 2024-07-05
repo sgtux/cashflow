@@ -27,6 +27,14 @@ class App extends React.Component {
 if (!location.host.includes('localhost') && location.protocol === 'http:')
   location = location.href.replace('http', 'https')
 
+if (module.hot) {
+  console.log('Hot reload is enabled.')
+  module.hot.accept('./App', () => {
+    const NextApp = require('./App').default
+    root.render(<NextApp />)
+  })
+}
+
 const domNode = document.getElementById('app')
 const root = createRoot(domNode)
 root.render(<App />)

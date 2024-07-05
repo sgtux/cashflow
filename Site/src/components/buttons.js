@@ -1,3 +1,6 @@
+import React from 'react'
+import { Add } from '@mui/icons-material'
+import { Fab } from '@mui/material'
 import styled from 'styled-components'
 
 export const TableActionButton = styled.button`
@@ -26,3 +29,14 @@ export const TableActionEditButton = styled(TableActionButton)`
 export const TableActionExemptButton = styled(TableActionButton)`
     background-color: #aaa;
 `
+
+export const AddFloatingButton = ({ onClick }) => {
+    return (
+        <Fab style={{ position: 'fixed', right: 50, bottom: 50 }}
+            size='large'
+            color='primary'
+            onClick={() => onClick && onClick()}>
+            <Add />
+        </Fab>
+    )
+}

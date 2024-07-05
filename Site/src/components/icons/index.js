@@ -1,6 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 
+export { getFabIconByExpenseType } from './ExpenseTypeIcon'
+
 const SvgIcon = styled.svg`
     color: ${({ selected }) => selected ? 'rgb(75, 147, 114)' : '#fff'};
     height: 30px;

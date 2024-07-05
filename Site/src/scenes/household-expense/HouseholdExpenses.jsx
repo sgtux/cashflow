@@ -2,37 +2,35 @@ import React, { useState, useEffect } from 'react'
 
 import {
     Paper,
-    List,
-    ListItem,
-    ListItemSecondaryAction,
     IconButton,
-    ListItemText,
-    Tooltip
+    Tooltip,
+    Fab,
 } from '@mui/material'
 
 import {
     Delete as DeleteIcon,
-    EditOutlined as EditIcon,
-    Refresh as RefreshIcon,
-    AddCircle as AddCircleIcon,
-    SafetyDivider
+    EditOutlined as EditIcon
 } from '@mui/icons-material'
 
-import { MainContainer, InputMonth } from '../../components'
+import { InputMonth, AddFloatingButton } from '../../components'
 
 import { householdExpenseService } from '../../services'
-import { toReal, dateToString, ellipsisText } from '../../helpers'
+import { toReal, getMonthName } from '../../helpers'
 import { EditHouseholdExpenseModal } from './edit-household-expense-modal/EditHouseholdExpenseModal'
+import { getFabIconByExpenseType } from '../../components/icons'
 
 export function HouseholdExpenses() {
 
     const [householdExpenses, setHouseholdExpenses] = useState([])
     const [loading, setLoading] = useState(false)
     const [selectedMonth, setSelectedMonth] = useState('')
+    const [selectedMonthName, setSelectedMonthName] = useState('')
     const [selectedYear, setSelectedYear] = useState('')
     const [totals, setTotals] = useState([])
     const [total, setTotal] = useState(0)
     const [editHouseholdExpense, setEditHouseholdExpense] = useState()
+    const [householdExpensesByDay, setHouseholdExpensesByDay] = useState({})
+    const [days, setDays] = useState([])
 
     useEffect(() => {
         const now = new Date()
@@ -42,6 +40,8 @@ export function HouseholdExpenses() {
         setSelectedYear(year)
         refresh(month, year)
     }, [])
+
+    useEffect(() => setSelectedMonthName(getMonthName(selectedMonth - 1)), [selectedMonth])
 
     useEffect(() => {
         if (householdExpenses.length) {
@@ -53,7 +53,11 @@ export function HouseholdExpenses() {
             for (const key in keyValue)
                 temp.push({ description: key, value: keyValue[key] })
             setTotals(temp)
+        } else {
+            setTotals([])
         }
+        updateDayMonth(householdExpenses)
+
     }, [householdExpenses])
 
     function refresh(month, year) {
@@ -70,6 +74,20 @@ export function HouseholdExpenses() {
             .finally(() => setLoading(false))
     }
 
+    function updateDayMonth(householdExpenses) {
+        const householdExpensesByDay = {}
+        if (Array.isArray(householdExpenses)) {
+            householdExpenses.forEach(p => {
+                const day = parseInt(new Date(p.date).getDate())
+                if (!householdExpensesByDay[day])
+                    householdExpensesByDay[day] = []
+                householdExpensesByDay[day].push(p)
+            })
+            setDays(Object.keys(householdExpensesByDay).reverse())
+            setHouseholdExpensesByDay(householdExpensesByDay)
+        }
+    }
+
     function removeHouseholdExpense(id) {
         setLoading(true)
         householdExpenseService.remove(id)
@@ -81,92 +99,63 @@ export function HouseholdExpenses() {
     function monthYearChanged(month, year) {
         setSelectedMonth(month)
         setSelectedYear(year)
+        refresh(month, year)
     }
 
     return (
-        <MainContainer title="Despesas" loading={loading}>
-            <InputMonth selectedYear={selectedYear}
-                selectedMonth={selectedMonth}
-                onChange={(month, year) => monthYearChanged(month, year)}
-                label="Filtro"
-                startYear={new Date().getFullYear() - 4} />
-            <IconButton style={{ marginLeft: 10 }} color="primary" aria-label="Refresh"
-                onClick={() => refresh(selectedMonth, selectedYear)}>
-                <RefreshIcon />
-            </IconButton>
-            <div style={{ height: 10 }}></div>
-            {
-                totals.map((e, i) => <div key={i} style={{ fontSize: 12 }}>
-                    <span>{e.description}: {toReal(e.value)}</span>
-                </div>)
-            }
-            <div style={{ fontSize: 16, marginTop: 20 }}>
-                <span style={{ fontWeight: 'bold' }}>Total: {toReal(total)}</span>
-            </div>
-            {householdExpenses.length ?
-                <div>
-                    <div style={{ textTransform: 'none', fontSize: '18px', textAlign: 'center' }}>
-                        <IconButton onClick={() => setEditHouseholdExpense({})} variant="contained" color="primary">
-                            <AddCircleIcon />
-                        </IconButton>
+        <div style={{ padding: 50 }}>
+            <Paper style={{ padding: 20, color: '#555', display: 'flex', flexDirection: 'column', textAlign: 'center' }}>
+                <InputMonth selectedYear={selectedYear}
+                    selectedMonth={selectedMonth}
+                    onChange={(month, year) => monthYearChanged(month, year)}
+                    startYear={new Date().getFullYear() - 4} />
+                <div style={{ textAlign: 'center', marginTop: 20 }}>
+                    {
+                        totals.map((e, i) => <div key={i} style={{ fontSize: 12 }}>
+                            <span>{e.description}: {toReal(e.value)}</span>
+                        </div>)
+                    }
+                    <div style={{ fontSize: 18, marginTop: 10 }}>
+                        <span style={{ fontWeight: 'bold' }}>Total: {toReal(total)}</span>
                     </div>
-                    <Paper style={{ marginTop: '20px' }}>
+                </div>
+            </Paper>
 
-                        <List dense={true}>
-                            {householdExpenses.map(p =>
-                                <ListItem key={p.id}>
-                                    <ListItemText
-                                        style={{ width: '100px' }}
-                                        secondary={p.typeDescription}
-                                    />
-                                    <ListItemText
-                                        style={{ width: '100px' }}
-                                        secondary={ellipsisText(p.description, 30)}
-                                    />
-                                    <ListItemText
-                                        style={{ width: '100px' }}
-                                        secondary={p.creditCardText ? `(${p.creditCardText})` : ''}
-                                    />
-                                    <ListItemText
-                                        style={{ width: '100px', textAlign: 'center' }}
-                                        secondary={toReal(p.value)}
-                                    />
-                                    <ListItemText
-                                        style={{ width: '100px' }}
-                                        secondary={dateToString(p.date)}
-                                    />
-                                    <ListItemSecondaryAction>
-                                        <Tooltip title="Editar esta Despesa">
-                                            <IconButton onClick={() => setEditHouseholdExpense(p)} color="primary" aria-label="Edit">
-                                                <EditIcon />
-                                            </IconButton>
-                                        </Tooltip>
-                                        <Tooltip title="Remover Despesa">
-                                            <IconButton color="secondary" aria-label="Delete"
-                                                onClick={() => removeHouseholdExpense(p.id)}>
-                                                <DeleteIcon />
-                                            </IconButton>
-                                        </Tooltip>
-                                    </ListItemSecondaryAction>
-                                </ListItem>
-                            )}
-                        </List>
-                    </Paper>
+            {days.length ?
+                <div>
+                    {days.map((p, q) =>
+                        <Paper key={q} style={{ textAlign: 'center', padding: 20, marginTop: 20, color: '#555' }}>
+                            <span style={{ fontSize: 16, fontWeight: 'bold' }}>{`${p} - ${selectedMonthName}`}</span>
+                            {
+                                householdExpensesByDay[p].map((x, i) => <Paper key={i} style={{ padding: 10, marginTop: 10, fontSize: 18, color: '#555' }}>
+                                    {getFabIconByExpenseType(x.type)}
+                                    <span>{` ${toReal(x.value)} - ${x.description} `}</span>
+                                    <Tooltip title="Editar esta Despesa">
+                                        <IconButton onClick={() => setEditHouseholdExpense(x)} color="primary" aria-label="Edit">
+                                            <EditIcon />
+                                        </IconButton>
+                                    </Tooltip>
+                                    <Tooltip title="Remover Despesa">
+                                        <IconButton color="secondary" aria-label="Delete"
+                                            onClick={() => removeHouseholdExpense(x.id)}>
+                                            <DeleteIcon />
+                                        </IconButton>
+                                    </Tooltip>
+                                </Paper>)
+                            }
+                        </Paper>)
+                    }
                 </div>
                 :
-                <div style={{ textTransform: 'none', fontSize: '18px', textAlign: 'center' }}>
-                    <div style={{ marginBottom: 40 }}>
-                        <span>Sem despesas para o filtro selecionado.</span>
-                    </div>
-                    <IconButton onClick={() => setEditHouseholdExpense({})} variant="contained" color="primary">
-                        <AddCircleIcon />
-                    </IconButton>
-                </div>
+                <Paper style={{ marginTop: 20, textTransform: 'none', fontSize: '18px', textAlign: 'center', padding: 10 }}>
+                    <span>Sem despesas para o filtro selecionado.</span>
+                </Paper>
             }
             <EditHouseholdExpenseModal onClose={() => setEditHouseholdExpense(null)}
                 editHouseholdExpense={editHouseholdExpense}
                 onSave={() => { setEditHouseholdExpense(null); refresh(selectedMonth, selectedYear) }}
             />
-        </MainContainer>
+            <AddFloatingButton onClick={() => setEditHouseholdExpense({})} />
+        </div>
     )
 }

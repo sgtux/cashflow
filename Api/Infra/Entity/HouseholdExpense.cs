@@ -22,6 +22,6 @@ namespace Cashflow.Api.Infra.Entity
 
         public string TypeDescription => Type.GetDescription();
 
-        public bool IsRecurrent => Type != HouseholdExpenseType.DelayInterest && Type != HouseholdExpenseType.Others;
+        public bool IsRecurrent => Type != HouseholdExpenseType.LateFees && Type != HouseholdExpenseType.Others;
     }
 }

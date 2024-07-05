@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import {
-  InputLabel,
   Select,
   MenuItem
 } from '@mui/material'
 
 import { Months } from '../../helpers/utils'
 
-export function InputMonth({ startYear, onChange, selectedMonth, selectedYear, label, countYears }) {
+export function InputMonth({ startYear, onChange, selectedMonth, selectedYear, countYears }) {
 
   const [years, setYears] = useState([])
 
@@ -22,9 +21,6 @@ export function InputMonth({ startYear, onChange, selectedMonth, selectedYear, l
 
   return (
     <span>
-      <div>
-        <InputLabel style={{ height: 16, fontSize: 10 }}>{label}</InputLabel>
-      </div>
       <Select
         value={selectedMonth}
         style={{ width: 150 }}

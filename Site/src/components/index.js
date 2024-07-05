@@ -12,4 +12,10 @@ export { MainContainer } from './main'
 export { Invoices } from './Invoices/Invoices'
 
 export { MoneySpan } from './money'
-export { TableActionButton, TableActionEditButton, TableActionPayButton, TableActionExemptButton } from './buttons'
+export {
+    TableActionButton,
+    TableActionEditButton,
+    TableActionPayButton,
+    TableActionExemptButton,
+    AddFloatingButton
+} from './buttons'
