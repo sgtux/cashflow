@@ -15,7 +15,7 @@ export const dateToString = date => {
   return `${day}/${month}/${date.getFullYear()}`
 }
 
-export const getDateFromStringEg = (value) => {
+export const getDateFromStringEg = value => {
   if (!value)
     return null
 
@@ -24,6 +24,8 @@ export const getDateFromStringEg = (value) => {
   const month = date[1]
   return new Date(`${year}/${month}`)
 }
+
+export const getMonthName = monthIndex => (isNaN(monthIndex) || !Months[monthIndex]) ? 'Invalid' : Months[monthIndex]
 
 export const toReal = val => {
   return isNaN(val) ? val : `R$ ${Number(val)

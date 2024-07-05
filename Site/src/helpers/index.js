@@ -8,7 +8,8 @@ export {
   toReal,
   fromReal,
   debounce,
-  ellipsisText
+  ellipsisText,
+  getMonthName
 } from './utils'
 
 export { default as toast } from './toast'

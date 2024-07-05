@@ -22,15 +22,17 @@ namespace Cashflow.Api.Enums
 
         Party = 10,
 
-        Uber = 11,
+        Transport = 11,
 
-        DelayInterest = 12,
+        LateFees = 12,
 
         Clothes = 13,
 
-        Utensil = 14,
+        Utilities = 14,
 
         Cleaning = 15,
+
+        Exchange = 16,
 
         Others = 20
     }
