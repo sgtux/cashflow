@@ -3,8 +3,10 @@ const path = require('path')
 const ProgressBar = require('progress-bar-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const CopyPlugin = require('copy-webpack-plugin')
 
 const urlApi = process.env.URL_API || ''
+const outputPath = path.join(__dirname, '..', 'Api', 'wwwroot')
 
 module.exports = {
   entry: './src/App.jsx',
@@ -27,7 +29,7 @@ module.exports = {
     extensions: ['.js', '.jsx', '.ttf']
   },
   output: {
-    path: path.join(__dirname, '..', 'Api', 'wwwroot'),
+    path: outputPath,
     publicPath: '/',
     filename: `bundle${(new Date()).getTime()}.js`
   },
@@ -41,6 +43,11 @@ module.exports = {
     new CleanWebpackPlugin(),
     new webpack.DefinePlugin({
       API_URL: JSON.stringify(urlApi),
+    }),
+    new CopyPlugin({
+      patterns: [
+        { from: path.join(__dirname, 'public', 'donald-loader.gif'), to: outputPath }
+      ]
     })
   ],
   devServer: {
