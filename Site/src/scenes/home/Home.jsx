@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 
 import { MainContainer } from '../../components'
 import { InputMonth } from '../../components/inputs'
@@ -6,12 +7,14 @@ import { InputMonth } from '../../components/inputs'
 import { MonthExpensesChart } from './MonthExpensesChart/MonthExpensesChart'
 
 import { homeService } from '../../services'
+import { showGlobalLoader, hideGlobalLoader } from '../../store/actions'
 
 export function Home() {
 
-    const [loading, setLoading] = useState(false)
     const [selectedDate, setSelectedDate] = useState({ month: '', year: '' })
     const [homeChart, setHomeChart] = useState([])
+
+    const dispatch = useDispatch()
 
     useEffect(() => {
         const now = new Date()
@@ -20,18 +23,23 @@ export function Home() {
         refresh({ month, year })
     }, [])
 
-    function refresh(date) {
+    async function refresh(date) {
         if (date.month && date.year) {
             setSelectedDate(date)
-            setLoading(true)
-            homeService.getChart(date.month, date.year)
-                .then(res => setHomeChart(res))
-                .finally(() => setLoading(false))
+            dispatch(showGlobalLoader())
+            try {
+                const res = await homeService.getChart(date.month, date.year)
+                setHomeChart(res)
+            } catch (err) {
+                console.log(err)
+            } finally {
+                dispatch(hideGlobalLoader())
+            }
         }
     }
 
     return (
-        <MainContainer title="Home" loading={loading}>
+        <MainContainer title="Home">
             <InputMonth
                 startYear={(new Date().getFullYear()) - 1}
                 selectedMonth={selectedDate.month}

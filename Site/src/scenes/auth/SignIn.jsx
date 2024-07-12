@@ -6,12 +6,11 @@ import {
   Card,
   Button,
   Zoom,
-  CircularProgress,
   Divider
 } from '@mui/material'
 
 import IconTextInput from '../../components/main/IconTextInput'
-import { userChanged } from '../../store/actions'
+import { userChanged, showGlobalLoader, hideGlobalLoader } from '../../store/actions'
 import { authService } from '../../services'
 
 const styles = {
@@ -39,7 +38,6 @@ export function SignInScreen({ changeScene }) {
   const [email, setEmail] = useState(false)
   const [emailValid, setEmailValid] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
-  const [loading, setLoading] = useState(false)
 
   const dispatch = useDispatch()
 
@@ -60,38 +58,45 @@ export function SignInScreen({ changeScene }) {
   function login(e) {
     if (e)
       e.preventDefault()
-    if (loading)
-      return
-    setLoading(true)
+    dispatch(showGlobalLoader())
     authService.login({ email, password })
       .then(user => dispatch(userChanged(user)))
-      .catch(() => { })
-      .finally(() => setLoading(false))
+      .catch(err => console.log(err))
+      .finally(() => dispatch(hideGlobalLoader()))
   }
 
   async function initializeGoogleOauth() {
-    const googleClientId = await authService.getGoogleClientId()
-    google.accounts.id.initialize({
-      client_id: googleClientId,
-      callback: handleCredentialResponse
-    })
-    google.accounts.id.renderButton(
-      document.getElementById('buttonDiv'),
-      {
-        theme: 'outline',
-        size: 'large',
-      }
-    )
-    google.accounts.id.prompt()
+    dispatch(showGlobalLoader())
+    try {
+      const googleClientId = await authService.getGoogleClientId()
+      google.accounts.id.initialize({
+        client_id: googleClientId,
+        callback: handleCredentialResponse
+      })
+      google.accounts.id.renderButton(
+        document.getElementById('buttonDiv'),
+        {
+          theme: 'outline',
+          size: 'large',
+        }
+      )
+      google.accounts.id.prompt()
+    } catch (ex) {
+      console.log(ex)
+    } finally {
+      dispatch(hideGlobalLoader())
+    }
   }
 
   async function handleCredentialResponse(response) {
     try {
+      dispatch(showGlobalLoader())
       const user = await authService.googleSignIn(response.credential)
       dispatch(userChanged(user))
     } catch (ex) {
       console.log(ex)
     }
+    finally { dispatch(hideGlobalLoader()) }
   }
 
   return (
@@ -102,7 +107,6 @@ export function SignInScreen({ changeScene }) {
             <IconTextInput
               label="Email"
               required
-              disabled={loading}
               name="email"
               onChange={e => onInputChange(e)}
               Icon={<Person />}
@@ -114,15 +118,11 @@ export function SignInScreen({ changeScene }) {
               minlength={4}
               onChange={e => onInputChange(e)}
               name="password"
-              disabled={loading}
               Icon={showPassword ? <VisibilityOff /> : <Visibility />}
               iconClick={() => setShowPassword(!showPassword)} />
           </CardContent>
           <br />
-          <div style={{ marginBottom: '10px' }} hidden={!loading}>
-            <CircularProgress />
-          </div>
-          <div hidden={loading}>
+          <div>
             <Button style={{ width: '250px' }}
               variant="contained"
               disabled={!emailValid || !passwordValid}

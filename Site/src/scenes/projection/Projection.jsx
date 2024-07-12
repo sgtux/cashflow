@@ -1,24 +1,27 @@
 import React, { useState, useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 
 import { Paper, List } from '@mui/material'
 
 import { MainContainer, MoneySpan } from '../../components'
 
 import { homeService } from '../../services'
+import { showGlobalLoader, hideGlobalLoader } from '../../store/actions'
 
 import { toReal } from '../../helpers/utils'
 import { PaymentMonth } from './PaymentMonth/PaymentMonth'
 
 export function Projection() {
 
-  const [loading, setLoading] = useState('')
   const [allPayments, setAllPayments] = useState({})
   const [totalValue, setTotalValue] = useState(0)
+
+  const dispatch = useDispatch()
 
   useEffect(() => refresh(), [])
 
   function refresh() {
-    setLoading(true)
+    dispatch(showGlobalLoader())
     homeService.getProjection()
       .then(res => {
         let total = 0
@@ -32,11 +35,11 @@ export function Projection() {
         setTotalValue(total)
         setAllPayments(res)
       }).catch(err => console.log(err))
-      .finally(() => setLoading(false))
+      .finally(() => dispatch(hideGlobalLoader()))
   }
 
   return (
-    <MainContainer title="Projeção" loading={loading}>
+    <MainContainer title="Projeção">
       <Paper>
 
         <List dense={true}>

@@ -25,16 +25,11 @@ export function CreditCardDetailModal({ onClose, onSave, card }) {
 
     useEffect(() => {
         if (card) {
-            console.log(card)
             setName(card.name || '')
             setInvoiceClosingDay((card.invoiceClosingDay || '') + '')
             setInvoiceDueDay((card.invoiceDueDay || '') + '')
         }
     }, [card])
-
-    useEffect(() => {
-        console.log(name)
-    }, [name])
 
     return (
         <Dialog

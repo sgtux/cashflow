@@ -34,6 +34,8 @@ namespace Cashflow.Api.Enums
 
         Exchange = 16,
 
+        Investment = 17,
+
         Others = 20
     }
 }

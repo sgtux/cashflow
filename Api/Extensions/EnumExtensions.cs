@@ -61,6 +61,8 @@ namespace Cashflow.Api.Extensions
                     return "Limpeza";
                 case HouseholdExpenseType.Exchange:
                     return "Câmbio";
+                case HouseholdExpenseType.Investment:
+                    return "Investimentos";
                 case HouseholdExpenseType.Others:
                     return "Outros";
                 default:

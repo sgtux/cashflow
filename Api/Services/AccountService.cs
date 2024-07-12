@@ -29,10 +29,6 @@ namespace Cashflow.Api.Services
         public async Task<ResultModel> GetById(int userId)
         {
             var user = await _userRepository.GetById(userId);
-
-            if (!user.Email.Contains("@"))
-                user.Email = CryptographyUtils.AesDecrypt(user.Email, _config.DataEncryptionKey);
-
             return new ResultDataModel<UserDataModel>(new UserDataModel(user));
         }
 
