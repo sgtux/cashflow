@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
 
 import {
     IconButton,
@@ -20,6 +20,7 @@ import { EditEarning } from './EditEarningModal/EditEarningModal'
 import { EarningTable, Container } from './styles'
 
 import { earningService } from '../../services'
+import { showGlobalLoader, hideGlobalLoader } from '../../store/actions'
 
 import { MainContainer, ConfirmModal } from '../../components/main'
 import { toReal, toast, dateToString, isSameMonth } from '../../helpers'
@@ -27,14 +28,14 @@ import { toReal, toast, dateToString, isSameMonth } from '../../helpers'
 export function Earnings() {
 
     const [earnings, setEarnings] = useState([])
-    const [loading, setLoading] = useState(false)
     const [removeItem, setRemoveItem] = useState(null)
     const [selectedMonthYear, setSelectedMonthYear] = useState('')
     const [monthYearList, setMonthYearList] = useState([])
     const [editEarning, setEditEarning] = useState(null)
 
-    useEffect(() => {
+    const dispatch = useDispatch()
 
+    useEffect(() => {
         const now = new Date()
         let year = now.getFullYear() - 1
         let month = now.getMonth() + 1
@@ -51,50 +52,58 @@ export function Earnings() {
         setSelectedMonthYear(`${month}/${year}`)
     }, [])
 
-    useEffect(() => refresh(), [selectedMonthYear])
+    useEffect(() => { refresh() }, [selectedMonthYear])
 
-    function refresh() {
+    async function refresh() {
         if (selectedMonthYear) {
             const temp = selectedMonthYear.split('/')
             const fromDate = new Date(`${temp[0]}/1/${temp[1]}`)
-            setLoading(true)
-            earningService.getAll({ fromDate })
-                .then(res => setEarnings(res))
-                .finally(() => setLoading(false))
+            try {
+                dispatch(showGlobalLoader())
+                const res = await earningService.getAll({ fromDate })
+                setEarnings(res)
+            } catch (ex) {
+                console.log(ex)
+            } finally {
+                dispatch(hideGlobalLoader())
+            }
         }
     }
 
-    function remove() {
-        setLoading(true)
-        earningService.remove(removeItem.id)
-            .then(() => {
-                toast.success('Removido com sucesso!')
-                setRemoveItem(null)
-                refresh()
-            })
-            .catch(err => {
-                console.log(err)
-                setLoading(false)
-            })
+    async function remove() {
+        dispatch(showGlobalLoader())
+        try {
+            await earningService.remove(removeItem.id)
+
+            toast.success('Removido com sucesso!')
+            setRemoveItem(null)
+            refresh()
+        } catch (ex) {
+            console.log(ex)
+        } finally {
+            dispatch(hideGlobalLoader())
+        }
     }
 
-    function copyEarning(earning) {
+    async function copyEarning(earning) {
         let date = new Date(earning.date)
         const now = new Date()
         date = new Date(now.getFullYear(), now.getMonth(), date.getDate())
         earning = { ...earning, id: 0, date }
-        setLoading(true)
-        earningService.save(earning)
-            .then(() => {
-                toast.success('Salvo com sucesso.')
-                refresh()
-            })
-            .catch(err => console.log(err))
-            .finally(() => setLoading(false))
+        dispatch(showGlobalLoader())
+        try {
+            await earningService.save(earning)
+            toast.success('Salvo com sucesso.')
+            await refresh()
+        } catch (ex) {
+            console.log(ex)
+        } finally {
+            dispatch(hideGlobalLoader())
+        }
     }
 
     return (
-        <MainContainer title="Proventos" loading={loading}>
+        <MainContainer title="Ganhos">
 
             <Paper>
                 <span style={{ margin: 10, fontSize: 16, color: '#666' }}>Desde: </span>

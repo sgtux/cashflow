@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
+import  { useDispatch } from 'react-redux'
 
 import {
     Paper,
     IconButton,
-    Tooltip,
-    Fab,
+    Tooltip
 } from '@mui/material'
 
 import {
@@ -18,11 +18,11 @@ import { householdExpenseService } from '../../services'
 import { toReal, getMonthName } from '../../helpers'
 import { EditHouseholdExpenseModal } from './edit-household-expense-modal/EditHouseholdExpenseModal'
 import { getFabIconByExpenseType } from '../../components/icons'
+import { showGlobalLoader, hideGlobalLoader} from '../../store/actions'
 
 export function HouseholdExpenses() {
 
     const [householdExpenses, setHouseholdExpenses] = useState([])
-    const [loading, setLoading] = useState(false)
     const [selectedMonth, setSelectedMonth] = useState('')
     const [selectedMonthName, setSelectedMonthName] = useState('')
     const [selectedYear, setSelectedYear] = useState('')
@@ -31,6 +31,8 @@ export function HouseholdExpenses() {
     const [editHouseholdExpense, setEditHouseholdExpense] = useState()
     const [householdExpensesByDay, setHouseholdExpensesByDay] = useState({})
     const [days, setDays] = useState([])
+
+    const dispatch = useDispatch()
 
     useEffect(() => {
         const now = new Date()
@@ -61,7 +63,7 @@ export function HouseholdExpenses() {
     }, [householdExpenses])
 
     function refresh(month, year) {
-        setLoading(true)
+        dispatch(showGlobalLoader())
         householdExpenseService.getAll(month, year)
             .then(res => {
                 setHouseholdExpenses(res)
@@ -71,7 +73,7 @@ export function HouseholdExpenses() {
                     setTotal(0)
             })
             .catch(err => console.log(err))
-            .finally(() => setLoading(false))
+            .finally(() => dispatch(hideGlobalLoader()))
     }
 
     function updateDayMonth(householdExpenses) {
@@ -89,11 +91,11 @@ export function HouseholdExpenses() {
     }
 
     function removeHouseholdExpense(id) {
-        setLoading(true)
+        dispatch(showGlobalLoader())
         householdExpenseService.remove(id)
             .then(() => refresh(selectedMonth, selectedYear))
             .catch(err => console.log(err))
-            .finally(() => setLoading(false))
+            .finally(() => dispatch(hideGlobalLoader()))
     }
 
     function monthYearChanged(month, year) {

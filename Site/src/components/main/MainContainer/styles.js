@@ -8,6 +8,6 @@ export const ContainerLoader = styled.div`
     right: 0;
     bottom: 0;
     background: rgba(0, 0, 0, .8);
-    z-index: 9;
+    z-index: 9999;
     padding-top: 300px;
 `

@@ -37,6 +37,7 @@ const ExpenseTypes = {
     Utilities: 14,
     Cleaning: 15,
     Exchange: 16,
+    Investiment: 17,
     Others: 20
 }
 
@@ -115,7 +116,7 @@ const LateFeesFabIcon = () => (
 )
 
 const ClothesFabIcon = () => (
-    <Fab size='small' style={{ marginRight: 10, }} color='secondary'>
+    <Fab size='small' style={{ marginRight: 10, }} color='info'>
         <ClothesIcon style={{ fontSize: ICON_FONT_SIZE }} />
     </Fab>
 )
@@ -133,6 +134,12 @@ const CleaningFabIcon = () => (
 )
 
 const ExchangeFabIcon = () => (
+    <Fab size='small' style={{ marginRight: 10, }} color='success'>
+        <ExchangeIcon style={{ fontSize: ICON_FONT_SIZE }} />
+    </Fab>
+)
+
+const InvestmentFabIcon = () => (
     <Fab size='small' style={{ marginRight: 10, }} color='success'>
         <ExchangeIcon style={{ fontSize: ICON_FONT_SIZE }} />
     </Fab>
@@ -177,6 +184,8 @@ export const getFabIconByExpenseType = type => {
         return <CleaningFabIcon />
     if (type === ExpenseTypes.Exchange)
         return <ExchangeFabIcon />
+    if (type === ExpenseTypes.Investiment)
+        return <InvestmentFabIcon />
     if (type === ExpenseTypes.Others)
         return <OthersFabIcon />
 }

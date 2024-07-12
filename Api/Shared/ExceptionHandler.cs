@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Net;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using Cashflow.Api.Contracts;
 using Cashflow.Api.Services;
@@ -22,11 +23,13 @@ namespace Cashflow.Api.Shared
             _next = next;
         }
 
-        public async Task Invoke(HttpContext context, IDatabaseContext databaseContext, LogService logService)
+        public async Task Invoke(HttpContext context, IDatabaseContext databaseContext, LogService logService, IAppConfig appConfig)
         {
             string status = "Success";
             try
             {
+                if (appConfig.IsDevelopment)
+                    Thread.Sleep(1000);
                 await _next(context);
                 databaseContext.Commit();
             }

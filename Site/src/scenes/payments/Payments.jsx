@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 
 import {
@@ -9,8 +10,7 @@ import {
   IconButton,
   ListItemText,
   Tooltip,
-  Typography,
-  Divider
+  Typography
 } from '@mui/material'
 
 import {
@@ -22,6 +22,7 @@ import {
 import { MainContainer } from '../../components/main'
 import { paymentService } from '../../services'
 import { toReal } from '../../helpers'
+import { showGlobalLoader, hideGlobalLoader } from '../../store/actions'
 import { PaymentFilter } from './PaymentFilter/PaymentFilter'
 
 import { PaidDoneSpan } from './styles'
@@ -42,23 +43,28 @@ const styles = {
 
 export function Payments() {
 
-  const [loading, setLoading] = useState(false)
   const [payments, setPayments] = useState([])
   const [filter, setFilter] = useState({ description: '', done: false, startDate: null, endDate: null })
 
-  useEffect(() => refresh(), [filter])
+  const dispatch = useDispatch()
 
-  function refresh() {
-    setLoading(true)
-    paymentService.getAll(filter)
-      .then(res => setPayments(res))
-      .finally(res => setLoading(false))
+  useEffect(() => {
+    refresh()
+  }, [filter])
+
+  async function refresh() {
+    try {
+      dispatch(showGlobalLoader())
+      const res = await paymentService.getAll(filter)
+      setPayments(res)
+    } finally {
+      dispatch(hideGlobalLoader())
+    }
   }
 
-  function removePayment(id) {
-    paymentService.remove(id)
-      .then(() => refresh())
-      .finally(() => setLoading(false))
+  async function removePayment(id) {
+    await paymentService.remove(id)
+    refresh()
   }
 
   function filterChanged(newFilter) {
@@ -70,7 +76,7 @@ export function Payments() {
   }
 
   return (
-    <MainContainer title="Pagamentos" loading={loading}>
+    <MainContainer title="Parcelamentos">
       <PaymentFilter filterChanged={e => filterChanged(e)} />
       {payments.length ?
         <div>

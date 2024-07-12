@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 
 import {
 	Paper,
@@ -22,7 +23,8 @@ import {
 import { MainContainer } from '../../components/main'
 import { CreditCardDetailModal } from './CreditCardEditModal/CreditCardEditModal'
 
-import { creditCardService } from '../../services/index'
+import { creditCardService } from '../../services'
+import { showGlobalLoader, hideGlobalLoader } from '../../store/actions'
 
 const styles = {
 	noRecords: {
@@ -47,33 +49,48 @@ export function CreditCards() {
 	const [cards, setCards] = useState([])
 	const [card, setCard] = useState(null)
 
-	useEffect(() => refresh(), [])
+	const dispatch = useDispatch()
 
-	function refresh() {
-		setLoading(true)
+	useEffect(() => { refresh() }, [])
+
+	async function refresh() {
+		dispatch(showGlobalLoader())
 		setCard(null)
-		creditCardService.get().then(res => {
-			setLoading(false)
+		try {
+			const res = await creditCardService.get()
 			setCards(res)
-		})
+		} catch (ex) {
+			console.log(ex)
+		} finally {
+			dispatch(hideGlobalLoader())
+		}
 	}
 
-	function removeCard(id) {
-		creditCardService.remove(id)
-			.then(() => refresh())
-			.catch(() => setLoading(false))
+	async function removeCard(id) {
+		dispatch(showGlobalLoader())
+		try {
+			await creditCardService.remove(id)
+			await refresh()
+		} catch (err) {
+			console.log(err)
+		} finally {
+			dispatch(hideGlobalLoader())
+		}
 	}
 
-	function saveCard(c) {
-		setLoading(true)
-		if (c.id)
-			creditCardService.update(c)
-				.then(() => refresh())
-				.catch(() => setLoading(false))
-		else
-			creditCardService.create(c)
-				.then(() => refresh())
-				.catch(() => setLoading(false))
+	async function saveCard(c) {
+		dispatch(showGlobalLoader())
+		try {
+			if (c.id)
+				await creditCardService.update(c)
+			else
+				await creditCardService.create(c)
+			await refresh()
+		} catch (err) {
+			console.log(err)
+		} finally {
+			dispatch(hideGlobalLoader())
+		}
 	}
 
 	return (

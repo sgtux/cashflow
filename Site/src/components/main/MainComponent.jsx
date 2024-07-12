@@ -13,6 +13,8 @@ import { Auth } from '../../scenes'
 import { AlertModal } from '../main/Modal'
 import { userChanged } from '../../store/actions'
 import { registerCallbackUnauthorized } from '../../services/httpService'
+import { ContainerLoader } from './MainContainer/styles'
+import { LinearProgress } from '@mui/material'
 
 export function MainComponent() {
 
@@ -21,7 +23,7 @@ export function MainComponent() {
   const [showModal, setShowModal] = useState(false)
   let mql = null
 
-  const { user } = useSelector(state => state.appState)
+  const { user, globalLoader } = useSelector(state => state.appState)
 
   const dispatch = useDispatch()
 
@@ -68,6 +70,14 @@ export function MainComponent() {
         text='Sessão Expirada!'
         show={showModal}
         onClose={() => logout()} />
+      {globalLoader &&
+        <ContainerLoader>
+          <div style={{ width: 200, margin: '0 auto' }}>
+            <img src='donald-loader.gif' style={{ borderRadius: '50%', height: 100, width: 100, marginBottom: 10 }} />
+            <LinearProgress />
+          </div>
+        </ContainerLoader>
+      }
     </div>
   )
 }
