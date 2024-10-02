@@ -36,6 +36,12 @@ namespace Cashflow.Api.Enums
 
         Investment = 17,
 
-        Others = 20
+        Phone = 18,
+
+        Games = 19,
+
+        Others = 20,
+
+        Donation = 21,
     }
 }
