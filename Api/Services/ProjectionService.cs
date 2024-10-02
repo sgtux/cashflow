@@ -125,13 +125,14 @@ namespace Cashflow.Api.Services
             var earnings = await _earningRepository.GetSome(filter);
             if (earnings.Any())
             {
-                var monthyEarnings = earnings.Where(p => p.Date.SameMonthYear(DateTimeUtils.CurrentDate) && p.Type == Enums.EarningType.Monthy);
-                foreach (var date in dates)
+                List<Earning> monthyEarnings = new List<Earning>();
+                foreach (var date in dates.Order())
                 {
+                    monthyEarnings.AddRange(earnings.Where(p => p.Date.SameMonthYear(date) && p.Type == EarningType.Monthy));
                     foreach (var item in monthyEarnings)
                         list.Add(new PaymentProjectionModel($"{item.Description} ({item.TypeDescription})", date, item.Value, MovementProjectionType.Earning));
 
-                    foreach (var item in earnings.Where(p => p.Type != Enums.EarningType.Monthy && p.Date.SameMonthYear(date)))
+                    foreach (var item in earnings.Where(p => p.Type != EarningType.Monthy && p.Date.SameMonthYear(date)))
                         list.Add(new PaymentProjectionModel($"{item.Description} (Provento)", date, item.Value, MovementProjectionType.Earning));
                 }
             }

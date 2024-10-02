@@ -63,6 +63,12 @@ namespace Cashflow.Api.Extensions
                     return "Câmbio";
                 case HouseholdExpenseType.Investment:
                     return "Investimentos";
+                case HouseholdExpenseType.Phone:
+                    return "Telefone";
+                case HouseholdExpenseType.Games:
+                    return "Jogos";
+                case HouseholdExpenseType.Donation:
+                    return "Doação";
                 case HouseholdExpenseType.Others:
                     return "Outros";
                 default:
@@ -75,7 +81,7 @@ namespace Cashflow.Api.Extensions
             switch (e)
             {
                 case EarningType.Monthy:
-                    return "Mensal";
+                    return "Recorrente";
                 case EarningType.Normal:
                     return "Normal";
                 default:
