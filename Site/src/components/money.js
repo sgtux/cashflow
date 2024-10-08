@@ -17,7 +17,7 @@ const getFont = props => {
 export const MoneySpan = styled.span`
     color: ${props => props.$gain ? Colors.AppGreen : Colors.AppRed};
     font-size: ${props => getFont(props)};
-    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-family: GraphikMedium;
     font-weight: ${props => props.$bold ? 'bold' : 'normal'};
     font-size: ${props => getFont(props)};
 `

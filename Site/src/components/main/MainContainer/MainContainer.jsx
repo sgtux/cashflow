@@ -8,7 +8,7 @@ const styles = {
     color: '#666',
     border: 'inset 2px #ccc',
     fontSize: '30px',
-    fontFamily: 'Roboto Helvetica Arial sans-serif',
+    fontFamily: 'GraphikRegular',
     textTransform: 'uppercase'
   },
   paper: {
@@ -17,7 +17,7 @@ const styles = {
     marginLeft: '20px',
     marginRight: '20px',
     padding: '10px',
-    fontFamily: 'Roboto Helvetica Arial sans-serif'
+    fontFamily: 'GraphikMedium'
   }
 }
 
@@ -25,7 +25,7 @@ export function MainContainer({ title, loading, children }) {
   return (
     <Paper style={styles.paper}>
       <fieldset style={styles.legend}>
-        <legend>{title}</legend>
+        <legend style={{ fontFamily: 'GraphikMedium' }}>{title}</legend>
         {
           loading &&
           <ContainerLoader>

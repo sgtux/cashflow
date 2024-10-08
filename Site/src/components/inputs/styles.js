@@ -8,7 +8,7 @@ export const InputMoney = styled(CurrencyInput)`
     border-bottom: solid 1px #666;
     margin: 10px;
     width: 100px;
-    font-family: Roboto Helvetica Arial sans-serif;
+    font-family: GraphikMedium;
 `
 
 const DefaultInput = styled.input`
@@ -18,7 +18,7 @@ const DefaultInput = styled.input`
     border-bottom: solid 1px #666;
     margin: 10px;
     width: 100px;
-    font-family: Roboto Helvetica Arial sans-serif;
+    font-family: GraphikMedium;
 `
 
 export const InputNumbers = DefaultInput
@@ -28,8 +28,8 @@ export const DatePickerInput = styled.input`
     border: 0;
     border-bottom: solid 1px #666;
     margin: 10px;
-    width: 80px;
-    font-family: Roboto Helvetica Arial sans-serif;
+    width: 100px;
+    font-family: GraphikMedium;
     font-size: 16px;
 `
 
@@ -39,13 +39,13 @@ export const InputText = styled.input`
     border-bottom: solid 1px #666;
     margin: 10px;
     width: 80px;
-    font-family: Roboto Helvetica Arial sans-serif;
+    font-family: GraphikMedium;
     font-size: 16px;
 `
 
 export const InputLabel = styled.span`
     color: #666;
-    font-family: Roboto Helvetica Arial sans-serif;
+    font-family: GraphikMedium;
     font-size: 16px;
 `
 

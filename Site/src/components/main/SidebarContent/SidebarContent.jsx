@@ -25,7 +25,7 @@ const styles = {
   },
   subMainText: {
     color: '#FFF',
-    fontFamily: 'Permanent Marker',
+    fontFamily: 'PermanentMarker',
     fontSize: '20px',
     textTransform: 'uppercase',
     marginLeft: 10

@@ -69,7 +69,7 @@ export function EditEarning({ editEarning, onClose, onSave }) {
             transitionDuration={250}
             TransitionComponent={Zoom}>
             <DialogContent>
-                <div style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: 14, color: '#666' }}>
+                <div style={{ fontFamily: 'GraphikRegular', fontSize: 14, color: '#666' }}>
                     <IconTextInput
                         label="Descrição"
                         value={description}
@@ -86,9 +86,9 @@ export function EditEarning({ editEarning, onClose, onSave }) {
                             onChangeValue={(event, value, maskedValue) => setValue(value)}
                             value={value} />
                     </div>
-                    <div>
+                    <div style={{marginTop: 20, marginBottom: 20}}>
                         <FormControl>
-                            <InputLabel htmlFor="select-tipo">Tipo</InputLabel>
+                            <InputLabel htmlFor="select-tipo">Tipo:</InputLabel>
                             <Select style={{ width: '200px' }} value={type || ''}
                                 onChange={e => setType(e.target.value)}>
                                 <MenuItem value={0}><span style={{ color: 'gray' }}>Selecione</span></MenuItem>

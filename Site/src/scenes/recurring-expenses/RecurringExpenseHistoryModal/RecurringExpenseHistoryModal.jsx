@@ -78,7 +78,7 @@ export function RecurringExpenseHistoryModal({ recurringExpense, onCancel, show,
             fullScreen={true}
             TransitionComponent={Zoom}>
             <DialogContent>
-                <div style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', minWidth: 500, minHeight: 340 }}>
+                <div style={{ fontFamily: 'GraphikRegular', minWidth: 500, minHeight: 340 }}>
                     <div>
                         {recurringExpense && recurringExpense.description} - {recurringExpense && toReal(recurringExpense.value)}
                     </div>

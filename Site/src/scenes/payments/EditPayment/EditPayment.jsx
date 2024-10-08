@@ -160,7 +160,7 @@ export function EditPayment() {
 
   return (
     <MainContainer title="Pagamento" loading={loading}>
-      <div style={{ textAlign: 'start', fontSize: 14, color: '#666', fontFamily: '"Roboto", "Helvetica", "Arial", "sans-serif"' }} >
+      <div style={{ textAlign: 'start', fontSize: 14, color: '#666', fontFamily: 'GraphikRegular' }} >
 
         <IconTextInput
           label="Descrição"

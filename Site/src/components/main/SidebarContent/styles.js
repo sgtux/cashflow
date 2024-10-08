@@ -15,7 +15,7 @@ export const MenuItemContainer = styled.div`
         transition: 400ms;
     }
     & > span {
-        font-family: 'Permanent Marker';
+        font-family: 'PermanentMarker';
         font-size: 20px;
         text-transform: uppercase;
         margin-left: 10px;
