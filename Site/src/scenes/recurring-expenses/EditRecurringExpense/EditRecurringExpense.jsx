@@ -79,7 +79,7 @@ export function EditRecurringExpense() {
 
     return (
         <MainContainer title="Despesa Recorrente" loading={loading}>
-            <div style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: 14, color: '#666' }}>
+            <div style={{ fontFamily: 'GraphikRegular', fontSize: 14, color: '#666' }}>
                 <IconTextInput
                     label="Descrição"
                     value={description}

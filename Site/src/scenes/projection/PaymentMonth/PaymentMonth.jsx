@@ -44,7 +44,7 @@ export function PaymentMonth({ paymentMonth }) {
                       </ImageListItem>
                       <ImageListItem cols={1}></ImageListItem>
                       <ImageListItem cols={1} style={{ textAlign: 'center' }}>
-                        <span style={{ color: 'gray', fontFamily: '"Roboto", "Helvetica", "Arial", "sans-serif"' }}>
+                        <span style={{ color: 'gray', fontFamily: 'GraphikRegular' }}>
                           {p.qtdInstallments ? `N°: ${p.number} - P: ${p.qtdPaidInstallments}/${p.qtdInstallments}` : ''}
                         </span>
                         {p.paidDate && <PaidSpan>PAGA</PaidSpan>}

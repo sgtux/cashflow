@@ -27,7 +27,7 @@ const styles = {
     color: '#666',
     marginTop: '25px',
     fontWeight: 'bold',
-    fontFamily: 'Arial'
+    fontFamily: 'GraphikRegular'
   }
 }
 

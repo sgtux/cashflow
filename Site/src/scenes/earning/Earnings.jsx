@@ -11,18 +11,16 @@ import {
 import {
     Delete as DeleteIcon,
     Edit as EditIcon,
-    AddCircle as AddCircleIcon,
     FileCopy as CopyIcon
 } from '@mui/icons-material'
 
 import { EditEarning } from './EditEarningModal/EditEarningModal'
 
-import { EarningTable, Container } from './styles'
-
 import { earningService } from '../../services'
 import { showGlobalLoader, hideGlobalLoader } from '../../store/actions'
 
 import { MainContainer, ConfirmModal } from '../../components/main'
+import { AddFloatingButton, MoneySpan } from '../../components'
 import { toReal, toast, dateToString, isSameMonth } from '../../helpers'
 
 export function Earnings() {
@@ -115,53 +113,32 @@ export function Earnings() {
                 </Select>
             </Paper>
 
-            <Container>
-                <EarningTable>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Id</th>
-                                <th>Descrição</th>
-                                <th>Valor</th>
-                                <th>Data</th>
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {earnings.map((p, i) =>
-                                <tr key={i}>
-                                    <td>{p.id}</td>
-                                    <td>{p.description} {p.type !== 2 ? `(${p.typeDescription})` : ''}</td>
-                                    <td>{toReal(p.value)}</td>
-                                    <td>{dateToString(p.date)}</td>
-                                    <td>
-                                        {!isSameMonth(new Date(), p.date) &&
-                                            <Tooltip title="Copiar para o mês atual">
-                                                <IconButton onClick={() => copyEarning(p)} color="primary" aria-label="Edit">
-                                                    <CopyIcon />
-                                                </IconButton>
-                                            </Tooltip>
-                                        }
-                                        <Tooltip title="Editar">
-                                            <IconButton onClick={() => setEditEarning(p)} color="primary" aria-label="Edit">
-                                                <EditIcon />
-                                            </IconButton>
-                                        </Tooltip>
-                                        <Tooltip title="Remover">
-                                            <IconButton onClick={() => setRemoveItem(p)} color="secondary" aria-label="Delete">
-                                                <DeleteIcon />
-                                            </IconButton>
-                                        </Tooltip>
-                                    </td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
-                </EarningTable>
-                <IconButton onClick={() => setEditEarning({})} variant="contained" color="primary">
-                    <AddCircleIcon />
-                </IconButton>
-            </Container>
+            {earnings.map((p, i) =>
+                <Paper key={i} style={{ padding: 10, margin: 10, textAlign: 'center', fontFamily: 'GraphikRegular', fontSize: 14 }}>
+                    <MoneySpan style={{ fontSize: 16 }} $gain>{toReal(p.value)}</MoneySpan>
+                    <span> - {p.description} {p.type !== 2 ? `(${p.typeDescription}) - ` : ' - '}</span>
+                    <span>{dateToString(p.date)}</span>
+                    <span>
+                        {!isSameMonth(new Date(), p.date) &&
+                            <Tooltip title="Copiar para o mês atual">
+                                <IconButton onClick={() => copyEarning(p)} color="primary" aria-label="Edit">
+                                    <CopyIcon />
+                                </IconButton>
+                            </Tooltip>
+                        }
+                        <Tooltip title="Editar">
+                            <IconButton onClick={() => setEditEarning(p)} color="primary" aria-label="Edit">
+                                <EditIcon />
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Remover">
+                            <IconButton onClick={() => setRemoveItem(p)} color="secondary" aria-label="Delete">
+                                <DeleteIcon />
+                            </IconButton>
+                        </Tooltip>
+                    </span>
+                </Paper>
+            )}
             <ConfirmModal show={!!removeItem}
                 onClose={() => setRemoveItem(null)}
                 onConfirm={() => remove()}
@@ -169,6 +146,7 @@ export function Earnings() {
             <EditEarning editEarning={editEarning}
                 onSave={() => { setEditEarning(null); refresh() }}
                 onClose={() => setEditEarning(null)} />
+            <AddFloatingButton onClick={() => setEditEarning({})} />
         </MainContainer>
     )
 }

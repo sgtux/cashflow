@@ -16,7 +16,7 @@ const styles = {
     flexGrow: 2,
     textTransform: 'uppercase',
     color: '#FFF',
-    fontFamily: 'Permanent Marker',
+    fontFamily: 'PermanentMarker',
     fontSize: '30px'
   },
   menuButton: {

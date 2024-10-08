@@ -46,7 +46,10 @@ module.exports = {
     }),
     new CopyPlugin({
       patterns: [
-        { from: path.join(__dirname, 'public', 'donald-loader.gif'), to: outputPath }
+        { from: path.join(__dirname, 'public', 'donald-loader.gif'), to: outputPath },
+        { from: path.join(__dirname, 'public', 'Graphik-Medium.ttf'), to: outputPath },
+        { from: path.join(__dirname, 'public', 'Graphik-Regular.ttf'), to: outputPath },
+        { from: path.join(__dirname, 'public', 'Permanent-Marker.woff2'), to: outputPath }
       ]
     })
   ],

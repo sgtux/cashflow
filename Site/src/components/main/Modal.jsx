@@ -24,7 +24,7 @@ const styles = {
     color: 'rgba(0, 0, 0, 0.54)',
     fontSize: '20px',
     fontWeight: 'bold',
-    fontFamily: 'sans-serif',
+    fontFamily: 'GraphikRegular',
     textAlign: 'center'
   }
 }

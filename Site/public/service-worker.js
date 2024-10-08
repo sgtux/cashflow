@@ -1,1 +1,0 @@
-const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`

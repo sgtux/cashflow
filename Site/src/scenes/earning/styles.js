@@ -14,10 +14,14 @@ export const EarningTable = styled.div`
         width: 100%;
     }
     & thead th {
+        font-family: GraphikMedium;
         position: sticky;
         top: 0;
         background-color: white;
         padding-top: 4px;
+    }
+    & tbody td {
+        font-family: GraphikRegular;
     }
     & tr:nth-child(even) {
         background-color: #ddd;

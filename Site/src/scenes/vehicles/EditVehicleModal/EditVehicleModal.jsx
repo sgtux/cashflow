@@ -105,7 +105,7 @@ export function EditVehicleModal({ vehicle, onCancel }) {
             fullScreen={true}
             TransitionComponent={Zoom}>
             <DialogContent>
-                <div style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', minWidth: 500, minHeight: 340 }}>
+                <div style={{ fontFamily: 'GraphikRegular', minWidth: 500, minHeight: 340 }}>
                     <h3 style={{ padding: 10, backgroundColor: '#ccc' }}>{vehicle && vehicle.description} (Gastos em Combustível)</h3>
                     <FuelExpensesTable>
                         <table>

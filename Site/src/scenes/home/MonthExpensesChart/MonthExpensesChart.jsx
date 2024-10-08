@@ -32,7 +32,7 @@ const renderCustomizedLabel = ({
         <text
             x={x}
             y={y}
-            style={{ fontSize: 16, fontFamily: 'sans-serif' }}
+            style={{ fontSize: 16, fontFamily: 'GraphikRegular' }}
             fill="white"
             textAnchor={x > cx ? "start" : "end"}
             dominantBaseline="central"
@@ -44,7 +44,7 @@ const renderCustomizedLabel = ({
 
 function Legend({ item }) {
     return (
-        <div style={{ color: COLORS[item.index], fontSize: 14, fontFamily: 'sans-serif' }}>
+        <div style={{ color: COLORS[item.index], fontSize: 14, fontFamily: 'GraphikRegular' }}>
             <span>{item.description}: </span>
             <span style={{ fontWeight: 'bold' }}>{toReal(item.value)}</span>
         </div>

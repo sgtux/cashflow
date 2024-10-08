@@ -8,7 +8,6 @@ import { MainComponent } from './components/main/MainComponent'
 import { AppTheme } from './helpers/themes'
 import { Store } from './store'
 
-import './App.css'
 import 'react-toastify/dist/ReactToastify.css'
 import 'react-datepicker/dist/react-datepicker.css'
 
