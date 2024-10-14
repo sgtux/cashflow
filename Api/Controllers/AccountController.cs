@@ -108,13 +108,14 @@ namespace Cashflow.Api.Controllers
                     { ClaimTypes.Sid, result.Data.Id.ToString() }
                 };
 
-                var token = new AccountResultModel()
+                var accountResultModel = new AccountResultModel()
                 {
                     Id = result.Data.Id,
                     Email = result.Data.Email,
-                    Token = new JwtTokenBuilder(_config.SecretJwtKey, _config.CookieExpiresInMinutes, claims).Build().Value
+                    Token = new JwtTokenBuilder(_config.SecretJwtKey, _config.CookieExpiresInMinutes, claims).Build().Value,
+                    Picture = googleUserModel.picture
                 };
-                return Ok(new ResultDataModel<AccountResultModel>() { Data = token });
+                return Ok(new ResultDataModel<AccountResultModel>() { Data = accountResultModel });
             }
         }
     }

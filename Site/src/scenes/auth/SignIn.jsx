@@ -11,7 +11,7 @@ import {
 
 import IconTextInput from '../../components/main/IconTextInput'
 import { userChanged, showGlobalLoader, hideGlobalLoader } from '../../store/actions'
-import { authService } from '../../services'
+import { StorageService, authService } from '../../services'
 
 const styles = {
   Card: {
@@ -92,6 +92,7 @@ export function SignInScreen({ changeScene }) {
     try {
       dispatch(showGlobalLoader())
       const user = await authService.googleSignIn(response.credential)
+      user.picture = StorageService.getPicture()
       dispatch(userChanged(user))
     } catch (ex) {
       console.log(ex)

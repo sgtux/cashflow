@@ -1,12 +1,11 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { AppBar, Toolbar, Button, Typography, IconButton } from '@mui/material'
 import * as Icons from '@mui/icons-material'
-import { Link } from 'react-router-dom'
 
 import { userChanged } from '../../store/actions'
 import { authService } from '../../services'
-import { UsernameSpan } from './styles'
+import { UserPicture, ToolbarMenuContainer } from './styles'
 
 const styles = {
   root: {
@@ -26,6 +25,15 @@ const styles = {
 }
 
 export function AppToolbar({ openSideBar, dockedMenu }) {
+
+  const [showMenu, setShowMenu] = useState(false)
+
+  useEffect(() => {
+    document.body.addEventListener('click', (e) => {
+      if (e.target.id !== 'user-picture')
+        setShowMenu(false)
+    })
+  }, [])
 
   const dispatch = useDispatch()
 
@@ -52,10 +60,11 @@ export function AppToolbar({ openSideBar, dockedMenu }) {
           <Typography variant="h2" color="inherit" style={styles.grow}>
             Fluxo de Caixa (R$)
           </Typography>
-          <Link to="/account"><UsernameSpan>{appState.user.email}</UsernameSpan></Link>
-          <Button color="secondary" onClick={() => logout()}>
-            <Icons.ExitToApp style={{ color: '#FFF' }} />
-          </Button>
+          <UserPicture id="user-picture" src={appState.user.picture} onClick={e => setShowMenu(!showMenu)} />
+          <ToolbarMenuContainer show={showMenu}>
+            <Button onClick={() => window.location = '#/account'}>Editar Conta</Button>
+            <Button onClick={() => logout()}>Sair</Button>
+          </ToolbarMenuContainer>
         </Toolbar>
       </AppBar>
     </div>

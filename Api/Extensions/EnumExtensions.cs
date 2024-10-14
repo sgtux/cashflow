@@ -30,7 +30,7 @@ namespace Cashflow.Api.Extensions
             switch (e)
             {
                 case HouseholdExpenseType.Food:
-                    return "Comida";
+                    return "Alimentação";
                 case HouseholdExpenseType.Market:
                     return "Mercado";
                 case HouseholdExpenseType.Snack:
@@ -69,6 +69,8 @@ namespace Cashflow.Api.Extensions
                     return "Jogos";
                 case HouseholdExpenseType.Donation:
                     return "Doação";
+                case HouseholdExpenseType.Streams:
+                    return "Streams";
                 case HouseholdExpenseType.Others:
                     return "Outros";
                 default:
