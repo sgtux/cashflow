@@ -1,4 +1,5 @@
 export const StorageKeys = {
   USER: '@CASHFLOW_USER',
-  TOKEN: '@CASHFLOW_TOKEN'
+  TOKEN: '@CASHFLOW_TOKEN',
+  PICTURE: '@CASHFLOW_PICTURE'
 }

@@ -8,9 +8,15 @@ const getToken = () => localStorage.getItem(StorageKeys.TOKEN)
 
 const setToken = token => token ? localStorage.setItem(StorageKeys.TOKEN, token) : localStorage.removeItem(StorageKeys.TOKEN)
 
+const getPicture = () => localStorage.getItem(StorageKeys.PICTURE)
+
+const setPicture = picture => picture ? localStorage.setItem(StorageKeys.PICTURE, picture) : localStorage.removeItem(StorageKeys.StorageKeys.PICTURE)
+
 export const StorageService = {
     getUser,
     setUser,
     getToken,
-    setToken
+    setToken,
+    getPicture,
+    setPicture
 }

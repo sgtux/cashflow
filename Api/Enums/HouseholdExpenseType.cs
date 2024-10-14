@@ -43,5 +43,7 @@ namespace Cashflow.Api.Enums
         Others = 20,
 
         Donation = 21,
+
+        Streams = 22,
     }
 }
