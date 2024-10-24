@@ -10,7 +10,7 @@ namespace Cashflow.Tests.Config
 
         public string SecretJwtKey => "!@#$TestSecretKey!WebApi!@#$%&*()";
 
-        public bool IsDevelopment => true;
+        public bool IsDevelopment => false;
 
         public string GoogleOauthUrl => "https://oauth2.googleapis.com";
 

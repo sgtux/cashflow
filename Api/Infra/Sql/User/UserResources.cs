@@ -8,6 +8,6 @@ namespace Cashflow.Api.Infra.Sql.User
 
         public static ResourceBuilder Insert => new ResourceBuilder("User.Insert.sql");
 
-        public static ResourceBuilder UpdateSpendingCeiling => new ResourceBuilder("User.UpdateSpendingCeiling.sql");
+        public static ResourceBuilder Update => new ResourceBuilder("User.Update.sql");
     }
 }

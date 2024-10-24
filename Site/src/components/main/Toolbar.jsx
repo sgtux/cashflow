@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { AppBar, Toolbar, Button, Typography, IconButton } from '@mui/material'
 import * as Icons from '@mui/icons-material'
 
-import { userChanged } from '../../store/actions'
+import { userChanged, menuChanged } from '../../store/actions'
 import { authService } from '../../services'
 import { UserPicture, ToolbarMenuContainer } from './styles'
 
@@ -44,6 +44,11 @@ export function AppToolbar({ openSideBar, dockedMenu }) {
     dispatch(userChanged(null))
   }
 
+  function editAccount() {
+    dispatch(menuChanged())
+    window.location = '#/account'
+  }
+
   return (
     <div style={styles.root} >
       <AppBar position='static' color='primary'>
@@ -62,7 +67,7 @@ export function AppToolbar({ openSideBar, dockedMenu }) {
           </Typography>
           <UserPicture id="user-picture" src={appState.user.picture} onClick={e => setShowMenu(!showMenu)} />
           <ToolbarMenuContainer show={showMenu}>
-            <Button onClick={() => window.location = '#/account'}>Editar Conta</Button>
+            <Button onClick={() => editAccount()}>Editar Conta</Button>
             <Button onClick={() => logout()}>Sair</Button>
           </ToolbarMenuContainer>
         </Toolbar>

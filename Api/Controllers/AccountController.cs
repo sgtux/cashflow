@@ -63,12 +63,13 @@ namespace Cashflow.Api.Controllers
         }
 
         [Authorize]
-        [HttpPut("SpendingCeiling")]
+        [HttpPut]
         public async Task<IActionResult> Put([FromBody] User user)
         {
             if (user is null)
                 return HandleUnprocessableEntity();
-            return HandleResult(await _service.UpdateSpendingCeiling(UserId, user.SpendingCeiling));
+                user.Id = UserId;
+            return HandleResult(await _service.Update(user));
         }
 
 

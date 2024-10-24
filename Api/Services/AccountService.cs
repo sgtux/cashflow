@@ -14,15 +14,12 @@ namespace Cashflow.Api.Services
 
         private readonly AppCache _appCache;
 
-        private readonly IAppConfig _config;
-
         private readonly ISystemParameterRepository _systemParameterRepository;
 
-        public AccountService(IUserRepository repository, AppCache appCache, IAppConfig config, ISystemParameterRepository systemParameterRepository)
+        public AccountService(IUserRepository repository, AppCache appCache, ISystemParameterRepository systemParameterRepository)
         {
             _userRepository = repository;
             _appCache = appCache;
-            _config = config;
             _systemParameterRepository = systemParameterRepository;
         }
 
@@ -109,15 +106,19 @@ namespace Cashflow.Api.Services
             return result;
         }
 
-        public async Task<ResultModel> UpdateSpendingCeiling(int userId, decimal spendingCeiling)
+        public async Task<ResultDataModel<UserDataModel>> Update(User user)
         {
-            var result = new ResultModel();
-            if (spendingCeiling < 0 || spendingCeiling > 99999)
-                result.AddNotification("Valor inválido.");
+            var result = new ResultDataModel<UserDataModel>(new UserDataModel(user));
+            const int minValue = 0;
+            const int maxValue = 99999;
+            if (user.ExpenseLimit < minValue || user.ExpenseLimit > maxValue)
+                result.AddNotification(ValidatorMessages.BetweenValue("ExpenseLimit", minValue, maxValue));
+            else if (user.FuelExpenseLimit < minValue || user.FuelExpenseLimit > maxValue)
+                result.AddNotification(ValidatorMessages.BetweenValue("FuelExpenseLimit", minValue, maxValue));
             else
             {
-                await _userRepository.UpdateSpendingCeiling(userId, spendingCeiling);
-                _appCache.Clear(userId);
+                await _userRepository.Update(user);
+                _appCache.Clear(user.Id);
             }
             return result;
         }
