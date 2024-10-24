@@ -10,13 +10,16 @@ namespace Cashflow.Api.Models
         {
             Id = user.Id;
             Email = user.Email;
-            SpendingCeiling = user.SpendingCeiling;
+            ExpenseLimit = user.ExpenseLimit;
+            FuelExpenseLimit = user.FuelExpenseLimit;
         }
 
         public int Id { get; set; }
 
         public string Email { get; set; }
 
-        public decimal SpendingCeiling { get; set; }
+        public decimal ExpenseLimit { get; set; }
+
+        public decimal FuelExpenseLimit { get; set; }
     }
 }

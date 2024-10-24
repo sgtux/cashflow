@@ -23,7 +23,7 @@
     <EmbeddedResource Include="Infra/Sql/User/GetByEmail.sql" />
     <EmbeddedResource Include="Infra/Sql/User/GetById.sql" />
     <EmbeddedResource Include="Infra/Sql/User/Insert.sql" />
-    <EmbeddedResource Include="Infra/Sql/User/UpdateSpendingCeiling.sql" />
+    <EmbeddedResource Include="Infra/Sql/User/Update.sql" />
 
     <EmbeddedResource Include="Infra/Sql/Earning/Insert.sql" />
     <EmbeddedResource Include="Infra/Sql/Earning/Delete.sql" />

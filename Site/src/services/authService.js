@@ -26,8 +26,7 @@ const createAccount = account =>
 
 const getAccount = () => httpService.get('/account')
 
-const updateSpendingCeiling = spendingCeiling =>
-  httpService.put('/account/SpendingCeiling', { spendingCeiling })
+const update = account => httpService.put('/account', account)
 
 const logout = () => StorageService.setToken(null)
 
@@ -36,7 +35,7 @@ export default {
   login,
   createAccount,
   getAccount,
-  updateSpendingCeiling,
+  update,
   getGoogleClientId,
   googleSignIn
 }

@@ -12,7 +12,8 @@ namespace Cashflow.Tests.Mocks.Database.Tables
                 .WithColumn("Email").AsString(255).NotNullable()
                 .WithColumn("Password").AsString(255).NotNullable()
                 .WithColumn("CreatedAt").AsDateTime().NotNullable()
-                .WithColumn("SpendingCeiling").AsDecimal().Nullable();
+                .WithColumn("ExpenseLimit").AsDecimal().Nullable()
+                .WithColumn("FuelExpenseLimit").AsDecimal().Nullable();
         }
 
         public override void Down()

@@ -189,7 +189,7 @@ namespace Cashflow.Api.Services
         {
             var fromDate = CurrentDate.AddMonths(-3).FixFirstDayInMonth();
             var allHouseholdExpenses = await _householdExpenseRepository.GetSome(new BaseFilter() { UserId = filter.UserId, StartDate = fromDate });
-            var spendingCeiling = (await _userRepository.GetById(filter.UserId)).SpendingCeiling;
+            var expenseLimit = (await _userRepository.GetById(filter.UserId)).ExpenseLimit;
 
             foreach (var date in dates)
             {
@@ -198,7 +198,7 @@ namespace Cashflow.Api.Services
                 if (householdExpenses.Any())
                     list.Add(new PaymentProjectionModel("Despesas Domésticas", date, householdExpenses.Sum(p => p.Value), MovementProjectionType.HouseholdExpense));
                 else
-                    list.Add(new PaymentProjectionModel("Despesas Domésticas (Desejado)", date, spendingCeiling, MovementProjectionType.HouseholdExpense));
+                    list.Add(new PaymentProjectionModel("Despesas Domésticas (Desejado)", date, expenseLimit, MovementProjectionType.HouseholdExpense));
             }
         }
 

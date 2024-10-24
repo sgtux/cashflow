@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Models;
 using Cashflow.Tests.Tests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -79,6 +80,71 @@ namespace Cashflow.Tests
         {
             var result = await Get<UserDataModel>("/api/account", 3);
             Assert.AreEqual("User3@mail.com", result.Data.Email);
+        }
+
+        [TestMethod]
+        public async Task UpdateWithMinExpenseLimitError()
+        {
+            var model = new User()
+            {
+                ExpenseLimit = -1,
+                FuelExpenseLimit = 99
+            };
+            var result = await Put("/api/account", model, 3);
+            TestErrors(model, result, "O valor do campo 'ExpenseLimit' deve estar entre 0 e 99999.");
+        }
+
+        [TestMethod]
+        public async Task UpdateWithMaxExpenseLimitError()
+        {
+            var model = new User()
+            {
+                ExpenseLimit = 999999,
+                FuelExpenseLimit = 99
+            };
+            var result = await Put("/api/account", model, 3);
+            TestErrors(model, result, "O valor do campo 'ExpenseLimit' deve estar entre 0 e 99999.");
+        }
+
+        [TestMethod]
+        public async Task UpdateWithMinFuelExpenseLimitError()
+        {
+            var model = new User()
+            {
+                ExpenseLimit = 99,
+                FuelExpenseLimit = -1
+            };
+            var result = await Put("/api/account", model, 3);
+            TestErrors(model, result, "O valor do campo 'FuelExpenseLimit' deve estar entre 0 e 99999.");
+        }
+
+        [TestMethod]
+        public async Task UpdateWithMaxFuelExpenseLimitError()
+        {
+            var model = new User()
+            {
+                ExpenseLimit = 99,
+                FuelExpenseLimit = 999999
+            };
+            var result = await Put("/api/account", model, 3);
+            TestErrors(model, result, "O valor do campo 'FuelExpenseLimit' deve estar entre 0 e 99999.");
+        }
+
+        [TestMethod]
+        public async Task UpdateOk()
+        {
+            var model = new User()
+            {
+                ExpenseLimit = 333.33m,
+                FuelExpenseLimit = 444.44m
+            };
+            var result = await Put("/api/account", model, 3);
+
+            TestErrors(model, result);
+
+            var userResult = await Get<UserDataModel>("/api/account", 3);
+            Assert.AreEqual(model.ExpenseLimit, userResult.Data.ExpenseLimit);
+            Assert.AreEqual(model.FuelExpenseLimit, userResult.Data.FuelExpenseLimit);
         }
     }
 }

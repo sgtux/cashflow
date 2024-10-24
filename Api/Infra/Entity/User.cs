@@ -10,7 +10,9 @@ namespace Cashflow.Api.Infra.Entity
 
         public string Password { get; set; }
 
-        public decimal SpendingCeiling { get; set; }
+        public decimal ExpenseLimit { get; set; }
+
+        public decimal FuelExpenseLimit { get; set; }
 
         public DateTime CreatedAt { get; set; }
     }

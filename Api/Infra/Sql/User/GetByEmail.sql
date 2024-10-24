@@ -3,6 +3,7 @@ SELECT
     Email,
     Password,
     CreatedAt,
-    SpendingCeiling
+    ExpenseLimit,
+    FuelExpenseLimit
 FROM [User]
 WHERE Email = @Email
