@@ -9,7 +9,8 @@ export {
   fromReal,
   debounce,
   ellipsisText,
-  getMonthName
+  getMonthName,
+  toThousandFormat
 } from './utils'
 
 export { default as toast } from './toast'

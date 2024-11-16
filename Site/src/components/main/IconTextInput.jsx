@@ -20,7 +20,6 @@ export default function IconTextInput(props) {
 	useEffect(() => {
 		setHasError(props.required)
 		setText(props.defaultValue || '')
-		// this.onChange(this.props.value || this.state.text)		
 	}, [])
 
 	useEffect(() => setText(props.value), [props.value])

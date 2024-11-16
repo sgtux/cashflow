@@ -22,6 +22,6 @@ FROM
 WHERE
     UserId = @UserId
 ORDER BY
-    v.Id,
-    f.Date,
-    f.Miliage
+    v.Id ASC,
+    f.Date DESC,
+    f.Miliage ASC

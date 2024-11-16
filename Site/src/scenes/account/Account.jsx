@@ -3,12 +3,12 @@ import React, { useState, useEffect } from 'react'
 import { Button } from '@mui/material'
 
 import { MainContainer } from '../../components'
-import { IconTextInput } from '../../components/main'
-
 import { InputMoney } from '../../components/inputs'
 
 import { authService } from '../../services'
 import { toReal, fromReal } from '../../helpers'
+
+import { EmailSpan } from './styles'
 
 export function Account() {
 
@@ -38,11 +38,8 @@ export function Account() {
     return (
         <MainContainer title="Conta" loading={loading}>
             <div>
-                <IconTextInput
-                    label="Email"
-                    value={email}
-                    disabled
-                />
+                <span style={{ fontSize: 16 }}>Email:</span>
+                <EmailSpan>{email}</EmailSpan>
             </div>
             <div style={{ marginTop: 20 }}>
                 <span style={{ fontSize: 16 }}>Limite para Despesas:</span>

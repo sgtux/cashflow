@@ -66,7 +66,7 @@ export function AppToolbar({ openSideBar, dockedMenu }) {
             Fluxo de Caixa (R$)
           </Typography>
           <UserPicture id="user-picture" src={appState.user.picture} onClick={e => setShowMenu(!showMenu)} />
-          <ToolbarMenuContainer show={showMenu}>
+          <ToolbarMenuContainer $show={showMenu}>
             <Button onClick={() => editAccount()}>Editar Conta</Button>
             <Button onClick={() => logout()}>Sair</Button>
           </ToolbarMenuContainer>

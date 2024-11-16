@@ -18,7 +18,7 @@ export const ToolbarMenuContainer = styled.div`
     top: 70px;
     right: 6px;
     width: 150px;
-    height: ${props => props.show ? '75px' : '0'};
+    height: ${props => props.$show ? '75px' : '0'};
     transition: 300ms;
     overflow: hidden;
     border-radius: 4px;

@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import {List, Divider} from '@mui/material'
+import { List, Divider } from '@mui/material'
 import { Link } from 'react-router-dom'
 
 import { MenuItemContainer } from './styles'

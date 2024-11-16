@@ -11,4 +11,4 @@ SELECT
 FROM Vehicle v
 LEFT JOIN FuelExpense f ON v.Id = f.VehicleId
 WHERE v.Id = @Id
-ORDER BY f.Date, f.Miliage
+ORDER BY f.Date DESC, f.Miliage ASC

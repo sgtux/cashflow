@@ -33,6 +33,10 @@ export const toReal = val => {
     .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')}`
 }
 
+export const toThousandFormat = number => {
+  return !number || isNaN(number) ? number : number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
+
 export const fromReal = val => typeof (val) === 'string' ? Number((val || '').replace(/[^0-9,]/g, '').replace(',', '.') || 0) : val
 
 export const isSameMonth = (d1, d2) => {
