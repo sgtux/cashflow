@@ -14,6 +14,8 @@ namespace Cashflow.Api.Infra.Entity
 
         public List<FuelExpense> FuelExpenses { get; set; }
 
+        public List<FuelExpense> FuelExpensesLast10 => HasExpenses ? FuelExpenses.OrderByDescending(p => p.Date).Take(10).ToList() : new List<FuelExpense>();
+
         public decimal MiliageTraveled => HasExpenses ? FuelExpenses.Max(p => p.Miliage) - FuelExpenses.Min(p => p.Miliage) : 0;
 
         public decimal MiliagePerLiter

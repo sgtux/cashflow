@@ -29,7 +29,7 @@ namespace Cashflow.Api.Shared
             try
             {
                 if (appConfig.IsDevelopment)
-                    Thread.Sleep(1000);
+                    Thread.Sleep(500);
                 await _next(context);
                 databaseContext.Commit();
             }
