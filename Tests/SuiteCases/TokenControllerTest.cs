@@ -6,7 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Cashflow.Tests
 {
-    [TestCategory("TokenTest")]
+    [TestCategory("Token")]
     [TestClass]
     public class TokenControllerTest : BaseControllerTest
     {

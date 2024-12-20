@@ -6,6 +6,8 @@ using Cashflow.Api.Shared;
 using Cashflow.Api.Contracts;
 using Cashflow.Api;
 using Cashflow.Tests.Mocks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Cashflow.Api.Auth;
 
 namespace Cashflow.Tests.Config
 {
@@ -18,7 +20,7 @@ namespace Cashflow.Tests.Config
             var appConfig = new TestAppConfig();
 
             services.AddMvc().AddApplicationPart(typeof(Startup).Assembly).AddControllersAsServices();
-            services.ConfigureAuthentication(appConfig.SecretJwtKey);
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme);
             services.AddRouting();
             services.AddSingleton<IAppConfig>(appConfig);
             services.ConfigureServices();
@@ -36,6 +38,7 @@ namespace Cashflow.Tests.Config
             app.UseStaticFiles();
             app.UseRouting();
 
+            app.UseMiddleware(typeof(AuthenticationMiddleware));
             app.UseAuthentication();
             app.UseAuthorization();
 
