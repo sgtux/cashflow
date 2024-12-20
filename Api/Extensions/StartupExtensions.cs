@@ -1,12 +1,9 @@
-using System.Text;
 using Cashflow.Api.Contracts;
 using Cashflow.Api.Infra.Repository;
 using Cashflow.Api.Services;
 using Cashflow.Api.Shared;
 using Cashflow.Api.Shared.Cache;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Cashflow.Api.Extensions
 {
@@ -53,22 +50,6 @@ namespace Cashflow.Api.Extensions
         public static void ConfigureDatabaseContext(this IServiceCollection services)
         {
             services.AddScoped<IDatabaseContext, DatabaseContext>();
-        }
-
-        public static void ConfigureAuthentication(this IServiceCollection services, string jwtKey)
-        {
-            var secretKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtKey));
-            var tokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateLifetime = true,
-                ValidateAudience = false,
-                ValidateIssuer = false,
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = secretKey
-            };
-
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options => options.TokenValidationParameters = tokenValidationParameters);
         }
     }
 }

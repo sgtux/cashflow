@@ -1,6 +1,8 @@
-﻿using Cashflow.Api.Contracts;
+﻿using Cashflow.Api.Auth;
+using Cashflow.Api.Contracts;
 using Cashflow.Api.Extensions;
 using Cashflow.Api.Shared;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -14,8 +16,8 @@ namespace Cashflow.Api
         public void ConfigureServices(IServiceCollection services)
         {
             var appConfig = new AppConfig();
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme);
             services.AddControllers();
-            services.ConfigureAuthentication(appConfig.SecretJwtKey);
             services.AddRouting();
             services.AddSingleton<IAppConfig>(appConfig);
             services.ConfigureServices();
@@ -30,9 +32,11 @@ namespace Cashflow.Api
 
             app.UseHttpsRedirection();
             app.UseDefaultFiles();
-            app.UseStaticFiles();
             app.UseRouting();
 
+            app.UseMiddleware(typeof(AuthenticationMiddleware));
+            
+            app.UseStaticFiles();
             app.UseAuthentication();
             app.UseAuthorization();
 

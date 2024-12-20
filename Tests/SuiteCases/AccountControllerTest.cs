@@ -9,6 +9,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Cashflow.Tests
 {
     [TestClass]
+    [TestCategory("Account")]
     public class AccountTest : BaseControllerTest
     {
         [TestMethod]
