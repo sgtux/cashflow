@@ -33,7 +33,7 @@ namespace Cashflow.Tests
         {
             var model = new Earning()
             {
-                Date = default(System.DateTime),
+                Date = default,
                 Value = 1000,
                 UserId = 1,
                 Description = "Salário"
@@ -46,7 +46,7 @@ namespace Cashflow.Tests
         {
             var model = new Earning()
             {
-                Date = default(System.DateTime),
+                Date = default,
                 Value = 1000,
                 UserId = 1
             };
@@ -120,7 +120,7 @@ namespace Cashflow.Tests
         {
             var model = new Earning()
             {
-                Date = default(System.DateTime),
+                Date = default,
                 Value = 1000,
                 UserId = 1,
                 Id = 2,

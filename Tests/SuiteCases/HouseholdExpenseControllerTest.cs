@@ -102,6 +102,15 @@ namespace Cashflow.Tests
         }
 
         [TestMethod]
+        public async Task UpdateWithInvalidCreditCard()
+        {
+            var model = DefaultHouseholdExpense;
+            model.CreditCardId = 99;
+            var result = await Put("/api/HouseholdExpense", model, model.UserId);
+            TestErrors(model, result, "Cartão de Crédito não encontrado(a).");
+        }
+
+        [TestMethod]
         public async Task UpdateOk()
         {
             var model = DefaultHouseholdExpense;

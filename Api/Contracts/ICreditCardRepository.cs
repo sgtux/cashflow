@@ -6,5 +6,7 @@ namespace Cashflow.Api.Contracts
     public interface ICreditCardRepository : IRepository<CreditCard>
     {
         Task<bool> HasPayments(int cardId);
+
+        Task<bool> HasHouseholdExpenses(int cardId);
     }
 }

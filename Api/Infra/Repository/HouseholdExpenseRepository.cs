@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Cashflow.Api.Contracts;
 using Cashflow.Api.Infra.Entity;
@@ -21,9 +22,21 @@ namespace Cashflow.Api.Infra.Repository
 
         public Task Add(HouseholdExpense t) => Execute(HouseholdExpenseResources.Insert, t);
 
-        public Task<IEnumerable<HouseholdExpense>> GetSome(BaseFilter filter) => Query(HouseholdExpenseResources.Some, filter);
+        public async Task<IEnumerable<HouseholdExpense>> GetSome(BaseFilter filter)
+        {
+            var data = await Query<dynamic>(HouseholdExpenseResources.Some, filter);
+            Slapper.AutoMapper.Configuration.AddIdentifiers(typeof(HouseholdExpense), new List<string> { "Id" });
+            Slapper.AutoMapper.Configuration.AddIdentifiers(typeof(CreditCard), new List<string> { "Id" });
+            return Slapper.AutoMapper.MapDynamic<HouseholdExpense>(data);
+        }
 
-        public Task<HouseholdExpense> GetById(long id) => FirstOrDefault(HouseholdExpenseResources.ById, new { Id = id });
+        public async Task<HouseholdExpense> GetById(long id)
+        {
+            var data = await Query<dynamic>(HouseholdExpenseResources.ById, new { Id = id });
+            Slapper.AutoMapper.Configuration.AddIdentifiers(typeof(HouseholdExpense), new List<string> { "Id" });
+            Slapper.AutoMapper.Configuration.AddIdentifiers(typeof(CreditCard), new List<string> { "Id" });
+            return Slapper.AutoMapper.MapDynamic<HouseholdExpense>(data).FirstOrDefault();
+        }
 
         public Task Remove(long id) => Execute(HouseholdExpenseResources.Delete, new { Id = id });
 

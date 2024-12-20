@@ -68,7 +68,9 @@ namespace Cashflow.Api.Validators
 
         public class CreditCardMessages
         {
-            public string BindedWithPayments = "Este cartão está vinculado à algum pagamento e não pode ser removido.";
+            public string BindedWithPayments = "Este cartão está vinculado à algum Parcelamento e não pode ser removido.";
+
+            public string BindedHouseholdExpense = "Este cartão está vinculado à alguma Despesa e não pode ser removido.";
         }
 
         public class SalaryMessages

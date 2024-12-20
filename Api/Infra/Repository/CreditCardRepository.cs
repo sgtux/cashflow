@@ -19,10 +19,9 @@ namespace Cashflow.Api.Infra.Repository
 
         public Task<IEnumerable<CreditCard>> GetSome(BaseFilter filter) => Query(CreditCardResources.ByUser, filter);
 
-        public async Task<bool> HasPayments(int cardId)
-        {
-            return await ExecuteScalar<int>(CreditCardResources.HasPayments, new { Id = cardId }) > 0;
-        }
+        public async Task<bool> HasPayments(int cardId) => await ExecuteScalar<int>(CreditCardResources.HasPayments, new { Id = cardId }) > 0;
+
+        public async Task<bool> HasHouseholdExpenses(int cardId) => await ExecuteScalar<int>(CreditCardResources.HasHouseholdExpenses, new { Id = cardId }) > 0;
 
         public Task Remove(long id) => Execute(CreditCardResources.Delete, new { Id = id });
 

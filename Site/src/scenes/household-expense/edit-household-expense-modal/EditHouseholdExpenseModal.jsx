@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import DatePicker from 'react-datepicker'
 import ptBr from 'date-fns/locale/pt-BR'
+import { useDispatch } from 'react-redux'
 
 import {
     TextField,
@@ -17,7 +18,8 @@ import {
 import { InputMoney, DatePickerContainer, DatePickerInput } from '../../../components/inputs'
 import { toReal, fromReal } from '../../../helpers'
 
-import { householdExpenseService, vehicleService } from '../../../services'
+import { householdExpenseService, vehicleService, creditCardService } from '../../../services'
+import { showGlobalLoader, hideGlobalLoader } from '../../../store/actions'
 
 export function EditHouseholdExpenseModal({ editHouseholdExpense, onClose, onSave }) {
 
@@ -30,18 +32,26 @@ export function EditHouseholdExpenseModal({ editHouseholdExpense, onClose, onSav
     const [vehicles, setVehicles] = useState([])
     const [types, setTypes] = useState([])
     const [type, setType] = useState('')
+    const [cards, setCards] = useState([])
+    const [creditCardId, setCreditCardId] = useState('')
+
+    const dispatch = useDispatch()
 
     useEffect(() => {
         async function fetchData() {
             if (editHouseholdExpense) {
                 try {
+                    dispatch(showGlobalLoader())
                     const taskVehicle = vehicleService.getAll()
                     const taskTypes = householdExpenseService.getTypes()
+                    const taskCards = creditCardService.get()
                     const listVehicles = await taskVehicle
                     const listTypes = await taskTypes
+                    const creditCards = await taskCards
 
                     setVehicles(listVehicles)
                     setTypes(listTypes)
+                    setCards(creditCards)
 
                     if (editHouseholdExpense.id) {
                         setId(editHouseholdExpense.id)
@@ -50,10 +60,12 @@ export function EditHouseholdExpenseModal({ editHouseholdExpense, onClose, onSav
                         setValue(toReal(editHouseholdExpense.value))
                         setVehicleId(editHouseholdExpense.vehicleId)
                         setType(editHouseholdExpense.type)
+                        setCreditCardId(editHouseholdExpense.creditCardId)
                     }
                 } catch (ex) {
                     console.log(ex)
                 }
+                dispatch(hideGlobalLoader())
             } else {
                 setId(0)
                 setDescription('')
@@ -61,6 +73,7 @@ export function EditHouseholdExpenseModal({ editHouseholdExpense, onClose, onSav
                 setValue('')
                 setVehicleId('')
                 setType('')
+                setCreditCardId('')
             }
         }
         fetchData()
@@ -77,7 +90,8 @@ export function EditHouseholdExpenseModal({ editHouseholdExpense, onClose, onSav
             date,
             value: fromReal(value),
             vehicleId: vehicleId ? Number(vehicleId) : 0,
-            type: Number(type)
+            type: Number(type),
+            creditCardId: creditCardId ? Number(creditCardId) : 0,
         })
             .then(() => onSave())
             .catch(err => console.log(err))
@@ -120,6 +134,16 @@ export function EditHouseholdExpenseModal({ editHouseholdExpense, onClose, onSav
                         </Select>
                     </FormControl>
                     <br />
+                </div>
+                <div style={{ marginTop: 10 }} hidden={!cards.length}>
+                    <FormControl>
+                        <InputLabel htmlFor="select-tipo">Cartão de Crédito</InputLabel>
+                        <Select style={{ width: '200px' }} value={creditCardId || ''}
+                            onChange={e => setCreditCardId(e.target.value)}>
+                            <MenuItem value={0}><span style={{ color: 'gray' }}>LIMPAR</span></MenuItem>
+                            {cards.map(p => <MenuItem key={p.id} value={p.id}>{p.name}</MenuItem>)}
+                        </Select>
+                    </FormControl>
                 </div>
                 {!!vehicles.length && type === 6 &&
                     <div>

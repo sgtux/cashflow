@@ -45,7 +45,6 @@ const styles = {
 
 export function CreditCards() {
 
-	const [loading, setLoading] = useState(false)
 	const [cards, setCards] = useState([])
 	const [card, setCard] = useState(null)
 
@@ -94,7 +93,7 @@ export function CreditCards() {
 	}
 
 	return (
-		<MainContainer title="Cartões de crédito" loading={loading}>
+		<MainContainer title="Cartões de crédito">
 			{cards.length > 0 ?
 				<Paper>
 					<List dense={true}>

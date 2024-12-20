@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react'
-import  { useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 import {
     Paper,
     IconButton,
-    Tooltip
+    Tooltip,
+    Fab
 } from '@mui/material'
 
 import {
     Delete as DeleteIcon,
-    EditOutlined as EditIcon
+    EditOutlined as EditIcon,
+    CreditCardOutlined as CardIcon
 } from '@mui/icons-material'
 
 import { InputMonth, AddFloatingButton } from '../../components'
@@ -18,7 +20,7 @@ import { householdExpenseService } from '../../services'
 import { toReal, getMonthName } from '../../helpers'
 import { EditHouseholdExpenseModal } from './edit-household-expense-modal/EditHouseholdExpenseModal'
 import { getFabIconByExpenseType } from '../../components/icons'
-import { showGlobalLoader, hideGlobalLoader} from '../../store/actions'
+import { showGlobalLoader, hideGlobalLoader } from '../../store/actions'
 
 export function HouseholdExpenses() {
 
@@ -131,6 +133,12 @@ export function HouseholdExpenses() {
                             {
                                 householdExpensesByDay[p].map((x, i) => <Paper key={i} style={{ padding: 10, marginTop: 10, fontSize: 18, color: '#555' }}>
                                     {getFabIconByExpenseType(x.type)}
+                                    {
+                                        !!x.creditCardId &&
+                                        <Tooltip title={x.creditCardName}>
+                                            <Fab size='small'><CardIcon /></Fab>
+                                        </Tooltip>
+                                    }
                                     <span>{` ${toReal(x.value)} - ${x.description} `}</span>
                                     <Tooltip title="Editar esta Despesa">
                                         <IconButton onClick={() => setEditHouseholdExpense(x)} color="primary" aria-label="Edit">
