@@ -71,14 +71,14 @@ namespace Cashflow.Api.Services
 
             decimal total = 0;
 
-            foreach (var item in (await _earningRepository.GetSome(filter)))
+            foreach (var item in await _earningRepository.GetSome(filter))
                 total += item.Value;
 
             total -= await CalculateFuelExpenses(filter);
 
             total -= await CalculateHouseholdExpenses(filter);
 
-            foreach (var item in (await _paymentRepository.GetSome(new BaseFilter() { UserId = filter.UserId })))
+            foreach (var item in await _paymentRepository.GetSome(new BaseFilter() { UserId = filter.UserId }))
                 total -= item.Installments.Where(p => p.PaidDate?.SameMonthYear(date) ?? false).Sum(p => p.PaidValue.Value);
 
 
@@ -86,7 +86,7 @@ namespace Cashflow.Api.Services
             if (lastRemainingBalance != null)
                 total += lastRemainingBalance.Value;
 
-            foreach (var item in (await _recurringExpenseRepository.GetSome(filter)))
+            foreach (var item in await _recurringExpenseRepository.GetSome(filter))
                 total -= item.History.First().PaidValue;
 
             var newRemainingBalance = new RemainingBalance()
@@ -149,10 +149,10 @@ namespace Cashflow.Api.Services
             var expenses = await _householdExpenseRepository.GetSome(new BaseFilter()
             {
                 UserId = filter.UserId,
-                StartDate = filter.StartDate,
+                StartDate = filter.StartDate.Value.AddMonths(-1),
                 EndDate = filter.EndDate
             });
-            return expenses.Sum(p => p.Value);
+            return expenses.Where(p => p.CreditCardId.HasValue ? p.InvoiceDate.SameMonthYear(filter.StartDate.Value) : p.Date.SameMonthYear(filter.StartDate.Value)).Sum(p => p.Value);
         }
     }
 }

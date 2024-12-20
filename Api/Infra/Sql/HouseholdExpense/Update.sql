@@ -5,6 +5,7 @@ SET
   Date = @Date,
   Value = @Value,
   VehicleId = @VehicleId,
-  Type = @Type
+  Type = @Type,
+  CreditCardId = @CreditCardId
 WHERE
   Id = @Id

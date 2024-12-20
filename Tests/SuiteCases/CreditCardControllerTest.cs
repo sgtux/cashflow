@@ -14,7 +14,7 @@ namespace Cashflow.Tests
         public async Task GetByUSer1()
         {
             var result = await Get<IEnumerable<CreditCard>>("/api/CreditCard", 1);
-            Assert.AreEqual(result.Data.Count(), 4, "Quantidade de cartões");
+            Assert.AreEqual(result.Data.Count(), 5, "Quantidade de cartões");
         }
 
         [TestMethod]
@@ -123,7 +123,14 @@ namespace Cashflow.Tests
         public async Task RemoveWithPayments()
         {
             var result = await Delete("/api/CreditCard/1", 1);
-            TestErrors(new { a = 1, b = 1 }, result, "Este cartão está vinculado à algum pagamento e não pode ser removido.");
+            TestErrors(new { a = 1, b = 1 }, result, "Este cartão está vinculado à algum Parcelamento e não pode ser removido.");
+        }
+
+        [TestMethod]
+        public async Task RemoveWithHouseholdExpense()
+        {
+            var result = await Delete("/api/CreditCard/6", 1);
+            TestErrors(new { a = 1, b = 1 }, result, "Este cartão está vinculado à alguma Despesa e não pode ser removido.");
         }
 
         [TestMethod]

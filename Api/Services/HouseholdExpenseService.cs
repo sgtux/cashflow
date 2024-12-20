@@ -21,13 +21,17 @@ namespace Cashflow.Api.Services
 
         private readonly AppCache _appCache;
 
+        private readonly ICreditCardRepository _creditCardRepository;
+
         public HouseholdExpenseService(IHouseholdExpenseRepository householdExpenseRepository,
             IVehicleRepository vehicleRepository,
-            AppCache appCache)
+            AppCache appCache,
+            ICreditCardRepository creditCardRepository)
         {
             _householdExpenseRepository = householdExpenseRepository;
             _vehicleRepository = vehicleRepository;
             _appCache = appCache;
+            _creditCardRepository = creditCardRepository;
         }
 
         public async Task<ResultDataModel<IEnumerable<HouseholdExpense>>> GetByUser(int userId, int month, int year)
@@ -68,7 +72,7 @@ namespace Cashflow.Api.Services
         public async Task<ResultModel> Add(HouseholdExpense householdExpense)
         {
             var result = new ResultModel();
-            var validatorResult = new HouseholdExpenseValidator(_householdExpenseRepository, _vehicleRepository).Validate(householdExpense);
+            var validatorResult = new HouseholdExpenseValidator(_vehicleRepository, _creditCardRepository).Validate(householdExpense);
             if (!validatorResult.IsValid)
                 result.AddNotification(validatorResult.Errors);
 
@@ -83,7 +87,7 @@ namespace Cashflow.Api.Services
         public async Task<ResultModel> Update(HouseholdExpense householdExpense)
         {
             var result = new ResultModel();
-            var validatorResult = new HouseholdExpenseValidator(_householdExpenseRepository, _vehicleRepository).Validate(householdExpense);
+            var validatorResult = new HouseholdExpenseValidator(_vehicleRepository, _creditCardRepository).Validate(householdExpense);
             if (validatorResult.IsValid)
             {
                 await _householdExpenseRepository.Update(householdExpense);

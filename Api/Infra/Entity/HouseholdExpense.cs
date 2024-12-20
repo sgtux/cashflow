@@ -21,5 +21,13 @@ namespace Cashflow.Api.Infra.Entity
         public HouseholdExpenseType Type { get; set; }
 
         public string TypeDescription => Type.GetDescription();
+
+        public int? CreditCardId { get; set; }
+
+        public CreditCard CreditCard { get; set; }
+
+        public string CreditCardName => CreditCard?.Name;
+
+        public DateTime InvoiceDate => CreditCard == null || Date.Day < CreditCard.InvoiceClosingDay ? Date : Date.AddMonths(1);
     }
 }

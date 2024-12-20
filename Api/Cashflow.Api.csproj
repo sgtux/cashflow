@@ -9,16 +9,20 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="coverlet.msbuild" Version="6.0.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
-    <PackageReference Include="dapper" Version="2.0.90" />
+    <PackageReference Include="dapper" Version="2.1.35" />
     <PackageReference Include="fluentvalidation" Version="10.1.0" />
-    <PackageReference Include="log4net" Version="2.0.12" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.9" />
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="6.0.9" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
+    <PackageReference Include="log4net" Version="3.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.11" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="9.0.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
     <PackageReference Include="Slapper.AutoMapper" Version="2.0.5" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <EmbeddedResource Include="Infra/Sql/User/GetByEmail.sql" />
     <EmbeddedResource Include="Infra/Sql/User/GetById.sql" />
@@ -37,6 +41,7 @@
     <EmbeddedResource Include="Infra/Sql/CreditCard/Insert.sql" />
     <EmbeddedResource Include="Infra/Sql/CreditCard/Update.sql" />
     <EmbeddedResource Include="Infra/Sql/CreditCard/HasPayments.sql" />
+    <EmbeddedResource Include="Infra/Sql/CreditCard/HasHouseholdExpenses.sql" />
 
     <EmbeddedResource Include="Infra/Sql/Payment/Delete.sql" />
     <EmbeddedResource Include="Infra/Sql/Payment/GetById.sql" />

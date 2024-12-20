@@ -14,6 +14,7 @@ namespace Cashflow.Tests
     public class HomeControllerTest : BaseControllerTest
     {
         [TestMethod]
+        [TestCategory("Home")]
         public async Task GetProjection()
         {
             var now = DateTime.Now;
@@ -21,23 +22,23 @@ namespace Cashflow.Tests
 
             var paymentsMonth = payments.First(p => p.MonthYear == now.ToString("MM/yyyy"));
 
-            // Earnings
-            decimal expected = 2500;
+            var previousMonthFuelExpense = 100;
+            var currentMonthFuelExpense = 200;
 
-            // Remaining Balance: 
-            expected += 305; // (2500(Salary) - 2000(Installment) - 100 (FuelExpense) - 95 (RecurringExpense))
+            var previousMonthHousehold = 1000; // Day 3 - CreditCardId = 7, InvoiceDay 4
+            var currentMonthHousehold = 300.5M + 1000 + 1000; // 1000 x 2 creditCard Days [4,5] - CreditCardId = 7, InvoiceDay 4
 
-            // Installments 4/6
-            expected -= 1500;
+            var previousPayment = 2000;
+            var currentPayment = 1500;
 
-            // Household Expenses
-            expected -= 300.5M;
+            var previousRecurring = 95;
+            var currentRecurring = 115;
 
-            // FuelExpenses
-            expected -= 200;
+            var previousEarning = 2500;
+            var currentEarning = 2500;
 
-            // Recurring Expense
-            expected -= 115; // 115/130
+            var expectedPreviousValue = previousEarning - previousMonthFuelExpense - previousMonthHousehold - previousPayment - previousRecurring;
+            var expected = expectedPreviousValue + currentEarning - currentMonthFuelExpense - currentMonthHousehold - currentPayment - currentRecurring;
 
             decimal actual = payments.First(p => p.MonthYear == now.ToString("MM/yyyy")).AccumulatedValue;
 

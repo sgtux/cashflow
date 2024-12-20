@@ -21,8 +21,8 @@ namespace Cashflow.Api.Infra.Repository
         => FirstOrDefault(RemainingBalanceResources.ByMonthYear, new
         {
             UserId = userId,
-            Month = date.Month,
-            Year = date.Year
+            date.Month,
+            date.Year
         });
 
         public Task<IEnumerable<RemainingBalance>> GetSome(BaseFilter filter) => Query(RemainingBalanceResources.Some, filter);

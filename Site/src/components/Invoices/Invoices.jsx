@@ -45,7 +45,7 @@ export function Invoices(props) {
         cards.length ?
             <Accordion>
                 <AccordionSummary expandIcon={<ExpandMore />}>
-                    <Typography style={{ color: '#666' }}>Faturas - <MoneySpan bold>{toReal(total)}</MoneySpan></Typography>
+                    <Typography style={{ color: '#666' }}>Faturas - <MoneySpan $bold>{toReal(total)}</MoneySpan></Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                     <div style={{ marginLeft: 20, width: '100%', color: '#666' }}>
@@ -63,7 +63,7 @@ export function Invoices(props) {
                                                     <span style={{ fontFamily: 'GraphikRegular' }}>{p.qtdInstallments ? `N°: ${p.number} - P: ${p.qtdPaidInstallments}/${p.qtdInstallments}` : ''}</span>
                                                 </ImageListItem>
                                                 <ImageListItem cols={1} style={{ textAlign: 'center' }}>
-                                                    <InvoiceCostSmall in={p.in}>{toReal(p.value)}</InvoiceCostSmall>
+                                                    <InvoiceCostSmall>{toReal(p.value)}</InvoiceCostSmall>
                                                 </ImageListItem>
                                             </ImageList>
                                         </ListItem>

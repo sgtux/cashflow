@@ -4,7 +4,7 @@ using Cashflow.Tests.TestModels;
 using Cashflow.Tests.Tests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Tests
+namespace Cashflow.Tests
 {
     [TestCategory("TokenTest")]
     [TestClass]

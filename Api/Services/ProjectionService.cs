@@ -73,7 +73,7 @@ namespace Cashflow.Api.Services
             await FillEarnings(list, dates, baseFilter);
             await FillPayments(list, dates, cards, baseFilter);
             await FillFuelExpenses(list, dates, baseFilter, user);
-            await FillHouseholdExpense(list, dates, baseFilter, user);
+            await FillHouseholdExpense(list, dates, cards, baseFilter, user);
             await FillRecurringExpenses(list, dates, cards, baseFilter);
             await FillRemainingBalance(list, baseFilter);
 
@@ -179,17 +179,23 @@ namespace Cashflow.Api.Services
             }
         }
 
-        private async Task FillHouseholdExpense(List<PaymentProjectionModel> list, List<DateTime> dates, BaseFilter filter, User user)
+        private async Task FillHouseholdExpense(List<PaymentProjectionModel> list, List<DateTime> dates, IEnumerable<CreditCard> cards, BaseFilter filter, User user)
         {
             var fromDate = CurrentDate.AddMonths(-3).FixFirstDayInMonth();
             var allHouseholdExpenses = await _householdExpenseRepository.GetSome(new BaseFilter() { UserId = filter.UserId, StartDate = fromDate });
-            
+
             foreach (var date in dates)
             {
-                var householdExpenses = allHouseholdExpenses.Where(p => p.Date.SameMonthYear(date));
+                var householdExpenses = allHouseholdExpenses.Where(p => p.Date.SameMonthYear(date) || p.InvoiceDate.SameMonthYear(date));
 
                 if (householdExpenses.Any())
-                    list.Add(new PaymentProjectionModel("Despesas Domésticas", date, householdExpenses.Sum(p => p.Value), MovementProjectionType.HouseholdExpense));
+                {
+                    foreach (var item in householdExpenses.Where(p => p.CreditCardId.HasValue))
+                    {
+                        list.Add(new PaymentProjectionModel($"{item.Description} (Despesas Domésticas)", item.InvoiceDate, item.Value, MovementProjectionType.HouseholdExpense, item.CreditCard));
+                    }
+                    list.Add(new PaymentProjectionModel("Despesas Domésticas", date, householdExpenses.Where(p => !p.CreditCardId.HasValue).Sum(p => p.Value), MovementProjectionType.HouseholdExpense));
+                }
                 else
                     list.Add(new PaymentProjectionModel("Despesas Domésticas (Desejado)", date, user.ExpenseLimit, MovementProjectionType.HouseholdExpense));
             }
