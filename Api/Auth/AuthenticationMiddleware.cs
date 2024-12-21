@@ -15,7 +15,7 @@ namespace Cashflow.Api.Auth
     {
         private readonly RequestDelegate _next;
 
-        private string[] _staticFileExtensions = { ".ttf", ".gif", ".html", ".css", ".js", ".ico" };
+        private string[] _staticFileExtensions = { ".ttf", ".gif", ".html", ".css", ".js", ".ico", ".woff2" };
 
         private const string AuthorizationHeader = "Authorization";
 
