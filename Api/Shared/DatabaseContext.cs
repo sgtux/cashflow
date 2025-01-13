@@ -1,5 +1,5 @@
 using System.Data;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using Cashflow.Api.Contracts;
 
 namespace Cashflow.Api.Shared
