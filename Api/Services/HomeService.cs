@@ -6,6 +6,7 @@ using Cashflow.Api.Contracts;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Infra.Filters;
 using Cashflow.Api.Models;
+using Cashflow.Api.Models.Home;
 using Cashflow.Api.Shared.Cache;
 
 namespace Cashflow.Api.Services
@@ -22,10 +23,13 @@ namespace Cashflow.Api.Services
 
         private readonly AppCache _appCache;
 
+        private readonly IRecurringExpenseRepository _recurringExpenseRepository;
+
         public HomeService(IPaymentRepository paymentRepository,
             ICreditCardRepository creditCardRepository,
             IHouseholdExpenseRepository householdExpenseRepository,
             IVehicleRepository vehicleRepository,
+            IRecurringExpenseRepository recurringExpenseRepository,
             IEarningRepository earningRepository,
             AppCache appCache
             )
@@ -35,16 +39,17 @@ namespace Cashflow.Api.Services
             _vehicleRepository = vehicleRepository;
             _earningRepository = earningRepository;
             _appCache = appCache;
+            _recurringExpenseRepository = recurringExpenseRepository;
         }
 
-        public async Task<ResultDataModel<List<HomeChartModel>>> GetInfo(int userId, short month, short year)
+        public async Task<ResultDataModel<HomeModel>> GetInfo(int userId, short month, short year)
         {
-            var list = _appCache.Home.Get(userId);
+            var homeModel = _appCache.Home.Get(userId);
 
-            if (list != null && list.First().Month == month && list.First().Year == year)
-                return new ResultDataModel<List<HomeChartModel>>(list, true);
+            if (homeModel != null && homeModel.Month == month && homeModel.Year == year)
+                return new ResultDataModel<HomeModel>(homeModel, true);
 
-            list = new List<HomeChartModel>();
+            homeModel.ChartInfos = new List<ChartModel>();
 
             var filter = new BaseFilter()
             {
@@ -53,14 +58,11 @@ namespace Cashflow.Api.Services
                 UserId = userId
             };
 
-            var householdExpenseModel = new HomeChartModel() { Index = 0, Description = "Despesas Domésticas" };
-            var spendingModel = new HomeChartModel() { Index = 1, Description = "Outros Gastos" };
-            var vehicleModel = new HomeChartModel() { Index = 2, Description = "Combustível" };
-            var financingsModel = new HomeChartModel() { Index = 3, Description = "Financiamentos" };
-            var loanModel = new HomeChartModel() { Index = 4, Description = "Empréstimos" };
-            var donationModel = new HomeChartModel() { Index = 5, Description = "Doações" };
-            var educationModel = new HomeChartModel() { Index = 6, Description = "Educação" };
-            var earningsModel = new HomeChartModel() { Index = 7, Description = "Provento" };
+            var householdExpenseModel = new ChartModel() { Index = 0, Description = "Despesas Domésticas", Month = month, Year = year };
+            var paymentModel = new ChartModel() { Index = 1, Description = "Parcelamentos", Month = month, Year = year };
+            var vehicleModel = new ChartModel() { Index = 2, Description = "Combustível", Month = month, Year = year };
+            var recurringExpenseModel = new ChartModel() { Index = 3, Description = "Despesas Recorrentes", Month = month, Year = year };
+            var earningsModel = new ChartModel() { Index = 4, Description = "Provento", Month = month, Year = year };
 
             foreach (var item in await _vehicleRepository.GetSome(filter))
                 vehicleModel.Value += item.FuelExpenses.Sum(p => p.ValueSupplied);
@@ -69,41 +71,36 @@ namespace Cashflow.Api.Services
                 householdExpenseModel.Value += item.Value;
 
             var payments = await _paymentRepository.GetSome(filter);
+            foreach (var item in payments)
+            {
+                var installments = item.Installments.Where(p => p.Date.Year == year && p.Date.Month == month);
+                paymentModel.Value += installments.Sum(p => p.Value);
+
+                var pendingValue = installments.Where(p => !p.PaidValue.HasValue).Sum(p => p.Value);
+                if (pendingValue > 0)
+                    homeModel.PendingPayments.Add(new PendingPaymentModel($"{item.Description} (Parcelado)", pendingValue));
+            }
+
+            var recurringExpenses = await _recurringExpenseRepository.GetSome(new BaseFilter() { UserId = userId, Active = 1 });
+            foreach (var item in recurringExpenses)
+            {
+                recurringExpenseModel.Value += item.Value;
+                if (!item.Paid)
+                    homeModel.PendingPayments.Add(new PendingPaymentModel($"{item.Description} (Recorrente)", item.Value));
+            }
 
             earningsModel.Value = (await _earningRepository.GetSome(filter)).Sum(p => p.Value);
 
-            spendingModel.Value += CalculatePaymentHomeChartModel(payments, month, year, Enums.PaymentType.Spending);
-            donationModel.Value += CalculatePaymentHomeChartModel(payments, month, year, Enums.PaymentType.Donation);
-            financingsModel.Value += CalculatePaymentHomeChartModel(payments, month, year, Enums.PaymentType.Financing);
-            educationModel.Value += CalculatePaymentHomeChartModel(payments, month, year, Enums.PaymentType.Education);
-            loanModel.Value += CalculatePaymentHomeChartModel(payments, month, year, Enums.PaymentType.Loan);
+            homeModel.ChartInfos.Add(paymentModel);
+            homeModel.ChartInfos.Add(householdExpenseModel);
+            homeModel.ChartInfos.Add(vehicleModel);
+            homeModel.ChartInfos.Add(paymentModel);
+            homeModel.ChartInfos.Add(recurringExpenseModel);
+            homeModel.ChartInfos.Add(earningsModel);
 
-            list.Add(spendingModel);
-            list.Add(householdExpenseModel);
-            list.Add(vehicleModel);
-            list.Add(financingsModel);
-            list.Add(loanModel);
-            list.Add(donationModel);
-            list.Add(educationModel);
-            list.Add(earningsModel);
+            _appCache.Home.Update(userId, homeModel);
 
-            foreach (var item in list)
-            {
-                item.Month = month;
-                item.Year = year;
-            }
-
-            _appCache.Home.Update(userId, list);
-
-            return new ResultDataModel<List<HomeChartModel>>(list);
-        }
-
-        private decimal CalculatePaymentHomeChartModel(IEnumerable<Payment> payments, int month, int year, Enums.PaymentType type)
-        {
-            decimal value = 0;
-            foreach (var item in payments.Where(p => p.Type == type))
-                value += item.Installments.Where(p => p.Date.Year == year && p.Date.Month == month).Sum(p => p.Value);
-            return value;
+            return new ResultDataModel<HomeModel>(homeModel);
         }
     }
 }

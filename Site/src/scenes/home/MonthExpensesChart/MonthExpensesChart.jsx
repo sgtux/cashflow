@@ -63,7 +63,7 @@ export function MonthExpensesChart({ data }) {
 
     return (
         <div style={{ marginTop: 20 }}>
-            {data.map(p => <Legend key={p.index} item={p} />)}
+            {data.map((p, i) => <Legend key={i} item={p} />)}
             <span style={{ fontSize: 20, marginTop: 10 }}>Total: {toReal(total)}</span>
             <PieChart width={300} height={300}>
                 <Pie
