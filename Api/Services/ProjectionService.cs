@@ -192,7 +192,8 @@ namespace Cashflow.Api.Services
                 {
                     foreach (var item in householdExpenses.Where(p => p.CreditCardId.HasValue))
                     {
-                        list.Add(new PaymentProjectionModel($"{item.Description} (Despesas Domésticas)", item.InvoiceDate, item.Value, MovementProjectionType.HouseholdExpense, item.CreditCard));
+                        if (!list.Any(p => p.Id == item.Id))
+                            list.Add(new PaymentProjectionModel($"{item.Description} (Despesas Domésticas)", item.InvoiceDate, item.Value, MovementProjectionType.HouseholdExpense, item.CreditCard, item.Id));
                     }
                     list.Add(new PaymentProjectionModel("Despesas Domésticas", date, householdExpenses.Where(p => !p.CreditCardId.HasValue).Sum(p => p.Value), MovementProjectionType.HouseholdExpense));
                 }

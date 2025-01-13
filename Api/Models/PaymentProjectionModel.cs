@@ -6,6 +6,8 @@ namespace Cashflow.Api.Models
 {
     public class PaymentProjectionModel
     {
+        public long Id { get; set; }
+
         public string Description { get; set; }
 
         public string MonthYear { get; set; }
@@ -34,13 +36,14 @@ namespace Cashflow.Api.Models
             Type = type;
         }
 
-        public PaymentProjectionModel(string description, DateTime date, decimal value, MovementProjectionType type, CreditCard creditCard)
+        public PaymentProjectionModel(string description, DateTime date, decimal value, MovementProjectionType type, CreditCard creditCard, long id = 0)
         {
             Description = description;
             MonthYear = date.ToString("MM/yyyy");
             Value = value;
             Type = type;
             CreditCard = creditCard;
+            Id = id;
         }
 
         public PaymentProjectionModel(string description,
