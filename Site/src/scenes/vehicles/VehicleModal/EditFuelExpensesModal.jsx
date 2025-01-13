@@ -22,9 +22,7 @@ import { tableCellClasses } from '@mui/material/TableCell'
 
 import {
     Delete as DeleteIcon,
-    Edit as EditIcon,
-    ArrowLeft as ArrowLeftIcon,
-    ArrowRight as ArrowRightIcon
+    Edit as EditIcon
 } from '@mui/icons-material'
 
 import { styled } from '@mui/material/styles'

@@ -187,7 +187,7 @@ export function Vehicles() {
             <EditFuelExpensesModal vehicle={editVehicleFuelExpenses}
                 onCancel={() => setEditVehicleFuelExpenses(null)}
                 onSave={vehicle => saveVehicle(vehicle)} />
-            <AddFloatingButton onClick={() => setEditVehicleFuelExpenses({})} />
+            <AddFloatingButton onClick={() => setEditVehicle({})} />
         </MainContainer >
     )
 }

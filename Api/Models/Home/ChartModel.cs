@@ -1,6 +1,6 @@
-namespace Cashflow.Api.Models
+namespace Cashflow.Api.Models.Home
 {
-    public class HomeChartModel
+    public class ChartModel
     {
         public int Index { get; set; }
 

@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Cashflow.Api.Models;
+using Cashflow.Api.Models.Home;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace Cashflow.Api.Shared.Cache
@@ -12,9 +12,9 @@ namespace Cashflow.Api.Shared.Cache
 
         public HomeCache(IMemoryCache memoryCache) => _memoryCache = memoryCache;
 
-        public List<HomeChartModel> Get(int userId) => _memoryCache.Get<List<HomeChartModel>>(BuildKey(userId));
+        public HomeModel Get(int userId) => _memoryCache.Get<HomeModel>(BuildKey(userId));
 
-        public void Update(int userId, List<HomeChartModel> list) => _memoryCache.Set(BuildKey(userId), list);
+        public void Update(int userId, HomeModel homeModel) => _memoryCache.Set(BuildKey(userId), homeModel);
 
         public void Clear(int userId) => _memoryCache.Remove(BuildKey(userId));
 
