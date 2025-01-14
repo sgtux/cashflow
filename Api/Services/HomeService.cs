@@ -1,9 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Cashflow.Api.Contracts;
-using Cashflow.Api.Infra.Entity;
+using Cashflow.Api.Extensions;
 using Cashflow.Api.Infra.Filters;
 using Cashflow.Api.Models;
 using Cashflow.Api.Models.Home;
@@ -14,6 +13,8 @@ namespace Cashflow.Api.Services
     public class HomeService
     {
         private readonly IPaymentRepository _paymentRepository;
+
+        private readonly IUserRepository _userRepository;
 
         private readonly IHouseholdExpenseRepository _householdExpenseRepository;
 
@@ -26,7 +27,7 @@ namespace Cashflow.Api.Services
         private readonly IRecurringExpenseRepository _recurringExpenseRepository;
 
         public HomeService(IPaymentRepository paymentRepository,
-            ICreditCardRepository creditCardRepository,
+            IUserRepository userRepository,
             IHouseholdExpenseRepository householdExpenseRepository,
             IVehicleRepository vehicleRepository,
             IRecurringExpenseRepository recurringExpenseRepository,
@@ -35,6 +36,7 @@ namespace Cashflow.Api.Services
             )
         {
             _paymentRepository = paymentRepository;
+            _userRepository = userRepository;
             _householdExpenseRepository = householdExpenseRepository;
             _vehicleRepository = vehicleRepository;
             _earningRepository = earningRepository;
@@ -49,32 +51,31 @@ namespace Cashflow.Api.Services
             if (homeModel != null && homeModel.Month == month && homeModel.Year == year)
                 return new ResultDataModel<HomeModel>(homeModel, true);
 
-            homeModel = new HomeModel();
+            homeModel = new HomeModel(month, year);
 
             var filter = new BaseFilter()
             {
-                StartDate = new DateTime(year, month, 1),
-                EndDate = new DateTime(year, month, DateTime.DaysInMonth(year, month)),
+                StartDate = new DateTime(year, month, 1).FixStartTimeFilter(),
+                EndDate = new DateTime(year, month, DateTime.DaysInMonth(year, month)).FixEndTimeFilter(),
                 UserId = userId
             };
 
-            var householdExpenseModel = new ChartModel() { Index = 0, Description = "Despesas Domésticas", Month = month, Year = year };
-            var paymentModel = new ChartModel() { Index = 1, Description = "Parcelamentos", Month = month, Year = year };
-            var vehicleModel = new ChartModel() { Index = 2, Description = "Combustível", Month = month, Year = year };
-            var recurringExpenseModel = new ChartModel() { Index = 3, Description = "Despesas Recorrentes", Month = month, Year = year };
-            var earningsModel = new ChartModel() { Index = 4, Description = "Provento", Month = month, Year = year };
+            var householdExpenseInflowOutflowModel = new InflowOutflowModel("Despesas Domésticas");
+            var paymentInflowOutflowModel = new InflowOutflowModel("Parcelamentos");
+            var vehicleInflowOutflowModel = new InflowOutflowModel("Combustível");
+            var recurringExpenseInflowOutflowModel = new InflowOutflowModel("Despesas Recorrentes");
 
             foreach (var item in await _vehicleRepository.GetSome(filter))
-                vehicleModel.Value += item.FuelExpenses.Sum(p => p.ValueSupplied);
+                vehicleInflowOutflowModel.Value += item.FuelExpenses.Sum(p => p.ValueSupplied);
 
             foreach (var item in await _householdExpenseRepository.GetSome(filter))
-                householdExpenseModel.Value += item.Value;
+                householdExpenseInflowOutflowModel.Value += item.Value;
 
             var payments = await _paymentRepository.GetSome(filter);
             foreach (var item in payments)
             {
                 var installments = item.Installments.Where(p => p.Date.Year == year && p.Date.Month == month);
-                paymentModel.Value += installments.Sum(p => p.Value);
+                paymentInflowOutflowModel.Value += installments.Sum(p => p.Value);
 
                 var pendingValue = installments.Where(p => !p.PaidValue.HasValue).Sum(p => p.Value);
                 if (pendingValue > 0)
@@ -84,23 +85,45 @@ namespace Cashflow.Api.Services
             var recurringExpenses = await _recurringExpenseRepository.GetSome(new BaseFilter() { UserId = userId, Active = 1 });
             foreach (var item in recurringExpenses)
             {
-                recurringExpenseModel.Value += item.Value;
+                recurringExpenseInflowOutflowModel.Value += item.Value;
                 if (!item.Paid)
                     homeModel.PendingPayments.Add(new PendingPaymentModel($"{item.Description} (Recorrente)", item.Value));
             }
 
-            earningsModel.Value = (await _earningRepository.GetSome(filter)).Sum(p => p.Value);
+            foreach (var item in await _earningRepository.GetSome(filter))
+                homeModel.Inflows.Add(new InflowOutflowModel(item.Description, item.Value));
 
-            homeModel.ChartInfos.Add(paymentModel);
-            homeModel.ChartInfos.Add(householdExpenseModel);
-            homeModel.ChartInfos.Add(vehicleModel);
-            homeModel.ChartInfos.Add(paymentModel);
-            homeModel.ChartInfos.Add(recurringExpenseModel);
-            homeModel.ChartInfos.Add(earningsModel);
+            homeModel.Outflows.Add(householdExpenseInflowOutflowModel);
+            homeModel.Outflows.Add(paymentInflowOutflowModel);
+            homeModel.Outflows.Add(vehicleInflowOutflowModel);
+            homeModel.Outflows.Add(recurringExpenseInflowOutflowModel);
+
+            homeModel.ChartInfos.ForEach(p => homeModel.Outflows.Add(new InflowOutflowModel(p.Description, p.Value)));
+
+            await FillLimitValues(homeModel, userId, householdExpenseInflowOutflowModel, vehicleInflowOutflowModel);
 
             _appCache.Home.Update(userId, homeModel);
 
             return new ResultDataModel<HomeModel>(homeModel);
+        }
+
+        private async Task FillLimitValues(HomeModel homeModel, int userId, InflowOutflowModel householdExpenseModel, InflowOutflowModel vehicleModel)
+        {
+            var user = await _userRepository.GetById(userId);
+            if (user.ExpenseLimit > 0)
+                homeModel.LimitValues.Add(new LimitValueModel()
+                {
+                    Description = "Despesas Domésticas",
+                    Limit = user.ExpenseLimit,
+                    Spent = householdExpenseModel.Value
+                });
+            if (user.FuelExpenseLimit > 0)
+                homeModel.LimitValues.Add(new LimitValueModel()
+                {
+                    Description = "Combustível",
+                    Limit = user.FuelExpenseLimit,
+                    Spent = vehicleModel.Value
+                });
         }
     }
 }
