@@ -49,7 +49,7 @@ namespace Cashflow.Api.Services
             if (homeModel != null && homeModel.Month == month && homeModel.Year == year)
                 return new ResultDataModel<HomeModel>(homeModel, true);
 
-            homeModel.ChartInfos = new List<ChartModel>();
+            homeModel = new HomeModel();
 
             var filter = new BaseFilter()
             {
