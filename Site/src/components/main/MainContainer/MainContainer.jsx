@@ -12,7 +12,7 @@ const styles = {
     textTransform: 'uppercase'
   },
   paper: {
-    marginTop: '50px',
+    marginTop: '20px',
     marginBottom: '50px',
     marginLeft: '20px',
     marginRight: '20px',
