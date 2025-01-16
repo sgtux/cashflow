@@ -1,5 +1,6 @@
 UPDATE Vehicle
 SET
-  Description = @Description
+  Description = @Description,
+  Active = @Active
 WHERE
   Id = @Id

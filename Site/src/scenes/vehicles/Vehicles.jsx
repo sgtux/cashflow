@@ -10,7 +10,8 @@ import {
     Tooltip,
     Collapse,
     Card,
-    Box
+    Box,
+    Checkbox
 } from '@mui/material'
 
 import { styled } from '@mui/material/styles'
@@ -64,18 +65,19 @@ export function Vehicles() {
     const [editVehicle, setEditVehicle] = useState(null)
     const [editVehicleFuelExpenses, setEditVehicleFuelExpenses] = useState(null)
     const [open, setOpen] = useState({})
+    const [showInactives, setShowInactives] = useState(false)
 
     useEffect(() => {
         setLoading(true)
-        vehicleService.getAll()
+        vehicleService.getAll(showInactives)
             .then(res => setVehicles(res))
             .finally(() => setLoading(false))
     }, [])
 
-    function refresh() {
+    function refresh(showInactivesParam) {
         setRemoveId(0)
         setLoading(true)
-        vehicleService.getAll()
+        vehicleService.getAll(showInactivesParam === undefined ? showInactives : showInactivesParam)
             .then(res => setVehicles(res))
             .finally(() => setLoading(false))
     }
@@ -173,10 +175,13 @@ export function Vehicles() {
                                 </React.Fragment>
                             )}
                         </TableBody>
-
                     </Table>
                 </TableContainer>
             </Container>
+            <div style={{ textAlign: 'center', marginTop: 10, fontSize: 16 }}>
+                <span>Exibir Inativos:</span>
+                <Checkbox checked={showInactives} onChange={p => { setShowInactives(p.target.checked); refresh(p.target.checked) }} />
+            </div>
             <ConfirmModal show={!!removeId}
                 onClose={() => setRemoveId(0)}
                 onConfirm={() => remove()}

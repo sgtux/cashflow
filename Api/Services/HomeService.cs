@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Cashflow.Api.Contracts;
 using Cashflow.Api.Extensions;
+using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Infra.Filters;
 using Cashflow.Api.Models;
 using Cashflow.Api.Models.Home;
@@ -60,6 +61,8 @@ namespace Cashflow.Api.Services
                 UserId = userId
             };
 
+            var user = await _userRepository.GetById(userId);
+
             var householdExpenseInflowOutflowModel = new InflowOutflowModel("Despesas Domésticas");
             var paymentInflowOutflowModel = new InflowOutflowModel("Parcelamentos");
             var vehicleInflowOutflowModel = new InflowOutflowModel("Combustível");
@@ -67,9 +70,13 @@ namespace Cashflow.Api.Services
 
             foreach (var item in await _vehicleRepository.GetSome(filter))
                 vehicleInflowOutflowModel.Value += item.FuelExpenses.Sum(p => p.ValueSupplied);
+            if (vehicleInflowOutflowModel.Value == 0)
+                vehicleInflowOutflowModel.Value = user.FuelExpenseLimit;
 
             foreach (var item in await _householdExpenseRepository.GetSome(filter))
                 householdExpenseInflowOutflowModel.Value += item.Value;
+            if (householdExpenseInflowOutflowModel.Value == 0)
+                householdExpenseInflowOutflowModel.Value = user.ExpenseLimit;
 
             var payments = await _paymentRepository.GetSome(filter);
             foreach (var item in payments)
@@ -100,16 +107,15 @@ namespace Cashflow.Api.Services
 
             homeModel.ChartInfos.ForEach(p => homeModel.Outflows.Add(new InflowOutflowModel(p.Description, p.Value)));
 
-            await FillLimitValues(homeModel, userId, householdExpenseInflowOutflowModel, vehicleInflowOutflowModel);
+            FillLimitValues(homeModel, user, householdExpenseInflowOutflowModel, vehicleInflowOutflowModel);
 
             _appCache.Home.Update(userId, homeModel);
 
             return new ResultDataModel<HomeModel>(homeModel);
         }
 
-        private async Task FillLimitValues(HomeModel homeModel, int userId, InflowOutflowModel householdExpenseModel, InflowOutflowModel vehicleModel)
+        private void FillLimitValues(HomeModel homeModel, User user, InflowOutflowModel householdExpenseModel, InflowOutflowModel vehicleModel)
         {
-            var user = await _userRepository.GetById(userId);
             if (user.ExpenseLimit > 0)
                 homeModel.LimitValues.Add(new LimitValueModel()
                 {

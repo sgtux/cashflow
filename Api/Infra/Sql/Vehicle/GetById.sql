@@ -2,6 +2,7 @@ SELECT
     v.Id,
     v.Description,
     v.UserId,
+    v.Active,
     f.Id,
     f.Miliage,
     f.ValueSupplied,

@@ -1,4 +1,4 @@
 INSERT INTO Vehicle 
-  (Description, UserId) 
+  (Description, UserId, Active)
 VALUES
-  (@Description, @UserId)
+  (@Description, @UserId, @Active)

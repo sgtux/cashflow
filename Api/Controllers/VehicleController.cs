@@ -18,7 +18,7 @@ namespace Cashflow.Api.Controllers
         public async Task<IActionResult> Get(int id) => HandleResult(await _service.GetById(id, UserId));
 
         [HttpGet]
-        public async Task<IActionResult> GetByUser(int id) => HandleResult(await _service.GetByUserId(UserId));
+        public async Task<IActionResult> GetByUser([FromQuery] bool showInactives) => HandleResult(await _service.GetByUserId(UserId, showInactives));
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Vehicle vehicle)

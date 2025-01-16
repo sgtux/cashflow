@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 
 import {
     Button,
+    Checkbox,
     Dialog,
     DialogContent,
     Zoom,
@@ -13,17 +14,23 @@ import {
 
 import { IconTextInput } from '../../../components/main'
 
-
 export function EditVehicleModal({ vehicle, onSave, onCancel }) {
 
     const [description, setDescription] = useState('')
+    const [active, setActive] = useState(true)
 
     useEffect(() => {
-        setDescription((vehicle || {}).description || '')
+        if (vehicle) {
+            setDescription(vehicle.description)
+            setActive(vehicle.active)
+        } else {
+            setDescription('')
+            setActive(true)
+        }
     }, [vehicle])
 
     function save() {
-        onSave({ id: vehicle.id, description })
+        onSave({ id: vehicle.id, description, active })
     }
 
     return (
@@ -43,7 +50,10 @@ export function EditVehicleModal({ vehicle, onSave, onCancel }) {
                         onChange={e => setDescription(e.value)}
                         Icon={<MotorcycleIcon />}
                     />
-                    <br />
+                    <div style={{ textAlign: 'center', marginTop: 10 }}>
+                        <span>Ativo:</span>
+                        <Checkbox checked={active} onChange={p => setActive(p.target.checked)} />
+                    </div>
                     <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'space-evenly' }}>
                         <Button color="primary" onClick={() => onCancel()}>
                             Cancelar
