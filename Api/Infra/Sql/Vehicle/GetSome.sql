@@ -2,6 +2,7 @@ SELECT
     v.Id,
     v.Description,
     v.UserId,
+    v.Active,
     f.Id,
     f.Miliage,
     f.ValueSupplied,
@@ -20,7 +21,8 @@ FROM
         OR f.Date <= @EndDate
     )
 WHERE
-    UserId = @UserId
+    v.UserId = @UserId
+    AND (@Active IS NULL OR v.Active = @Active)
 ORDER BY
     v.Id ASC,
     f.Date DESC,

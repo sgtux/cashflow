@@ -12,6 +12,8 @@ namespace Cashflow.Api.Infra.Entity
 
         public int UserId { get; set; }
 
+        public bool Active { get; set; }
+
         public List<FuelExpense> FuelExpenses { get; set; }
 
         public List<FuelExpense> FuelExpensesLast10 => HasExpenses ? FuelExpenses.OrderByDescending(p => p.Date).Take(10).ToList() : new List<FuelExpense>();

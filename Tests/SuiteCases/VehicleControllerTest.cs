@@ -15,7 +15,8 @@ namespace Cashflow.Tests
             var model = new Vehicle()
             {
                 Description = "",
-                UserId = 1
+                UserId = 1,
+                Active = true
             };
             var result = await Post("/api/Vehicle", model, model.UserId);
             TestErrors(model, result, "O campo 'Descrição' é obrigatório.");

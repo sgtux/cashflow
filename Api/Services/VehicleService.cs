@@ -52,9 +52,14 @@ namespace Cashflow.Api.Services
             return new ResultDataModel<Vehicle>(p?.UserId == userId ? p : null);
         }
 
-        public async Task<ResultDataModel<IEnumerable<Vehicle>>> GetByUserId(int userId)
+        public async Task<ResultDataModel<IEnumerable<Vehicle>>> GetByUserId(int userId, bool showInactives)
         {
-            var filter = new BaseFilter() { UserId = userId, StartDate = DateTimeUtils.CurrentDate.AddMonths(-2).FixFirstDayInMonth() };
+            var filter = new BaseFilter()
+            {
+                UserId = userId,
+                StartDate = DateTimeUtils.CurrentDate.AddMonths(-2).FixFirstDayInMonth(),
+                Active = showInactives ? null : 1
+            };
             return new ResultDataModel<IEnumerable<Vehicle>>(await _vehicleRepository.GetSome(filter));
         }
 

@@ -9,7 +9,8 @@ namespace Cashflow.Tests.Mocks.Database.Tables
         {
             Create.Table("Vehicle")
                 .WithColumn("Id").AsInt32().PrimaryKey().Identity()
-                .WithColumn("Description").AsString(255).NotNullable();
+                .WithColumn("Description").AsString(255).NotNullable()
+                .WithColumn("Active").AsBoolean().Nullable().WithDefaultValue(true);
 
             Execute.Sql("ALTER TABLE Vehicle ADD COLUMN UserId INTEGER REFERENCES User(Id)");
         }
