@@ -3,7 +3,7 @@ name: Build and Tests
 on:
   push:
     branches:
-      - '*'
+      - 'none'
       - '!main'
   workflow_dispatch:
 

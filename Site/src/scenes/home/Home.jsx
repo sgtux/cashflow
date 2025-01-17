@@ -4,7 +4,6 @@ import { useDispatch } from 'react-redux'
 import Grid from '@mui/material/Grid2'
 import { Divider, List, ListItem, ListItemIcon, ListItemText, Paper, styled } from '@mui/material'
 import WarningIcon from '@mui/icons-material/Warning'
-import { Gauge, gaugeClasses } from '@mui/x-charts/Gauge'
 
 import { InputMonth, MainContainer } from '../../components'
 import { Colors } from '../../helpers/themes'
@@ -13,6 +12,7 @@ import { homeService } from '../../services'
 import { showGlobalLoader, hideGlobalLoader } from '../../store/actions'
 import { toReal } from '../../helpers'
 import { GridTitle } from './styles'
+import { SpentLimitBar } from './SpentLimitBar/SpentLimitBar'
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: '#fff',
@@ -25,21 +25,9 @@ const Item = styled(Paper)(({ theme }) => ({
     }),
 }));
 
-const getColorByValues = (spent, limit) => {
-    const percent = (spent * 100) / limit
-    if (percent < 80)
-        return Colors.AppGreen
-    if (percent < 95)
-        return Colors.AppYellow
-    if (percent < 100)
-        return Colors.AppRed
-    return Colors.AppRedDark
-}
-
 export function Home() {
 
     const [selectedDate, setSelectedDate] = useState({ month: '', year: '' })
-    const [homeChart, setHomeChart] = useState([])
     const [pendingPayments, setPendingPayments] = useState([])
     const [inflows, setInflows] = useState([])
     const [outflows, setOutflows] = useState([])
@@ -61,8 +49,7 @@ export function Home() {
             setSelectedDate(date)
             dispatch(showGlobalLoader())
             try {
-                const res = await homeService.getChart(date.month, date.year)
-                setHomeChart(res.chartInfos)
+                const res = await homeService.getChart(date.month, date.year)                
                 setPendingPayments(res.pendingPayments)
                 setInflows(res.inflows)
                 setOutflows(res.outflows)
@@ -110,6 +97,28 @@ export function Home() {
                 <Grid size={6}>
                     <Item>
                         <List>
+                            <GridTitle>Saídas - <span style={{ color: Colors.AppRed }}>{toReal(totalOutflows)}</span></GridTitle>
+                            {outflows.map((p, i) =>
+                                <div key={i}>
+                                    <Divider />
+                                    <ListItem>
+                                        <ListItemText>
+                                            {p.description}
+                                        </ListItemText>
+                                        <ListItemText style={{ textAlign: 'right', color: Colors.AppRed }}>
+                                            {toReal(p.value)}
+                                        </ListItemText>
+                                    </ListItem>
+                                </div>
+                            )}
+                        </List>
+                    </Item>
+                </Grid>
+            </Grid>
+            <Grid container rowSpacing={1} marginTop={1} columnSpacing={{ xs: 1, sm: 1, md: 2 }}>
+                <Grid size={6}>
+                    <Item>
+                        <List>
                             <GridTitle>Pendências</GridTitle>
                             {pendingPayments.map((p, i) =>
                                 <div key={i}>
@@ -130,55 +139,14 @@ export function Home() {
                         </List>
                     </Item>
                 </Grid>
-            </Grid>
-            <Grid container rowSpacing={1} marginTop={1} columnSpacing={{ xs: 1, sm: 1, md: 2 }}>
                 <Grid size={6}>
-                    <Item>
-                        <List>
-                            <GridTitle>Saídas - <span style={{ color: Colors.AppRed }}>{toReal(totalOutflows)}</span></GridTitle>
-                            {outflows.map((p, i) =>
-                                <div key={i}>
-                                    <Divider />
-                                    <ListItem>
-                                        <ListItemText>
-                                            {p.description}
-                                        </ListItemText>
-                                        <ListItemText style={{ textAlign: 'right', color: Colors.AppRed }}>
-                                            {toReal(p.value)}
-                                        </ListItemText>
-                                    </ListItem>
-                                </div>
-                            )}
-                        </List>
-                    </Item>
-                </Grid>
-                <Grid size={6}>
-                    {limitValues.map((p, i) =>
-                        <Paper key={i} style={{ paddingTop: 4, marginBottom: 4 }}>
-                            <GridTitle>{p.description}</GridTitle>
-                            <Gauge
-                                height={200}
-                                value={p.spent}
-                                valueMax={p.limit}
-                                startAngle={-100}
-                                endAngle={100}
-                                cornerRadius="80%"
-                                style={{ color: 'red' }}
-                                sx={{
-                                    [`& .${gaugeClasses.valueText}`]: {
-                                        fontSize: 16,
-                                        transform: 'translate(0px, 0px)',
-                                        fontWeight: 'bold'
-                                    },
-                                    [`& .${gaugeClasses.valueArc}`]: {
-                                        fill: getColorByValues(p.spent, p.limit)
-                                    }
-                                }}
-                                text={
-                                    ({ value, valueMax }) => `${toReal(value)} / ${toReal(valueMax)}`
-                                } />
-                        </Paper>
-                    )}
+                    <Paper style={{ padding: 4, marginBottom: 4 }}>
+                        <GridTitle>Limites</GridTitle>
+                        <Divider />
+                        {limitValues.map((p, i) =>
+                            <SpentLimitBar key={i} description={p.description} spent={p.spent} limit={p.limit} />
+                        )}
+                    </Paper>
                 </Grid>
             </Grid>
         </MainContainer>
