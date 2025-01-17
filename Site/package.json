@@ -36,7 +36,6 @@
     "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^6.3.1",
     "@mui/material": "^6.3.1",
-    "@mui/x-charts": "^7.23.6",
     "@types/react": "^19.0.6",
     "clean-webpack-plugin": "^4.0.0",
     "copy-webpack-plugin": "^12.0.2",
@@ -48,7 +47,6 @@
     "react-router-dom": "^6.28.1",
     "react-sidebar": "^3.0.2",
     "reactstrap": "^9.2.3",
-    "recharts": "^2.15.0",
     "redux-logger": "^3.0.6",
     "styles": "link:@mui/material/styles"
   }
