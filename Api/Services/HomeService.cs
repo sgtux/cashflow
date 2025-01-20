@@ -73,8 +73,13 @@ namespace Cashflow.Api.Services
             if (vehicleInflowOutflowModel.Value == 0)
                 vehicleInflowOutflowModel.Value = user.FuelExpenseLimit;
 
-            foreach (var item in await _householdExpenseRepository.GetSome(filter))
-                householdExpenseInflowOutflowModel.Value += item.Value;
+            var householdExpenses = await _householdExpenseRepository.GetSome(new BaseFilter()
+            {
+                StartDate = new DateTime(year, month, 1).AddMonths(-1).FixStartTimeFilter(),
+                EndDate = new DateTime(year, month, DateTime.DaysInMonth(year, month)).FixEndTimeFilter(),
+                UserId = userId
+            });
+            householdExpenseInflowOutflowModel.Value = householdExpenses.Where(p => p.InvoiceDate.SameMonthYear(filter.StartDate.Value)).Sum(p => p.Value);
             if (householdExpenseInflowOutflowModel.Value == 0)
                 householdExpenseInflowOutflowModel.Value = user.ExpenseLimit;
 

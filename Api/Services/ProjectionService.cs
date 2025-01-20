@@ -175,7 +175,7 @@ namespace Cashflow.Api.Services
                 if (fuelExpenses.Any())
                     list.Add(new PaymentProjectionModel("Gastos em Combustível", date, fuelExpenses.Sum(p => p.ValueSupplied), MovementProjectionType.FuelExpense));
                 else
-                    list.Add(new PaymentProjectionModel("Gastos em Combustível (Desejado)", date, user.FuelExpenseLimit, MovementProjectionType.FuelExpense));
+                    list.Add(new PaymentProjectionModel("Gastos em Combustível (Residual)", date, user.FuelExpenseLimit, MovementProjectionType.FuelExpense));
             }
         }
 
@@ -187,18 +187,26 @@ namespace Cashflow.Api.Services
             foreach (var date in dates)
             {
                 var householdExpenses = allHouseholdExpenses.Where(p => p.Date.SameMonthYear(date) || p.InvoiceDate.SameMonthYear(date));
+                decimal totalInCard = 0;
+                decimal valueWithoutCard = 0;
 
                 if (householdExpenses.Any())
                 {
                     foreach (var item in householdExpenses.Where(p => p.CreditCardId.HasValue))
                     {
-                        if (!list.Any(p => p.Id == item.Id))
+                        if (!list.Any(p => p.Id == item.Id) && item.InvoiceDate.SameMonthYear(date))
+                        {
                             list.Add(new PaymentProjectionModel($"{item.Description} (Despesas Domésticas)", item.InvoiceDate, item.Value, MovementProjectionType.HouseholdExpense, item.CreditCard, item.Id));
+                            totalInCard += item.Value;
+                        }
                     }
-                    list.Add(new PaymentProjectionModel("Despesas Domésticas", date, householdExpenses.Where(p => !p.CreditCardId.HasValue).Sum(p => p.Value), MovementProjectionType.HouseholdExpense));
+                    valueWithoutCard = householdExpenses.Where(p => !p.CreditCardId.HasValue).Sum(p => p.Value);
+                    if (valueWithoutCard > 0)
+                        list.Add(new PaymentProjectionModel("Despesas Domésticas", date, valueWithoutCard, MovementProjectionType.HouseholdExpense));
                 }
-                else
-                    list.Add(new PaymentProjectionModel("Despesas Domésticas (Desejado)", date, user.ExpenseLimit, MovementProjectionType.HouseholdExpense));
+                decimal residual = user.ExpenseLimit - valueWithoutCard - totalInCard;
+                if (residual > 0)
+                    list.Add(new PaymentProjectionModel("Despesas Domésticas (Residual)", date, residual, MovementProjectionType.HouseholdExpense));
             }
         }
 
