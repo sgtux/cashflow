@@ -12,7 +12,9 @@ namespace Cashflow.Api.Contracts
 
         bool IsDevelopment { get; }
 
-        string GoogleOauthUrl { get; }
+        string GoogleOauthAccessTokenUrl { get; }
+
+        string GoogleOauthIdTokenUrl { get; }
 
         string GoogleClientId { get; }
     }

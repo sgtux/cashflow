@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using Cashflow.Api.Models;
+using Cashflow.Api.Models.Account;
 using Cashflow.Tests.TestModels;
 using Cashflow.Tests.Tests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

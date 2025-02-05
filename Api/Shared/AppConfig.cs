@@ -14,7 +14,8 @@ namespace Cashflow.Api.Shared
             CookieExpiresInMinutes = Convert.ToInt32(Environment.GetEnvironmentVariable("COOKIE_EXPIRES_IN_MINUTES"));
             SecretJwtKey = Environment.GetEnvironmentVariable("SECRET_JWT_KEY");
             DataEncryptionKey = Environment.GetEnvironmentVariable("DATA_ENCRYPTION_KEY");
-            GoogleOauthUrl = Environment.GetEnvironmentVariable("GOOGLE_OAUTH_URL");
+            GoogleOauthAccessTokenUrl = Environment.GetEnvironmentVariable("GOOGLE_OAUTH_ACCESS_TOKEN");
+            GoogleOauthIdTokenUrl = Environment.GetEnvironmentVariable("GOOGLE_OAUTH_ID_TOKEN");
             GoogleClientId = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_ID");
         }
 
@@ -28,7 +29,9 @@ namespace Cashflow.Api.Shared
 
         public bool IsDevelopment => _environmentName == "Development";
 
-        public string GoogleOauthUrl { get; }
+        public string GoogleOauthAccessTokenUrl { get; }
+
+        public string GoogleOauthIdTokenUrl { get; }
 
         public string GoogleClientId { get; }
     }

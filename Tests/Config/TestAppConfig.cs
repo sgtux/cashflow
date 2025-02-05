@@ -12,7 +12,9 @@ namespace Cashflow.Tests.Config
 
         public bool IsDevelopment => false;
 
-        public string GoogleOauthUrl => "https://oauth2.googleapis.com";
+        public string GoogleOauthAccessTokenUrl => throw new System.NotImplementedException();
+
+        public string GoogleOauthIdTokenUrl => throw new System.NotImplementedException();
 
         public string DataEncryptionKey => "1234567890123456";
 

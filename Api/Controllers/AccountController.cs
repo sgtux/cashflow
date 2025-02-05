@@ -8,6 +8,7 @@ using Cashflow.Api.Auth;
 using Cashflow.Api.Contracts;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Models;
+using Cashflow.Api.Models.Account;
 using Cashflow.Api.Services;
 using Cashflow.Api.Utils;
 using Microsoft.AspNetCore.Authorization;
@@ -68,7 +69,7 @@ namespace Cashflow.Api.Controllers
         {
             if (user is null)
                 return HandleUnprocessableEntity();
-                user.Id = UserId;
+            user.Id = UserId;
             return HandleResult(await _service.Update(user));
         }
 
@@ -77,47 +78,59 @@ namespace Cashflow.Api.Controllers
         public IActionResult GetGoogleClientId() => HandleResult(new ResultDataModel<string>(_config.GoogleClientId));
 
         [HttpPost("GoogleSignIn")]
-        public async Task<IActionResult> Post([FromBody] string googleToken)
+        public async Task<IActionResult> Post([FromBody] LoginGoogleModel loginModel)
         {
-            if (googleToken == null)
+            if (loginModel == null || !loginModel.IsValid)
                 return HandleUnprocessableEntity();
+
+            GoogleUserModel googleUserModel = null;
 
             using (HttpClient client = new HttpClient())
             {
-                string url = $"{_config.GoogleOauthUrl}/tokeninfo?id_token={googleToken}";
-                HttpResponseMessage response = await client.GetAsync(url);
+                HttpResponseMessage response = null;
+                if (!string.IsNullOrEmpty(loginModel.IdToken))
+                {
+                    response = await client.GetAsync($"{_config.GoogleOauthIdTokenUrl}?id_token={loginModel.IdToken}");
+                }
+                else
+                {
+                    client.DefaultRequestHeaders.Add("Authorization", $"Bearer {loginModel.AccessToken}");
+                    response = await client.GetAsync($"{_config.GoogleOauthAccessTokenUrl}");
+                }
+
                 string responseBody = await response.Content.ReadAsStringAsync();
 
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
-                    _logService.Error($"Google Oauth Error - {CryptographyUtils.GenerateSHA512(googleToken)} - {responseBody}");
+                    var tokenType = string.IsNullOrEmpty(loginModel.AccessToken) ? "IdToken" : "AccessToken";
+                    _logService.Error($"Google Oauth Error - {tokenType} - {responseBody}");
                     ResultModel resultError = new ResultModel();
                     resultError.AddNotification("Erro ao validar o token.");
                     return HandleResult(resultError);
                 }
+                googleUserModel = JsonSerializer.Deserialize<GoogleUserModel>(responseBody);
+            }
 
-                var googleUserModel = JsonSerializer.Deserialize<GoogleUserModel>(responseBody);
 
-                var result = await _service.Login(googleUserModel);
-                if (!result.IsValid)
-                    return HandleResult(result);
+            var result = await _service.Login(googleUserModel);
+            if (!result.IsValid)
+                return HandleResult(result);
 
-                await _remainingBalanceService.Recalculate(result.Data.Id, DateTimeUtils.CurrentDate.AddMonths(-1));
+            await _remainingBalanceService.Recalculate(result.Data.Id, DateTimeUtils.CurrentDate.AddMonths(-1));
 
-                var claims = new Dictionary<string, string>
+            var claims = new Dictionary<string, string>
                 {
                     { ClaimTypes.Sid, result.Data.Id.ToString() }
                 };
 
-                var accountResultModel = new AccountResultModel()
-                {
-                    Id = result.Data.Id,
-                    Email = result.Data.Email,
-                    Token = new JwtTokenBuilder(_config.SecretJwtKey, _config.CookieExpiresInMinutes, claims).Build().Value,
-                    Picture = googleUserModel.picture
-                };
-                return Ok(new ResultDataModel<AccountResultModel>() { Data = accountResultModel });
-            }
+            var accountResultModel = new AccountResultModel()
+            {
+                Id = result.Data.Id,
+                Email = result.Data.Email,
+                Token = new JwtTokenBuilder(_config.SecretJwtKey, _config.CookieExpiresInMinutes, claims).Build().Value,
+                Picture = googleUserModel.picture
+            };
+            return Ok(new ResultDataModel<AccountResultModel>() { Data = accountResultModel });
         }
     }
 }

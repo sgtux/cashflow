@@ -1,4 +1,4 @@
-namespace Cashflow.Api.Models
+namespace Cashflow.Api.Models.Account
 {
     public class GoogleUserModel
     {

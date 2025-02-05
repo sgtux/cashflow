@@ -1,6 +1,6 @@
 using Cashflow.Api.Infra.Entity;
 
-namespace Cashflow.Api.Models
+namespace Cashflow.Api.Models.Account
 {
     public class UserDataModel
     {

@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using Cashflow.Api.Contracts;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Models;
+using Cashflow.Api.Models.Account;
 using Cashflow.Api.Shared.Cache;
 using Cashflow.Api.Utils;
 using Cashflow.Api.Validators;

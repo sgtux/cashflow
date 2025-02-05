@@ -1,6 +1,6 @@
-namespace Cashflow.Api.Models
+namespace Cashflow.Api.Models.Account
 {
-    public class AccountModel
+    public class LoginModel
     {
         public string Email { get; set; }
 

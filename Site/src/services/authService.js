@@ -9,7 +9,7 @@ const login = user =>
     })
 
 const getGoogleClientId = () => httpService.getNotAuthenticated('/account/GoogleClientId')
-const googleSignIn = token => httpService.postNotAuthenticated('/account/GoogleSignIn', `"${token}"`)
+const googleSignIn = token => httpService.postNotAuthenticated('/account/GoogleSignIn', { idToken: token })
   .then(res => {
     StorageService.setToken(res.token)
     if (res.picture)
