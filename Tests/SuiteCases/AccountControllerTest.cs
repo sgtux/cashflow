@@ -2,7 +2,7 @@ using System.Diagnostics;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Cashflow.Api.Infra.Entity;
-using Cashflow.Api.Models;
+using Cashflow.Api.Models.Account;
 using Cashflow.Tests.Tests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

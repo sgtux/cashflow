@@ -7,7 +7,7 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Cashflow.Api.Models;
+using Cashflow.Api.Models.Account;
 using Cashflow.Tests.Config;
 using Cashflow.Tests.Mocks;
 using Cashflow.Tests.TestModels;

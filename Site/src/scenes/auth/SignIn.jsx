@@ -74,7 +74,7 @@ export function SignInScreen({ changeScene }) {
         callback: handleCredentialResponse
       })
       google.accounts.id.renderButton(
-        document.getElementById('buttonDiv'),
+        document.getElementById('googleButton'),
         {
           theme: 'outline',
           size: 'large',
@@ -138,7 +138,7 @@ export function SignInScreen({ changeScene }) {
           </div>
           <br />
           <Divider />
-          <div style={{ margin: '0 auto', marginTop: 20, width: 240 }} id="buttonDiv"></div>
+          <div style={{ margin: '0 auto', marginTop: 20, width: 240 }} id="googleButton"></div>
         </form>
       </Card>
     </Zoom>
