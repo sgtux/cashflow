@@ -1,3 +1,4 @@
+using Cashflow.Api.Enums;
 using Cashflow.Api.Infra.Entity;
 
 namespace Cashflow.Api.Models.Account
@@ -12,6 +13,8 @@ namespace Cashflow.Api.Models.Account
             Email = user.Email;
             ExpenseLimit = user.ExpenseLimit;
             FuelExpenseLimit = user.FuelExpenseLimit;
+            Plan = user.Plan;
+            RecordsUsed = user.RecordsUsed;
         }
 
         public int Id { get; set; }
@@ -21,5 +24,9 @@ namespace Cashflow.Api.Models.Account
         public decimal ExpenseLimit { get; set; }
 
         public decimal FuelExpenseLimit { get; set; }
+
+        public UserPlanType Plan { get; set; }
+
+        public int RecordsUsed { get; set; }
     }
 }

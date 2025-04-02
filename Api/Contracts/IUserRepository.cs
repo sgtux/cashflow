@@ -6,5 +6,7 @@ namespace Cashflow.Api.Contracts
     public interface IUserRepository : IRepository<User>
     {
         Task<User> FindByEmail(string email);
+
+        Task<int> TotalRegisters(int userId);
     }
 }

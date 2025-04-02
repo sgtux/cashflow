@@ -32,6 +32,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Infra/Sql/User/GetByEmail.sql" />
     <EmbeddedResource Include="Infra/Sql/User/GetById.sql" />
+    <EmbeddedResource Include="Infra/Sql/User/GetTotalRegisters.sql" />    
     <EmbeddedResource Include="Infra/Sql/User/Insert.sql" />
     <EmbeddedResource Include="Infra/Sql/User/Update.sql" />
 

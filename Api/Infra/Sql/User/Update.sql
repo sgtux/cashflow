@@ -2,6 +2,7 @@ UPDATE
     [User]
 SET
     ExpenseLimit = @ExpenseLimit,
-    FuelExpenseLimit = @FuelExpenseLimit
+    FuelExpenseLimit = @FuelExpenseLimit,
+    RecordsUsed = @RecordsUsed
 WHERE
     Id = @Id

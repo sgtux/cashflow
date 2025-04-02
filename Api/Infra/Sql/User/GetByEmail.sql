@@ -4,6 +4,8 @@ SELECT
     Password,
     CreatedAt,
     ExpenseLimit,
-    FuelExpenseLimit
+    FuelExpenseLimit,
+    [Plan],
+    RecordsUsed
 FROM [User]
 WHERE Email = @Email

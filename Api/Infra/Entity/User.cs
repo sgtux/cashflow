@@ -1,4 +1,5 @@
 using System;
+using Cashflow.Api.Enums;
 
 namespace Cashflow.Api.Infra.Entity
 {
@@ -15,5 +16,9 @@ namespace Cashflow.Api.Infra.Entity
         public decimal FuelExpenseLimit { get; set; }
 
         public DateTime CreatedAt { get; set; }
+
+        public UserPlanType Plan { get; set; }
+
+        public int RecordsUsed { get; set; }
     }
 }

@@ -111,22 +111,25 @@ namespace Cashflow.Api.Controllers
                 googleUserModel = JsonSerializer.Deserialize<GoogleUserModel>(responseBody);
             }
 
-
             var result = await _service.Login(googleUserModel);
             if (!result.IsValid)
                 return HandleResult(result);
 
-            await _remainingBalanceService.Recalculate(result.Data.Id, DateTimeUtils.CurrentDate.AddMonths(-1));
+            var user = result.Data;
+
+            await _remainingBalanceService.Recalculate(user.Id, DateTimeUtils.CurrentDate.AddMonths(-1));
+
+            await _service.UpdateRecordsUsed(user.Id);
 
             var claims = new Dictionary<string, string>
                 {
-                    { ClaimTypes.Sid, result.Data.Id.ToString() }
+                    { ClaimTypes.Sid, user.Id.ToString() }
                 };
 
             var accountResultModel = new AccountResultModel()
             {
-                Id = result.Data.Id,
-                Email = result.Data.Email,
+                Id = user.Id,
+                Email = user.Email,
                 Token = new JwtTokenBuilder(_config.SecretJwtKey, _config.CookieExpiresInMinutes, claims).Build().Value,
                 Picture = googleUserModel.picture
             };
