@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - azure-pipelines-deploy
   workflow_dispatch:
 
 jobs:
@@ -81,7 +82,7 @@ jobs:
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
-        uses: azure/webapps-deploy@v3
+        uses: azure/webapps-deploy@v2
         with:
           app-name: 'cashfloweb'
           slot-name: 'Production'
