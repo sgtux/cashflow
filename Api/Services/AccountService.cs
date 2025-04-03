@@ -49,6 +49,7 @@ namespace Cashflow.Api.Services
 
             model.Password = CryptographyUtils.PasswordHash(model.Password);
             model.CreatedAt = CurrentDate;
+            model.Plan = Enums.UserPlanType.Free;
 
             await _userRepository.Add(model);
             var user = await _userRepository.FindByEmail(model.Email);
@@ -118,10 +119,18 @@ namespace Cashflow.Api.Services
                 result.AddNotification(ValidatorMessages.BetweenValue("FuelExpenseLimit", minValue, maxValue));
             else
             {
+                user.RecordsUsed = await _userRepository.TotalRegisters(user.Id);
                 await _userRepository.Update(user);
                 _appCache.Clear(user.Id);
             }
             return result;
+        }
+
+        public async Task UpdateRecordsUsed(int userId)
+        {
+            var user = await _userRepository.GetById(userId);
+            user.RecordsUsed = await _userRepository.TotalRegisters(userId);
+            await _userRepository.Update(user);
         }
     }
 }

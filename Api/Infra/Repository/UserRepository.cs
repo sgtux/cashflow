@@ -17,6 +17,8 @@ namespace Cashflow.Api.Infra.Repository
 
         public Task<User> GetById(long id) => FirstOrDefault(UserResources.ById, new { Id = id });
 
+        public Task<int> TotalRegisters(int userId) => ExecuteScalar<int>(UserResources.TotalRegisters, new { UserId = userId });
+
         public Task Add(User t) => Execute(UserResources.Insert, t);
 
         public Task Update(User t) => Execute(UserResources.Update, t);

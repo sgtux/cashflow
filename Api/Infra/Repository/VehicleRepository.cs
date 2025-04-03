@@ -11,14 +11,7 @@ namespace Cashflow.Api.Infra.Repository
 {
     public class VehicleRepository : BaseRepository<Vehicle>, IVehicleRepository
     {
-        private readonly ICreditCardRepository _creditCardRepository;
-
-        public VehicleRepository(IDatabaseContext conn,
-            LogService logService,
-            ICreditCardRepository creditCardRepository) : base(conn, logService)
-        {
-            _creditCardRepository = creditCardRepository;
-        }
+        public VehicleRepository(IDatabaseContext conn, LogService logService) : base(conn, logService) { }
 
         public Task Add(Vehicle vehicle) => Execute(VehicleResources.Insert, vehicle);
 

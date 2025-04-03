@@ -1,4 +1,4 @@
 INSERT INTO [User]
-    (Email, Password, CreatedAt)
+    (Email, Password, CreatedAt, [Plan])
 VALUES
-    (@Email, @Password, @CreatedAt)
+    (@Email, @Password, @CreatedAt, @Plan)
