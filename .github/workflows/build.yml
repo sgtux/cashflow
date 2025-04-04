@@ -5,6 +5,7 @@ on:
     branches:
       - '*'
       - '!main'
+      - 'azure-pipelines-deploy'
   workflow_dispatch:
 
 jobs:

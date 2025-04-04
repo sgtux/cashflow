@@ -32,11 +32,11 @@ namespace Cashflow.Api
 
             app.UseHttpsRedirection();
             app.UseDefaultFiles();
+            app.UseStaticFiles();
             app.UseRouting();
 
             app.UseMiddleware(typeof(AuthenticationMiddleware));
             
-            app.UseStaticFiles();
             app.UseAuthentication();
             app.UseAuthorization();
 
