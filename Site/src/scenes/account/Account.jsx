@@ -81,7 +81,7 @@ export function Account() {
                 <Grid container rowSpacing={1} columnSpacing={{ xs: 2, sm: 2, md: 2 }}>
                     <Grid size={4}>
                         <BenefitsCard selected={plan === 1}>
-                            <img height={50} src="./icons/bronze-medal.svg" />
+                            <img height={50} src="./images/bronze-medal.svg" />
                             <PlanTitle>Free</PlanTitle>
                             <PlanCost>R$ 0,00</PlanCost>
                             <BenefitsContainer>
@@ -91,7 +91,7 @@ export function Account() {
                     </Grid>
                     <Grid size={4}>
                         <BenefitsCard selected={plan === 2}>
-                            <img height={50} src="./icons/silver-medal.svg" />
+                            <img height={50} src="./images/silver-medal.svg" />
                             <PlanTitle>Basic</PlanTitle>
                             <PlanCost>R$ 5,99</PlanCost>
                             <BenefitsContainer><span>100.000 registros disponíveis.</span></BenefitsContainer>
@@ -99,7 +99,7 @@ export function Account() {
                     </Grid>
                     <Grid size={4}>
                         <BenefitsCard selected={plan === 3}>
-                            <img height={50} src="./icons/gold-medal.svg" />
+                            <img height={50} src="./images/gold-medal.svg" />
                             <PlanTitle>Premium</PlanTitle>
                             <PlanCost>R$ 19,99</PlanCost>
                             <BenefitsContainer><span>1.000.000 registros disponíveis.</span></BenefitsContainer>
