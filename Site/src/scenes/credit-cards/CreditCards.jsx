@@ -7,7 +7,6 @@ import {
 	ListItem,
 	ListItemAvatar,
 	Avatar,
-	ListItemSecondaryAction,
 	IconButton,
 	ListItemText,
 	Tooltip,
@@ -98,7 +97,22 @@ export function CreditCards() {
 				<Paper>
 					<List dense={true}>
 						{cards.map(p =>
-							<ListItem key={p.id}>
+							<ListItem key={p.id} secondaryAction={
+								<>
+									<Tooltip title="Editar este cartão">
+										<IconButton color="primary" aria-label="Edit"
+											onClick={() => setCard(p)}>
+											<EditIcon />
+										</IconButton>
+									</Tooltip>
+									<Tooltip title="Remover este cartão">
+										<IconButton color="secondary" aria-label="Delete"
+											onClick={() => removeCard(p.id)}>
+											<DeleteIcon />
+										</IconButton>
+									</Tooltip>
+								</>
+							}>
 								<ListItemAvatar>
 									<Avatar>
 										<CardIcon />
@@ -119,20 +133,6 @@ export function CreditCards() {
 									primary="Vencimento da fatura"
 									secondary={p.invoiceDueDay}
 								/>
-								<ListItemSecondaryAction>
-									<Tooltip title="Editar este cartão">
-										<IconButton color="primary" aria-label="Edit"
-											onClick={() => setCard(p)}>
-											<EditIcon />
-										</IconButton>
-									</Tooltip>
-									<Tooltip title="Remover este cartão">
-										<IconButton color="secondary" aria-label="Delete"
-											onClick={() => removeCard(p.id)}>
-											<DeleteIcon />
-										</IconButton>
-									</Tooltip>
-								</ListItemSecondaryAction>
 							</ListItem>
 						)}
 					</List>

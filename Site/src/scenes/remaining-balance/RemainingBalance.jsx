@@ -4,7 +4,6 @@ import {
     Paper,
     List,
     ListItem,
-    ListItemSecondaryAction,
     IconButton,
     ListItemText,
     Zoom,
@@ -30,13 +29,22 @@ import { toReal, fromReal } from '../../helpers'
 export function RemainingBalances() {
 
     const [remainingBalances, setRemainingBalances] = useState([])
+    const [remainingBalancesFiltered, setRemainingBalancesFiltered] = useState([])
     const [loading, setLoading] = useState(false)
     const [value, setValue] = useState('')
     const [selectedRemainingBalance, setSelectedRemainingBalance] = useState(null)
     const [recalculateItem, setRecalculateItem] = useState(null)
     const [debt, setDebt] = useState(false)
+    const [showAllItems, setShowAllItems] = useState(false)
 
     useEffect(() => refresh(), [])
+
+    useEffect(() => {
+        if (showAllItems)
+            setRemainingBalancesFiltered(remainingBalances)
+        else
+            setRemainingBalancesFiltered(remainingBalances.slice(0, 5))
+    }, [showAllItems, remainingBalances])
 
     function refresh() {
         setSelectedRemainingBalance(null)
@@ -79,37 +87,46 @@ export function RemainingBalances() {
         setDebt(p.value < 0)
     }
 
+    function showHide(){
+        setShowAllItems(!showAllItems)
+    }
+
     return (
         <MainContainer title="Saldo Remanescente" loading={loading}>
-            {remainingBalances.length ?
-                <Paper style={{ marginTop: '20px' }}>
+            {remainingBalancesFiltered.length ?
+                <>
                     <List dense={true}>
-                        {remainingBalances.map(p =>
-                            <ListItem key={p.id}>
-                                <ListItemText
-                                    style={{ width: '100px' }}
-                                    secondary=""
-                                />
-                                <ListItemText
-                                    style={{ width: '100px' }}
-                                    secondary={p.monthYearText}
-                                />
-                                <ListItemText
-                                    style={{ width: '100px', textAlign: 'center' }}
-                                    secondary={<MoneySpan $gain={p.value >= 0}>{toReal(p.value)}</MoneySpan>}
-                                />
-                                <ListItemSecondaryAction hidden={!p.id}>
+                        {remainingBalancesFiltered.map(p =>
+                            <Paper key={p.id} style={{ padding: 10, marginTop: 10, fontSize: 24, color: '#555' }}>
+                                <ListItem secondaryAction={<div hidden={!p.id}>
                                     <IconButton color="primary" aria-label="Edit" onClick={() => edit(p)}>
                                         <EditIcon />
                                     </IconButton>
                                     <IconButton color="primary" aria-label="Refresh" onClick={() => setRecalculateItem(p)}>
                                         <RefreshIcon />
                                     </IconButton>
-                                </ListItemSecondaryAction>
-                            </ListItem>
+                                </div>
+                                }>
+                                    <ListItemText
+                                        style={{ width: '100px' }}
+                                        secondary=""
+                                    />
+                                    <ListItemText
+                                        style={{ width: '100px' }}
+                                        secondary={p.monthYearText}
+                                    />
+                                    <ListItemText
+                                        style={{ width: '100px', textAlign: 'center' }}
+                                        secondary={<MoneySpan $gain={p.value >= 0}>{toReal(p.value)}</MoneySpan>}
+                                    />
+                                </ListItem>
+                            </Paper>
                         )}
                     </List>
-                </Paper>
+                    <div style={{ textAlign: 'center' }}>
+                        <Button size="large" color="primary" onClick={() => showHide()}>{showAllItems ? 'Minimizar' : 'Exibir Todos'}</Button>
+                    </div>
+                </>
                 :
                 <div style={{ textTransform: 'none', fontSize: '18px', textAlign: 'center' }}>
                     <div style={{ marginBottom: 40 }}>
