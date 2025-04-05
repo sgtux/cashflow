@@ -205,7 +205,7 @@ namespace Cashflow.Api.Services
                         list.Add(new PaymentProjectionModel("Despesas Domésticas", date, valueWithoutCard, MovementProjectionType.HouseholdExpense));
                 }
                 decimal residual = user.ExpenseLimit - valueWithoutCard - totalInCard;
-                if (residual > 0)
+                if (residual > 0 && residual == user.ExpenseLimit)
                     list.Add(new PaymentProjectionModel("Despesas Domésticas (Residual)", date, residual, MovementProjectionType.HouseholdExpense));
             }
         }

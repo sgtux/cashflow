@@ -6,7 +6,6 @@ import {
   Paper,
   List,
   ListItem,
-  ListItemSecondaryAction,
   IconButton,
   ListItemText,
   Tooltip,
@@ -90,7 +89,23 @@ export function Payments() {
           <Paper>
             <List dense={true}>
               {payments.map((p, index) =>
-                <ListItem key={index} style={{ backgroundColor: index % 2 === 0 ? '#eee' : '#fff' }}>
+                <ListItem key={index} style={{ backgroundColor: index % 2 === 0 ? '#eee' : '#fff' }} secondaryAction={
+                  <>
+                    <Link to={`/edit-payment/${p.id}`}>
+                      <Tooltip title="Editar este pagamento">
+                        <IconButton color="primary" aria-label="Edit">
+                          <EditIcon />
+                        </IconButton>
+                      </Tooltip>
+                    </Link>
+                    <Tooltip title="Remover este pagamento">
+                      <IconButton color="secondary" aria-label="Delete"
+                        onClick={() => removePayment(p.id)}>
+                        <DeleteIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </>
+                }>
                   <ListItemText
                     primary={p.description}
                     style={{ width: '100px' }}
@@ -116,21 +131,6 @@ export function Payments() {
                     primary={(p.done || p.currentMonthPaid) && <PaidDoneSpan>{`${p.done ? 'Concluído' : p.currentMonthPaid ? 'pago' : ''}`}</PaidDoneSpan>}
                     secondary={`${p.paidInstallments}/${p.installments.length}`}
                   />
-                  <ListItemSecondaryAction>
-                    <Link to={`/edit-payment/${p.id}`}>
-                      <Tooltip title="Editar este pagamento">
-                        <IconButton color="primary" aria-label="Edit">
-                          <EditIcon />
-                        </IconButton>
-                      </Tooltip>
-                    </Link>
-                    <Tooltip title="Remover este pagamento">
-                      <IconButton color="secondary" aria-label="Delete"
-                        onClick={() => removePayment(p.id)}>
-                        <DeleteIcon />
-                      </IconButton>
-                    </Tooltip>
-                  </ListItemSecondaryAction>
                 </ListItem>
               )}
             </List>
