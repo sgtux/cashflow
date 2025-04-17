@@ -4,7 +4,8 @@ import {
   DialogContent,
   DialogTitle,
   Button,
-  Zoom
+  Zoom,
+  DialogActions
 } from '@mui/material'
 
 import { SuccessAnimatedIcon, ErrorAnimatedIcon } from './Icons'
@@ -73,9 +74,9 @@ export const ConfirmModal = ({ show, text, onClose, onConfirm }) => (
         {text}
       </div>
     </DialogContent>
-    <div style={{ marginBottom: '20px', textAlign: 'center' }}>
-      <Button size="large" color="primary" onClick={() => onClose()} autoFocus>não</Button>
-      <Button size="large" color="primary" onClick={() => onConfirm()} variant="contained" autoFocus>sim</Button>
-    </div>
+    <DialogActions>
+      <Button size="large" onClick={() => onClose()} variant="outlined" autoFocus>cancelar</Button>
+      <Button size="large" color="primary" onClick={() => onConfirm()} variant="contained" autoFocus>ok</Button>
+    </DialogActions>
   </Dialog>
 )

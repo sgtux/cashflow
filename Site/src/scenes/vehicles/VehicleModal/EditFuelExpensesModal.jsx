@@ -152,7 +152,6 @@ export function EditFuelExpensesModal({ vehicle, onCancel }) {
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
             transitionDuration={250}
-            fullWidth={true}
             maxWidth="lg"
             TransitionComponent={Zoom}>
             <DialogContent>
