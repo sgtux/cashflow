@@ -1,19 +1,53 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Dialog, DialogContent, Zoom, IconButton, Card } from '@mui/material'
 import ptBr from 'date-fns/locale/pt-BR'
 import DatePicker from 'react-datepicker'
+import { styled } from '@mui/material/styles'
+
+import {
+    Button,
+    Dialog,
+    DialogContent,
+    Zoom,
+    IconButton,
+    Card,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+    TablePagination
+} from '@mui/material'
 
 import {
     Delete as DeleteIcon,
     Edit as EditIcon
 } from '@mui/icons-material'
 
+import { tableCellClasses } from '@mui/material/TableCell'
+
 import { toReal, fromReal, dateToString, toast } from '../../../helpers'
 import { InputMoney, DatePickerContainer, DatePickerInput } from '../../../components/inputs'
 import { recurringExpenseService } from '../../../services'
 import { ConfirmModal } from '../../../components/main'
 
-import { RecurringExpenseHistoryTable } from './styles'
+const StyledTableRow = styled(TableRow)(() => ({
+    '&:nth-of-type(odd)': {
+        backgroundColor: '#eee'
+    },
+    '&:last-child td, &:last-child th': {
+        border: 0,
+    },
+}));
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+        backgroundColor: '#999',
+        color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+        fontSize: 14,
+    },
+}));
 
 export function RecurringExpenseHistoryModal({ recurringExpense, onCancel, show, requestRefresh }) {
 
@@ -22,6 +56,9 @@ export function RecurringExpenseHistoryModal({ recurringExpense, onCancel, show,
     const [paidValue, setPaidValue] = useState('')
     const [formIsValid, setFormIsValid] = useState(false)
     const [removeItem, setRemoveItem] = useState(null)
+    const [rowsPerPage, setRowsPerPage] = useState(5)
+    const [page, setPage] = useState(0)
+    const [historyFiltered, setHistoryFiltered] = useState([])
 
     const [history, setHistory] = useState([])
 
@@ -29,6 +66,13 @@ export function RecurringExpenseHistoryModal({ recurringExpense, onCancel, show,
         if ((recurringExpense || {}).history)
             setHistory(recurringExpense.history)
     }, [recurringExpense])
+
+    useEffect(() => {
+        const from = page * rowsPerPage
+        const to = rowsPerPage * (page + 1)
+        const filtered = history.slice(from, to)
+        setHistoryFiltered(filtered)
+    }, [page, history, rowsPerPage])
 
     useEffect(() => {
         setFormIsValid(date && fromReal(paidValue) > 0)
@@ -68,6 +112,15 @@ export function RecurringExpenseHistoryModal({ recurringExpense, onCancel, show,
             })
     }
 
+    function handleChangePage(newValue) {
+        setPage(newValue)
+    }
+
+    function handleChangeRowsPerPage(newValue) {
+        setRowsPerPage(newValue)
+        setPage(0)
+    }
+
     return (
         <Dialog
             open={show}
@@ -75,53 +128,56 @@ export function RecurringExpenseHistoryModal({ recurringExpense, onCancel, show,
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
             transitionDuration={250}
-            fullScreen={true}
+            maxWidth="lg"
             TransitionComponent={Zoom}>
             <DialogContent>
-                <div style={{ fontFamily: 'GraphikRegular', minWidth: 500, minHeight: 340 }}>
+                <div style={{ fontFamily: 'GraphikRegular', minWidth: 700 }}>
                     <div>
-                        {recurringExpense && recurringExpense.description} - {recurringExpense && toReal(recurringExpense.value)}
-                    </div>
-                    <RecurringExpenseHistoryTable>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Id</th>
-                                    <th>Valor Pago</th>
-                                    <th>Data</th>
-                                    <th>Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {history.map((p, i) =>
-                                    <tr key={i}>
-                                        <td>{p.id}</td>
-                                        <td>{toReal(p.paidValue)}</td>
-                                        <td>{dateToString(p.date)}</td>
-                                        <td>
-                                            <IconButton onClick={() => edit(p)} color="primary" aria-label="Edit">
+                        <Table size='small'>
+                            <TableHead>
+                                <StyledTableRow>
+                                    <StyledTableCell align="center">Id</StyledTableCell>
+                                    <StyledTableCell align="center">Valor Pago</StyledTableCell>
+                                    <StyledTableCell align="center">Data</StyledTableCell>
+                                    <StyledTableCell align="center">Ações</StyledTableCell>
+                                </StyledTableRow>
+                            </TableHead>
+                            <TableBody>
+                                {historyFiltered.map(h =>
+                                    <StyledTableRow key={h.id} hover>
+                                        <StyledTableCell align="center">{h.id}</StyledTableCell>
+                                        <StyledTableCell align="center">{toReal(h.paidValue)}</StyledTableCell>
+                                        <StyledTableCell align="center">{dateToString(h.date)}</StyledTableCell>
+                                        <StyledTableCell align="center">
+                                            <IconButton onClick={() => edit(h)} color="primary" aria-label="Edit">
                                                 <EditIcon />
                                             </IconButton>
-                                            <IconButton onClick={() => setRemoveItem(p)} color="secondary" aria-label="Delete">
+                                            <IconButton onClick={() => setRemoveItem(h)} color="secondary" aria-label="Delete">
                                                 <DeleteIcon />
                                             </IconButton>
-                                        </td>
-                                    </tr>
+                                        </StyledTableCell>
+                                    </StyledTableRow>
                                 )}
-                            </tbody>
-                        </table>
-                    </RecurringExpenseHistoryTable>
+                            </TableBody>
+
+                        </Table>
+                        <TablePagination rowsPerPageOptions={[5, 10]}
+                            component="div"
+                            count={history.length}
+                            rowsPerPage={rowsPerPage}
+                            page={page}
+                            onPageChange={(e, newPage) => handleChangePage(newPage)}
+                            onRowsPerPageChange={e => handleChangeRowsPerPage(e.target.value)} />
+                    </div>
                     <Card>
                         <DatePickerContainer style={{ padding: 10 }}>
                             Valor Pago:
                             <InputMoney
                                 onChangeValue={(event, value, maskedValue) => setPaidValue(value)}
                                 value={paidValue} />
-                            <br />
                             Data: <DatePicker onChange={e => setDate(e)}
                                 customInput={<DatePickerInput />}
                                 dateFormat="dd/MM/yyyy" locale={ptBr} selected={date} />
-                            <br />
                             <Button onClick={() => clear()} autoFocus>limpar</Button>
                             <Button onClick={() => save()}
                                 disabled={!formIsValid}
