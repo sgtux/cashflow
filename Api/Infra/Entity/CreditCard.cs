@@ -11,5 +11,7 @@ namespace Cashflow.Api.Infra.Entity
         public int InvoiceClosingDay { get; set; }
 
         public int InvoiceDueDay { get; set; }
+
+        public decimal OutstandingDebt { get; set; }
     }
 }
