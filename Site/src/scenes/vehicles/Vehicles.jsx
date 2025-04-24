@@ -44,7 +44,7 @@ const StyledTableRow = styled(TableRow)(() => ({
     '&:last-child td, &:last-child th': {
         border: 0,
     },
-}));
+}))
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -54,7 +54,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.body}`]: {
         fontSize: 14,
     },
-}));
+}))
 
 export function Vehicles() {
 

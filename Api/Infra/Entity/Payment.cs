@@ -45,6 +45,6 @@ namespace Cashflow.Api.Infra.Entity
 
         public bool CurrentMonthPaid => Installments?.FirstOrDefault(p => p.Date.SameMonthYear(DateTimeUtils.CurrentDate))?.PaidDate.HasValue ?? false;
 
-        private bool HasInstallments => Installments?.Any() ?? false;
+        public bool HasInstallments => Installments?.Any() ?? false;
     }
 }

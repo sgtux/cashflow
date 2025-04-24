@@ -14,8 +14,7 @@ import {
 
 import {
   Delete as DeleteIcon,
-  EditOutlined as EditIcon,
-  AddCircle as AddCircleIcon
+  EditOutlined as EditIcon
 } from '@mui/icons-material'
 
 import { MainContainer } from '../../components/main'
@@ -23,22 +22,9 @@ import { paymentService } from '../../services'
 import { toReal } from '../../helpers'
 import { showGlobalLoader, hideGlobalLoader } from '../../store/actions'
 import { PaymentFilter } from './PaymentFilter/PaymentFilter'
+import { AddFloatingButton } from '../../components'
 
-import { PaidDoneSpan } from './styles'
-
-const styles = {
-  noRecords: {
-    textTransform: 'none',
-    fontSize: '18px',
-    textAlign: 'center'
-  },
-  divNewPayment: {
-    textTransform: 'none',
-    fontSize: '18px',
-    textAlign: 'center',
-    marginTop: '20px'
-  }
-}
+import { PaidDoneSpan, NoRecordsContainer } from './styles'
 
 export function Payments() {
 
@@ -78,76 +64,63 @@ export function Payments() {
     <MainContainer title="Parcelamentos">
       <PaymentFilter filterChanged={e => filterChanged(e)} />
       {payments.length ?
-        <div>
-          <div style={styles.divNewPayment}>
-            <Link to="/edit-payment/0">
-              <IconButton variant="contained" color="primary">
-                <AddCircleIcon />
-              </IconButton>
-            </Link>
-          </div>
-          <Paper>
-            <List dense={true}>
-              {payments.map((p, index) =>
-                <ListItem key={index} style={{ backgroundColor: index % 2 === 0 ? '#eee' : '#fff' }} secondaryAction={
-                  <>
-                    <Link to={`/edit-payment/${p.id}`}>
-                      <Tooltip title="Editar este pagamento">
-                        <IconButton color="primary" aria-label="Edit">
-                          <EditIcon />
-                        </IconButton>
-                      </Tooltip>
-                    </Link>
-                    <Tooltip title="Remover este pagamento">
-                      <IconButton color="secondary" aria-label="Delete"
-                        onClick={() => removePayment(p.id)}>
-                        <DeleteIcon />
+        <Paper>
+          <List dense={true}>
+            {payments.map((p, index) =>
+              <ListItem key={index} style={{ backgroundColor: index % 2 === 0 ? '#eee' : '#fff' }} secondaryAction={
+                <>
+                  <Link to={`/edit-payment/${p.id}`}>
+                    <Tooltip title="Editar este pagamento">
+                      <IconButton color="primary" aria-label="Edit">
+                        <EditIcon />
                       </IconButton>
                     </Tooltip>
-                  </>
-                }>
-                  <ListItemText
-                    primary={p.description}
-                    style={{ width: '100px' }}
-                    secondary={
-                      <React.Fragment>
-                        <Typography component="span" color={p.type.in ? 'primary' : 'secondary'}>
-                          {p.type.description}
-                        </Typography>
-                      </React.Fragment>
-                    }
-                  />
-                  <ListItemText
-                    style={{ width: '40px' }}
-                    primary={<span style={{ color: '#666' }}>{`${p.firstPaymentDate} - ${p.lastPaymentDate}`}</span>}
-                    secondary={`${toReal(p.installmentValue)} - ${toReal(p.total)}`}
-                  />
-                  <ListItemText
-                    style={{ width: '40px' }}
-                    secondary={p.creditCardText}
-                  />
-                  <ListItemText
-                    style={{ width: '30px' }}
-                    primary={(p.done || p.currentMonthPaid) && <PaidDoneSpan>{`${p.done ? 'Concluído' : p.currentMonthPaid ? 'pago' : ''}`}</PaidDoneSpan>}
-                    secondary={`${p.paidInstallments}/${p.installments.length}`}
-                  />
-                </ListItem>
-              )}
-            </List>
-          </Paper>
-        </div>
+                  </Link>
+                  <Tooltip title="Remover este pagamento">
+                    <IconButton color="secondary" aria-label="Delete"
+                      onClick={() => removePayment(p.id)}>
+                      <DeleteIcon />
+                    </IconButton>
+                  </Tooltip>
+                </>
+              }>
+                <ListItemText
+                  primary={p.description}
+                  style={{ width: '100px' }}
+                  secondary={
+                    <React.Fragment>
+                      <Typography component="span" color={p.type.in ? 'primary' : 'secondary'}>
+                        {p.type.description}
+                      </Typography>
+                    </React.Fragment>
+                  }
+                />
+                <ListItemText
+                  style={{ width: '40px' }}
+                  primary={<span style={{ color: '#666' }}>{`${p.firstPaymentDate} - ${p.lastPaymentDate}`}</span>}
+                  secondary={<span style={{ textTransform: 'initial', fontFamily: 'FiraCodeMedium' }}>{`${p.installments.length} x ${toReal(p.installmentValue)} = ${toReal(p.total)}`}</span>}
+                />
+                <ListItemText
+                  style={{ width: '40px' }}
+                  secondary={p.creditCardText}
+                />
+                <ListItemText
+                  style={{ width: '30px' }}
+                  primary={(p.done || p.currentMonthPaid) && <PaidDoneSpan>{`${p.done ? 'Concluído' : p.currentMonthPaid ? 'pago' : ''}`}</PaidDoneSpan>}
+                  secondary={`${p.paidInstallments}/${p.installments.length}`}
+                />
+              </ListItem>
+            )}
+          </List>
+        </Paper>
         :
-        <div style={styles.noRecords}>
-          <div style={{ marginBottom: 40 }}>
-            <span>A busca não retornou registros.</span>
-          </div>
-          <Link to="/edit-payment/0">
-            <IconButton variant="contained" color="primary">
-              <AddCircleIcon />
-            </IconButton>
-          </Link>
-        </div>
+        <NoRecordsContainer>
+          <span>A busca não retornou registros.</span>
+        </NoRecordsContainer>
       }
+      <Link to="/edit-payment/0">
+        <AddFloatingButton onClick={() => { }} />
+      </Link>
     </MainContainer>
   )
 }

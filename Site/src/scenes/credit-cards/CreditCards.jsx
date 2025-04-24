@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
+import styled from '@emotion/styled'
+import { tableCellClasses } from '@mui/material/TableCell'
 
 import {
-	Paper,
-	List,
-	ListItem,
-	ListItemAvatar,
 	Avatar,
 	IconButton,
-	ListItemText,
 	Tooltip,
-	Button
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableRow
 } from '@mui/material'
 
 import {
@@ -19,28 +20,33 @@ import {
 	CreditCardOutlined as CardIcon
 } from '@mui/icons-material'
 
-import { MainContainer } from '../../components/main'
+import { MainContainer, AddFloatingButton, MoneySpan } from '../../components'
 import { CreditCardDetailModal } from './CreditCardEditModal/CreditCardEditModal'
 
 import { creditCardService } from '../../services'
 import { showGlobalLoader, hideGlobalLoader } from '../../store/actions'
+import { NoRecordsContainer } from './styles'
+import { toReal } from '../../helpers'
 
-const styles = {
-	noRecords: {
-		textTransform: 'none',
-		fontSize: '18px',
-		textAlign: 'center'
+const StyledTableRow = styled(TableRow)(() => ({
+	'&:nth-of-type(odd)': {
+		backgroundColor: '#eee'
 	},
-	divNewCard: {
-		textTransform: 'none',
-		fontSize: '18px',
-		textAlign: 'center',
-		marginTop: '20px'
+	'&:last-child td, &:last-child th': {
+		border: 0,
 	},
-	errorMessage: {
-		color: 'red'
-	}
-}
+}))
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+	[`&.${tableCellClasses.head}`]: {
+		backgroundColor: '#999',
+		color: theme.palette.common.white,
+	},
+	[`&.${tableCellClasses.body}`]: {
+		fontSize: 14,
+	},
+	textAlign: 'center'
+}))
 
 export function CreditCards() {
 
@@ -55,8 +61,9 @@ export function CreditCards() {
 		dispatch(showGlobalLoader())
 		setCard(null)
 		try {
-			const res = await creditCardService.get()
-			setCards(res)
+			const creditCards = await creditCardService.get()
+			setCards(creditCards)
+			console.log(creditCards)
 		} catch (ex) {
 			console.log(ex)
 		} finally {
@@ -94,11 +101,31 @@ export function CreditCards() {
 	return (
 		<MainContainer title="Cartões de crédito">
 			{cards.length > 0 ?
-				<Paper>
-					<List dense={true}>
+				<Table sx={{ minWidth: 700 }}>
+					<TableHead>
+						<TableRow>
+							<StyledTableCell />
+							<StyledTableCell>Descrição</StyledTableCell>
+							<StyledTableCell>Saldo Devedor</StyledTableCell>
+							<StyledTableCell>Dia Fechamento</StyledTableCell>
+							<StyledTableCell>Dia Vencimento</StyledTableCell>
+							<StyledTableCell>Ações</StyledTableCell>
+						</TableRow>
+					</TableHead>
+
+					<TableBody>
 						{cards.map(p =>
-							<ListItem key={p.id} secondaryAction={
-								<>
+							<StyledTableRow key={p.id}>
+								<StyledTableCell>
+									<Avatar>
+										<CardIcon />
+									</Avatar>
+								</StyledTableCell>
+								<StyledTableCell>{p.name}</StyledTableCell>
+								<StyledTableCell><MoneySpan $gain={p.outstandingDebt <= 0}>{toReal(p.outstandingDebt)}</MoneySpan></StyledTableCell>
+								<StyledTableCell>{p.invoiceClosingDay}</StyledTableCell>
+								<StyledTableCell>{p.invoiceDueDay}</StyledTableCell>
+								<StyledTableCell onClick={e => e.stopPropagation()}>
 									<Tooltip title="Editar este cartão">
 										<IconButton color="primary" aria-label="Edit"
 											onClick={() => setCard(p)}>
@@ -111,43 +138,18 @@ export function CreditCards() {
 											<DeleteIcon />
 										</IconButton>
 									</Tooltip>
-								</>
-							}>
-								<ListItemAvatar>
-									<Avatar>
-										<CardIcon />
-									</Avatar>
-								</ListItemAvatar>
-								<ListItemText
-									style={{ width: 160 }}
-									primary={p.name}
-									secondary=""
-								/>
-								<ListItemText
-									style={{ width: 160, textAlign: 'center' }}
-									primary="Fechamento da fatura"
-									secondary={p.invoiceClosingDay}
-								/>
-								<ListItemText
-									style={{ width: 160, textAlign: 'center' }}
-									primary="Vencimento da fatura"
-									secondary={p.invoiceDueDay}
-								/>
-							</ListItem>
+								</StyledTableCell>
+							</StyledTableRow>
 						)}
-					</List>
-				</Paper>
+					</TableBody>
+				</Table>
 				:
-				<div style={styles.noRecords}>
+				<NoRecordsContainer>
 					<span>Você ainda não adicionou cartões.</span>
-				</div>
+				</NoRecordsContainer>
 			}
-			<div style={styles.divNewCard}>
-				<Button variant="text" color="primary" onClick={() => setCard({})}>
-					Adicionar Cartão
-				</Button>
-			</div>
 			<CreditCardDetailModal onSave={c => saveCard(c)} onClose={() => refresh()} card={card} />
+			<AddFloatingButton onClick={() => setCard({})} />
 		</MainContainer>
 	)
 }
