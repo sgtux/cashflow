@@ -73,7 +73,7 @@ namespace Cashflow.Api.Services
             if (vehicleInflowOutflowModel.Value == 0)
                 vehicleInflowOutflowModel.Value = user.FuelExpenseLimit;
 
-            var householdExpenses = await _householdExpenseRepository.GetSome(new BaseFilter()
+            var householdExpenses = await _householdExpenseRepository.GetSome(new HouseholdExpenseFilter()
             {
                 StartDate = new DateTime(year, month, 1).AddMonths(-1).FixStartTimeFilter(),
                 EndDate = new DateTime(year, month, DateTime.DaysInMonth(year, month)).FixEndTimeFilter(),
@@ -83,7 +83,12 @@ namespace Cashflow.Api.Services
             if (householdExpenseInflowOutflowModel.Value == 0)
                 householdExpenseInflowOutflowModel.Value = user.ExpenseLimit;
 
-            var payments = await _paymentRepository.GetSome(filter);
+            var payments = await _paymentRepository.GetSome(new PaymentFilter()
+            {
+                StartDate = filter.StartDate,
+                EndDate = filter.EndDate,
+                UserId = filter.UserId
+            });
             foreach (var item in payments)
             {
                 var installments = item.Installments.Where(p => p.Date.Year == year && p.Date.Month == month);
@@ -94,7 +99,7 @@ namespace Cashflow.Api.Services
                     homeModel.PendingPayments.Add(new PendingPaymentModel($"{item.Description} (Parcelado)", pendingValue));
             }
 
-            var recurringExpenses = await _recurringExpenseRepository.GetSome(new BaseFilter() { UserId = userId, Active = 1 });
+            var recurringExpenses = await _recurringExpenseRepository.GetSome(new RecurringExpenseFilter() { UserId = userId, Active = 1 });
             foreach (var item in recurringExpenses)
             {
                 recurringExpenseInflowOutflowModel.Value += item.Value;

@@ -5,7 +5,7 @@ import Grid from '@mui/material/Grid2'
 import { Divider, List, ListItem, ListItemIcon, ListItemText, Paper, styled } from '@mui/material'
 import WarningIcon from '@mui/icons-material/Warning'
 
-import { InputMonth, MainContainer } from '../../components'
+import { InputMonth, MainContainer, MoneySpan } from '../../components'
 import { Colors } from '../../helpers/themes'
 
 import { homeService } from '../../services'
@@ -49,7 +49,7 @@ export function Home() {
             setSelectedDate(date)
             dispatch(showGlobalLoader())
             try {
-                const res = await homeService.getChart(date.month, date.year)                
+                const res = await homeService.getChart(date.month, date.year)
                 setPendingPayments(res.pendingPayments)
                 setInflows(res.inflows)
                 setOutflows(res.outflows)
@@ -119,7 +119,7 @@ export function Home() {
                 <Grid size={6}>
                     <Item>
                         <List>
-                            <GridTitle>Pendências</GridTitle>
+                            <GridTitle>Pendências<MoneySpan $gain={false}>Exibir Total</MoneySpan></GridTitle>
                             {pendingPayments.map((p, i) =>
                                 <div key={i}>
                                     <Divider />

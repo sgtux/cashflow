@@ -22,7 +22,7 @@ namespace Cashflow.Api.Infra.Repository
 
         public Task Add(HouseholdExpense t) => Execute(HouseholdExpenseResources.Insert, t);
 
-        public async Task<IEnumerable<HouseholdExpense>> GetSome(BaseFilter filter)
+        public async Task<IEnumerable<HouseholdExpense>> GetSome(HouseholdExpenseFilter filter)
         {
             var data = await Query<dynamic>(HouseholdExpenseResources.Some, filter);
             Slapper.AutoMapper.Configuration.AddIdentifiers(typeof(HouseholdExpense), new List<string> { "Id" });

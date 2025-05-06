@@ -27,6 +27,10 @@ WHERE
     OR LOWER(p.Description) LIKE LOWER(@Description)
   )
   AND (
+    @CreditCardIdsStr IS NULL
+    OR p.CreditCardId IN @CreditCardIds
+  )
+  AND (
     @StartDate IS NULL
     OR EXISTS (
       SELECT

@@ -120,7 +120,7 @@ export function RecurringExpenses() {
                         <TableBody>
                             {recurringExpenses.map((p, i) =>
                                 <React.Fragment key={i}>
-                                    <TableRow hover onClick={() => setOpen({ ...open, [i]: !open[i] })} sx={{ cursor: 'pointer' }}>
+                                    <TableRow sx={{ cursor: 'pointer' }}>
                                         <StyledTableCell>
                                             <IconButton
                                                 aria-label="expand row"

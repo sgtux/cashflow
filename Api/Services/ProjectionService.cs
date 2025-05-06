@@ -141,7 +141,7 @@ namespace Cashflow.Api.Services
 
         private async Task FillPayments(List<PaymentProjectionModel> list, List<DateTime> dates, IEnumerable<CreditCard> cards, BaseFilter filter)
         {
-            var payments = await _paymentRepository.GetSome(filter);
+            var payments = await _paymentRepository.GetSome(new PaymentFilter(filter));
             payments = payments.Where(p => !p.Done || p.DoneInThisMonth);
 
             foreach (var date in dates)
@@ -182,7 +182,7 @@ namespace Cashflow.Api.Services
         private async Task FillHouseholdExpense(List<PaymentProjectionModel> list, List<DateTime> dates, IEnumerable<CreditCard> cards, BaseFilter filter, User user)
         {
             var fromDate = CurrentDate.AddMonths(-3).FixFirstDayInMonth();
-            var allHouseholdExpenses = await _householdExpenseRepository.GetSome(new BaseFilter() { UserId = filter.UserId, StartDate = fromDate });
+            var allHouseholdExpenses = await _householdExpenseRepository.GetSome(new HouseholdExpenseFilter() { UserId = filter.UserId, StartDate = fromDate });
 
             foreach (var date in dates)
             {
@@ -212,8 +212,8 @@ namespace Cashflow.Api.Services
 
         private async Task FillRecurringExpenses(List<PaymentProjectionModel> list, List<DateTime> dates, IEnumerable<CreditCard> cards, BaseFilter filter)
         {
-            var currentRecurringExpenses = await _recurringExpenseRepository.GetSome(new BaseFilter() { UserId = filter.UserId, StartDate = CurrentDate.FixFirstDayInMonth(), EndDate = CurrentDate.FixLastDayInMonth() });
-            var projectionRecurringExpenses = await _recurringExpenseRepository.GetSome(new BaseFilter() { UserId = filter.UserId, Active = 1 });
+            var currentRecurringExpenses = await _recurringExpenseRepository.GetSome(new RecurringExpenseFilter() { UserId = filter.UserId, StartDate = CurrentDate.FixFirstDayInMonth(), EndDate = CurrentDate.FixLastDayInMonth() });
+            var projectionRecurringExpenses = await _recurringExpenseRepository.GetSome(new RecurringExpenseFilter() { UserId = filter.UserId, Active = 1 });
             foreach (var date in dates)
             {
                 if (date.SameMonthYear(CurrentDate))

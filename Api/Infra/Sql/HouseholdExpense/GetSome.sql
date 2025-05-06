@@ -17,6 +17,10 @@ FROM
 WHERE
   p.UserId = @UserId
   AND (
+    @CreditCardIdsStr IS NULL
+    OR p.CreditCardId IN @CreditCardIds
+  )
+  AND (
     @StartDate IS NULL
     OR p.Date >= @StartDate
   )

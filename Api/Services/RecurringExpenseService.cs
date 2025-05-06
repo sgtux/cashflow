@@ -34,7 +34,7 @@ namespace Cashflow.Api.Services
             return new ResultDataModel<RecurringExpense>(expense?.UserId == userId ? expense : null);
         }
 
-        public async Task<ResultDataModel<IEnumerable<RecurringExpense>>> GetByUser(int userId, byte? active) => new ResultDataModel<IEnumerable<RecurringExpense>>(await _recurringExpenseRepository.GetSome(new BaseFilter() { UserId = userId, Active = active }));
+        public async Task<ResultDataModel<IEnumerable<RecurringExpense>>> GetByUser(int userId, byte? active, IEnumerable<int> creditCardIds = null) => new ResultDataModel<IEnumerable<RecurringExpense>>(await _recurringExpenseRepository.GetSome(new RecurringExpenseFilter() { UserId = userId, Active = active, CreditCardIds = creditCardIds }));
 
         public async Task<ResultModel> Add(RecurringExpense recurringExpense)
         {

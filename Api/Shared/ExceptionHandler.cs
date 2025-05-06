@@ -41,7 +41,7 @@ namespace Cashflow.Api.Shared
                 Console.Write(error);
                 databaseContext.Rollback();
                 logService.Error(error);
-                await HandleExceptionAsync(context, ex);
+                await HandleExceptionAsync(context, ex, appConfig, error);
             }
             finally
             {
@@ -52,12 +52,15 @@ namespace Cashflow.Api.Shared
             }
         }
 
-        private static Task HandleExceptionAsync(HttpContext context, Exception exception)
+        private static Task HandleExceptionAsync(HttpContext context, Exception exception, IAppConfig appConfig, string error)
         {
             var serverErrorMessage = "Erro interno no servidor, procure o administrador do sistema.";
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-            return context.Response.WriteAsync(JsonSerializer.Serialize(new { errors = new[] { serverErrorMessage } }));
+            if (appConfig.IsDevelopment)
+                return context.Response.WriteAsync(JsonSerializer.Serialize(new { exception = exception.ToString(), errors = new[] { serverErrorMessage } }));
+            else
+                return context.Response.WriteAsync(JsonSerializer.Serialize(new { errors = new[] { serverErrorMessage } }));
         }
     }
 }
