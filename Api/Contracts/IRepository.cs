@@ -5,7 +5,9 @@ using Cashflow.Api.Infra.Filters;
 
 namespace Cashflow.Api.Contracts
 {
-    public interface IRepository<T> where T : class
+    public interface IRepository<T, F>
+        where T : class
+        where F : BaseFilter
     {
 
         DateTime CurrentDate { get; }
@@ -18,7 +20,7 @@ namespace Cashflow.Api.Contracts
 
         Task<T> GetById(long id);
 
-        Task<IEnumerable<T>> GetSome(BaseFilter filter);
+        Task<IEnumerable<T>> GetSome(F filter);
 
         Task Add(T t);
 

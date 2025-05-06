@@ -60,7 +60,7 @@ namespace Cashflow.Api.Services
             if (current != null && !force)
                 return new ResultDataModel<RemainingBalance>(current);
 
-            var filter = new BaseFilter()
+            var filter = new RecurringExpenseFilter()
             {
                 StartDate = date.FixFirstDayInMonth().FixStartTimeFilter(),
                 EndDate = date.FixLastDayInMonth().FixEndTimeFilter(),
@@ -78,7 +78,7 @@ namespace Cashflow.Api.Services
 
             total -= await CalculateHouseholdExpenses(filter);
 
-            foreach (var item in await _paymentRepository.GetSome(new BaseFilter() { UserId = filter.UserId }))
+            foreach (var item in await _paymentRepository.GetSome(new PaymentFilter() { UserId = filter.UserId }))
                 total -= item.Installments.Where(p => p.PaidDate?.SameMonthYear(date) ?? false).Sum(p => p.PaidValue.Value);
 
 
@@ -146,7 +146,7 @@ namespace Cashflow.Api.Services
 
         private async Task<decimal> CalculateHouseholdExpenses(BaseFilter filter)
         {
-            var expenses = await _householdExpenseRepository.GetSome(new BaseFilter()
+            var expenses = await _householdExpenseRepository.GetSome(new HouseholdExpenseFilter()
             {
                 UserId = filter.UserId,
                 StartDate = filter.StartDate.Value.AddMonths(-1),

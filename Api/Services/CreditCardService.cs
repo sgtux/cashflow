@@ -18,28 +18,60 @@ namespace Cashflow.Api.Services
 
         private readonly PaymentService _paymentService;
 
+        private readonly HouseholdExpenseService _householdExpenseService;
+
+        private readonly RecurringExpenseService _recurringExpenseService;
+
         public CreditCardService(
             ICreditCardRepository creditCardRepository,
             IUserRepository userRepository,
             IPaymentRepository paymentRepository,
+            IRecurringExpenseRepository recurringExpenseRepository,
+            IHouseholdExpenseRepository householdExpenseRepository,
+            IVehicleRepository vehicleRepository,
             AppCache appCache)
         {
             _creditCardRepository = creditCardRepository;
             _userRepository = userRepository;
             _paymentService = new PaymentService(paymentRepository, _creditCardRepository, appCache);
+            _householdExpenseService = new HouseholdExpenseService(householdExpenseRepository, vehicleRepository, appCache, creditCardRepository);
+            _recurringExpenseService = new RecurringExpenseService(recurringExpenseRepository, creditCardRepository, appCache);
         }
 
         public async Task<ResultDataModel<IEnumerable<CreditCard>>> GetByUser(int userId)
         {
-            var payments = (await _paymentService.GetByUser(userId, new PaymentFilterModel() { Done = false })).Data;
-
             var creditCards = await _creditCardRepository.GetSome(new BaseFilter() { UserId = userId });
+
+            var creditCardIds = creditCards.Select(p => p.Id);
+
+            var payments = (await _paymentService.GetByUser(userId, new PaymentFilter() { Done = false, CreditCardIds = creditCardIds })).Data;
+            var householdExpenses = (await _householdExpenseService.GetByUser(userId, 0, 0, creditCardIds)).Data;
+            var recurringExpenses = (await _recurringExpenseService.GetByUser(userId, 1, creditCardIds)).Data;
 
             foreach (var card in creditCards)
             {
-                foreach (var pay in payments.Where(p => p.CreditCard?.Id == card.Id && p.HasInstallments))
+                foreach (var pay in payments.Where(p => p.CreditCardId == card.Id && p.HasInstallments))
                 {
-                    card.OutstandingDebt += pay.Installments.Where(p => !p.Exempt && !p.PaidValue.HasValue).Sum(p => p.Value);
+                    var item = new CreditCardItemModel();
+                    item.Description = $"{pay.Description} (Parcelado)";
+                    item.OutstandingDebt += pay.Installments.Where(p => !p.Exempt && !p.PaidValue.HasValue).Sum(p => p.Value);
+                    card.Items.Add(item);
+                }
+
+                foreach (var householdExpense in householdExpenses.Where(p => p.CreditCardId == card.Id))
+                {
+                    var item = new CreditCardItemModel();
+                    item.Description = $"{householdExpense.Description} (Despesa)";
+                    item.OutstandingDebt = householdExpense.Value;
+                    card.Items.Add(item);
+                }
+
+                foreach (var recurringExpense in recurringExpenses.Where(p => p.CreditCardId == card.Id))
+                {
+                    var item = new CreditCardItemModel();
+                    item.Description = $"{recurringExpense.Description} (Despesa Recorrente)";
+                    item.OutstandingDebt = recurringExpense.Value;
+                    card.Items.Add(item);
                 }
             }
 

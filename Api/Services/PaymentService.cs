@@ -34,19 +34,14 @@ namespace Cashflow.Api.Services
             return new ResultDataModel<Payment>(p?.UserId == userId ? p : null);
         }
 
-        public async Task<ResultDataModel<IEnumerable<Payment>>> GetByUser(int userId, PaymentFilterModel filterModel)
+        public async Task<ResultDataModel<IEnumerable<Payment>>> GetByUser(int userId, PaymentFilter filter)
         {
-            var filter = new BaseFilter()
-            {
-                UserId = userId,
-                Description = filterModel.Description.FormatToLike(),
-                StartDate = filterModel.StartDate.FixStartTimeFilter(),
-                EndDate = filterModel.StartDate.FixEndTimeFilter()
-            };
+            filter.UserId = userId;
+            filter.FixParams();
             var list = await _paymentRepository.GetSome(filter);
-            if (filterModel.Done.HasValue)
+            if (filter.Done.HasValue)
             {
-                if (filterModel.Done.Value)
+                if (filter.Done.Value)
                     list = list.Where(p => p.Done);
                 else
                     list = list.Where(p => !p.Done);

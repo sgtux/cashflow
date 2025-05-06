@@ -15,6 +15,10 @@ FROM
 WHERE
 	re.UserId = @UserId
 	AND (
+		@CreditCardIdsStr IS NULL
+		OR re.CreditCardId IN @CreditCardIds
+	)
+	AND (
 		@Active IS NULL
 		OR (
 			(

@@ -34,22 +34,17 @@ namespace Cashflow.Api.Services
             _creditCardRepository = creditCardRepository;
         }
 
-        public async Task<ResultDataModel<IEnumerable<HouseholdExpense>>> GetByUser(int userId, int month, int year)
+        public async Task<ResultDataModel<IEnumerable<HouseholdExpense>>> GetByUser(int userId, int month, int year, IEnumerable<int> creditCardIds = null)
         {
-            var now = CurrentDate;
-
-            if (month > 12 || month < 1)
-                month = now.Month;
-
-            if (year > now.Year + 5 || year < now.Year - 5)
-                year = now.Year;
-
-            var list = await _householdExpenseRepository.GetSome(new BaseFilter()
+            HouseholdExpenseFilter filter = new HouseholdExpenseFilter()
             {
-                StartDate = new DateTime(year, month, 1).FixStartTimeFilter(),
-                EndDate = new DateTime(year, month, DateTime.DaysInMonth(year, month)).FixEndTimeFilter(),
-                UserId = userId
-            });
+                UserId = userId,
+                CreditCardIds = creditCardIds,
+                Month = month,
+                Year = year
+            };
+
+            var list = await _householdExpenseRepository.GetSome(filter);
             return new ResultDataModel<IEnumerable<HouseholdExpense>>(list.OrderByDescending(p => p.Date));
         }
 

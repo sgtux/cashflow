@@ -13,14 +13,9 @@ namespace Cashflow.Api.Infra.Repository
 {
     public class PaymentRepository : BaseRepository<Payment>, IPaymentRepository
     {
-        private readonly ICreditCardRepository _creditCardRepository;
+        public PaymentRepository(IDatabaseContext conn, LogService logService) : base(conn, logService) { }
 
-        public PaymentRepository(IDatabaseContext conn, LogService logService, ICreditCardRepository creditCardRepository) : base(conn, logService)
-        {
-            _creditCardRepository = creditCardRepository;
-        }
-
-        public async Task<IEnumerable<Payment>> GetSome(BaseFilter filter)
+        public async Task<IEnumerable<Payment>> GetSome(PaymentFilter filter)
         {
             var data = await Query<dynamic>(PaymentResources.Some, filter);
 

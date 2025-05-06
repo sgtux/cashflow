@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Cashflow.Api.Infra.Entity;
+using Cashflow.Api.Infra.Filters;
 using Cashflow.Api.Models;
 using Cashflow.Api.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -16,7 +17,7 @@ namespace Cashflow.Api.Controllers
         public PaymentController(PaymentService service) => _service = service;
 
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] PaymentFilterModel filter) => HandleResult(await _service.GetByUser(UserId, filter));
+        public async Task<IActionResult> Get([FromQuery] PaymentFilter filter) => HandleResult(await _service.GetByUser(UserId, filter));
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id) => HandleResult(await _service.Get(id, UserId));

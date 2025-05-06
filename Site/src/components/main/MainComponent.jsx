@@ -73,7 +73,7 @@ export function MainComponent() {
       {globalLoader &&
         <ContainerLoader>
           <div style={{ width: 200, margin: '0 auto' }}>
-            <img src='donald-loader.gif' style={{ borderRadius: '50%', height: 100, width: 100, marginBottom: 10 }} />
+            <img src='./images/donald-loader.gif' style={{ borderRadius: '50%', height: 100, width: 100, marginBottom: 10 }} />
             <LinearProgress />
           </div>
         </ContainerLoader>

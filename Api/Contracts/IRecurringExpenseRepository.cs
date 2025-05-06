@@ -1,10 +1,10 @@
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Cashflow.Api.Infra.Entity;
+using Cashflow.Api.Infra.Filters;
 
 namespace Cashflow.Api.Contracts
 {
-    public interface IRecurringExpenseRepository : IRepository<RecurringExpense>
+    public interface IRecurringExpenseRepository : IRepository<RecurringExpense, RecurringExpenseFilter>
     {
         Task AddHistory(RecurringExpenseHistory history);
 

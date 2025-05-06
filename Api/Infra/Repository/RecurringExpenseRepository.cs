@@ -18,7 +18,7 @@ namespace Cashflow.Api.Infra.Repository
             _creditCardRepository = creditCardRepository;
         }
 
-        public async Task<IEnumerable<RecurringExpense>> GetSome(BaseFilter filter)
+        public async Task<IEnumerable<RecurringExpense>> GetSome(RecurringExpenseFilter filter)
         {
             var list = new List<RecurringExpense>();
             var cards = await _creditCardRepository.GetSome(filter);
