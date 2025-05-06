@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Cashflow.Api.Contracts;
+using Cashflow.Api.Extensions;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Infra.Filters;
 using Cashflow.Api.Models;
@@ -40,12 +42,13 @@ namespace Cashflow.Api.Services
 
         public async Task<ResultDataModel<IEnumerable<CreditCard>>> GetByUser(int userId)
         {
+            var now = DateTime.Now;
             var creditCards = await _creditCardRepository.GetSome(new BaseFilter() { UserId = userId });
 
             var creditCardIds = creditCards.Select(p => p.Id);
 
             var payments = (await _paymentService.GetByUser(userId, new PaymentFilter() { Done = false, CreditCardIds = creditCardIds })).Data;
-            var householdExpenses = (await _householdExpenseService.GetByUser(userId, 0, 0, creditCardIds)).Data;
+            var householdExpenses = (await _householdExpenseService.GetByUser(userId, now.AddMonths(-1), null, creditCardIds)).Data;
             var recurringExpenses = (await _recurringExpenseService.GetByUser(userId, 1, creditCardIds)).Data;
 
             foreach (var card in creditCards)
@@ -60,7 +63,7 @@ namespace Cashflow.Api.Services
                     card.Items.Add(item);
                 }
 
-                foreach (var householdExpense in householdExpenses.Where(p => p.CreditCardId == card.Id))
+                foreach (var householdExpense in householdExpenses.Where(p => p.CreditCardId == card.Id && (p.InvoiceDate.SameMonthYear(now) || p.InvoiceDate.SameMonthYear(now.AddMonths(1)))))
                 {
                     var item = new CreditCardItemModel();
                     item.Description = $"{householdExpense.Description} (Despesa)";

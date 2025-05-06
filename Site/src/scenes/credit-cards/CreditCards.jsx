@@ -77,7 +77,6 @@ export function CreditCards() {
 		try {
 			const creditCards = await creditCardService.get()
 			setCards(creditCards)
-			console.log(creditCards)
 		} catch (ex) {
 			console.log(ex)
 		} finally {
