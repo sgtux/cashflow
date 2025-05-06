@@ -54,7 +54,9 @@ namespace Cashflow.Api.Services
                 {
                     var item = new CreditCardItemModel();
                     item.Description = $"{pay.Description} (Parcelado)";
-                    item.OutstandingDebt += pay.Installments.Where(p => !p.Exempt && !p.PaidValue.HasValue).Sum(p => p.Value);
+                    item.OutstandingDebt += pay.TotalPaid;
+                    item.Plots = $"{pay.Installments.Count(p => p.PaidValue.HasValue)}/{pay.Installments.Count}";
+                    item.Total = pay.Total;
                     card.Items.Add(item);
                 }
 

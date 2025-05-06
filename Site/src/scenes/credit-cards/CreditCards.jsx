@@ -166,17 +166,21 @@ export function CreditCards() {
 													<Table size='small'>
 														<TableHead>
 															<StyledTableRow>
-																<StyledTableCell>Descrição</StyledTableCell>
-																<StyledTableCell>Valor Pendente</StyledTableCell>
+																<StyledSubTableCell align='left'>Descrição</StyledSubTableCell>
+																<StyledTableCell>Parcelas</StyledTableCell>
+																<StyledSubTableCell align='right'>Valor Pendente</StyledSubTableCell>
+																<StyledSubTableCell align='right'>Valor Total</StyledSubTableCell>
 															</StyledTableRow>
 														</TableHead>
 														<TableBody>
 															{p.items.map((h, j) =>
 																<StyledTableRow key={j}>
 																	<StyledSubTableCell align="left">{toReal(h.description)}</StyledSubTableCell>
+																	<StyledTableCell>{h.plots || '-'}</StyledTableCell>
 																	<StyledSubTableCell align="right">
-																		<MoneySpan>{toReal(h.outstandingDebt)}</MoneySpan>
+																		<MoneySpan style={{ fontSize: 12 }}>{toReal(h.outstandingDebt)}</MoneySpan>
 																	</StyledSubTableCell>
+																	<StyledSubTableCell align="right">{h.total ? toReal(h.total) : '-'}</StyledSubTableCell>
 																</StyledTableRow>
 															)}
 														</TableBody>
