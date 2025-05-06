@@ -39,7 +39,7 @@ namespace Cashflow.Api.Infra.Filters
         {
             Description = Description.FormatToLike();
             StartDate = StartDate.FixStartTimeFilter();
-            EndDate = StartDate.FixEndTimeFilter();
+            EndDate = EndDate.FixEndTimeFilter();
         }
     }
 }

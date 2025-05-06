@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using Cashflow.Api.Extensions;
 
 namespace Cashflow.Api.Infra.Filters
 {
@@ -15,22 +13,9 @@ namespace Cashflow.Api.Infra.Filters
 
         public string CreditCardIdsStr => CreditCardIds?.Any() ?? false ? string.Join(",", CreditCardIds) : null;
 
-        public int Month { get; set; }
-
-        public int Year { get; set; }
-
         public override void FixParams()
         {
-            var now = CurrentDate;
-
-            if (Month > 12 || Month < 1)
-                Month = now.Month;
-
-            if (Year > now.Year + 5 || Year < now.Year - 5)
-                Year = now.Year;
-
-            StartDate = new DateTime(Year, Month, 1).FixStartTimeFilter();
-            EndDate = new DateTime(Year, Month, DateTime.DaysInMonth(Year, Month)).FixEndTimeFilter();
+            base.FixParams();
 
             if (CreditCardIds is not null && !CreditCardIds.Any())
                 CreditCardIds = null;

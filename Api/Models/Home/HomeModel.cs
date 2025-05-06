@@ -13,6 +13,8 @@ namespace Cashflow.Api.Models.Home
 
         public List<PendingPaymentModel> PendingPayments { get; set; }
 
+        public decimal PendingPaymentsTotal => PendingPayments?.Sum(p => p.Value) ?? 0;
+
         public List<LimitValueModel> LimitValues { get; set; }
 
         public List<InflowOutflowModel> Inflows { get; set; }
@@ -31,7 +33,7 @@ namespace Cashflow.Api.Models.Home
             PendingPayments = new List<PendingPaymentModel>();
             LimitValues = new List<LimitValueModel>();
             Inflows = new List<InflowOutflowModel>();
-            Outflows = new List<InflowOutflowModel>();            
+            Outflows = new List<InflowOutflowModel>();
         }
     }
 }
