@@ -1,6 +1,6 @@
 namespace Cashflow.Api.Enums
 {
-    public enum HouseholdExpenseType
+    public enum ExpenseType
     {
         Food = 1,
 
@@ -45,5 +45,11 @@ namespace Cashflow.Api.Enums
         Donation = 21,
 
         Streams = 22,
+
+        Loan = 23,
+
+        Financing = 24,
+
+        Tech = 25
     }
 }

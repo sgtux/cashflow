@@ -6,73 +6,60 @@ namespace Cashflow.Api.Extensions
 {
     public static class EnumExtensions
     {
-        public static string GetDescription(this PaymentType type)
-        {
-            switch (type)
-            {
-                case PaymentType.Spending:
-                    return "Gastos";
-                case PaymentType.Financing:
-                    return "Financiamento";
-                case PaymentType.Education:
-                    return "Educação";
-                case PaymentType.Loan:
-                    return "Empréstimo";
-                case PaymentType.Donation:
-                    return "Doação";
-                default:
-                    return "Desconhecido";
-            }
-        }
-
-        public static string GetDescription(this HouseholdExpenseType e)
+        public static string GetDescription(this ExpenseType e)
         {
             switch (e)
             {
-                case HouseholdExpenseType.Food:
+                case ExpenseType.Food:
                     return "Alimentação";
-                case HouseholdExpenseType.Market:
+                case ExpenseType.Market:
                     return "Mercado";
-                case HouseholdExpenseType.Snack:
+                case ExpenseType.Snack:
                     return "Lanche";
-                case HouseholdExpenseType.Aesthetics:
+                case ExpenseType.Aesthetics:
                     return "Estética";
-                case HouseholdExpenseType.Education:
+                case ExpenseType.Education:
                     return "Educação";
-                case HouseholdExpenseType.Vehicle:
+                case ExpenseType.Vehicle:
                     return "Veículo";
-                case HouseholdExpenseType.Pets:
+                case ExpenseType.Pets:
                     return "Pets";
-                case HouseholdExpenseType.Leisure:
+                case ExpenseType.Leisure:
                     return "Lazer";
-                case HouseholdExpenseType.HardDrink:
+                case ExpenseType.HardDrink:
                     return "Bebida Alcoólica";
-                case HouseholdExpenseType.Party:
+                case ExpenseType.Party:
                     return "Festa";
-                case HouseholdExpenseType.Transport:
+                case ExpenseType.Transport:
                     return "Transporte";
-                case HouseholdExpenseType.LateFees:
+                case ExpenseType.LateFees:
                     return "Juros de Atraso";
-                case HouseholdExpenseType.Clothes:
+                case ExpenseType.Clothes:
                     return "Roupas";
-                case HouseholdExpenseType.Utilities:
+                case ExpenseType.Utilities:
                     return "Utilidades";
-                case HouseholdExpenseType.Cleaning:
+                case ExpenseType.Cleaning:
                     return "Limpeza";
-                case HouseholdExpenseType.Exchange:
+                case ExpenseType.Exchange:
                     return "Câmbio";
-                case HouseholdExpenseType.Investment:
+                case ExpenseType.Investment:
                     return "Investimentos";
-                case HouseholdExpenseType.Phone:
+                case ExpenseType.Phone:
                     return "Telefone";
-                case HouseholdExpenseType.Games:
+                case ExpenseType.Games:
                     return "Jogos";
-                case HouseholdExpenseType.Donation:
+                case ExpenseType.Donation:
                     return "Doação";
-                case HouseholdExpenseType.Streams:
+                case ExpenseType.Streams:
                     return "Streams";
-                case HouseholdExpenseType.Others:
+                case ExpenseType.Others:
                     return "Outros";
+                case ExpenseType.Loan:
+                    return "Empréstimo";
+                case ExpenseType.Financing:
+                    return "Financiamento";
+                case ExpenseType.Tech:
+                    return "Tecnologia";
                 default:
                     return "Desconhecido";
             }

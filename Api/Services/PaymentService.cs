@@ -7,7 +7,6 @@ using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Infra.Filters;
 using Cashflow.Api.Models;
 using Cashflow.Api.Validators;
-using Cashflow.Api.Extensions;
 using Cashflow.Api.Enums;
 using Cashflow.Api.Shared.Cache;
 
@@ -52,7 +51,11 @@ namespace Cashflow.Api.Services
 
         public ResultDataModel<IEnumerable<TypeModel>> GetTypes()
         {
-            var types = Enum.GetValues<PaymentType>().Select(p => new TypeModel(p));
+            var types = Enum.GetValues<ExpenseType>()
+                            .Where(p => p != ExpenseType.Others)
+                            .Select(p => new TypeModel(p))
+                            .OrderBy(p => p.Description)
+                            .Append(new TypeModel(ExpenseType.Others));
             return new ResultDataModel<IEnumerable<TypeModel>>(types);
         }
 

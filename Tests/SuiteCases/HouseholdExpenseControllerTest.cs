@@ -18,7 +18,7 @@ namespace Cashflow.Tests
             Date = new DateTime(2019, 5, 1),
             Value = 327.5M,
             VehicleId = 3,
-            Type = HouseholdExpenseType.Others
+            Type = ExpenseType.Others
         };
 
         [TestMethod]

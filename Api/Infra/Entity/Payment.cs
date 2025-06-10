@@ -15,7 +15,7 @@ namespace Cashflow.Api.Infra.Entity
 
         public int UserId { get; set; }
 
-        public PaymentType Type { get; set; }
+        public ExpenseType Type { get; set; }
 
         public int? CreditCardId { get; set; }
 

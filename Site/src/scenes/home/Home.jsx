@@ -34,6 +34,7 @@ export function Home() {
     const [limitValues, setLimitValues] = useState([])
     const [totalInflows, setTotalInflows] = useState(0)
     const [totalOutflows, setTotalOutflows] = useState(0)
+    const [pendingTotalValue, setPendingTotalValue] = useState(0)
 
     const dispatch = useDispatch()
 
@@ -43,6 +44,10 @@ export function Home() {
         let year = now.getFullYear()
         refresh({ month, year })
     }, [])
+
+    useEffect(() => {
+        setPendingTotalValue(pendingPayments.reduce((total, item) => total + item.value, 0))
+    }, [pendingPayments])
 
     async function refresh(date) {
         if (date.month && date.year) {
@@ -66,18 +71,21 @@ export function Home() {
 
     return (
         <MainContainer title="Home">
+            <InputMonth
+                startYear={(new Date().getFullYear()) - 1}
+                selectedMonth={selectedDate.month}
+                selectedYear={selectedDate.year}
+                countYears={2}
+                label="Mês Referência:"
+                onChange={(month, year) => refresh({ month, year })} />
+            <div style={{ marginTop: 10 }}></div>
+            <Divider />
+            <div style={{ marginTop: 10 }}></div>
             <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 1, md: 2 }}>
                 <Grid size={6} padding={0} margin={0}>
-                    <InputMonth
-                        startYear={(new Date().getFullYear()) - 1}
-                        selectedMonth={selectedDate.month}
-                        selectedYear={selectedDate.year}
-                        countYears={2}
-                        label="Mês Referência:"
-                        onChange={(month, year) => refresh({ month, year })} />
                     <Item>
                         <List>
-                            <GridTitle>Entradas - <span style={{ color: Colors.AppGreen }}>{toReal(totalInflows)}</span></GridTitle>
+                            <GridTitle>Entradas - <MoneySpan $bold $large2 $gain>{toReal(totalInflows)}</MoneySpan></GridTitle>
                             {inflows.map((p, i) =>
                                 <div key={i}>
                                     <Divider />
@@ -97,7 +105,7 @@ export function Home() {
                 <Grid size={6}>
                     <Item>
                         <List>
-                            <GridTitle>Saídas - <span style={{ color: Colors.AppRed }}>{toReal(totalOutflows)}</span></GridTitle>
+                            <GridTitle>Saídas - <MoneySpan $bold $large2>{toReal(totalOutflows)}</MoneySpan></GridTitle>
                             {outflows.map((p, i) =>
                                 <div key={i}>
                                     <Divider />
@@ -119,23 +127,26 @@ export function Home() {
                 <Grid size={6}>
                     <Item>
                         <List>
-                            <GridTitle>Pendências<MoneySpan $gain={false}>Exibir Total</MoneySpan></GridTitle>
-                            {pendingPayments.map((p, i) =>
-                                <div key={i}>
-                                    <Divider />
-                                    <ListItem>
-                                        <ListItemIcon>
-                                            <WarningIcon color='warning' />
-                                        </ListItemIcon>
-                                        <ListItemText>
-                                            {p.description}
-                                        </ListItemText>
-                                        <ListItemText style={{ textAlign: 'right', color: Colors.AppRed }}>
-                                            {toReal(p.value)}
-                                        </ListItemText>
-                                    </ListItem>
-                                </div>
-                            )}
+                            <GridTitle>Pendências - <MoneySpan $bold $large2 $gain={pendingTotalValue <= 0}>{toReal(pendingTotalValue)}</MoneySpan></GridTitle>
+                            {pendingPayments.length == 0 ?
+                                <div>Sem pendências no momento.</div>
+                                : pendingPayments.map((p, i) =>
+                                    <div key={i}>
+                                        <Divider />
+                                        <ListItem>
+                                            <ListItemIcon>
+                                                <WarningIcon color='warning' />
+                                            </ListItemIcon>
+                                            <ListItemText>
+                                                {p.description}
+                                            </ListItemText>
+                                            <ListItemText style={{ textAlign: 'right', color: Colors.AppRed }}>
+                                                {toReal(p.value)}
+                                            </ListItemText>
+                                        </ListItem>
+                                    </div>
+                                )
+                            }
                         </List>
                     </Item>
                 </Grid>

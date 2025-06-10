@@ -119,12 +119,10 @@ namespace Cashflow.Api.Services
                 return result;
             }
 
-            var hasPayments = await _creditCardRepository.HasPayments(id);
-            if (hasPayments)
+            if (await _creditCardRepository.HasPayments(id))
                 result.AddNotification(ValidatorMessages.CreditCard.BindedWithPayments);
 
-            var hasHouseholdExpenses = await _creditCardRepository.HasHouseholdExpenses(id);
-            if (hasHouseholdExpenses)
+            if (await _creditCardRepository.HasHouseholdExpenses(id))
                 result.AddNotification(ValidatorMessages.CreditCard.BindedHouseholdExpense);
 
             if (!result.IsValid)
