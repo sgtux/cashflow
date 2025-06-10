@@ -18,7 +18,7 @@ namespace Cashflow.Api.Infra.Entity
 
         public int? VehicleId { get; set; }
 
-        public HouseholdExpenseType Type { get; set; }
+        public ExpenseType Type { get; set; }
 
         public string TypeDescription => Type.GetDescription();
 

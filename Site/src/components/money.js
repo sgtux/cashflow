@@ -9,6 +9,8 @@ const getFont = props => {
         return '12px'
     if (props.$large)
         return '16px'
+    if (props.$large2)
+        return '20px'
     if (props.$bigger)
         return '30px'
     return '14px'

@@ -7,6 +7,7 @@ using Cashflow.Api.Infra.Entity;
 using Cashflow.Tests.Tests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Cashflow.Api.Models;
+using Cashflow.Api.Enums;
 
 namespace Cashflow.Tests
 {
@@ -21,7 +22,7 @@ namespace Cashflow.Tests
             UserId = 1,
             CreditCardId = 1,
             Description = "First Payment",
-            Type = Enums.PaymentType.Spending,
+            Type = ExpenseType.Others,
             Installments = new List<Installment>()
                     {
                       new Installment() { Number = 1, Id = 1, Value = 1500.6M, PaidValue = 1500.6M, Date = new DateTime(2020, 1, 1) },

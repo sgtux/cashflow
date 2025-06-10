@@ -11,13 +11,7 @@ namespace Cashflow.Api.Models
 
         public TypeModel() { }
 
-        public TypeModel(HouseholdExpenseType type)
-        {
-            Id = (int)type;
-            Description = type.GetDescription();
-        }
-
-        public TypeModel(PaymentType type)
+        public TypeModel(ExpenseType type)
         {
             Id = (int)type;
             Description = type.GetDescription();
