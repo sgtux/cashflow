@@ -96,7 +96,7 @@ namespace Cashflow.Api.Services
 
                 var pendingValue = installments.Where(p => !p.PaidValue.HasValue).Sum(p => p.Value);
                 if (pendingValue > 0)
-                    homeModel.PendingPayments.Add(new PendingPaymentModel($"{item.Description} (Parcelado)", pendingValue));
+                    homeModel.PendingPayments.Add(new PendingPaymentModel($"{item.Description} (Parcelado)", pendingValue, item.CreditCardId > 0));
             }
 
             var recurringExpenses = await _recurringExpenseRepository.GetSome(new RecurringExpenseFilter() { UserId = userId, Active = 1 });
@@ -104,7 +104,7 @@ namespace Cashflow.Api.Services
             {
                 recurringExpenseInflowOutflowModel.Value += item.Value;
                 if (!item.Paid)
-                    homeModel.PendingPayments.Add(new PendingPaymentModel($"{item.Description} (Recorrente)", item.Value));
+                    homeModel.PendingPayments.Add(new PendingPaymentModel($"{item.Description} (Recorrente)", item.Value, item.CreditCardId > 0));
             }
 
             foreach (var item in await _earningRepository.GetSome(filter))
@@ -124,7 +124,7 @@ namespace Cashflow.Api.Services
             return new ResultDataModel<HomeModel>(homeModel);
         }
 
-        private void FillLimitValues(HomeModel homeModel, User user, InflowOutflowModel householdExpenseModel, InflowOutflowModel vehicleModel)
+        private void FillLimitValues(HomeModel homeModel, UserEntity user, InflowOutflowModel householdExpenseModel, InflowOutflowModel vehicleModel)
         {
             if (user.ExpenseLimit > 0)
                 homeModel.LimitValues.Add(new LimitValueModel()

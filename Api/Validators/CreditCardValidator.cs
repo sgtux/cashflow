@@ -6,7 +6,7 @@ using FluentValidation;
 
 namespace Cashflow.Api.Validators
 {
-    public class CreditCardValidator : AbstractValidator<CreditCard>
+    public class CreditCardValidator : AbstractValidator<CreditCardEntity>
     {
         private readonly ICreditCardRepository _creditCardRepository;
 
@@ -23,13 +23,13 @@ namespace Cashflow.Api.Validators
             RuleFor(c => c).Must(UserExists).WithMessage(ValidatorMessages.NotFound("Usuário"));
         }
 
-        public bool CreditCardExists(CreditCard card)
+        public bool CreditCardExists(CreditCardEntity card)
         {
             var cards = _creditCardRepository.GetSome(new BaseFilter() { UserId = card.UserId }).Result;
             return cards.Any(p => p.Id == card.Id);
         }
 
-        public bool UserExists(CreditCard card)
+        public bool UserExists(CreditCardEntity card)
         {
             return card.UserId > 0 && _userRepository.GetById(card.UserId).Result != null;
         }

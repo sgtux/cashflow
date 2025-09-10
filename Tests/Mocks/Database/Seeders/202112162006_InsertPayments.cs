@@ -13,7 +13,9 @@ namespace Cashflow.Tests.Mocks.Database.Seeders
                 .Row(new { Id = 2, Description = "Payment 2", Date = new DateTime(2019, 10, 1), UserId = 1, CreditCardId = 1, Type = 1 })
                 .Row(new { Id = 3, Description = "Payment 3", Date = new DateTime(2019, 12, 1), UserId = 1, CreditCardId = 1, Type = 1 })
                 .Row(new { Id = 4, Description = "Payment 4", Date = new DateTime(2019, 9, 1), UserId = 2, CreditCardId = 1, Type = 1 })
-                .Row(new { Id = 5, Description = "Payment 5", Date = new DateTime(2019, 9, 1), UserId = 4, Type = 1 });
+                .Row(new { Id = 5, Description = "Payment 5", Date = new DateTime(2019, 9, 1), UserId = 4, Type = 1 })
+                .Row(new { Id = 6, Description = "Payment 6", Date = new DateTime(2019, 9, 1), UserId = 2, CreditCardId = 3, Type = 1 })
+                .Row(new { Id = 7, Description = "Payment 7", Date = new DateTime(2019, 9, 1), UserId = 2,  CreditCardId = 3, Type = 1 });
         }
 
         public override void Down()

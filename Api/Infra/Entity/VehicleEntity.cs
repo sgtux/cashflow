@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Cashflow.Api.Infra.Entity
 {
-    public class Vehicle : BaseEntity
+    public class VehicleEntity : BaseEntity
     {
         public int Id { get; set; }
 
@@ -14,9 +14,9 @@ namespace Cashflow.Api.Infra.Entity
 
         public bool Active { get; set; }
 
-        public List<FuelExpense> FuelExpenses { get; set; }
+        public List<FuelExpenseEntity> FuelExpenses { get; set; }
 
-        public List<FuelExpense> FuelExpensesLast10 => HasExpenses ? FuelExpenses.OrderByDescending(p => p.Date).Take(10).ToList() : new List<FuelExpense>();
+        public List<FuelExpenseEntity> FuelExpensesLast10 => HasExpenses ? FuelExpenses.OrderByDescending(p => p.Date).Take(10).ToList() : new List<FuelExpenseEntity>();
 
         public decimal MiliageTraveled => HasExpenses ? FuelExpenses.Max(p => p.Miliage) - FuelExpenses.Min(p => p.Miliage) : 0;
 

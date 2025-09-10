@@ -4,7 +4,7 @@ using Cashflow.Api.Infra.Filters;
 
 namespace Cashflow.Api.Contracts
 {
-    public interface ICreditCardRepository : IRepository<CreditCard, BaseFilter>
+    public interface ICreditCardRepository : IRepository<CreditCardEntity, BaseFilter>
     {
         Task<bool> HasPayments(int cardId);
 

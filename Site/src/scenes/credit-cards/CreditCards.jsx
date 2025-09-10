@@ -13,7 +13,12 @@ import {
 	TableHead,
 	TableRow,
 	Collapse,
-	Card
+	Card,
+	Dialog,
+	DialogTitle,
+	DialogContent,
+	Button,
+	Zoom
 } from '@mui/material'
 
 import {
@@ -23,7 +28,7 @@ import {
 	KeyboardArrowUp
 } from '@mui/icons-material'
 
-import { MainContainer, AddFloatingButton, MoneySpan } from '../../components'
+import { MainContainer, AddFloatingButton, MoneySpan, TableActionPayButton, PaymentDoneSpan, InputMoney } from '../../components'
 import { CreditCardDetailModal } from './CreditCardEditModal/CreditCardEditModal'
 
 import { creditCardService } from '../../services'
@@ -66,6 +71,8 @@ export function CreditCards() {
 	const [cards, setCards] = useState([])
 	const [card, setCard] = useState(null)
 	const [open, setOpen] = useState({})
+	const [paymentToPay, setPaymentToPay] = useState(null)
+	const [valueToPay, setValueToPay] = useState(0)
 
 	const dispatch = useDispatch()
 
@@ -111,6 +118,30 @@ export function CreditCards() {
 		}
 	}
 
+	async function payCurrentInvoicePayment(item, card) {
+		const payment = {
+			description: item.description,
+			itemId: item.id,
+			type: item.type,
+			creditCardId: card.id
+		}
+		setPaymentToPay(payment)
+		setValueToPay(item.currentMonthDebt)
+	}
+
+	async function savePaymentToPay() {
+		dispatch(showGlobalLoader())
+		try {
+			await creditCardService.payCurrentInvoicePayment({ ...paymentToPay, paidValue: valueToPay })
+			setPaymentToPay(null)
+			await refresh()
+		} catch (err) {
+			console.log(err)
+		} finally {
+			dispatch(hideGlobalLoader())
+		}
+	}
+
 	return (
 		<MainContainer title="Cartões de crédito">
 			{cards.length > 0 ?
@@ -118,10 +149,11 @@ export function CreditCards() {
 					<TableHead>
 						<TableRow>
 							<StyledTableCell />
-							<StyledTableCell>Descrição</StyledTableCell>
+							<StyledTableCell>Nome</StyledTableCell>
+							<StyledTableCell>Fatura Atual</StyledTableCell>
 							<StyledTableCell>Crédito Devedor</StyledTableCell>
-							<StyledTableCell>Dia Fechamento Fatura</StyledTableCell>
-							<StyledTableCell>Dia Vencimento Fatura</StyledTableCell>
+							<StyledTableCell>Dia Fechamento</StyledTableCell>
+							<StyledTableCell>Dia Vencimento</StyledTableCell>
 							<StyledTableCell>Ações</StyledTableCell>
 						</TableRow>
 					</TableHead>
@@ -139,6 +171,7 @@ export function CreditCards() {
 										</IconButton>
 									</StyledTableCell>
 									<StyledTableCell>{p.name}</StyledTableCell>
+									<StyledTableCell><MoneySpan $gain={p.isCurrentMonthDebtPaid}>{toReal(p.currentMonthDebt)}</MoneySpan>										</StyledTableCell>
 									<StyledTableCell><MoneySpan $gain={p.outstandingDebt <= 0}>{toReal(p.outstandingDebtTotal)}</MoneySpan></StyledTableCell>
 									<StyledTableCell>{p.invoiceClosingDay}</StyledTableCell>
 									<StyledTableCell>{p.invoiceDueDay}</StyledTableCell>
@@ -169,6 +202,7 @@ export function CreditCards() {
 																<StyledTableCell>Parcelas</StyledTableCell>
 																<StyledSubTableCell align='right'>Valor Pendente</StyledSubTableCell>
 																<StyledSubTableCell align='right'>Valor Total</StyledSubTableCell>
+																<StyledSubTableCell></StyledSubTableCell>
 															</StyledTableRow>
 														</TableHead>
 														<TableBody>
@@ -180,6 +214,13 @@ export function CreditCards() {
 																		<MoneySpan style={{ fontSize: 12 }}>{toReal(h.outstandingDebt)}</MoneySpan>
 																	</StyledSubTableCell>
 																	<StyledSubTableCell align="right">{h.total ? toReal(h.total) : '-'}</StyledSubTableCell>
+																	<StyledTableCell>
+																		{h.isCurrentMonthDebtPaid ?
+																			<PaymentDoneSpan>pago</PaymentDoneSpan>
+																			:
+																			<TableActionPayButton onClick={() => payCurrentInvoicePayment(h, p)}>pagar</TableActionPayButton>
+																		}
+																	</StyledTableCell>
 																</StyledTableRow>
 															)}
 														</TableBody>
@@ -200,6 +241,30 @@ export function CreditCards() {
 			}
 			<CreditCardDetailModal onSave={c => saveCard(c)} onClose={() => refresh()} card={card} />
 			<AddFloatingButton onClick={() => setCard({})} />
+			<Dialog
+				open={!!paymentToPay}
+				onClose={() => setPaymentToPay(null)}
+				aria-labelledby="alert-dialog-title"
+				aria-describedby="alert-dialog-description"
+				transitionDuration={250}
+				TransitionComponent={Zoom}>
+				<DialogTitle id="alert-dialog-title" style={{ textAlign: 'center' }}>
+					<span>{(paymentToPay || {}).description}</span>
+				</DialogTitle>
+				<DialogContent>
+					<div style={{ textAlign: 'center', padding: 30 }}>
+						<span style={{ fontSize: 16 }}>Valor:</span>
+						<InputMoney
+							onChangeValue={(event, value, maskedValue) => setValueToPay(value)}
+							value={valueToPay} />
+						<br />
+					</div>
+				</DialogContent>
+				<div style={{ marginBottom: '20px', textAlign: 'center' }}>
+					<Button size="large" color="primary" onClick={() => setPaymentToPay(null)} autoFocus>cancelar</Button>
+					<Button size="large" color="primary" onClick={() => savePaymentToPay()} variant="contained" autoFocus>pagar</Button>
+				</div>
+			</Dialog>
 		</MainContainer>
 	)
 }

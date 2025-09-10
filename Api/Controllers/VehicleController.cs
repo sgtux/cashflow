@@ -21,7 +21,7 @@ namespace Cashflow.Api.Controllers
         public async Task<IActionResult> GetByUser([FromQuery] bool showInactives) => HandleResult(await _service.GetByUserId(UserId, showInactives));
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Vehicle vehicle)
+        public async Task<IActionResult> Post([FromBody] VehicleEntity vehicle)
         {
             if (vehicle is null)
                 return HandleUnprocessableEntity();
@@ -30,7 +30,7 @@ namespace Cashflow.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] Vehicle vehicle)
+        public async Task<IActionResult> Put(int id, [FromBody] VehicleEntity vehicle)
         {
             if (vehicle is null)
                 return HandleUnprocessableEntity();

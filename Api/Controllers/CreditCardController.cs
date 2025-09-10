@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Cashflow.Api.Infra.Entity;
+using Cashflow.Api.Models.CreditCard;
 using Cashflow.Api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +19,7 @@ namespace Cashflow.Api.Controllers
         public async Task<IActionResult> Get() => HandleResult(await _service.GetByUser(UserId));
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] CreditCard card)
+        public async Task<IActionResult> Post([FromBody] CreditCardEntity card)
         {
             if (card is null)
                 return HandleUnprocessableEntity();
@@ -27,12 +28,20 @@ namespace Cashflow.Api.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Put([FromBody] CreditCard card)
+        public async Task<IActionResult> Put([FromBody] CreditCardEntity card)
         {
             if (card is null)
                 return HandleUnprocessableEntity();
             card.UserId = UserId;
             return HandleResult(await _service.Update(card));
+        }
+
+        [HttpPut("PayCurrentInvoicePayment")]
+        public async Task<IActionResult> PutPayCurrentInvoicePayment([FromBody] PayCurrentInvoicePaymentModel model)
+        {
+            if (model is null)
+                return HandleUnprocessableEntity();
+            return HandleResult(await _service.PayCurrentInvoicePayment(model, UserId));
         }
 
         [HttpDelete("{id}")]

@@ -30,7 +30,7 @@ namespace Cashflow.Api.Services
             return new ResultDataModel<UserDataModel>(new UserDataModel(user));
         }
 
-        public async Task<ResultDataModel<UserDataModel>> Add(User model)
+        public async Task<ResultDataModel<UserDataModel>> Add(UserEntity model)
         {
             var result = new ResultDataModel<UserDataModel>();
 
@@ -95,7 +95,7 @@ namespace Cashflow.Api.Services
                     return result;
                 }
 
-                await _userRepository.Add(new User()
+                await _userRepository.Add(new UserEntity()
                 {
                     CreatedAt = CurrentDate,
                     Email = googleUserModel.email
@@ -108,7 +108,7 @@ namespace Cashflow.Api.Services
             return result;
         }
 
-        public async Task<ResultDataModel<UserDataModel>> Update(User user)
+        public async Task<ResultDataModel<UserDataModel>> Update(UserEntity user)
         {
             var result = new ResultDataModel<UserDataModel>(new UserDataModel(user));
             const int minValue = 0;

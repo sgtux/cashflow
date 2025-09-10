@@ -11,33 +11,33 @@ using Cashflow.Api.Infra.Filters;
 
 namespace Cashflow.Api.Infra.Repository
 {
-    public class PaymentRepository : BaseRepository<Payment>, IPaymentRepository
+    public class PaymentRepository : BaseRepository<PaymentEntity>, IPaymentRepository
     {
         public PaymentRepository(IDatabaseContext conn, LogService logService) : base(conn, logService) { }
 
-        public async Task<IEnumerable<Payment>> GetSome(PaymentFilter filter)
+        public async Task<IEnumerable<PaymentEntity>> GetSome(PaymentFilter filter)
         {
             var data = await Query<dynamic>(PaymentResources.Some, filter);
 
-            Slapper.AutoMapper.Configuration.AddIdentifiers(typeof(Payment), new List<string> { "Id" });
-            Slapper.AutoMapper.Configuration.AddIdentifiers(typeof(Installment), new List<string> { "Id" });
-            Slapper.AutoMapper.Configuration.AddIdentifiers(typeof(CreditCard), new List<string> { "Id" });
+            Slapper.AutoMapper.Configuration.AddIdentifiers(typeof(PaymentEntity), new List<string> { "Id" });
+            Slapper.AutoMapper.Configuration.AddIdentifiers(typeof(InstallmentEntity), new List<string> { "Id" });
+            Slapper.AutoMapper.Configuration.AddIdentifiers(typeof(CreditCardEntity), new List<string> { "Id" });
 
-            return Slapper.AutoMapper.MapDynamic<Payment>(data);
+            return Slapper.AutoMapper.MapDynamic<PaymentEntity>(data);
         }
 
-        public async Task<Payment> GetById(long id)
+        public async Task<PaymentEntity> GetById(long id)
         {
             var data = await Query<dynamic>(PaymentResources.ById, new { Id = id });
 
-            Slapper.AutoMapper.Configuration.AddIdentifiers(typeof(Payment), new List<string> { "Id" });
-            Slapper.AutoMapper.Configuration.AddIdentifiers(typeof(Installment), new List<string> { "Id" });
-            Slapper.AutoMapper.Configuration.AddIdentifiers(typeof(CreditCard), new List<string> { "Id" });
+            Slapper.AutoMapper.Configuration.AddIdentifiers(typeof(PaymentEntity), new List<string> { "Id" });
+            Slapper.AutoMapper.Configuration.AddIdentifiers(typeof(InstallmentEntity), new List<string> { "Id" });
+            Slapper.AutoMapper.Configuration.AddIdentifiers(typeof(CreditCardEntity), new List<string> { "Id" });
 
-            return Slapper.AutoMapper.MapDynamic<Payment>(data).FirstOrDefault();
+            return Slapper.AutoMapper.MapDynamic<PaymentEntity>(data).FirstOrDefault();
         }
 
-        public async Task Add(Payment payment)
+        public async Task Add(PaymentEntity payment)
         {
             BeginTransaction();
             await Execute(PaymentResources.Insert, payment);
@@ -49,7 +49,7 @@ namespace Cashflow.Api.Infra.Repository
             }
         }
 
-        public async Task Update(Payment payment)
+        public async Task Update(PaymentEntity payment)
         {
             BeginTransaction();
             await Execute(InstallmentResources.Delete, new { PaymentId = payment.Id });
@@ -59,6 +59,11 @@ namespace Cashflow.Api.Infra.Repository
                 i.PaymentId = payment.Id;
                 await Execute(InstallmentResources.Insert, i);
             }
+        }
+
+        public Task UpdateInstallment(InstallmentEntity installment)
+        {
+            return Execute(InstallmentResources.Update, installment);
         }
 
         public async Task Remove(long id)

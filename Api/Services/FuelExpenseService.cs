@@ -28,10 +28,10 @@ namespace Cashflow.Api.Services
             _appCache = appCache;
         }
 
-        public async Task<ResultModel> Add(FuelExpense fuelExpense, int userId)
+        public async Task<ResultModel> Add(FuelExpenseEntity fuelExpense, int userId)
         {
             var result = new ResultModel();
-            var validatorResult = new FuelExpenseValidator(_vehicleRepository, _fuelExpenseRepository, _creditCardRepository, userId).Validate(fuelExpense);
+            var validatorResult = new FuelExpenseValidator(_vehicleRepository, _fuelExpenseRepository, userId).Validate(fuelExpense);
 
             if (validatorResult.IsValid)
             {
@@ -44,10 +44,10 @@ namespace Cashflow.Api.Services
             return result;
         }
 
-        public async Task<ResultModel> Update(FuelExpense fuelExpense, int userId)
+        public async Task<ResultModel> Update(FuelExpenseEntity fuelExpense, int userId)
         {
             var result = new ResultModel();
-            var validatorResult = new FuelExpenseValidator(_vehicleRepository, _fuelExpenseRepository, _creditCardRepository, userId).Validate(fuelExpense);
+            var validatorResult = new FuelExpenseValidator(_vehicleRepository, _fuelExpenseRepository, userId).Validate(fuelExpense);
 
             if (validatorResult.IsValid)
             {

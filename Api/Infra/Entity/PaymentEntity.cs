@@ -7,7 +7,7 @@ using Cashflow.Api.Utils;
 
 namespace Cashflow.Api.Infra.Entity
 {
-    public class Payment : BaseEntity
+    public class PaymentEntity : BaseEntity
     {
         public long Id { get; set; }
 
@@ -19,7 +19,7 @@ namespace Cashflow.Api.Infra.Entity
 
         public int? CreditCardId { get; set; }
 
-        public CreditCard CreditCard { get; set; }
+        public CreditCardEntity CreditCard { get; set; }
 
         public string CreditCardText => CreditCard?.Name ?? string.Empty;
 
@@ -29,7 +29,7 @@ namespace Cashflow.Api.Infra.Entity
 
         public bool DoneInThisMonth => HasInstallments && Done && (Installments?.Where(p => p.PaidDate.HasValue).Max(p => p.PaidDate.Value).SameMonthYear(DateTimeUtils.CurrentDate) ?? false);
 
-        public IList<Installment> Installments { get; set; }
+        public IList<InstallmentEntity> Installments { get; set; }
 
         public int PaidInstallments => Installments?.Count(p => p.PaidDate.HasValue || p.Exempt) ?? 0;
 

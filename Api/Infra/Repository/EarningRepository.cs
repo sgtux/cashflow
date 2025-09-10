@@ -8,18 +8,18 @@ using Cashflow.Api.Contracts;
 
 namespace Cashflow.Api.Infra.Repository
 {
-    public class EarningRepository : BaseRepository<Earning>, IEarningRepository
+    public class EarningRepository : BaseRepository<EarningEntity>, IEarningRepository
     {
         public EarningRepository(IDatabaseContext conn, LogService logService) : base(conn, logService) { }
 
-        public Task Add(Earning earning) => Execute(EarningResources.Insert, earning);
+        public Task Add(EarningEntity earning) => Execute(EarningResources.Insert, earning);
 
-        public Task<Earning> GetById(long id) => FirstOrDefault(EarningResources.ById, new { Id = id });
+        public Task<EarningEntity> GetById(long id) => FirstOrDefault(EarningResources.ById, new { Id = id });
 
-        public Task<IEnumerable<Earning>> GetSome(BaseFilter filter) => Query(EarningResources.ByUser, filter);
+        public Task<IEnumerable<EarningEntity>> GetSome(BaseFilter filter) => Query(EarningResources.ByUser, filter);
 
         public Task Remove(long id) => Execute(EarningResources.Delete, new { Id = id });
 
-        public Task Update(Earning earning) => Execute(EarningResources.Update, earning);
+        public Task Update(EarningEntity earning) => Execute(EarningResources.Update, earning);
     }
 }

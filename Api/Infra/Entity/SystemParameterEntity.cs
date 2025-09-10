@@ -1,8 +1,6 @@
-using System;
-
 namespace Cashflow.Api.Infra.Entity
 {
-    public class SystemParameter : BaseEntity
+    public class SystemParameterEntity : BaseEntity
     {
         public long Id { get; set; }
 

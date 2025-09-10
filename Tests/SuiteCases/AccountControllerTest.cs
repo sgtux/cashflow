@@ -86,7 +86,7 @@ namespace Cashflow.Tests
         [TestMethod]
         public async Task UpdateWithMinExpenseLimitError()
         {
-            var model = new User()
+            var model = new UserEntity()
             {
                 ExpenseLimit = -1,
                 FuelExpenseLimit = 99
@@ -98,7 +98,7 @@ namespace Cashflow.Tests
         [TestMethod]
         public async Task UpdateWithMaxExpenseLimitError()
         {
-            var model = new User()
+            var model = new UserEntity()
             {
                 ExpenseLimit = 999999,
                 FuelExpenseLimit = 99
@@ -110,7 +110,7 @@ namespace Cashflow.Tests
         [TestMethod]
         public async Task UpdateWithMinFuelExpenseLimitError()
         {
-            var model = new User()
+            var model = new UserEntity()
             {
                 ExpenseLimit = 99,
                 FuelExpenseLimit = -1
@@ -122,7 +122,7 @@ namespace Cashflow.Tests
         [TestMethod]
         public async Task UpdateWithMaxFuelExpenseLimitError()
         {
-            var model = new User()
+            var model = new UserEntity()
             {
                 ExpenseLimit = 99,
                 FuelExpenseLimit = 999999
@@ -134,7 +134,7 @@ namespace Cashflow.Tests
         [TestMethod]
         public async Task UpdateOk()
         {
-            var model = new User()
+            var model = new UserEntity()
             {
                 ExpenseLimit = 333.33m,
                 FuelExpenseLimit = 444.44m

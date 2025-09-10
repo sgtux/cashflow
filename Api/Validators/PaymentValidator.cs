@@ -8,7 +8,7 @@ using FluentValidation;
 
 namespace Cashflow.Api.Validators
 {
-    public class PaymentValidator : AbstractValidator<Payment>
+    public class PaymentValidator : AbstractValidator<PaymentEntity>
     {
         private readonly IPaymentRepository _paymentRepository;
 
@@ -26,7 +26,7 @@ namespace Cashflow.Api.Validators
             RuleFor(p => p.Installments).Custom(ValidateInstallments);
         }
 
-        private void ValidateInstallments(IList<Installment> list, ValidationContext<Payment> context)
+        private void ValidateInstallments(IList<InstallmentEntity> list, ValidationContext<PaymentEntity> context)
         {
             if (list != null)
             {
@@ -39,7 +39,7 @@ namespace Cashflow.Api.Validators
                 if (list.Any(p => p.PaidValue.HasValue && p.Exempt))
                     context.AddFailure(ValidatorMessages.Payment.ExemptInstallmentWithValue);
 
-                if (list.Any(p => p.Date == default(DateTime)))
+                if (list.Any(p => p.Date == default))
                     context.AddFailure(ValidatorMessages.Payment.InstallmentWithInvalidDate);
 
                 if (list.Any(p => p.PaidDate == default(DateTime)))
@@ -56,7 +56,7 @@ namespace Cashflow.Api.Validators
             }
         }
 
-        private bool ValidCreditCard(Payment payment)
+        private bool ValidCreditCard(PaymentEntity payment)
         {
             if (payment.CreditCardId > 0)
             {
@@ -69,7 +69,7 @@ namespace Cashflow.Api.Validators
             return true;
         }
 
-        private bool ValidPayment(Payment payment)
+        private bool ValidPayment(PaymentEntity payment)
         {
             var paymentDb = _paymentRepository.GetById(payment.Id).Result;
             return paymentDb?.UserId == payment.UserId;

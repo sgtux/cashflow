@@ -12,7 +12,7 @@ namespace Cashflow.Tests
         [TestMethod]
         public async Task AddWithInvalidDescription()
         {
-            var model = new Vehicle()
+            var model = new VehicleEntity()
             {
                 Description = "",
                 UserId = 1,
@@ -25,7 +25,7 @@ namespace Cashflow.Tests
         [TestMethod]
         public async Task AddOk()
         {
-            var model = new Vehicle()
+            var model = new VehicleEntity()
             {
                 Description = "Vehicle 2",
                 UserId = 1
@@ -37,7 +37,7 @@ namespace Cashflow.Tests
         [TestMethod]
         public async Task UpdateWithInvalidDescription()
         {
-            var model = new Vehicle()
+            var model = new VehicleEntity()
             {
                 Description = "",
                 UserId = 1,
@@ -50,7 +50,7 @@ namespace Cashflow.Tests
         [TestMethod]
         public async Task UpdateOk()
         {
-            var model = new Vehicle()
+            var model = new VehicleEntity()
             {
                 Description = "Vehicle 1",
                 UserId = 1,
@@ -63,14 +63,14 @@ namespace Cashflow.Tests
         [TestMethod]
         public async Task MiliageTraveledOk()
         {
-            var vehicle = await Get<Vehicle>("/api/Vehicle/2", 1);
+            var vehicle = await Get<VehicleEntity>("/api/Vehicle/2", 1);
             Assert.AreEqual(50, vehicle.Data.MiliageTraveled);
         }
 
         [TestMethod]
         public async Task MilagePerLiterOk()
         {
-            var vehicle = await Get<Vehicle>("/api/Vehicle/2", 1);
+            var vehicle = await Get<VehicleEntity>("/api/Vehicle/2", 1);
             Assert.AreEqual(10.64M, vehicle.Data.MiliagePerLiter);
         }
     }

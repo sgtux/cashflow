@@ -17,7 +17,7 @@ namespace Cashflow.Tests
         [TestMethod]
         public async Task GetSalariesByUser()
         {
-            var result = await Get<IEnumerable<Earning>>("/api/Earning", 1);
+            var result = await Get<IEnumerable<EarningEntity>>("/api/Earning", 1);
             Assert.IsTrue(result.Data.Count() > 0);
         }
 
@@ -31,7 +31,7 @@ namespace Cashflow.Tests
         [TestMethod]
         public async Task AddEarningWithDefaultDate()
         {
-            var model = new Earning()
+            var model = new EarningEntity()
             {
                 Date = default,
                 Value = 1000,
@@ -44,7 +44,7 @@ namespace Cashflow.Tests
 
         public async Task AddEarningWithoutDescription()
         {
-            var model = new Earning()
+            var model = new EarningEntity()
             {
                 Date = default,
                 Value = 1000,
@@ -57,7 +57,7 @@ namespace Cashflow.Tests
         [TestMethod]
         public async Task AddSalaryWithValueNoMoreThenZero()
         {
-            var model = new Earning()
+            var model = new EarningEntity()
             {
                 Date = DateTime.Now,
                 Value = 0,
@@ -72,7 +72,7 @@ namespace Cashflow.Tests
         [TestMethod]
         public async Task AddCurrentEarningWithInvalidType()
         {
-            var model = new Earning()
+            var model = new EarningEntity()
             {
                 Date = new DateTime(2021, 4, 1),
                 Value = 1000,
@@ -87,7 +87,7 @@ namespace Cashflow.Tests
         [TestMethod]
         public async Task AddCurrentEarningOk()
         {
-            var model = new Earning()
+            var model = new EarningEntity()
             {
                 Date = new DateTime(2021, 4, 1),
                 Value = 1000,
@@ -102,7 +102,7 @@ namespace Cashflow.Tests
         [TestMethod]
         public async Task AddEarningOk()
         {
-            var model = new Earning()
+            var model = new EarningEntity()
             {
                 Date = new DateTime(2020, 12, 1),
                 Value = 1000,
@@ -118,7 +118,7 @@ namespace Cashflow.Tests
         [TestMethod]
         public async Task UpdateEarningWithDefaultDate()
         {
-            var model = new Earning()
+            var model = new EarningEntity()
             {
                 Date = default,
                 Value = 1000,
@@ -133,7 +133,7 @@ namespace Cashflow.Tests
         [TestMethod]
         public async Task UpdateEarningWithValueNoMoreThenZero()
         {
-            var model = new Earning()
+            var model = new EarningEntity()
             {
                 Id = 2,
                 Date = DateTime.Now,
@@ -149,7 +149,7 @@ namespace Cashflow.Tests
         [TestMethod]
         public async Task UpdateEarningWithoutDescription()
         {
-            var model = new Earning()
+            var model = new EarningEntity()
             {
                 Id = 2,
                 Date = DateTime.Now,
@@ -164,7 +164,7 @@ namespace Cashflow.Tests
         [TestMethod]
         public async Task UpdateEarningNotFound()
         {
-            var model = new Earning()
+            var model = new EarningEntity()
             {
                 Id = 99,
                 Description = "Salário",
@@ -179,7 +179,7 @@ namespace Cashflow.Tests
         [TestMethod]
         public async Task UpdateEarningWithInvalidType()
         {
-            var model = new Earning()
+            var model = new EarningEntity()
             {
                 Id = 3,
                 Description = "Salário",
@@ -195,7 +195,7 @@ namespace Cashflow.Tests
         [TestMethod]
         public async Task UpdateEarningOk()
         {
-            var model = new Earning()
+            var model = new EarningEntity()
             {
                 Id = 12,
                 Description = "Salário",

@@ -5,7 +5,7 @@ using Cashflow.Api.Extensions;
 
 namespace Cashflow.Api.Infra.Entity
 {
-    public class RecurringExpense : BaseEntity
+    public class RecurringExpenseEntity : BaseEntity
     {
         public long Id { get; set; }
 
@@ -17,11 +17,11 @@ namespace Cashflow.Api.Infra.Entity
 
         public int? CreditCardId { get; set; }
 
-        public CreditCard CreditCard { get; set; }
+        public CreditCardEntity CreditCard { get; set; }
 
         public int UserId { get; set; }
 
-        public List<RecurringExpenseHistory> History { get; set; }
+        public List<RecurringExpenseHistoryEntity> History { get; set; }
 
         public bool Paid => History?.Any(p => p.Date.SameMonthYear(CurrentDate)) ?? false;
 

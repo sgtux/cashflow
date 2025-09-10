@@ -7,7 +7,7 @@ namespace Cashflow.Api.Models.Account
     {
         public UserDataModel() { }
 
-        public UserDataModel(User user)
+        public UserDataModel(UserEntity user)
         {
             Id = user.Id;
             Email = user.Email;

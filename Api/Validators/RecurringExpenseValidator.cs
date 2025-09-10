@@ -6,7 +6,7 @@ using FluentValidation;
 
 namespace Cashflow.Api.Validators
 {
-    public class RecurringExpenseValidator : AbstractValidator<RecurringExpense>
+    public class RecurringExpenseValidator : AbstractValidator<RecurringExpenseEntity>
     {
         private readonly IRecurringExpenseRepository _recurringExpenseRepository;
 
@@ -22,7 +22,7 @@ namespace Cashflow.Api.Validators
             RuleFor(p => p).Must(ValidRecurringExpense).When(p => p.Id > 0).WithMessage(ValidatorMessages.NotFound("Despesa Recorrente"));
         }
 
-        private bool ValidCreditCard(RecurringExpense recurringExpense)
+        private bool ValidCreditCard(RecurringExpenseEntity recurringExpense)
         {
             if (recurringExpense.CreditCardId > 0)
             {
@@ -35,7 +35,7 @@ namespace Cashflow.Api.Validators
             return true;
         }
 
-        private bool ValidRecurringExpense(RecurringExpense recurringExpense)
+        private bool ValidRecurringExpense(RecurringExpenseEntity recurringExpense)
         {
             var recurringExpenseDb = _recurringExpenseRepository.GetById(recurringExpense.Id).Result;
             return recurringExpenseDb?.UserId == recurringExpense.UserId;

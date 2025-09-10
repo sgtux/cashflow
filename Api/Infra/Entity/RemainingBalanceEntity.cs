@@ -2,7 +2,7 @@ using System;
 
 namespace Cashflow.Api.Infra.Entity
 {
-    public class RemainingBalance : BaseEntity
+    public class RemainingBalanceEntity : BaseEntity
     {
         public long Id { get; set; }
 

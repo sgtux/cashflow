@@ -40,3 +40,11 @@ export const AddFloatingButton = ({ onClick }) => {
         </Fab>
     )
 }
+
+export const PaymentDoneSpan = styled.span`
+    color: #fff;
+    font-size: 10px;
+    background-color: #bbb;
+    padding: 4px;
+    border-radius: 6px;
+`

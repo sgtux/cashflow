@@ -3,7 +3,7 @@ using Cashflow.Api.Enums;
 
 namespace Cashflow.Api.Infra.Entity
 {
-    public class User : BaseEntity
+    public class UserEntity : BaseEntity
     {
         public int Id { get; set; }
 

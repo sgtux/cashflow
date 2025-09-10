@@ -7,11 +7,11 @@ using FluentValidation;
 
 namespace Cashflow.Api.Validators
 {
-    public class EarningValidator : AbstractValidator<Earning>
+    public class EarningValidator : AbstractValidator<EarningEntity>
     {
         private readonly IEarningRepository _repository;
 
-        private IEnumerable<Earning> _earnings;
+        private IEnumerable<EarningEntity> _earnings;
 
         public EarningValidator(IEarningRepository repository)
         {
@@ -23,13 +23,13 @@ namespace Cashflow.Api.Validators
             RuleFor(s => s).Must(EarningExists).When(p => p.Id > 0).WithMessage(ValidatorMessages.NotFound("Provento"));
         }
 
-        private bool EarningExists(Earning earning)
+        private bool EarningExists(EarningEntity earning)
         {
             LoadEarnings(earning);
             return _earnings.Any(p => p.Id == earning.Id && p.UserId == earning.UserId);
         }
 
-        private void LoadEarnings(Earning earning)
+        private void LoadEarnings(EarningEntity earning)
         {
             if (_earnings is null)
                 _earnings = _repository.GetSome(new BaseFilter() { UserId = earning.UserId }).Result;

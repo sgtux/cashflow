@@ -70,7 +70,7 @@ export function SidebarContent({ closeSidebar }) {
         <Divider />
         <LinkListItem onClick={() => closeSidebar()} to="/projection" text="Projeção" icon={AnalysisIcon} />
         <Divider />
-        <LinkListItem onClick={() => closeSidebar()} to="/credit-cards" text="Cartões" icon={CreditCardIcon} />
+        <LinkListItem onClick={() => closeSidebar()} to="/credit-cards" text="Créditos/Faturas" icon={CreditCardIcon} />
         <Divider />
         <LinkListItem onClick={() => closeSidebar()} to="/earnings" text="Ganhos" icon={MoneyIncomeIcon} />
         <Divider />

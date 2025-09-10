@@ -7,25 +7,21 @@ using FluentValidation;
 
 namespace Cashflow.Api.Validators
 {
-    public class FuelExpenseValidator : AbstractValidator<FuelExpense>
+    public class FuelExpenseValidator : AbstractValidator<FuelExpenseEntity>
     {
         private readonly IVehicleRepository _vehicleRepository;
 
         private readonly IFuelExpenseRepository _fuelExpenseRepository;
 
-        private readonly ICreditCardRepository _creditCardRepository;
-
         private int _userId;
 
         public FuelExpenseValidator(IVehicleRepository vehicleRepository,
             IFuelExpenseRepository fuelExpenseRepository,
-            ICreditCardRepository creditCardRepository,
             int userId)
         {
             _userId = userId;
             _vehicleRepository = vehicleRepository;
             _fuelExpenseRepository = fuelExpenseRepository;
-            _creditCardRepository = creditCardRepository;
             RuleFor(c => c.Miliage).GreaterThan(0).WithMessage(ValidatorMessages.MinValue("Quilometragem", 0));
             RuleFor(c => c.Miliage).LessThan(1000000000).WithMessage(ValidatorMessages.MaxValue("Quilometragem", 999999999));
             RuleFor(c => c.PricePerLiter).GreaterThan(0).WithMessage(ValidatorMessages.MinValue("Preço por Litro", 0));
@@ -38,15 +34,15 @@ namespace Cashflow.Api.Validators
             RuleFor(c => c).Must(DataMiliageIsMatch).WithMessage("Data e Quilometragem não batem devido à outro abastecimento");
         }
 
-        private bool VehicleExists(FuelExpense fuelExpense)
+        private bool VehicleExists(FuelExpenseEntity fuelExpense)
         {
             var vehicle = _vehicleRepository.GetById(fuelExpense.VehicleId).Result;
             return vehicle?.UserId == _userId;
         }
 
-        private bool FuelExpenseExists(FuelExpense fuelExpense) => _fuelExpenseRepository.GetById(fuelExpense.Id).Result != null;
+        private bool FuelExpenseExists(FuelExpenseEntity fuelExpense) => _fuelExpenseRepository.GetById(fuelExpense.Id).Result != null;
 
-        private bool DataMiliageIsMatch(FuelExpense fuelExpense)
+        private bool DataMiliageIsMatch(FuelExpenseEntity fuelExpense)
         {
             var vehicle = _vehicleRepository.GetById(fuelExpense.VehicleId).Result;
             if (vehicle == null)

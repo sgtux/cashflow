@@ -27,13 +27,13 @@ namespace Cashflow.Api.Services
             _appCache = appCache;
         }
 
-        public async Task<ResultDataModel<Payment>> Get(int id, int userId)
+        public async Task<ResultDataModel<PaymentEntity>> Get(long id, int userId)
         {
             var p = await _paymentRepository.GetById(id);
-            return new ResultDataModel<Payment>(p?.UserId == userId ? p : null);
+            return new ResultDataModel<PaymentEntity>(p?.UserId == userId ? p : null);
         }
 
-        public async Task<ResultDataModel<IEnumerable<Payment>>> GetByUser(int userId, PaymentFilter filter)
+        public async Task<ResultDataModel<IEnumerable<PaymentEntity>>> GetByUser(int userId, PaymentFilter filter)
         {
             filter.UserId = userId;
             filter.FixParams();
@@ -46,7 +46,7 @@ namespace Cashflow.Api.Services
                     list = list.Where(p => !p.Done);
             }
             list = list.OrderBy(p => p.Description);
-            return new ResultDataModel<IEnumerable<Payment>>(list);
+            return new ResultDataModel<IEnumerable<PaymentEntity>>(list);
         }
 
         public ResultDataModel<IEnumerable<TypeModel>> GetTypes()
@@ -59,7 +59,7 @@ namespace Cashflow.Api.Services
             return new ResultDataModel<IEnumerable<TypeModel>>(types);
         }
 
-        public async Task<ResultModel> Add(Payment payment)
+        public async Task<ResultModel> Add(PaymentEntity payment)
         {
             var result = new ResultModel();
             var validatorResult = new PaymentValidator(_paymentRepository, _creditCardRepository).Validate(payment);
@@ -78,7 +78,7 @@ namespace Cashflow.Api.Services
             return result;
         }
 
-        public async Task<ResultModel> Update(Payment payment)
+        public async Task<ResultModel> Update(PaymentEntity payment)
         {
             var result = new ResultModel();
             var validatorResult = new PaymentValidator(_paymentRepository, _creditCardRepository).Validate(payment);
@@ -97,6 +97,11 @@ namespace Cashflow.Api.Services
             return result;
         }
 
+        public Task UpdateInstallment(InstallmentEntity installment)
+        {
+            return _paymentRepository.UpdateInstallment(installment);
+        }
+
         public async Task<ResultModel> Remove(int paymentId, int userId)
         {
             var result = new ResultModel();
@@ -113,8 +118,8 @@ namespace Cashflow.Api.Services
 
         public async Task<ResultModel> GenerateInstallments(GenerateInstallmentsModel model, int userId)
         {
-            var installments = new List<Installment>();
-            var result = new ResultDataModel<List<Installment>>(installments);
+            var installments = new List<InstallmentEntity>();
+            var result = new ResultDataModel<List<InstallmentEntity>>(installments);
 
             if (model.Value <= 0 || model.Amount <= 0 || model.Amount > 72 || model.Date == default)
             {
@@ -162,7 +167,7 @@ namespace Cashflow.Api.Services
 
             for (short i = 1; i <= model.Amount; i++)
             {
-                installments.Add(new Installment()
+                installments.Add(new InstallmentEntity()
                 {
                     Number = i,
                     Value = model.Value,

@@ -44,7 +44,7 @@ namespace Cashflow.Api.Controllers
         {
             if (model is null)
                 return HandleUnprocessableEntity();
-            var result = await _service.Add(model.Map<AccountModel, User>());
+            var result = await _service.Add(model.Map<AccountModel, UserEntity>());
             if (result.IsValid)
             {
                 var claims = new Dictionary<string, string>
@@ -65,7 +65,7 @@ namespace Cashflow.Api.Controllers
 
         [Authorize]
         [HttpPut]
-        public async Task<IActionResult> Put([FromBody] User user)
+        public async Task<IActionResult> Put([FromBody] UserEntity user)
         {
             if (user is null)
                 return HandleUnprocessableEntity();

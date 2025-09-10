@@ -18,7 +18,7 @@ namespace Cashflow.Tests
         {
             var previousMonth = DateTime.Now.AddMonths(-1);
             await Put("/api/RemainingBalance/Recalculate", new { previousMonth.Month, previousMonth.Year }, 4);
-            var result = (await Get<List<RemainingBalance>>("/api/RemainingBalance", 4)).Data;
+            var result = (await Get<List<RemainingBalanceEntity>>("/api/RemainingBalance", 4)).Data;
             var previousRemainingBalance = result.First(p => p.Date.SameMonthYear(previousMonth));
             var currentRemainingBalance = result.First(p => p.Date.SameMonthYear(p.CurrentDate));
 

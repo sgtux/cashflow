@@ -6,7 +6,7 @@ using FluentValidation;
 
 namespace Cashflow.Api.Validators
 {
-    public class HouseholdExpenseValidator : AbstractValidator<HouseholdExpense>
+    public class HouseholdExpenseValidator : AbstractValidator<HouseholdExpenseEntity>
     {
         private readonly IVehicleRepository _vehicleRepository;
 
@@ -25,7 +25,7 @@ namespace Cashflow.Api.Validators
             RuleFor(p => p).Must(ValidCreditCard).WithMessage(ValidatorMessages.NotFound("Cartão de Crédito"));
         }
 
-        private bool VehicleExists(HouseholdExpense householdExpense)
+        private bool VehicleExists(HouseholdExpenseEntity householdExpense)
         {
             if (householdExpense.VehicleId > 0)
             {
@@ -37,7 +37,7 @@ namespace Cashflow.Api.Validators
             return true;
         }
 
-        private bool ValidCreditCard(HouseholdExpense householdExpense)
+        private bool ValidCreditCard(HouseholdExpenseEntity householdExpense)
         {
             if (householdExpense.CreditCardId > 0)
             {

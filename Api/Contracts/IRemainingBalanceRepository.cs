@@ -5,8 +5,8 @@ using Cashflow.Api.Infra.Filters;
 
 namespace Cashflow.Api.Contracts
 {
-    public interface IRemainingBalanceRepository : IRepository<RemainingBalance, BaseFilter>
+    public interface IRemainingBalanceRepository : IRepository<RemainingBalanceEntity, BaseFilter>
     {
-        Task<RemainingBalance> GetByMonthYear(int userId, DateTime date);
+        Task<RemainingBalanceEntity> GetByMonthYear(int userId, DateTime date);
     }
 }

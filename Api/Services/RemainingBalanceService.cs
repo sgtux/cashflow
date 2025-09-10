@@ -51,14 +51,14 @@ namespace Cashflow.Api.Services
             var list = (await _remainingBalanceRepository.GetSome(new BaseFilter() { UserId = userId })).ToList();
             var result = await Recalculate(userId, DateTimeUtils.CurrentDate, false, true);
             list.Add(result.Data);
-            return new ResultDataModel<IEnumerable<RemainingBalance>>(list.OrderByDescending(p => p.Date));
+            return new ResultDataModel<IEnumerable<RemainingBalanceEntity>>(list.OrderByDescending(p => p.Date));
         }
 
-        public async Task<ResultDataModel<RemainingBalance>> Recalculate(int userId, DateTime date, bool force = false, bool simulation = false)
+        public async Task<ResultDataModel<RemainingBalanceEntity>> Recalculate(int userId, DateTime date, bool force = false, bool simulation = false)
         {
             var current = await _remainingBalanceRepository.GetByMonthYear(userId, date);
             if (current != null && !force)
-                return new ResultDataModel<RemainingBalance>(current);
+                return new ResultDataModel<RemainingBalanceEntity>(current);
 
             var filter = new RecurringExpenseFilter()
             {
@@ -89,7 +89,7 @@ namespace Cashflow.Api.Services
             foreach (var item in await _recurringExpenseRepository.GetSome(filter))
                 total -= item.History.First().PaidValue;
 
-            var newRemainingBalance = new RemainingBalance()
+            var newRemainingBalance = new RemainingBalanceEntity()
             {
                 Value = total,
                 Month = date.Month,
@@ -98,19 +98,19 @@ namespace Cashflow.Api.Services
             };
 
             if (simulation || date.SameMonthYear(DateTimeUtils.CurrentDate))
-                return new ResultDataModel<RemainingBalance>(newRemainingBalance);
+                return new ResultDataModel<RemainingBalanceEntity>(newRemainingBalance);
 
             if (current == null)
             {
                 await _remainingBalanceRepository.Add(newRemainingBalance);
                 _appCache.Clear(userId);
-                return new ResultDataModel<RemainingBalance>(newRemainingBalance);
+                return new ResultDataModel<RemainingBalanceEntity>(newRemainingBalance);
             }
 
             current.Value = total;
             await _remainingBalanceRepository.Update(current);
             _appCache.Clear(userId);
-            return new ResultDataModel<RemainingBalance>(current);
+            return new ResultDataModel<RemainingBalanceEntity>(current);
         }
 
         public async Task<ResultModel> Update(int userId, RemainingBalanceModel model)

@@ -3,5 +3,5 @@ using Cashflow.Api.Infra.Filters;
 
 namespace Cashflow.Api.Contracts
 {
-    public interface IHouseholdExpenseRepository : IRepository<HouseholdExpense, HouseholdExpenseFilter> { }
+    public interface IHouseholdExpenseRepository : IRepository<HouseholdExpenseEntity, HouseholdExpenseFilter> { }
 }

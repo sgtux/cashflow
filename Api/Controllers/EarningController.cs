@@ -25,7 +25,7 @@ namespace Cashflow.Api.Controllers
         public IActionResult GetTypes() => HandleResult(_service.GetTypes());
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Earning earning)
+        public async Task<IActionResult> Post([FromBody] EarningEntity earning)
         {
             if (earning is null)
                 return HandleUnprocessableEntity();
@@ -34,7 +34,7 @@ namespace Cashflow.Api.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Put([FromBody] Earning earning)
+        public async Task<IActionResult> Put([FromBody] EarningEntity earning)
         {
             if (earning is null)
                 return HandleUnprocessableEntity();

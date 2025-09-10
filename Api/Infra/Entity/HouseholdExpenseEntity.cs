@@ -4,7 +4,7 @@ using Cashflow.Api.Extensions;
 
 namespace Cashflow.Api.Infra.Entity
 {
-    public class HouseholdExpense : BaseEntity
+    public class HouseholdExpenseEntity : BaseEntity
     {
         public long Id { get; set; }
 
@@ -24,7 +24,7 @@ namespace Cashflow.Api.Infra.Entity
 
         public int? CreditCardId { get; set; }
 
-        public CreditCard CreditCard { get; set; }
+        public CreditCardEntity CreditCard { get; set; }
 
         public string CreditCardName => CreditCard?.Name;
 

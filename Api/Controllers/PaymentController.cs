@@ -20,7 +20,7 @@ namespace Cashflow.Api.Controllers
         public async Task<IActionResult> Get([FromQuery] PaymentFilter filter) => HandleResult(await _service.GetByUser(UserId, filter));
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id) => HandleResult(await _service.Get(id, UserId));
+        public async Task<IActionResult> Get(long id) => HandleResult(await _service.Get(id, UserId));
 
         [HttpGet("Types")]
         public IActionResult GetTypes() => HandleResult(_service.GetTypes());
@@ -29,7 +29,7 @@ namespace Cashflow.Api.Controllers
         public async Task<IActionResult> GenerateInstallments([FromQuery] GenerateInstallmentsModel model) => HandleResult(await _service.GenerateInstallments(model, UserId));
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Payment payment)
+        public async Task<IActionResult> Post([FromBody] PaymentEntity payment)
         {
             if (payment is null)
                 return HandleUnprocessableEntity();
@@ -39,7 +39,7 @@ namespace Cashflow.Api.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Put([FromBody] Payment payment)
+        public async Task<IActionResult> Put([FromBody] PaymentEntity payment)
         {
             if (payment is null)
                 return HandleUnprocessableEntity();

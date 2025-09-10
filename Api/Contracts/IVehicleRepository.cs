@@ -3,5 +3,5 @@ using Cashflow.Api.Infra.Filters;
 
 namespace Cashflow.Api.Contracts
 {
-    public interface IVehicleRepository : IRepository<Vehicle, BaseFilter> { }
+    public interface IVehicleRepository : IRepository<VehicleEntity, BaseFilter> { }
 }

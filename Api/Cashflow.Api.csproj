@@ -58,6 +58,7 @@
 
     <EmbeddedResource Include="Infra/Sql/Installment/Insert.sql" />
     <EmbeddedResource Include="Infra/Sql/Installment/Delete.sql" />
+    <EmbeddedResource Include="Infra/Sql/Installment/Update.sql" />
 
     <EmbeddedResource Include="Infra/Sql/HouseholdExpense/Delete.sql" />
     <EmbeddedResource Include="Infra/Sql/HouseholdExpense/GetSome.sql" />

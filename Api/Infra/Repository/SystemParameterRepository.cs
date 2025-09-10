@@ -8,7 +8,7 @@ using Cashflow.Api.Shared;
 
 namespace Cashflow.Api.Infra.Repository
 {
-    public class SystemParameterRepository : BaseRepository<SystemParameter>, ISystemParameterRepository
+    public class SystemParameterRepository : BaseRepository<SystemParameterEntity>, ISystemParameterRepository
     {
         public SystemParameterRepository(IDatabaseContext conn, LogService logService) : base(conn, logService) { }
 
