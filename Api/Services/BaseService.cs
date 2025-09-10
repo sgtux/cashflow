@@ -5,6 +5,8 @@ namespace Cashflow.Api.Services
 {
     public abstract class BaseService
     {
-        public DateTime CurrentDate => DateTimeUtils.CurrentDate;
+        public BaseService() => CurrentDate = DateTimeUtils.CurrentDate;
+
+        public DateTime CurrentDate { get; }
     }
 }

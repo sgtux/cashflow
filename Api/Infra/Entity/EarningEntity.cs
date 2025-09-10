@@ -4,7 +4,7 @@ using Cashflow.Api.Extensions;
 
 namespace Cashflow.Api.Infra.Entity
 {
-    public class Earning : BaseEntity
+    public class EarningEntity : BaseEntity
     {
         public int Id { get; set; }
 

@@ -2,7 +2,7 @@ using System;
 
 namespace Cashflow.Api.Infra.Entity
 {
-    public class Installment : BaseEntity
+    public class InstallmentEntity : BaseEntity
     {
         public long Id { get; set; }
 

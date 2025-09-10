@@ -71,6 +71,10 @@ namespace Cashflow.Api.Validators
             public string BindedWithPayments = "Este cartão está vinculado à algum Parcelamento e não pode ser removido.";
 
             public string BindedHouseholdExpense = "Este cartão está vinculado à alguma Despesa e não pode ser removido.";
+
+            public string InvalidType = "Tipo inválido.";
+
+            public string InvalidPaymentValue = "Valor de pagamento inválido.";
         }
 
         public class SalaryMessages

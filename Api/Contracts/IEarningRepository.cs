@@ -3,5 +3,5 @@ using Cashflow.Api.Infra.Filters;
 
 namespace Cashflow.Api.Contracts
 {
-    public interface IEarningRepository : IRepository<Earning, BaseFilter> { }
+    public interface IEarningRepository : IRepository<EarningEntity, BaseFilter> { }
 }

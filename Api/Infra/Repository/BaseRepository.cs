@@ -82,21 +82,21 @@ namespace Cashflow.Api.Infra.Repository
 
         public async Task<bool> Exists(long id)
         {
-            var query = $"SELECT COUNT(1) FROM \"{typeof(T).Name}\" WHERE \"Id\" = @Id";
+            var query = $"SELECT COUNT(1) FROM \"{typeof(T).Name.Replace("Entity", "")}\" WHERE \"Id\" = @Id";
             Log(query);
             return await _conn.ExecuteScalarAsync<long>(query, new { Id = id }) > 0;
         }
 
         public async Task<int> Count()
         {
-            var query = $"SELECT COUNT(1) FROM \"{typeof(T).Name}\"";
+            var query = $"SELECT COUNT(1) FROM \"{typeof(T).Name.Replace("Entity", "")}\"";
             Log(query);
             return await _conn.ExecuteScalarAsync<int>(query);
         }
 
         public Task<long> NextId()
         {
-            var query = $"SELECT MAX(Id) FROM {typeof(T).Name}";
+            var query = $"SELECT MAX(Id) FROM {typeof(T).Name.Replace("Entity", "")}";
             Log(query);
             return _conn.ExecuteScalarAsync<long>(query, null, Transaction);
         }

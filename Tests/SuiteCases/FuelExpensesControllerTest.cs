@@ -9,8 +9,8 @@ namespace Cashflow.Tests
     [TestClass]
     public class FuelExpenseControllerTest : BaseControllerTest
     {
-        private FuelExpense ValidFuelExpense =>
-        new FuelExpense()
+        private FuelExpenseEntity ValidFuelExpense =>
+        new FuelExpenseEntity()
         {
             Date = new DateTime(2020, 12, 12),
             Miliage = 250,

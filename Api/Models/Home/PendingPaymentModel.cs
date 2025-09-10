@@ -6,10 +6,13 @@ namespace Cashflow.Api.Models.Home
 
         public decimal Value { get; set; }
 
-        public PendingPaymentModel(string description, decimal value)
+        public bool IsInCreditCard { get; set; }
+
+        public PendingPaymentModel(string description, decimal value, bool isInCreditCard)
         {
             Description = description;
             Value = value;
+            IsInCreditCard = isInCreditCard;
         }
     }
 }

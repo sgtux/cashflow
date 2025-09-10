@@ -9,15 +9,15 @@ using Cashflow.Api.Contracts;
 
 namespace Cashflow.Api.Infra.Repository
 {
-    public class RemainingBalanceRepository : BaseRepository<RemainingBalance>, IRemainingBalanceRepository
+    public class RemainingBalanceRepository : BaseRepository<RemainingBalanceEntity>, IRemainingBalanceRepository
     {
         public RemainingBalanceRepository(IDatabaseContext conn, LogService logService) : base(conn, logService) { }
 
-        public Task Add(RemainingBalance remainingBalance) => Execute(RemainingBalanceResources.Insert, remainingBalance);
+        public Task Add(RemainingBalanceEntity remainingBalance) => Execute(RemainingBalanceResources.Insert, remainingBalance);
 
-        public Task<RemainingBalance> GetById(long id) => throw new NotImplementedException();
+        public Task<RemainingBalanceEntity> GetById(long id) => throw new NotImplementedException();
 
-        public Task<RemainingBalance> GetByMonthYear(int userId, DateTime date)
+        public Task<RemainingBalanceEntity> GetByMonthYear(int userId, DateTime date)
         => FirstOrDefault(RemainingBalanceResources.ByMonthYear, new
         {
             UserId = userId,
@@ -25,10 +25,10 @@ namespace Cashflow.Api.Infra.Repository
             date.Year
         });
 
-        public Task<IEnumerable<RemainingBalance>> GetSome(BaseFilter filter) => Query(RemainingBalanceResources.Some, filter);
+        public Task<IEnumerable<RemainingBalanceEntity>> GetSome(BaseFilter filter) => Query(RemainingBalanceResources.Some, filter);
 
         public Task Remove(long id) => Execute(RemainingBalanceResources.Delete, new { Id = id });
 
-        public Task Update(RemainingBalance remainingBalance) => Execute(RemainingBalanceResources.Update, remainingBalance);
+        public Task Update(RemainingBalanceEntity remainingBalance) => Execute(RemainingBalanceResources.Update, remainingBalance);
     }
 }

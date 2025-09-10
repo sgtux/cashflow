@@ -9,37 +9,30 @@ using Cashflow.Api.Services;
 
 namespace Cashflow.Api.Infra.Repository
 {
-    public class HouseholdExpenseRepository : BaseRepository<HouseholdExpense>, IHouseholdExpenseRepository
+    public class HouseholdExpenseRepository : BaseRepository<HouseholdExpenseEntity>, IHouseholdExpenseRepository
     {
-        private readonly ICreditCardRepository _creditCardRepository;
+        public HouseholdExpenseRepository(IDatabaseContext conn, LogService logService) : base(conn, logService) { }
 
-        public HouseholdExpenseRepository(IDatabaseContext conn,
-            LogService logService,
-            ICreditCardRepository creditCardRepository) : base(conn, logService)
-        {
-            _creditCardRepository = creditCardRepository;
-        }
+        public Task Add(HouseholdExpenseEntity t) => Execute(HouseholdExpenseResources.Insert, t);
 
-        public Task Add(HouseholdExpense t) => Execute(HouseholdExpenseResources.Insert, t);
-
-        public async Task<IEnumerable<HouseholdExpense>> GetSome(HouseholdExpenseFilter filter)
+        public async Task<IEnumerable<HouseholdExpenseEntity>> GetSome(HouseholdExpenseFilter filter)
         {
             var data = await Query<dynamic>(HouseholdExpenseResources.Some, filter);
-            Slapper.AutoMapper.Configuration.AddIdentifiers(typeof(HouseholdExpense), new List<string> { "Id" });
-            Slapper.AutoMapper.Configuration.AddIdentifiers(typeof(CreditCard), new List<string> { "Id" });
-            return Slapper.AutoMapper.MapDynamic<HouseholdExpense>(data);
+            Slapper.AutoMapper.Configuration.AddIdentifiers(typeof(HouseholdExpenseEntity), new List<string> { "Id" });
+            Slapper.AutoMapper.Configuration.AddIdentifiers(typeof(CreditCardEntity), new List<string> { "Id" });
+            return Slapper.AutoMapper.MapDynamic<HouseholdExpenseEntity>(data);
         }
 
-        public async Task<HouseholdExpense> GetById(long id)
+        public async Task<HouseholdExpenseEntity> GetById(long id)
         {
             var data = await Query<dynamic>(HouseholdExpenseResources.ById, new { Id = id });
-            Slapper.AutoMapper.Configuration.AddIdentifiers(typeof(HouseholdExpense), new List<string> { "Id" });
-            Slapper.AutoMapper.Configuration.AddIdentifiers(typeof(CreditCard), new List<string> { "Id" });
-            return Slapper.AutoMapper.MapDynamic<HouseholdExpense>(data).FirstOrDefault();
+            Slapper.AutoMapper.Configuration.AddIdentifiers(typeof(HouseholdExpenseEntity), new List<string> { "Id" });
+            Slapper.AutoMapper.Configuration.AddIdentifiers(typeof(CreditCardEntity), new List<string> { "Id" });
+            return Slapper.AutoMapper.MapDynamic<HouseholdExpenseEntity>(data).FirstOrDefault();
         }
 
         public Task Remove(long id) => Execute(HouseholdExpenseResources.Delete, new { Id = id });
 
-        public Task Update(HouseholdExpense t) => Execute(HouseholdExpenseResources.Update, t);
+        public Task Update(HouseholdExpenseEntity t) => Execute(HouseholdExpenseResources.Update, t);
     }
 }

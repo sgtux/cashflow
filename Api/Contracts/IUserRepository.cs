@@ -4,9 +4,9 @@ using Cashflow.Api.Infra.Filters;
 
 namespace Cashflow.Api.Contracts
 {
-    public interface IUserRepository : IRepository<User, BaseFilter>
+    public interface IUserRepository : IRepository<UserEntity, BaseFilter>
     {
-        Task<User> FindByEmail(string email);
+        Task<UserEntity> FindByEmail(string email);
 
         Task<int> TotalRegisters(int userId);
     }

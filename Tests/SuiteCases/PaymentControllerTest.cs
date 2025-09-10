@@ -15,25 +15,25 @@ namespace Cashflow.Tests
     [TestCategory("PaymentTest")]
     public class PaymentControllerTest : BaseControllerTest
     {
-        private Payment DefaultPayment
-        => new Payment()
+        private PaymentEntity DefaultPayment
+        => new ()
         {
             Id = 1,
             UserId = 1,
             CreditCardId = 1,
             Description = "First Payment",
             Type = ExpenseType.Others,
-            Installments = new List<Installment>()
+            Installments = new List<InstallmentEntity>()
                     {
-                      new Installment() { Number = 1, Id = 1, Value = 1500.6M, PaidValue = 1500.6M, Date = new DateTime(2020, 1, 1) },
-                      new Installment() { Number = 2, Id = 1, Value = 1500.6M, Exempt = true, Date = new DateTime(2020, 1, 1) }
+                      new InstallmentEntity() { Number = 1, Id = 1, Value = 1500.6M, PaidValue = 1500.6M, Date = new DateTime(2020, 1, 1) },
+                      new InstallmentEntity() { Number = 2, Id = 1, Value = 1500.6M, Exempt = true, Date = new DateTime(2020, 1, 1) }
                     }
         };
 
         [TestMethod]
         public async Task GetUserPayments()
         {
-            var payments = await Get<IEnumerable<Payment>>("/api/Payment", 1);
+            var payments = await Get<IEnumerable<PaymentEntity>>("/api/Payment", 1);
             Assert.IsFalse(payments.Data.Any(p => p.UserId != 1));
         }
 
@@ -50,7 +50,7 @@ namespace Cashflow.Tests
         public async Task AddWithNoPlots()
         {
             var p = DefaultPayment;
-            p.Installments = new List<Installment>();
+            p.Installments = new List<InstallmentEntity>();
             var result = await Post("/api/Payment", p, p.UserId);
             TestErrors(p, result, "O pagamento deve ter pelo menos 1 parcela.");
         }
@@ -68,9 +68,9 @@ namespace Cashflow.Tests
         public async Task AddInstallmentExemptWithPaidValue()
         {
             var p = DefaultPayment;
-            p.Installments = new List<Installment>()
+            p.Installments = new List<InstallmentEntity>()
                 {
-                    new Installment() { Number = 1, Id = 1, Exempt = true, PaidValue = 1500.6M, PaidDate = DateTime.Now, Value = 1500.6M, Date = new DateTime(2020, 1, 1) }
+                    new InstallmentEntity() { Number = 1, Id = 1, Exempt = true, PaidValue = 1500.6M, PaidDate = DateTime.Now, Value = 1500.6M, Date = new DateTime(2020, 1, 1) }
                 };
             var result = await Post("/api/Payment", p, p.UserId);
             TestErrors(p, result, "Parcela isenta com valor pago informado.");
@@ -80,9 +80,9 @@ namespace Cashflow.Tests
         public async Task AddNoExemptInstallmentWithNoPaidValue()
         {
             var p = DefaultPayment;
-            p.Installments = new List<Installment>()
+            p.Installments = new List<InstallmentEntity>()
                 {
-                    new Installment() { Number = 1, Id = 1, Value = 1500.6M, PaidValue = 0, Date = new DateTime(2020, 1, 1) }
+                    new InstallmentEntity() { Number = 1, Id = 1, Value = 1500.6M, PaidValue = 0, Date = new DateTime(2020, 1, 1) }
                 };
             var result = await Post("/api/Payment", p, p.UserId);
             TestErrors(p, result, "Parcela com valor pago inválido.");
@@ -111,7 +111,7 @@ namespace Cashflow.Tests
         public async Task UpdateWithNoPlots()
         {
             var p = DefaultPayment;
-            p.Installments = new List<Installment>();
+            p.Installments = new List<InstallmentEntity>();
             var result = await Put("/api/Payment", p, p.UserId);
             TestErrors(p, result, "O pagamento deve ter pelo menos 1 parcela.");
         }
@@ -169,7 +169,7 @@ namespace Cashflow.Tests
         public async Task GetGenerateInstallmentsOK()
         {
             string queryString = "value=1000&amount=10&date=2024-06-10T03:00:00.000Z";
-            var result = await Get<IEnumerable<Installment>>($"/api/Payment/GenerateInstallments?{queryString}", 1);
+            var result = await Get<IEnumerable<InstallmentEntity>>($"/api/Payment/GenerateInstallments?{queryString}", 1);
             var first = result.Data.First();
             Assert.AreEqual(100, first.Value);
             Assert.AreEqual(6, first.Date.Month);
@@ -180,7 +180,7 @@ namespace Cashflow.Tests
         {
             // CreditCard 4 with UserId 1, InvoiceDueDay 20, InvoiceClosingDay = 10
             string queryString = "value=1000&amount=10&date=2024-06-09T03:00:00.000Z&creditCardId=4";
-            var result = await Get<IEnumerable<Installment>>($"/api/Payment/GenerateInstallments?{queryString}", 1);
+            var result = await Get<IEnumerable<InstallmentEntity>>($"/api/Payment/GenerateInstallments?{queryString}", 1);
             var first = result.Data.First();
             Assert.AreEqual(100, first.Value);
             Assert.AreEqual(6, first.Date.Month);
@@ -191,7 +191,7 @@ namespace Cashflow.Tests
         {
             // CreditCard 5 with UserId 1, InvoiceDueDay 10, InvoiceClosingDay = 20
             string queryString = "value=1000&amount=10&date=2024-06-10T03:00:00.000Z&creditCardId=5";
-            var result = await Get<IEnumerable<Installment>>($"/api/Payment/GenerateInstallments?{queryString}", 1);
+            var result = await Get<IEnumerable<InstallmentEntity>>($"/api/Payment/GenerateInstallments?{queryString}", 1);
             var first = result.Data.First();
             Assert.AreEqual(100, first.Value);
             Assert.AreEqual(7, first.Date.Month);
@@ -202,7 +202,7 @@ namespace Cashflow.Tests
         {
             // CreditCard 5 with UserId 1, InvoiceDueDay 10, InvoiceClosingDay = 20
             string queryString = "value=1000&amount=10&date=2024-06-20T03:00:00.000Z&creditCardId=5";
-            var result = await Get<IEnumerable<Installment>>($"/api/Payment/GenerateInstallments?{queryString}", 1);
+            var result = await Get<IEnumerable<InstallmentEntity>>($"/api/Payment/GenerateInstallments?{queryString}", 1);
             var first = result.Data.First();
             Assert.AreEqual(100, first.Value);
             Assert.AreEqual(8, first.Date.Month);

@@ -9,25 +9,19 @@ using Cashflow.Api.Infra.Filters;
 
 namespace Cashflow.Api.Infra.Repository
 {
-    public class FuelExpenseRepository : BaseRepository<FuelExpense>, IFuelExpenseRepository
+    public class FuelExpenseRepository : BaseRepository<FuelExpenseEntity>, IFuelExpenseRepository
     {
-        private readonly ICreditCardRepository _creditCardRepository;
-
         public FuelExpenseRepository(IDatabaseContext conn,
-            LogService logService,
-            ICreditCardRepository creditCardRepository) : base(conn, logService)
-        {
-            _creditCardRepository = creditCardRepository;
-        }
+            LogService logService) : base(conn, logService) { }
 
-        public Task Add(FuelExpense t) => Execute(FuelExpenseResources.Insert, t);
+        public Task Add(FuelExpenseEntity t) => Execute(FuelExpenseResources.Insert, t);
 
-        public async Task<FuelExpense> GetById(long id) => await FirstOrDefault(FuelExpenseResources.ById, new { Id = id });
+        public async Task<FuelExpenseEntity> GetById(long id) => await FirstOrDefault(FuelExpenseResources.ById, new { Id = id });
 
-        public Task Update(FuelExpense t) => Execute(FuelExpenseResources.Update, t);
+        public Task Update(FuelExpenseEntity t) => Execute(FuelExpenseResources.Update, t);
 
         public Task Remove(long id) => Execute(FuelExpenseResources.Delete, new { Id = id });
 
-        public Task<IEnumerable<FuelExpense>> GetSome(BaseFilter filter) => throw new NotImplementedException();
+        public Task<IEnumerable<FuelExpenseEntity>> GetSome(BaseFilter filter) => throw new NotImplementedException();
     }
 }

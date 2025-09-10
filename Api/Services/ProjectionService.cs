@@ -126,7 +126,7 @@ namespace Cashflow.Api.Services
             var earnings = await _earningRepository.GetSome(filter);
             if (earnings.Any())
             {
-                List<Earning> monthyEarnings = new List<Earning>();
+                List<EarningEntity> monthyEarnings = new List<EarningEntity>();
                 foreach (var date in dates.Order())
                 {
                     monthyEarnings.AddRange(earnings.Where(p => p.Date.SameMonthYear(date) && p.Type == EarningType.Monthy));
@@ -139,14 +139,14 @@ namespace Cashflow.Api.Services
             }
         }
 
-        private async Task FillPayments(List<PaymentProjectionModel> list, List<DateTime> dates, IEnumerable<CreditCard> cards, BaseFilter filter)
+        private async Task FillPayments(List<PaymentProjectionModel> list, List<DateTime> dates, IEnumerable<CreditCardEntity> cards, BaseFilter filter)
         {
             var payments = await _paymentRepository.GetSome(new PaymentFilter(filter));
             payments = payments.Where(p => !p.Done || p.DoneInThisMonth);
 
             foreach (var date in dates)
             {
-                Func<Installment, bool> condition = i => (i.PaidDate == null && !i.Exempt && i.Date.SameMonthYear(date)) || (i.PaidDate != null && i.PaidDate.Value.SameMonthYear(date));
+                Func<InstallmentEntity, bool> condition = i => (i.PaidDate == null && !i.Exempt && i.Date.SameMonthYear(date)) || (i.PaidDate != null && i.PaidDate.Value.SameMonthYear(date));
                 foreach (var payMonth in payments.Where(p => p.Installments?.Any(condition) ?? false))
                 {
                     var installments = payMonth.Installments.Where(condition);
@@ -162,11 +162,11 @@ namespace Cashflow.Api.Services
             }
         }
 
-        private async Task FillFuelExpenses(List<PaymentProjectionModel> list, List<DateTime> dates, BaseFilter filter, User user)
+        private async Task FillFuelExpenses(List<PaymentProjectionModel> list, List<DateTime> dates, BaseFilter filter, UserEntity user)
         {
             var fromDate = DateTimeUtils.CurrentDate.AddMonths(-3).FixFirstDayInMonth();
             var vehicles = await _vehicleRepository.GetSome(new BaseFilter() { UserId = filter.UserId, StartDate = fromDate });
-            List<FuelExpense> allFuelExpenses = new List<FuelExpense>();
+            List<FuelExpenseEntity> allFuelExpenses = new List<FuelExpenseEntity>();
             vehicles.ToList().ForEach(p => allFuelExpenses.AddRange(p.FuelExpenses));
 
             foreach (var date in dates)
@@ -179,7 +179,7 @@ namespace Cashflow.Api.Services
             }
         }
 
-        private async Task FillHouseholdExpense(List<PaymentProjectionModel> list, List<DateTime> dates, IEnumerable<CreditCard> cards, BaseFilter filter, User user)
+        private async Task FillHouseholdExpense(List<PaymentProjectionModel> list, List<DateTime> dates, IEnumerable<CreditCardEntity> cards, BaseFilter filter, UserEntity user)
         {
             var fromDate = CurrentDate.AddMonths(-3).FixFirstDayInMonth();
             var allHouseholdExpenses = await _householdExpenseRepository.GetSome(new HouseholdExpenseFilter() { UserId = filter.UserId, StartDate = fromDate });
@@ -210,7 +210,7 @@ namespace Cashflow.Api.Services
             }
         }
 
-        private async Task FillRecurringExpenses(List<PaymentProjectionModel> list, List<DateTime> dates, IEnumerable<CreditCard> cards, BaseFilter filter)
+        private async Task FillRecurringExpenses(List<PaymentProjectionModel> list, List<DateTime> dates, IEnumerable<CreditCardEntity> cards, BaseFilter filter)
         {
             var currentRecurringExpenses = await _recurringExpenseRepository.GetSome(new RecurringExpenseFilter() { UserId = filter.UserId, StartDate = CurrentDate.FixFirstDayInMonth(), EndDate = CurrentDate.FixLastDayInMonth() });
             var projectionRecurringExpenses = await _recurringExpenseRepository.GetSome(new RecurringExpenseFilter() { UserId = filter.UserId, Active = 1 });

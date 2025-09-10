@@ -17,5 +17,6 @@ export {
     TableActionEditButton,
     TableActionPayButton,
     TableActionExemptButton,
-    AddFloatingButton
+    AddFloatingButton,
+    PaymentDoneSpan
 } from './buttons'

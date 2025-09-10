@@ -4,11 +4,11 @@ using FluentValidation;
 
 namespace Cashflow.Api.Validators
 {
-    public class VehicleValidator : AbstractValidator<Vehicle>
+    public class VehicleValidator : AbstractValidator<VehicleEntity>
     {
         private readonly IVehicleRepository _vehicleRepository;
 
-        public VehicleValidator(IVehicleRepository vehicleRepository, IUserRepository userRepository)
+        public VehicleValidator(IVehicleRepository vehicleRepository)
         {
             _vehicleRepository = vehicleRepository;
             RuleFor(c => c.Description).NotEmpty().WithMessage(ValidatorMessages.FieldIsRequired("Descrição"));
@@ -16,6 +16,6 @@ namespace Cashflow.Api.Validators
             RuleFor(c => c).Must(VehicleExists).When(c => c.Id > 0).WithMessage(ValidatorMessages.NotFound("Veículo"));
         }
 
-        public bool VehicleExists(Vehicle vehicle) => _vehicleRepository.GetById(vehicle.Id).Result?.UserId == vehicle.UserId;
+        public bool VehicleExists(VehicleEntity vehicle) => _vehicleRepository.GetById(vehicle.Id).Result?.UserId == vehicle.UserId;
     }
 }

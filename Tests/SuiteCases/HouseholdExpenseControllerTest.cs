@@ -10,7 +10,7 @@ namespace Cashflow.Tests
     [TestClass]
     public class HouseholdExpenseControllerTest : BaseControllerTest
     {
-        private HouseholdExpense DefaultHouseholdExpense = new HouseholdExpense()
+        private HouseholdExpenseEntity DefaultHouseholdExpense = new()
         {
             Id = 10,
             UserId = 2,

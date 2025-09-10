@@ -21,7 +21,7 @@ namespace Cashflow.Api.Controllers
         public async Task<IActionResult> Get(int id) => HandleResult(await _service.GetById(id, UserId));
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] RecurringExpense expense)
+        public async Task<IActionResult> Post([FromBody] RecurringExpenseEntity expense)
         {
             if (expense is null)
                 return HandleUnprocessableEntity();
@@ -30,7 +30,7 @@ namespace Cashflow.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] RecurringExpense expense)
+        public async Task<IActionResult> Put(int id, [FromBody] RecurringExpenseEntity expense)
         {
             if (expense is null)
                 return HandleUnprocessableEntity();
@@ -43,7 +43,7 @@ namespace Cashflow.Api.Controllers
         public async Task<IActionResult> Delete(int id) => HandleResult(await _service.Remove(id, UserId));
 
         [HttpPost("History")]
-        public async Task<IActionResult> PostHistory([FromBody] RecurringExpenseHistory history)
+        public async Task<IActionResult> PostHistory([FromBody] RecurringExpenseHistoryEntity history)
         {
             if (history is null)
                 return HandleUnprocessableEntity();
@@ -51,7 +51,7 @@ namespace Cashflow.Api.Controllers
         }
 
         [HttpPut("History/{id}")]
-        public async Task<IActionResult> PutHistory(int id, [FromBody] RecurringExpenseHistory history)
+        public async Task<IActionResult> PutHistory(int id, [FromBody] RecurringExpenseHistoryEntity history)
         {
             if (history is null)
                 return HandleUnprocessableEntity();

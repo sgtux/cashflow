@@ -33,7 +33,7 @@ namespace Cashflow.Api.Services
             _creditCardRepository = creditCardRepository;
         }
 
-        public async Task<ResultDataModel<IEnumerable<HouseholdExpense>>> GetByUser(int userId, DateTime? startDate, DateTime? endDate, IEnumerable<int> creditCardIds = null)
+        public async Task<ResultDataModel<IEnumerable<HouseholdExpenseEntity>>> GetByUser(int userId, DateTime? startDate, DateTime? endDate, IEnumerable<int> creditCardIds = null)
         {
             HouseholdExpenseFilter filter = new HouseholdExpenseFilter()
             {
@@ -46,10 +46,10 @@ namespace Cashflow.Api.Services
             filter.FixParams();
 
             var list = await _householdExpenseRepository.GetSome(filter);
-            return new ResultDataModel<IEnumerable<HouseholdExpense>>(list.OrderByDescending(p => p.Date));
+            return new ResultDataModel<IEnumerable<HouseholdExpenseEntity>>(list.OrderByDescending(p => p.Date));
         }
 
-        public Task<ResultDataModel<IEnumerable<HouseholdExpense>>> GetByUser(int userId, int month, int year)
+        public Task<ResultDataModel<IEnumerable<HouseholdExpenseEntity>>> GetByUser(int userId, int month, int year)
         {
             var now = CurrentDate;
 
@@ -65,10 +65,10 @@ namespace Cashflow.Api.Services
             return GetByUser(userId, startDate, endDate);
         }
 
-        public async Task<ResultDataModel<HouseholdExpense>> GetById(long id, int userId)
+        public async Task<ResultDataModel<HouseholdExpenseEntity>> GetById(long id, int userId)
         {
             var p = await _householdExpenseRepository.GetById(id);
-            return new ResultDataModel<HouseholdExpense>(p?.UserId == userId ? p : null);
+            return new ResultDataModel<HouseholdExpenseEntity>(p?.UserId == userId ? p : null);
         }
 
         public ResultDataModel<IEnumerable<TypeModel>> GetTypes()
@@ -81,7 +81,7 @@ namespace Cashflow.Api.Services
             return new ResultDataModel<IEnumerable<TypeModel>>(types);
         }
 
-        public async Task<ResultModel> Add(HouseholdExpense householdExpense)
+        public async Task<ResultModel> Add(HouseholdExpenseEntity householdExpense)
         {
             var result = new ResultModel();
             var validatorResult = new HouseholdExpenseValidator(_vehicleRepository, _creditCardRepository).Validate(householdExpense);
@@ -96,7 +96,7 @@ namespace Cashflow.Api.Services
             return result;
         }
 
-        public async Task<ResultModel> Update(HouseholdExpense householdExpense)
+        public async Task<ResultModel> Update(HouseholdExpenseEntity householdExpense)
         {
             var result = new ResultModel();
             var validatorResult = new HouseholdExpenseValidator(_vehicleRepository, _creditCardRepository).Validate(householdExpense);

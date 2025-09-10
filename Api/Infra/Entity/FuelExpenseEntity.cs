@@ -2,7 +2,7 @@ using System;
 
 namespace Cashflow.Api.Infra.Entity
 {
-    public class FuelExpense : BaseEntity
+    public class FuelExpenseEntity : BaseEntity
     {
         public int Id { get; set; }
 

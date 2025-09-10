@@ -24,7 +24,7 @@ namespace Cashflow.Api.Models
 
         public int QtdPaidInstallments { get; set; }
 
-        public CreditCard CreditCard { get; set; }
+        public CreditCardEntity CreditCard { get; set; }
 
         public PaymentProjectionModel() { }
 
@@ -36,7 +36,7 @@ namespace Cashflow.Api.Models
             Type = type;
         }
 
-        public PaymentProjectionModel(string description, DateTime date, decimal value, MovementProjectionType type, CreditCard creditCard, long id = 0)
+        public PaymentProjectionModel(string description, DateTime date, decimal value, MovementProjectionType type, CreditCardEntity creditCard, long id = 0)
         {
             Description = description;
             MonthYear = date.ToString("MM/yyyy");
@@ -50,7 +50,7 @@ namespace Cashflow.Api.Models
             DateTime date,
             decimal value,
             MovementProjectionType type,
-            CreditCard creditCard,
+            CreditCardEntity creditCard,
             string number,
             DateTime? paidDate,
             int qtdInstallments,

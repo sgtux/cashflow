@@ -15,7 +15,7 @@ namespace Cashflow.Api.Controllers
         public FuelExpenseController(FuelExpenseService service) => _service = service;
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] FuelExpense fuelExpense)
+        public async Task<IActionResult> Post([FromBody] FuelExpenseEntity fuelExpense)
         {
             if (fuelExpense is null)
                 return UnprocessableEntity();
@@ -23,7 +23,7 @@ namespace Cashflow.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] FuelExpense fuelExpense)
+        public async Task<IActionResult> Put(int id, [FromBody] FuelExpenseEntity fuelExpense)
         {
             if (fuelExpense is null)
                 return UnprocessableEntity();

@@ -9,7 +9,7 @@ using Cashflow.Api.Services;
 
 namespace Cashflow.Api.Infra.Repository
 {
-    public class RecurringExpenseRepository : BaseRepository<RecurringExpense>, IRecurringExpenseRepository
+    public class RecurringExpenseRepository : BaseRepository<RecurringExpenseEntity>, IRecurringExpenseRepository
     {
         private readonly ICreditCardRepository _creditCardRepository;
 
@@ -18,11 +18,11 @@ namespace Cashflow.Api.Infra.Repository
             _creditCardRepository = creditCardRepository;
         }
 
-        public async Task<IEnumerable<RecurringExpense>> GetSome(RecurringExpenseFilter filter)
+        public async Task<IEnumerable<RecurringExpenseEntity>> GetSome(RecurringExpenseFilter filter)
         {
-            var list = new List<RecurringExpense>();
+            var list = new List<RecurringExpenseEntity>();
             var cards = await _creditCardRepository.GetSome(filter);
-            await Query<RecurringExpenseHistory>(RecurringExpenseResources.Some, (p, i) =>
+            await Query<RecurringExpenseHistoryEntity>(RecurringExpenseResources.Some, (p, i) =>
             {
                 var recurringExpense = list.FirstOrDefault(x => x.Id == p.Id);
                 if (recurringExpense == null)
@@ -31,7 +31,7 @@ namespace Cashflow.Api.Infra.Repository
                     list.Add(recurringExpense);
                     if (recurringExpense.CreditCardId.HasValue)
                         recurringExpense.CreditCard = cards.FirstOrDefault(p => p.Id == recurringExpense.CreditCardId.Value);
-                    recurringExpense.History = new List<RecurringExpenseHistory>();
+                    recurringExpense.History = new List<RecurringExpenseHistoryEntity>();
                 }
                 if (i != null)
                     recurringExpense.History.Add(i);
@@ -41,15 +41,15 @@ namespace Cashflow.Api.Infra.Repository
             return list;
         }
 
-        public async Task<RecurringExpense> GetById(long id)
+        public async Task<RecurringExpenseEntity> GetById(long id)
         {
-            RecurringExpense recurringExpense = null;
-            await Query<RecurringExpenseHistory>(RecurringExpenseResources.ById, (p, i) =>
+            RecurringExpenseEntity recurringExpense = null;
+            await Query<RecurringExpenseHistoryEntity>(RecurringExpenseResources.ById, (p, i) =>
             {
                 if (recurringExpense == null)
                 {
                     recurringExpense = p;
-                    recurringExpense.History = new List<RecurringExpenseHistory>();
+                    recurringExpense.History = new List<RecurringExpenseHistoryEntity>();
                 }
                 if (i != null)
                     recurringExpense.History.Add(i);
@@ -69,15 +69,15 @@ namespace Cashflow.Api.Infra.Repository
             return recurringExpense;
         }
 
-        public Task Add(RecurringExpense t) => Execute(RecurringExpenseResources.Insert, t);
+        public Task Add(RecurringExpenseEntity t) => Execute(RecurringExpenseResources.Insert, t);
 
         public Task Remove(long id) => Execute(RecurringExpenseResources.Delete, new { Id = id });
 
-        public Task Update(RecurringExpense t) => Execute(RecurringExpenseResources.Update, t);
+        public Task Update(RecurringExpenseEntity t) => Execute(RecurringExpenseResources.Update, t);
 
-        public Task AddHistory(RecurringExpenseHistory history) => Execute(RecurringExpenseHistoryResources.Insert, history);
+        public Task AddHistory(RecurringExpenseHistoryEntity history) => Execute(RecurringExpenseHistoryResources.Insert, history);
 
-        public Task UpdateHistory(RecurringExpenseHistory history) => Execute(RecurringExpenseHistoryResources.Update, history);
+        public Task UpdateHistory(RecurringExpenseHistoryEntity history) => Execute(RecurringExpenseHistoryResources.Update, history);
 
         public Task RemoveHistory(long id) => Execute(RecurringExpenseHistoryResources.Delete, new { Id = id });
     }

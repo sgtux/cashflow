@@ -15,25 +15,21 @@ namespace Cashflow.Api.Services
     public class VehicleService : BaseService
     {
         private readonly IVehicleRepository _vehicleRepository;
-
-        private readonly IUserRepository _userRepository;
-
+        
         private readonly AppCache _appCache;
 
         public VehicleService(
             IVehicleRepository vehicleRepository,
-            IUserRepository userRepository,
             AppCache appCache)
         {
             _vehicleRepository = vehicleRepository;
-            _userRepository = userRepository;
             _appCache = appCache;
         }
 
-        public async Task<ResultModel> Add(Vehicle vehicle)
+        public async Task<ResultModel> Add(VehicleEntity vehicle)
         {
             var result = new ResultModel();
-            var validatorResult = new VehicleValidator(_vehicleRepository, _userRepository).Validate(vehicle);
+            var validatorResult = new VehicleValidator(_vehicleRepository).Validate(vehicle);
 
             if (validatorResult.IsValid)
             {
@@ -46,13 +42,13 @@ namespace Cashflow.Api.Services
             return result;
         }
 
-        public async Task<ResultDataModel<Vehicle>> GetById(int id, int userId)
+        public async Task<ResultDataModel<VehicleEntity>> GetById(int id, int userId)
         {
             var p = await _vehicleRepository.GetById(id);
-            return new ResultDataModel<Vehicle>(p?.UserId == userId ? p : null);
+            return new ResultDataModel<VehicleEntity>(p?.UserId == userId ? p : null);
         }
 
-        public async Task<ResultDataModel<IEnumerable<Vehicle>>> GetByUserId(int userId, bool showInactives)
+        public async Task<ResultDataModel<IEnumerable<VehicleEntity>>> GetByUserId(int userId, bool showInactives)
         {
             var filter = new BaseFilter()
             {
@@ -60,13 +56,13 @@ namespace Cashflow.Api.Services
                 StartDate = DateTimeUtils.CurrentDate.AddMonths(-2).FixFirstDayInMonth(),
                 Active = showInactives ? null : 1
             };
-            return new ResultDataModel<IEnumerable<Vehicle>>(await _vehicleRepository.GetSome(filter));
+            return new ResultDataModel<IEnumerable<VehicleEntity>>(await _vehicleRepository.GetSome(filter));
         }
 
-        public async Task<ResultModel> Update(Vehicle vehicle)
+        public async Task<ResultModel> Update(VehicleEntity vehicle)
         {
             var result = new ResultModel();
-            var validatorResult = new VehicleValidator(_vehicleRepository, _userRepository).Validate(vehicle);
+            var validatorResult = new VehicleValidator(_vehicleRepository).Validate(vehicle);
 
             if (validatorResult.IsValid)
             {

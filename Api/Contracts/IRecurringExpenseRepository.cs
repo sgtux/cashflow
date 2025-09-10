@@ -4,11 +4,11 @@ using Cashflow.Api.Infra.Filters;
 
 namespace Cashflow.Api.Contracts
 {
-    public interface IRecurringExpenseRepository : IRepository<RecurringExpense, RecurringExpenseFilter>
+    public interface IRecurringExpenseRepository : IRepository<RecurringExpenseEntity, RecurringExpenseFilter>
     {
-        Task AddHistory(RecurringExpenseHistory history);
+        Task AddHistory(RecurringExpenseHistoryEntity history);
 
-        Task UpdateHistory(RecurringExpenseHistory history);
+        Task UpdateHistory(RecurringExpenseHistoryEntity history);
 
         Task RemoveHistory(long id);
     }

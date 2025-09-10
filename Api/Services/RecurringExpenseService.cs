@@ -28,15 +28,15 @@ namespace Cashflow.Api.Services
             _appCache = appCache;
         }
 
-        public async Task<ResultDataModel<RecurringExpense>> GetById(long id, int userId)
+        public async Task<ResultDataModel<RecurringExpenseEntity>> GetById(long id, int userId)
         {
             var expense = await _recurringExpenseRepository.GetById(id);
-            return new ResultDataModel<RecurringExpense>(expense?.UserId == userId ? expense : null);
+            return new ResultDataModel<RecurringExpenseEntity>(expense?.UserId == userId ? expense : null);
         }
 
-        public async Task<ResultDataModel<IEnumerable<RecurringExpense>>> GetByUser(int userId, byte? active, IEnumerable<int> creditCardIds = null) => new ResultDataModel<IEnumerable<RecurringExpense>>(await _recurringExpenseRepository.GetSome(new RecurringExpenseFilter() { UserId = userId, Active = active, CreditCardIds = creditCardIds }));
+        public async Task<ResultDataModel<IEnumerable<RecurringExpenseEntity>>> GetByUser(int userId, byte? active, IEnumerable<int> creditCardIds = null) => new ResultDataModel<IEnumerable<RecurringExpenseEntity>>(await _recurringExpenseRepository.GetSome(new RecurringExpenseFilter() { UserId = userId, Active = active, CreditCardIds = creditCardIds }));
 
-        public async Task<ResultModel> Add(RecurringExpense recurringExpense)
+        public async Task<ResultModel> Add(RecurringExpenseEntity recurringExpense)
         {
             var result = new ResultModel();
             var validatorResult = new RecurringExpenseValidator(_recurringExpenseRepository, _creditCardRepository).Validate(recurringExpense);
@@ -52,7 +52,7 @@ namespace Cashflow.Api.Services
             return result;
         }
 
-        public async Task<ResultModel> Update(RecurringExpense recurringExpense)
+        public async Task<ResultModel> Update(RecurringExpenseEntity recurringExpense)
         {
             var result = new ResultModel();
             var validatorResult = new RecurringExpenseValidator(_recurringExpenseRepository, _creditCardRepository).Validate(recurringExpense);
@@ -86,7 +86,7 @@ namespace Cashflow.Api.Services
             return result;
         }
 
-        public async Task<ResultModel> AddHistory(RecurringExpenseHistory history, int userId)
+        public async Task<ResultModel> AddHistory(RecurringExpenseHistoryEntity history, int userId)
         {
             var result = new ResultModel();
             var validatorResult = new RecurringExpenseHistoryValidator(_recurringExpenseRepository, userId).Validate(history);
@@ -102,7 +102,7 @@ namespace Cashflow.Api.Services
             return result;
         }
 
-        public async Task<ResultModel> UpdateHistory(RecurringExpenseHistory history, int userId)
+        public async Task<ResultModel> UpdateHistory(RecurringExpenseHistoryEntity history, int userId)
         {
             var result = new ResultModel();
             var validatorResult = new RecurringExpenseHistoryValidator(_recurringExpenseRepository, userId).Validate(history);

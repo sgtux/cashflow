@@ -2,7 +2,7 @@ using System;
 
 namespace Cashflow.Api.Infra.Entity
 {
-    public class RecurringExpenseHistory : BaseEntity
+    public class RecurringExpenseHistoryEntity : BaseEntity
     {
         public long Id { get; set; }
 
@@ -10,6 +10,6 @@ namespace Cashflow.Api.Infra.Entity
 
         public DateTime Date { get; set; }
 
-        public int RecurringExpenseId { get; set; }
+        public long RecurringExpenseId { get; set; }
     }
 }

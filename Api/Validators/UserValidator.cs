@@ -5,7 +5,7 @@ using FluentValidation;
 
 namespace Cashflow.Api.Validators
 {
-    public class UserValidator : AbstractValidator<User>
+    public class UserValidator : AbstractValidator<UserEntity>
     {
         private readonly IUserRepository _userRepository;
 
@@ -18,9 +18,9 @@ namespace Cashflow.Api.Validators
             RuleFor(u => u).Must(ValidEmailPattern).WithMessage(ValidatorMessages.User.EmailPattern);
         }
 
-        private bool ValidEmailPattern(User user) => Regex.IsMatch(user.Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$");
+        private bool ValidEmailPattern(UserEntity user) => Regex.IsMatch(user.Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$");
 
-        private bool ValidEmailInUse(User user)
+        private bool ValidEmailInUse(UserEntity user)
         {
             var resultDb = _userRepository.FindByEmail(user.Email).Result;
             return resultDb == null || resultDb.Id == user.Id;

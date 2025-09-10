@@ -9,14 +9,14 @@ namespace Cashflow.Tests
     [TestClass]
     public class RecurringExpenseControllerTest : BaseControllerTest
     {
-        private RecurringExpense DefaultRecurringExpense => new RecurringExpense()
+        private RecurringExpenseEntity DefaultRecurringExpense => new RecurringExpenseEntity()
         {
             UserId = 2,
             Description = "Computer Shop 2",
             Value = 327
         };
 
-        private RecurringExpenseHistory DefaultRecurringExpenseHistory => new RecurringExpenseHistory()
+        private RecurringExpenseHistoryEntity DefaultRecurringExpenseHistory => new RecurringExpenseHistoryEntity()
         {
             Id = 6,
             PaidValue = 80.5M,

@@ -25,9 +25,9 @@ namespace Cashflow.Api.Services
             _appCache = appCache;
         }
 
-        public async Task<ResultDataModel<Earning>> GetById(int id) => new ResultDataModel<Earning>(await _earningRepository.GetById(id));
+        public async Task<ResultDataModel<EarningEntity>> GetById(int id) => new ResultDataModel<EarningEntity>(await _earningRepository.GetById(id));
 
-        public async Task<ResultDataModel<IEnumerable<Earning>>> GetByUser(int userId, DateTime? from) => new ResultDataModel<IEnumerable<Earning>>(await _earningRepository.GetSome(new BaseFilter() { StartDate = from.FixStartTimeFilter(), UserId = userId }));
+        public async Task<ResultDataModel<IEnumerable<EarningEntity>>> GetByUser(int userId, DateTime? from) => new ResultDataModel<IEnumerable<EarningEntity>>(await _earningRepository.GetSome(new BaseFilter() { StartDate = from.FixStartTimeFilter(), UserId = userId }));
 
         public ResultDataModel<IEnumerable<TypeModel>> GetTypes()
         {
@@ -35,7 +35,7 @@ namespace Cashflow.Api.Services
             return new ResultDataModel<IEnumerable<TypeModel>>(types);
         }
 
-        public async Task<ResultModel> Add(Earning earning)
+        public async Task<ResultModel> Add(EarningEntity earning)
         {
             var result = new ResultModel();
             var validatorResult = new EarningValidator(_earningRepository).Validate(earning);
@@ -49,7 +49,7 @@ namespace Cashflow.Api.Services
             return result;
         }
 
-        public async Task<ResultModel> Update(Earning earning)
+        public async Task<ResultModel> Update(EarningEntity earning)
         {
             var result = new ResultModel();
             var validatorResult = new EarningValidator(_earningRepository).Validate(earning);

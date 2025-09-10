@@ -9,21 +9,21 @@ using Cashflow.Api.Infra.Filters;
 
 namespace Cashflow.Api.Infra.Repository
 {
-    public class VehicleRepository : BaseRepository<Vehicle>, IVehicleRepository
+    public class VehicleRepository : BaseRepository<VehicleEntity>, IVehicleRepository
     {
         public VehicleRepository(IDatabaseContext conn, LogService logService) : base(conn, logService) { }
 
-        public Task Add(Vehicle vehicle) => Execute(VehicleResources.Insert, vehicle);
+        public Task Add(VehicleEntity vehicle) => Execute(VehicleResources.Insert, vehicle);
 
-        public async Task<Vehicle> GetById(long id)
+        public async Task<VehicleEntity> GetById(long id)
         {
-            Vehicle vehicle = null;
-            await Query<FuelExpense>(VehicleResources.ById, (x, y) =>
+            VehicleEntity vehicle = null;
+            await Query<FuelExpenseEntity>(VehicleResources.ById, (x, y) =>
             {
                 if (vehicle == null)
                 {
                     vehicle = x;
-                    vehicle.FuelExpenses = new List<FuelExpense>();
+                    vehicle.FuelExpenses = new List<FuelExpenseEntity>();
                 }
                 if (y != null)
                     vehicle.FuelExpenses.Add(y);
@@ -33,16 +33,16 @@ namespace Cashflow.Api.Infra.Repository
             return vehicle;
         }
 
-        public async Task<IEnumerable<Vehicle>> GetSome(BaseFilter filter)
+        public async Task<IEnumerable<VehicleEntity>> GetSome(BaseFilter filter)
         {
-            var list = new List<Vehicle>();
-            await Query<FuelExpense>(VehicleResources.Some, (x, y) =>
+            var list = new List<VehicleEntity>();
+            await Query<FuelExpenseEntity>(VehicleResources.Some, (x, y) =>
             {
                 var vehicle = list.FirstOrDefault(p => p.Id == x.Id);
                 if (vehicle == null)
                 {
                     vehicle = x;
-                    vehicle.FuelExpenses = new List<FuelExpense>();
+                    vehicle.FuelExpenses = new List<FuelExpenseEntity>();
                     list.Add(vehicle);
                 }
                 if (y != null)
@@ -55,6 +55,6 @@ namespace Cashflow.Api.Infra.Repository
 
         public Task Remove(long id) => Execute(VehicleResources.Delete, new { Id = id });
 
-        public Task Update(Vehicle vehicle) => Execute(VehicleResources.Update, vehicle);
+        public Task Update(VehicleEntity vehicle) => Execute(VehicleResources.Update, vehicle);
     }
 }
