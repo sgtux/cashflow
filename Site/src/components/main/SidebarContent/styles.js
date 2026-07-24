@@ -1,23 +1,26 @@
-import styled from 'styled-components'
+import { alpha, styled } from '@mui/material/styles'
 
-export const MenuItemContainer = styled.div`
-    text-align: center;
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    padding: 10px;
-    transition: 400ms;
-    color: ${({ selected }) => selected ? 'rgb(75, 147, 114)' : '#fff'};
-    background-color: ${({ selected }) => selected ? '#fff' : '#0000'};
-    &:hover {
-        cursor: pointer;
-        background-color: ${({ selected }) => selected ? '#fff' : '#fff3'};
-        transition: 400ms;
+export const MenuItemContainer = styled('div', {
+    shouldForwardProp: prop => prop !== 'selected'
+})(({ theme, selected }) => ({
+    textAlign: 'center',
+    margin: 0,
+    display: 'flex',
+    justifyContent: 'center',
+    padding: 10,
+    transition: '400ms',
+    color: selected ? theme.palette.primary.main : theme.palette.primary.contrastText,
+    backgroundColor: selected ? theme.palette.primary.contrastText : 'transparent',
+    '&:hover': {
+        cursor: 'pointer',
+        backgroundColor: selected ? theme.palette.primary.contrastText : alpha(theme.palette.primary.contrastText, 0.2),
+        transition: '400ms'
+    },
+    '& > span': {
+        fontFamily: 'GraphikMedium',
+        fontSize: 15,
+        letterSpacing: '0.3px',
+        textTransform: 'uppercase',
+        marginLeft: 10
     }
-    & > span {
-        font-family: 'PermanentMarker';
-        font-size: 20px;
-        text-transform: uppercase;
-        margin-left: 10px;
-    }
-`
+}))

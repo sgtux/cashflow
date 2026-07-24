@@ -1,32 +1,33 @@
-import styled from '@emotion/styled'
-import { Colors } from '../../../helpers/themes'
+import { styled } from '@mui/material/styles'
 
-export const Container = styled.div`
-    margin: 20px;
-    text-align: center;
-`
+export const Container = styled('div')({
+    margin: 20,
+    textAlign: 'center'
+})
 
-export const ContainerBar = styled.div`    
-    display: flex;
-    justify-content: right;
-    height: 20px;
-    border-radius: 10px;
-    width: 90%;
-    margin: 0 auto;
-    margin-bottom: 10;
-    overflow: hidden;
-    background-image: linear-gradient( to right, ${Colors.AppGreen} 60%, ${Colors.AppYellow} 80%, ${Colors.AppRed} 95%, ${Colors.AppRedDark});
-`
+export const ContainerBar = styled('div')(({ theme }) => ({
+    display: 'flex',
+    justifyContent: 'right',
+    height: 20,
+    borderRadius: 10,
+    width: '90%',
+    margin: '0 auto',
+    marginBottom: 10,
+    overflow: 'hidden',
+    backgroundImage: `linear-gradient(to right, ${theme.palette.success.main} 60%, ${theme.palette.warning.main} 80%, ${theme.palette.error.main} 95%, ${theme.palette.error.dark})`
+}))
 
-export const FillBar = styled.div`
-    height: 100%;
-    width: ${p => `${100 - p.percent}%`};
-    background-color: #ccc;
-`
+export const FillBar = styled('div', {
+    shouldForwardProp: prop => prop !== 'percent'
+})(({ theme, percent }) => ({
+    height: '100%',
+    width: `${100 - percent}%`,
+    backgroundColor: theme.palette.action.disabledBackground
+}))
 
-export const Label = styled.span`
-    font-size: 16px;
-    font-weight: bold;
-    color: #555;
-    font-family: "Roboto","Helvetica","Arial",sans-serif;
-`
+export const Label = styled('span')(({ theme }) => ({
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: theme.palette.text.secondary,
+    fontFamily: '"Roboto","Helvetica","Arial",sans-serif'
+}))

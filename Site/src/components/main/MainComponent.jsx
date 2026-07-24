@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import Sidebar from 'react-sidebar'
 import { HashRouter } from 'react-router-dom'
 
 import { ToastContainer } from 'react-toastify'
 
-import { Colors } from '../../helpers/themes'
+import { Box, Drawer, LinearProgress } from '@mui/material'
+import { useTheme, useColorScheme } from '@mui/material/styles'
+import useMediaQuery from '@mui/material/useMediaQuery'
+
 import { AppToolbar } from './Toolbar'
 import { SidebarContent } from './'
 import AppRouter from './AppRouter'
@@ -14,31 +16,29 @@ import { AlertModal } from '../main/Modal'
 import { userChanged } from '../../store/actions'
 import { registerCallbackUnauthorized } from '../../services/httpService'
 import { ContainerLoader } from './MainContainer/styles'
-import { LinearProgress } from '@mui/material'
+
+const DRAWER_WIDTH = 260
 
 export function MainComponent() {
 
-  const [sidebarDocked, setSidebarDocked] = useState(false)
   const [sidebarIsOpen, setSidebarIsOpen] = useState(false)
   const [showModal, setShowModal] = useState(false)
-  let mql = null
 
-  const { user, globalLoader } = useSelector(state => state.appState)
+  const theme = useTheme()
+  const { setMode } = useColorScheme()
+  const sidebarDocked = useMediaQuery(theme.breakpoints.up('lg'))
+
+  const { user, globalLoader, themeMode } = useSelector(state => state.appState)
 
   const dispatch = useDispatch()
 
   useEffect(() => {
-    if (mql === null)
-      mql = window.matchMedia('(min-width: 1024px)')
-    mediaQueryChanged()
-    mql.addListener(mediaQueryChanged)
-    registerCallbackUnauthorized(() => setShowModal(true))
-    return () => mql.removeListener(mediaQueryChanged)
-  }, [])
+    setMode(themeMode)
+  }, [themeMode])
 
-  function mediaQueryChanged() {
-    setSidebarDocked(mql.matches)
-  }
+  useEffect(() => {
+    registerCallbackUnauthorized(() => setShowModal(true))
+  }, [])
 
   function logout() {
     setShowModal(false)
@@ -49,18 +49,34 @@ export function MainComponent() {
     <div>
       {user ?
         <HashRouter>
-          <Sidebar
-            sidebar={<SidebarContent closeSidebar={() => setSidebarIsOpen(false)} />}
-            open={sidebarIsOpen}
-            onSetOpen={open => setSidebarIsOpen(open)}
-            docked={sidebarDocked}
-            styles={{ sidebar: { background: Colors.AppGreen } }}>
-            <AppToolbar
-              dockedMenu={sidebarDocked}
-              openSideBar={() => setSidebarIsOpen(true)}
-            />
-            <AppRouter />
-          </Sidebar>
+          <Box sx={{ display: 'flex' }}>
+            <Drawer
+              variant={sidebarDocked ? 'permanent' : 'temporary'}
+              open={sidebarDocked || sidebarIsOpen}
+              onClose={() => setSidebarIsOpen(false)}
+              ModalProps={{ keepMounted: true }}
+              sx={theme => ({
+                width: sidebarDocked ? DRAWER_WIDTH : 0,
+                flexShrink: 0,
+                '& .MuiDrawer-paper': {
+                  width: DRAWER_WIDTH,
+                  boxSizing: 'border-box',
+                  backgroundColor: theme.palette.primary.main,
+                  ...theme.applyStyles('dark', {
+                    backgroundColor: theme.palette.background.paper
+                  })
+                }
+              })}>
+              <SidebarContent closeSidebar={() => setSidebarIsOpen(false)} />
+            </Drawer>
+            <Box sx={{ flexGrow: 1, minWidth: 0 }}>
+              <AppToolbar
+                dockedMenu={sidebarDocked}
+                openSideBar={() => setSidebarIsOpen(true)}
+              />
+              <AppRouter />
+            </Box>
+          </Box>
         </HashRouter>
         :
         <Auth />

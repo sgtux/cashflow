@@ -1,6 +1,4 @@
-import styled from 'styled-components'
-
-import { Colors } from '../helpers/themes'
+import { styled } from '@mui/material/styles'
 
 const getFont = props => {
     if (props.$small)
@@ -16,10 +14,11 @@ const getFont = props => {
     return '14px'
 }
 
-export const MoneySpan = styled.span`
-    color: ${props => props.$gain ? Colors.AppGreen : Colors.AppRed};
-    font-size: ${props => getFont(props)};
-    font-family: GraphikMedium;
-    font-weight: ${props => props.$bold ? 'bold' : 'normal'};
-    font-size: ${props => getFont(props)};
-`
+export const MoneySpan = styled('span', {
+    shouldForwardProp: prop => !prop.startsWith('$')
+})(({ theme, ...props }) => ({
+    color: props.$gain ? theme.palette.success.main : theme.palette.error.main,
+    fontSize: getFont(props),
+    fontFamily: props.$bold ? 'FiraCodeSemiBold' : 'FiraCodeRegular',
+    fontVariantNumeric: 'tabular-nums'
+}))
