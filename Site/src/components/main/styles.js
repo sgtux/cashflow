@@ -18,6 +18,7 @@ export const ToolbarMenuContainer = styled('div', {
     boxShadow: `1px 1px 10px ${theme.palette.divider}`,
     position: 'fixed',
     top: 70,
+    zIndex: 5,
     right: 6,
     width: 150,
     height: $show ? 75 : 0,

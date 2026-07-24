@@ -34,7 +34,7 @@ export function AppToolbar({ openSideBar, dockedMenu }) {
 
   useEffect(() => {
     document.body.addEventListener('click', (e) => {
-      if (e.target.id !== 'user-picture')
+      if (!e.target.closest('#user-picture'))
         setShowMenu(false)
     })
   }, [])
@@ -79,11 +79,17 @@ export function AppToolbar({ openSideBar, dockedMenu }) {
             onClick={() => toggleThemeMode()}>
             {mode === 'dark' ? <Icons.LightMode /> : <Icons.DarkMode />}
           </IconButton>
-          <UserPicture id="user-picture" src={appState.user.picture} onClick={e => setShowMenu(!showMenu)} />
           <ToolbarMenuContainer $show={showMenu}>
             <Button onClick={() => editAccount()}>Editar Conta</Button>
             <Button onClick={() => logout()}>Sair</Button>
           </ToolbarMenuContainer>
+          {appState.user.picture ?
+            <UserPicture id="user-picture" src={appState.user.picture} onClick={() => setShowMenu(!showMenu)} />
+            :
+            <IconButton id="user-picture" color="inherit" onClick={() => setShowMenu(!showMenu)}>
+              <Icons.AccountCircle />
+            </IconButton>
+          }
         </Toolbar>
       </AppBar>
     </div>
