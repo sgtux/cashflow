@@ -1,41 +1,23 @@
 import React from 'react'
-import { Paper, CircularProgress } from '@mui/material';
+import { Paper, Typography, CircularProgress } from '@mui/material';
 
 import { ContainerLoader } from './styles'
 
-const styles = {
-  legend: {
-    color: '#666',
-    border: 'inset 2px #ccc',
-    fontSize: '30px',
-    fontFamily: 'GraphikRegular',
-    textTransform: 'uppercase'
-  },
-  paper: {
-    marginTop: '20px',
-    marginBottom: '50px',
-    marginLeft: '20px',
-    marginRight: '20px',
-    padding: '10px',
-    fontFamily: 'GraphikMedium'
-  }
-}
-
 export function MainContainer({ title, loading, children }) {
   return (
-    <Paper style={styles.paper}>
-      <fieldset style={styles.legend}>
-        <legend style={{ fontFamily: 'GraphikMedium' }}>{title}</legend>
-        {
-          loading &&
-          <ContainerLoader>
-            <div>
-              <CircularProgress size={50} />
-            </div>
-          </ContainerLoader>
-        }
-        {children}
-      </fieldset>
+    <Paper variant="outlined" sx={{ mt: 2.5, mb: 6, mx: 2.5, p: 1.5, position: 'relative' }}>
+      <Typography variant="overline" sx={{ color: 'text.secondary', fontFamily: 'GraphikMedium', display: 'block', mb: 1 }}>
+        {title}
+      </Typography>
+      {
+        loading &&
+        <ContainerLoader>
+          <div>
+            <CircularProgress size={50} />
+          </div>
+        </ContainerLoader>
+      }
+      {children}
     </Paper>
   )
 }

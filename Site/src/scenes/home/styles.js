@@ -1,10 +1,10 @@
-import styled from '@emotion/styled'
+import { styled } from '@mui/material/styles'
 
-export const GridTitle = styled.div`
-    font-size: 20px;
-    margin: 10px;
-    font-weight: bold;
-    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-    color: rgba(0, 0, 0, 0.6);
-    text-align: center;
-`
+export const GridTitle = styled('div')(({ theme }) => ({
+    fontSize: 20,
+    margin: 10,
+    fontWeight: 'bold',
+    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+    color: theme.palette.text.secondary,
+    textAlign: 'center'
+}))

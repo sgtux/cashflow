@@ -22,13 +22,6 @@ const styles = {
   symbolDiv: {
     textAlign: 'center',
     width: '260px'
-  },
-  subMainText: {
-    color: '#FFF',
-    fontFamily: 'PermanentMarker',
-    fontSize: '20px',
-    textTransform: 'uppercase',
-    marginLeft: 10
   }
 }
 

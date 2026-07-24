@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 
 import { Provider } from 'react-redux'
 import { ThemeProvider } from '@mui/material/styles'
+import CssBaseline from '@mui/material/CssBaseline'
 import { MainComponent } from './components/main/MainComponent'
 
 import { AppTheme } from './helpers/themes'
@@ -16,6 +17,7 @@ class App extends React.Component {
     return (
       <Provider store={Store}>
         <ThemeProvider theme={AppTheme}>
+          <CssBaseline />
           <MainComponent />
         </ThemeProvider>
       </Provider>

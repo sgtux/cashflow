@@ -6,7 +6,6 @@ import { Divider, List, ListItem, ListItemIcon, ListItemText, Paper, styled } fr
 import WarningIcon from '@mui/icons-material/Warning'
 
 import { InputMonth, MainContainer, MoneySpan } from '../../components'
-import { Colors } from '../../helpers/themes'
 
 import { homeService } from '../../services'
 import { showGlobalLoader, hideGlobalLoader } from '../../store/actions'
@@ -15,7 +14,7 @@ import { GridTitle } from './styles'
 import { SpentLimitBar } from './SpentLimitBar/SpentLimitBar'
 
 const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: '#fff',
+    backgroundColor: theme.palette.background.paper,
     ...theme.typography.body2,
     padding: theme.spacing(1),
     textAlign: 'center',
@@ -93,7 +92,7 @@ export function Home() {
                                         <ListItemText>
                                             {p.description}
                                         </ListItemText>
-                                        <ListItemText style={{ textAlign: 'right', color: Colors.AppGreen }}>
+                                        <ListItemText sx={{ textAlign: 'right', color: 'success.main' }}>
                                             {toReal(p.value)}
                                         </ListItemText>
                                     </ListItem>
@@ -113,7 +112,7 @@ export function Home() {
                                         <ListItemText>
                                             {p.description}
                                         </ListItemText>
-                                        <ListItemText style={{ textAlign: 'right', color: Colors.AppRed }}>
+                                        <ListItemText sx={{ textAlign: 'right', color: 'error.main' }}>
                                             {toReal(p.value)}
                                         </ListItemText>
                                     </ListItem>
@@ -140,7 +139,7 @@ export function Home() {
                                             <ListItemText>
                                                 {p.description}
                                             </ListItemText>
-                                            <ListItemText style={{ textAlign: 'right', color: Colors.AppRed }}>
+                                            <ListItemText sx={{ textAlign: 'right', color: 'error.main' }}>
                                                 {toReal(p.value)}
                                             </ListItemText>
                                         </ListItem>
