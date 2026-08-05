@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Cashflow.Api.Contracts;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Infra.Filters;
@@ -20,19 +21,18 @@ namespace Cashflow.Api.Validators
             RuleFor(s => s.Date).NotEqual(default(System.DateTime)).WithMessage(ValidatorMessages.FieldIsRequired("Data"));
             RuleFor(s => s.Value).GreaterThan(0).WithMessage(ValidatorMessages.GreaterThan("Valor", 0));
             RuleFor(s => s.Type).IsInEnum().WithMessage("Tipo inválido.");
-            RuleFor(s => s).Must(EarningExists).When(p => p.Id > 0).WithMessage(ValidatorMessages.NotFound("Provento"));
+            RuleFor(s => s).MustAsync((earning, _) => EarningExists(earning)).When(p => p.Id > 0).WithMessage(ValidatorMessages.NotFound("Provento"));
         }
 
-        private bool EarningExists(EarningEntity earning)
+        private async Task<bool> EarningExists(EarningEntity earning)
         {
-            LoadEarnings(earning);
+            await LoadEarnings(earning);
             return _earnings.Any(p => p.Id == earning.Id && p.UserId == earning.UserId);
         }
 
-        private void LoadEarnings(EarningEntity earning)
+        private async Task LoadEarnings(EarningEntity earning)
         {
-            if (_earnings is null)
-                _earnings = _repository.GetSome(new BaseFilter() { UserId = earning.UserId }).Result;
+            _earnings ??= await _repository.GetSome(new BaseFilter() { UserId = earning.UserId });
         }
     }
 }

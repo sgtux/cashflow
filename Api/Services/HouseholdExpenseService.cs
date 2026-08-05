@@ -84,7 +84,7 @@ namespace Cashflow.Api.Services
         public async Task<ResultModel> Add(HouseholdExpenseEntity householdExpense)
         {
             var result = new ResultModel();
-            var validatorResult = new HouseholdExpenseValidator(_vehicleRepository, _creditCardRepository).Validate(householdExpense);
+            var validatorResult = await new HouseholdExpenseValidator(_vehicleRepository, _creditCardRepository).ValidateAsync(householdExpense);
             if (!validatorResult.IsValid)
                 result.AddNotification(validatorResult.Errors);
 
@@ -99,7 +99,7 @@ namespace Cashflow.Api.Services
         public async Task<ResultModel> Update(HouseholdExpenseEntity householdExpense)
         {
             var result = new ResultModel();
-            var validatorResult = new HouseholdExpenseValidator(_vehicleRepository, _creditCardRepository).Validate(householdExpense);
+            var validatorResult = await new HouseholdExpenseValidator(_vehicleRepository, _creditCardRepository).ValidateAsync(householdExpense);
             if (validatorResult.IsValid)
             {
                 await _householdExpenseRepository.Update(householdExpense);

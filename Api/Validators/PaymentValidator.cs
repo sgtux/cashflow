@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Cashflow.Api.Contracts;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Infra.Filters;
@@ -21,8 +22,8 @@ namespace Cashflow.Api.Validators
             RuleFor(p => p.Description).NotEmpty().WithMessage(ValidatorMessages.FieldIsRequired("Descrição"));
             RuleFor(p => p.Installments).NotEmpty().WithMessage(ValidatorMessages.Payment.InstallmentsRequired);
             RuleFor(p => p.Type).IsInEnum().WithMessage(ValidatorMessages.Payment.PaymentTypeInvalid);
-            RuleFor(p => p).Must(ValidCreditCard).WithMessage(ValidatorMessages.NotFound("Cartão de Crédito"));
-            RuleFor(p => p).Must(ValidPayment).When(p => p.Id > 0).WithMessage(ValidatorMessages.NotFound("Pagamento"));
+            RuleFor(p => p).MustAsync((payment, _) => ValidCreditCard(payment)).WithMessage(ValidatorMessages.NotFound("Cartão de Crédito"));
+            RuleFor(p => p).MustAsync((payment, _) => ValidPayment(payment)).When(p => p.Id > 0).WithMessage(ValidatorMessages.NotFound("Pagamento"));
             RuleFor(p => p.Installments).Custom(ValidateInstallments);
         }
 
@@ -56,11 +57,12 @@ namespace Cashflow.Api.Validators
             }
         }
 
-        private bool ValidCreditCard(PaymentEntity payment)
+        private async Task<bool> ValidCreditCard(PaymentEntity payment)
         {
             if (payment.CreditCardId > 0)
             {
-                var card = _creditCardRepository.GetSome(new BaseFilter() { UserId = payment.UserId }).Result.FirstOrDefault(p => p.Id == payment.CreditCardId.Value);
+                var cards = await _creditCardRepository.GetSome(new BaseFilter() { UserId = payment.UserId });
+                var card = cards.FirstOrDefault(p => p.Id == payment.CreditCardId.Value);
                 if (card == null || card.UserId != payment.UserId)
                     return false;
             }
@@ -69,9 +71,9 @@ namespace Cashflow.Api.Validators
             return true;
         }
 
-        private bool ValidPayment(PaymentEntity payment)
+        private async Task<bool> ValidPayment(PaymentEntity payment)
         {
-            var paymentDb = _paymentRepository.GetById(payment.Id).Result;
+            var paymentDb = await _paymentRepository.GetById(payment.Id);
             return paymentDb?.UserId == payment.UserId;
         }
     }

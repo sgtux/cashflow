@@ -62,7 +62,7 @@ namespace Cashflow.Api.Services
         public async Task<ResultModel> Add(PaymentEntity payment)
         {
             var result = new ResultModel();
-            var validatorResult = new PaymentValidator(_paymentRepository, _creditCardRepository).Validate(payment);
+            var validatorResult = await new PaymentValidator(_paymentRepository, _creditCardRepository).ValidateAsync(payment);
             if (!validatorResult.IsValid)
             {
                 result.AddNotification(validatorResult.Errors);
@@ -81,7 +81,7 @@ namespace Cashflow.Api.Services
         public async Task<ResultModel> Update(PaymentEntity payment)
         {
             var result = new ResultModel();
-            var validatorResult = new PaymentValidator(_paymentRepository, _creditCardRepository).Validate(payment);
+            var validatorResult = await new PaymentValidator(_paymentRepository, _creditCardRepository).ValidateAsync(payment);
             if (!validatorResult.IsValid)
             {
                 result.AddNotification(validatorResult.Errors);

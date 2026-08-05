@@ -110,7 +110,7 @@ namespace Cashflow.Api.Services
         public async Task<ResultModel> Add(CreditCardEntity card)
         {
             var result = new ResultModel();
-            var validatorResult = new CreditCardValidator(_creditCardRepository, _userRepository).Validate(card);
+            var validatorResult = await new CreditCardValidator(_creditCardRepository, _userRepository).ValidateAsync(card);
 
             if (validatorResult.IsValid)
                 await _creditCardRepository.Add(card);
@@ -123,7 +123,7 @@ namespace Cashflow.Api.Services
         public async Task<ResultModel> Update(CreditCardEntity card)
         {
             var result = new ResultModel();
-            var validatorResult = new CreditCardValidator(_creditCardRepository, _userRepository).Validate(card);
+            var validatorResult = await new CreditCardValidator(_creditCardRepository, _userRepository).ValidateAsync(card);
 
             if (validatorResult.IsValid)
                 await _creditCardRepository.Update(card);

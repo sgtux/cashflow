@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Threading.Tasks;
 using Cashflow.Api.Contracts;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Infra.Filters;
@@ -18,15 +19,16 @@ namespace Cashflow.Api.Validators
             _creditCardRepository = creditCardRepository;
             RuleFor(p => p.Description).NotEmpty().WithMessage(ValidatorMessages.FieldIsRequired("Descrição"));
             RuleFor(s => s.Value).GreaterThan(0).WithMessage(ValidatorMessages.GreaterThan("Valor", 0));
-            RuleFor(p => p).Must(ValidCreditCard).WithMessage(ValidatorMessages.NotFound("Cartão de Crédito"));
-            RuleFor(p => p).Must(ValidRecurringExpense).When(p => p.Id > 0).WithMessage(ValidatorMessages.NotFound("Despesa Recorrente"));
+            RuleFor(p => p).MustAsync((recurringExpense, _) => ValidCreditCard(recurringExpense)).WithMessage(ValidatorMessages.NotFound("Cartão de Crédito"));
+            RuleFor(p => p).MustAsync((recurringExpense, _) => ValidRecurringExpense(recurringExpense)).When(p => p.Id > 0).WithMessage(ValidatorMessages.NotFound("Despesa Recorrente"));
         }
 
-        private bool ValidCreditCard(RecurringExpenseEntity recurringExpense)
+        private async Task<bool> ValidCreditCard(RecurringExpenseEntity recurringExpense)
         {
             if (recurringExpense.CreditCardId > 0)
             {
-                var card = _creditCardRepository.GetSome(new BaseFilter() { UserId = recurringExpense.UserId }).Result.FirstOrDefault(p => p.Id == recurringExpense.CreditCardId.Value);
+                var cards = await _creditCardRepository.GetSome(new BaseFilter() { UserId = recurringExpense.UserId });
+                var card = cards.FirstOrDefault(p => p.Id == recurringExpense.CreditCardId.Value);
                 if (card == null || card.UserId != recurringExpense.UserId)
                     return false;
             }
@@ -35,9 +37,9 @@ namespace Cashflow.Api.Validators
             return true;
         }
 
-        private bool ValidRecurringExpense(RecurringExpenseEntity recurringExpense)
+        private async Task<bool> ValidRecurringExpense(RecurringExpenseEntity recurringExpense)
         {
-            var recurringExpenseDb = _recurringExpenseRepository.GetById(recurringExpense.Id).Result;
+            var recurringExpenseDb = await _recurringExpenseRepository.GetById(recurringExpense.Id);
             return recurringExpenseDb?.UserId == recurringExpense.UserId;
         }
     }

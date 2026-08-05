@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Threading.Tasks;
 using Cashflow.Api.Contracts;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Infra.Filters;
@@ -19,19 +20,19 @@ namespace Cashflow.Api.Validators
             RuleFor(c => c.Name).NotEmpty().WithMessage(ValidatorMessages.FieldIsRequired("Nome"));
             RuleFor(c => c.InvoiceClosingDay).InclusiveBetween(1, 30).WithMessage(ValidatorMessages.BetweenValue("Dia de fechamento da fatura", 1, 30));
             RuleFor(c => c.InvoiceDueDay).InclusiveBetween(1, 30).WithMessage(ValidatorMessages.BetweenValue("Dia de vencimento da fatura", 1, 30));
-            RuleFor(c => c).Must(CreditCardExists).When(c => c.Id > 0).WithMessage(ValidatorMessages.NotFound("Cartão de Crédito"));
-            RuleFor(c => c).Must(UserExists).WithMessage(ValidatorMessages.NotFound("Usuário"));
+            RuleFor(c => c).MustAsync((card, _) => CreditCardExists(card)).When(c => c.Id > 0).WithMessage(ValidatorMessages.NotFound("Cartão de Crédito"));
+            RuleFor(c => c).MustAsync((card, _) => UserExists(card)).WithMessage(ValidatorMessages.NotFound("Usuário"));
         }
 
-        public bool CreditCardExists(CreditCardEntity card)
+        public async Task<bool> CreditCardExists(CreditCardEntity card)
         {
-            var cards = _creditCardRepository.GetSome(new BaseFilter() { UserId = card.UserId }).Result;
+            var cards = await _creditCardRepository.GetSome(new BaseFilter() { UserId = card.UserId });
             return cards.Any(p => p.Id == card.Id);
         }
 
-        public bool UserExists(CreditCardEntity card)
+        public async Task<bool> UserExists(CreditCardEntity card)
         {
-            return card.UserId > 0 && _userRepository.GetById(card.UserId).Result != null;
+            return card.UserId > 0 && await _userRepository.GetById(card.UserId) != null;
         }
     }
 }

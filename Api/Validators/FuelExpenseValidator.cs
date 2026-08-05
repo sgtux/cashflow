@@ -1,8 +1,8 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Cashflow.Api.Contracts;
 using Cashflow.Api.Infra.Entity;
-using Cashflow.Api.Infra.Filters;
 using FluentValidation;
 
 namespace Cashflow.Api.Validators
@@ -29,22 +29,31 @@ namespace Cashflow.Api.Validators
             RuleFor(c => c.ValueSupplied).GreaterThan(0).WithMessage(ValidatorMessages.MinValue("Valor Abastecido", 0));
             RuleFor(c => c.ValueSupplied).LessThan(1000000000).WithMessage(ValidatorMessages.MaxValue("Valor Abastecido", 999999999));
             RuleFor(c => c.Date).NotEqual(default(DateTime)).WithMessage(ValidatorMessages.FieldIsRequired("Data"));
-            RuleFor(c => c).Must(VehicleExists).WithMessage(ValidatorMessages.NotFound("Veículo"));
-            RuleFor(c => c).Must(FuelExpenseExists).When(c => c.Id > 0).WithMessage(ValidatorMessages.NotFound("Despesa de combustível"));
-            RuleFor(c => c).Must(DataMiliageIsMatch).WithMessage("Data e Quilometragem não batem devido à outro abastecimento");
+            RuleFor(c => c).MustAsync((fuelExpense, _) => VehicleExists(fuelExpense)).WithMessage(ValidatorMessages.NotFound("Veículo"));
+            RuleFor(c => c).MustAsync((fuelExpense, _) => FuelExpenseExists(fuelExpense)).When(c => c.Id > 0).WithMessage(ValidatorMessages.NotFound("Despesa de combustível"));
+            RuleFor(c => c).MustAsync((fuelExpense, _) => DataMiliageIsMatch(fuelExpense)).WithMessage("Data e Quilometragem não batem devido à outro abastecimento");
         }
 
-        private bool VehicleExists(FuelExpenseEntity fuelExpense)
+        private Task<VehicleEntity> GetVehicle(int vehicleId) => _vehicleRepository.GetById(vehicleId);
+
+        private async Task<bool> VehicleExists(FuelExpenseEntity fuelExpense)
         {
-            var vehicle = _vehicleRepository.GetById(fuelExpense.VehicleId).Result;
+            var vehicle = await GetVehicle(fuelExpense.VehicleId);
             return vehicle?.UserId == _userId;
         }
 
-        private bool FuelExpenseExists(FuelExpenseEntity fuelExpense) => _fuelExpenseRepository.GetById(fuelExpense.Id).Result != null;
-
-        private bool DataMiliageIsMatch(FuelExpenseEntity fuelExpense)
+        private async Task<bool> FuelExpenseExists(FuelExpenseEntity fuelExpense)
         {
-            var vehicle = _vehicleRepository.GetById(fuelExpense.VehicleId).Result;
+            var existing = await _fuelExpenseRepository.GetById(fuelExpense.Id);
+            if (existing == null)
+                return false;
+            var vehicle = await GetVehicle(existing.VehicleId);
+            return vehicle?.UserId == _userId;
+        }
+
+        private async Task<bool> DataMiliageIsMatch(FuelExpenseEntity fuelExpense)
+        {
+            var vehicle = await GetVehicle(fuelExpense.VehicleId);
             if (vehicle == null)
                 return false;
             return !vehicle.FuelExpenses.Any(p => p.Id != fuelExpense.Id && (fuelExpense.Miliage == p.Miliage
