@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Threading.Tasks;
 using Cashflow.Api.Contracts;
 using Cashflow.Api.Extensions;
 using Cashflow.Api.Infra.Entity;
@@ -20,27 +21,27 @@ namespace Cashflow.Api.Validators
             _userId = userId;
             RuleFor(p => p.Date).NotEqual(default(System.DateTime)).WithMessage(ValidatorMessages.FieldIsRequired("Data"));
             RuleFor(s => s.PaidValue).GreaterThan(0).WithMessage(ValidatorMessages.FieldIsRequired("Valor Pago"));
-            RuleFor(p => p).Must(ValidMonthYear).WithMessage("Já existe um histórico para este Mês/Ano.");
-            RuleFor(p => p).Must(ValidRecurringExpense).WithMessage(ValidatorMessages.NotFound("Despesa Recorrente"));
-            RuleFor(p => p).Must(ValidRecurringExpense).When(p => p.Id > 0).WithMessage(ValidatorMessages.NotFound("Despesa Recorrente"));
+            RuleFor(p => p).MustAsync((history, _) => ValidMonthYear(history)).WithMessage("Já existe um histórico para este Mês/Ano.");
+            RuleFor(p => p).MustAsync((history, _) => ValidRecurringExpense(history)).WithMessage(ValidatorMessages.NotFound("Despesa Recorrente"));
+            RuleFor(p => p).MustAsync((history, _) => ValidRecurringExpense(history)).When(p => p.Id > 0).WithMessage(ValidatorMessages.NotFound("Despesa Recorrente"));
         }
 
-        private bool ValidMonthYear(RecurringExpenseHistoryEntity history)
+        private async Task<bool> ValidMonthYear(RecurringExpenseHistoryEntity history)
         {
-            LoadRecurringExpense(history.RecurringExpenseId);
+            await LoadRecurringExpense(history.RecurringExpenseId);
             return _recurringExpense?.History != null && !_recurringExpense.History.Any(p => p.Id != history.Id && p.Date.SameMonthYear(history.Date));
         }
 
-        private bool ValidRecurringExpense(RecurringExpenseHistoryEntity history)
+        private async Task<bool> ValidRecurringExpense(RecurringExpenseHistoryEntity history)
         {
-            LoadRecurringExpense(history.RecurringExpenseId);
+            await LoadRecurringExpense(history.RecurringExpenseId);
             return _recurringExpense?.UserId == _userId;
         }
 
-        private void LoadRecurringExpense(long id)
+        private async Task LoadRecurringExpense(long id)
         {
             if (_recurringExpense == null)
-                _recurringExpense = _recurringExpenseRepository.GetById(id).Result;
+                _recurringExpense = await _recurringExpenseRepository.GetById(id);
         }
     }
 }

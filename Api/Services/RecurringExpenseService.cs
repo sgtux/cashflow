@@ -39,7 +39,7 @@ namespace Cashflow.Api.Services
         public async Task<ResultModel> Add(RecurringExpenseEntity recurringExpense)
         {
             var result = new ResultModel();
-            var validatorResult = new RecurringExpenseValidator(_recurringExpenseRepository, _creditCardRepository).Validate(recurringExpense);
+            var validatorResult = await new RecurringExpenseValidator(_recurringExpenseRepository, _creditCardRepository).ValidateAsync(recurringExpense);
 
             if (validatorResult.IsValid)
             {
@@ -55,7 +55,7 @@ namespace Cashflow.Api.Services
         public async Task<ResultModel> Update(RecurringExpenseEntity recurringExpense)
         {
             var result = new ResultModel();
-            var validatorResult = new RecurringExpenseValidator(_recurringExpenseRepository, _creditCardRepository).Validate(recurringExpense);
+            var validatorResult = await new RecurringExpenseValidator(_recurringExpenseRepository, _creditCardRepository).ValidateAsync(recurringExpense);
 
             if (validatorResult.IsValid)
             {
@@ -89,7 +89,7 @@ namespace Cashflow.Api.Services
         public async Task<ResultModel> AddHistory(RecurringExpenseHistoryEntity history, int userId)
         {
             var result = new ResultModel();
-            var validatorResult = new RecurringExpenseHistoryValidator(_recurringExpenseRepository, userId).Validate(history);
+            var validatorResult = await new RecurringExpenseHistoryValidator(_recurringExpenseRepository, userId).ValidateAsync(history);
 
             if (validatorResult.IsValid)
             {
@@ -105,7 +105,7 @@ namespace Cashflow.Api.Services
         public async Task<ResultModel> UpdateHistory(RecurringExpenseHistoryEntity history, int userId)
         {
             var result = new ResultModel();
-            var validatorResult = new RecurringExpenseHistoryValidator(_recurringExpenseRepository, userId).Validate(history);
+            var validatorResult = await new RecurringExpenseHistoryValidator(_recurringExpenseRepository, userId).ValidateAsync(history);
 
             if (validatorResult.IsValid)
             {

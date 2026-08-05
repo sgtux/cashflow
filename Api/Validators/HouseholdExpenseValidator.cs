@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Threading.Tasks;
 using Cashflow.Api.Contracts;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Infra.Filters;
@@ -21,15 +22,15 @@ namespace Cashflow.Api.Validators
             RuleFor(s => s.Description).NotEmpty().WithMessage(ValidatorMessages.FieldIsRequired("Descrição"));
             RuleFor(s => s.Value).GreaterThan(0).WithMessage(ValidatorMessages.GreaterThan("Valor", 0));
             RuleFor(s => s.Type).IsInEnum().WithMessage("Tipo inválido");
-            RuleFor(c => c).Must(VehicleExists).WithMessage(ValidatorMessages.NotFound("Veículo"));
-            RuleFor(p => p).Must(ValidCreditCard).WithMessage(ValidatorMessages.NotFound("Cartão de Crédito"));
+            RuleFor(c => c).MustAsync((householdExpense, _) => VehicleExists(householdExpense)).WithMessage(ValidatorMessages.NotFound("Veículo"));
+            RuleFor(p => p).MustAsync((householdExpense, _) => ValidCreditCard(householdExpense)).WithMessage(ValidatorMessages.NotFound("Cartão de Crédito"));
         }
 
-        private bool VehicleExists(HouseholdExpenseEntity householdExpense)
+        private async Task<bool> VehicleExists(HouseholdExpenseEntity householdExpense)
         {
             if (householdExpense.VehicleId > 0)
             {
-                var vehicle = _vehicleRepository.GetById(householdExpense.VehicleId.Value).Result;
+                var vehicle = await _vehicleRepository.GetById(householdExpense.VehicleId.Value);
                 return vehicle?.UserId == householdExpense.UserId;
             }
             else
@@ -37,11 +38,12 @@ namespace Cashflow.Api.Validators
             return true;
         }
 
-        private bool ValidCreditCard(HouseholdExpenseEntity householdExpense)
+        private async Task<bool> ValidCreditCard(HouseholdExpenseEntity householdExpense)
         {
             if (householdExpense.CreditCardId > 0)
             {
-                var card = _creditCardRepository.GetSome(new BaseFilter() { UserId = householdExpense.UserId }).Result.FirstOrDefault(p => p.Id == householdExpense.CreditCardId.Value);
+                var cards = await _creditCardRepository.GetSome(new BaseFilter() { UserId = householdExpense.UserId });
+                var card = cards.FirstOrDefault(p => p.Id == householdExpense.CreditCardId.Value);
                 if (card == null || card.UserId != householdExpense.UserId)
                     return false;
             }

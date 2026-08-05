@@ -40,7 +40,7 @@ namespace Cashflow.Api.Services
                 return result;
             }
 
-            var validationResults = new UserValidator(_userRepository).Validate(model);
+            var validationResults = await new UserValidator(_userRepository).ValidateAsync(model);
             if (!validationResults.IsValid)
             {
                 result.AddNotification(validationResults.Errors);

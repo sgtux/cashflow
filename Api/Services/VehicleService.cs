@@ -29,7 +29,7 @@ namespace Cashflow.Api.Services
         public async Task<ResultModel> Add(VehicleEntity vehicle)
         {
             var result = new ResultModel();
-            var validatorResult = new VehicleValidator(_vehicleRepository).Validate(vehicle);
+            var validatorResult = await new VehicleValidator(_vehicleRepository).ValidateAsync(vehicle);
 
             if (validatorResult.IsValid)
             {
@@ -62,7 +62,7 @@ namespace Cashflow.Api.Services
         public async Task<ResultModel> Update(VehicleEntity vehicle)
         {
             var result = new ResultModel();
-            var validatorResult = new VehicleValidator(_vehicleRepository).Validate(vehicle);
+            var validatorResult = await new VehicleValidator(_vehicleRepository).ValidateAsync(vehicle);
 
             if (validatorResult.IsValid)
             {
