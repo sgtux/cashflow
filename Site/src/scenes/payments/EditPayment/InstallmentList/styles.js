@@ -17,11 +17,11 @@ export const InstallmentTable = styled.div`
     & thead th {
         position: sticky;
         top: 0;
-        background-color: white;
+        background-color: var(--mui-palette-background-paper);
         padding-top: 4px;
         font-size: 14px;
     }
     & tr:nth-child(even) {
-        background-color: #ededed;
+        background-color: var(--mui-palette-action-hover);
     }
 `

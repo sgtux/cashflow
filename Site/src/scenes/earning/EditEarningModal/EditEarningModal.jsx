@@ -67,9 +67,10 @@ export function EditEarning({ editEarning, onClose, onSave }) {
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
             transitionDuration={250}
-            TransitionComponent={Zoom}>
-            <DialogContent>
-                <div style={{ fontFamily: 'GraphikRegular', fontSize: 14, color: '#666' }}>
+            TransitionComponent={Zoom}
+            PaperProps={{ style: { overflow: 'visible' } }}>
+            <DialogContent sx={{ overflow: 'visible' }}>
+                <div style={{ fontFamily: 'GraphikRegular', fontSize: 14, color: 'var(--mui-palette-text-secondary)' }}>
                     <IconTextInput
                         label="Descrição"
                         value={description}

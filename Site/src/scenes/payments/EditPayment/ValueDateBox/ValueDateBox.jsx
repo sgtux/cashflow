@@ -6,7 +6,7 @@ import { InputMoney, DatePickerInput, DatePickerContainer } from '../../../../co
 
 export function ValueDateBox({ value, valueChanged, date, dateChanged }) {
     return (
-        <DatePickerContainer style={{ marginRight: '10px', marginTop: '10px', color: '#666' }}>
+        <DatePickerContainer style={{ marginRight: '10px', marginTop: '10px', color: 'var(--mui-palette-text-secondary)' }}>
             <span>Valor da Compra:</span>
             <InputMoney
                 style={{ fontSize: 16, width: 190 }}

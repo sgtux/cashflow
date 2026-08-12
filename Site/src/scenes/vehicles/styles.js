@@ -17,10 +17,10 @@ export const VehicleTable = styled.div`
     & thead th {
         position: sticky;
         top: 0;
-        background-color: white;
+        background-color: var(--mui-palette-background-paper);
         padding-top: 4px;
     }
     & tr:nth-child(even) {
-        background-color: #ddd;
+        background-color: var(--mui-palette-action-hover);
     }
 `

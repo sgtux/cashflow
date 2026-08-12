@@ -36,9 +36,9 @@ import { showGlobalLoader, hideGlobalLoader } from '../../store/actions'
 import { NoRecordsContainer } from './styles'
 import { toReal } from '../../helpers'
 
-const StyledTableRow = styled(TableRow)(() => ({
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
 	'&:nth-of-type(odd)': {
-		backgroundColor: '#eee'
+		backgroundColor: theme.palette.action.hover
 	},
 	'&:last-child td, &:last-child th': {
 		border: 0,

@@ -35,9 +35,9 @@ import { dateToString, toReal, toast } from '../../helpers'
 import { RecurringExpenseHistoryModal } from './RecurringExpenseHistoryModal/RecurringExpenseHistoryModal'
 
 
-const StyledTableRow = styled(TableRow)(() => ({
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
     '&:nth-of-type(odd)': {
-        backgroundColor: '#eee'
+        backgroundColor: theme.palette.action.hover
     },
     '&:last-child td, &:last-child th': {
         border: 0,

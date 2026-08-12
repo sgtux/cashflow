@@ -104,7 +104,7 @@ export function Earnings() {
         <MainContainer title="Ganhos">
 
             <Paper>
-                <span style={{ margin: 10, fontSize: 16, color: '#666' }}>Desde: </span>
+                <span style={{ margin: 10, fontSize: 16, color: 'var(--mui-palette-text-secondary)' }}>Desde: </span>
                 <Select
                     value={selectedMonthYear}
                     style={{ width: '130px' }}

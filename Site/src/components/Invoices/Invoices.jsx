@@ -45,16 +45,16 @@ export function Invoices(props) {
         cards.length ?
             <Accordion>
                 <AccordionSummary expandIcon={<ExpandMore />}>
-                    <Typography style={{ color: '#666' }}>Faturas - <MoneySpan $bold>{toReal(total)}</MoneySpan></Typography>
+                    <Typography style={{ color: 'var(--mui-palette-text-secondary)' }}>Faturas - <MoneySpan $bold>{toReal(total)}</MoneySpan></Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-                    <div style={{ marginLeft: 20, width: '100%', color: '#666' }}>
+                    <div style={{ marginLeft: 20, width: '100%', color: 'var(--mui-palette-text-secondary)' }}>
                         {cards.map((c, j) =>
                             <div key={j}>
                                 <span style={{ fontWeight: 'bold' }}>{c.name}</span>
                                 <List dense={true} style={{ marginLeft: 50, marginRight: 10 }}>
                                     {c.payments.map((p, k) =>
-                                        <ListItem style={{ backgroundColor: k % 2 == 0 ? '#ddd' : '#eee' }} key={k}>
+                                        <ListItem style={{ backgroundColor: k % 2 == 0 ? 'var(--mui-palette-action-hover)' : 'transparent' }} key={k}>
                                             <ImageList rowHeight={18} cols={5} style={{ width: '100%' }}>
                                                 <ImageListItem cols={3}>
                                                     <span>{p.description}</span>

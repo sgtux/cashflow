@@ -108,7 +108,7 @@ export function HouseholdExpenses() {
 
     return (
         <div style={{ padding: 50 }}>
-            <Paper style={{ padding: 20, color: '#555', display: 'flex', flexDirection: 'column', textAlign: 'center' }}>
+            <Paper style={{ padding: 20, color: 'var(--mui-palette-text-secondary)', display: 'flex', flexDirection: 'column', textAlign: 'center' }}>
                 <InputMonth selectedYear={selectedYear}
                     selectedMonth={selectedMonth}
                     onChange={(month, year) => monthYearChanged(month, year)}
@@ -128,10 +128,10 @@ export function HouseholdExpenses() {
             {days.length ?
                 <div>
                     {days.map((p, q) =>
-                        <Paper key={q} style={{ textAlign: 'center', padding: 20, marginTop: 20, color: '#555' }}>
+                        <Paper key={q} style={{ textAlign: 'center', padding: 20, marginTop: 20, color: 'var(--mui-palette-text-secondary)' }}>
                             <span style={{ fontSize: 16, fontWeight: 'bold' }}>{`${p} - ${selectedMonthName}`}</span>
                             {
-                                householdExpensesByDay[p].map((x, i) => <Paper key={i} style={{ padding: 10, marginTop: 10, fontSize: 18, color: '#555' }}>
+                                householdExpensesByDay[p].map((x, i) => <Paper key={i} style={{ padding: 10, marginTop: 10, fontSize: 18, color: 'var(--mui-palette-text-secondary)' }}>
                                     {getFabIconByExpenseType(x.type)}
                                     {
                                         !!x.creditCardId &&

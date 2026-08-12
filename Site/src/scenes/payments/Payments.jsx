@@ -67,7 +67,7 @@ export function Payments() {
         <Paper>
           <List dense={true}>
             {payments.map((p, index) =>
-              <ListItem key={index} style={{ backgroundColor: index % 2 === 0 ? '#eee' : '#fff' }} secondaryAction={
+              <ListItem key={index} style={{ backgroundColor: index % 2 === 0 ? 'var(--mui-palette-action-hover)' : 'transparent' }} secondaryAction={
                 <>
                   <Link to={`/edit-payment/${p.id}`}>
                     <Tooltip title="Editar este pagamento">
@@ -97,7 +97,7 @@ export function Payments() {
                 />
                 <ListItemText
                   style={{ width: '40px' }}
-                  primary={<span style={{ color: '#666' }}>{`${p.firstPaymentDate} - ${p.lastPaymentDate}`}</span>}
+                  primary={<span style={{ color: 'var(--mui-palette-text-secondary)' }}>{`${p.firstPaymentDate} - ${p.lastPaymentDate}`}</span>}
                   secondary={<span style={{ textTransform: 'initial', fontFamily: 'FiraCodeMedium' }}>{`${p.installments.length} x ${toReal(p.installmentValue)} = ${toReal(p.total)}`}</span>}
                 />
                 <ListItemText
