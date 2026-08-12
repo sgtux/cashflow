@@ -17,13 +17,13 @@ export const EarningTable = styled.div`
         font-family: GraphikMedium;
         position: sticky;
         top: 0;
-        background-color: white;
+        background-color: var(--mui-palette-background-paper);
         padding-top: 4px;
     }
     & tbody td {
         font-family: GraphikRegular;
     }
     & tr:nth-child(even) {
-        background-color: #ddd;
+        background-color: var(--mui-palette-action-hover);
     }
 `

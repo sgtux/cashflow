@@ -159,7 +159,7 @@ export function EditHouseholdExpenseModal({ editHouseholdExpense, onClose, onSav
                     </div>
                 }
                 <div style={{ display: 'flex', justifyContent: 'end', marginTop: 100, marginBottom: 10, width: 300 }}>
-                    <Button onClick={() => onClose()} variant="contained" autoFocus>Cancel</Button>
+                    <Button onClick={() => onClose()} color="primary" autoFocus>Cancel</Button>
                     <Button
                         style={{ marginLeft: 10 }}
                         disabled={!formIsValid}

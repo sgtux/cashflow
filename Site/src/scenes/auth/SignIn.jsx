@@ -24,7 +24,7 @@ const styles = {
   },
   Or: {
     textAlign: 'center',
-    color: '#666',
+    color: 'var(--mui-palette-text-secondary)',
     marginTop: '25px',
     fontWeight: 'bold',
     fontFamily: 'GraphikRegular'

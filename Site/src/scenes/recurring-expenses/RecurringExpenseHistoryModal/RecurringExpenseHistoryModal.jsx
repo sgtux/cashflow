@@ -30,9 +30,9 @@ import { InputMoney, DatePickerContainer, DatePickerInput } from '../../../compo
 import { recurringExpenseService } from '../../../services'
 import { ConfirmModal } from '../../../components/main'
 
-const StyledTableRow = styled(TableRow)(() => ({
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
     '&:nth-of-type(odd)': {
-        backgroundColor: '#eee'
+        backgroundColor: theme.palette.action.hover
     },
     '&:last-child td, &:last-child th': {
         border: 0,

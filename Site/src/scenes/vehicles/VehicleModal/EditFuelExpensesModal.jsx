@@ -33,9 +33,9 @@ import { InputMoney, InputText, DatePickerContainer, DatePickerInput } from '../
 
 const MAX_VALUE = 999999999
 
-const StyledTableRow = styled(TableRow)(() => ({
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
     '&:nth-of-type(odd)': {
-        backgroundColor: '#eee'
+        backgroundColor: theme.palette.action.hover
     },
     '&:last-child td, &:last-child th': {
         border: 0,

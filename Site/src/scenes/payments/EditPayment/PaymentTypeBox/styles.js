@@ -11,6 +11,6 @@ export const Container = styled(FormControl)`
 `
 
 export const MenuItemSpan = styled.span`
-    color: ${props => props.gain ? 'green' : 'red'};
+    color: ${props => props.gain ? 'green' : 'var(--mui-palette-error-main)'};
     font-weight: 'bold';
 `

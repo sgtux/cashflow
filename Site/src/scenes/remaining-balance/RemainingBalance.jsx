@@ -97,7 +97,7 @@ export function RemainingBalances() {
                 <>
                     <List dense={true}>
                         {remainingBalancesFiltered.map(p =>
-                            <Paper key={p.id} style={{ padding: 10, marginTop: 10, fontSize: 24, color: '#555' }}>
+                            <Paper key={p.id} style={{ padding: 10, marginTop: 10, fontSize: 24, color: 'var(--mui-palette-text-secondary)' }}>
                                 <ListItem secondaryAction={<div hidden={!p.id}>
                                     <IconButton color="primary" aria-label="Edit" onClick={() => edit(p)}>
                                         <EditIcon />

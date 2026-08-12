@@ -79,7 +79,7 @@ export function EditRecurringExpense() {
 
     return (
         <MainContainer title="Despesa Recorrente" loading={loading}>
-            <div style={{ fontFamily: 'GraphikRegular', fontSize: 14, color: '#666' }}>
+            <div style={{ fontFamily: 'GraphikRegular', fontSize: 14, color: 'var(--mui-palette-text-secondary)' }}>
                 <IconTextInput
                     label="Descrição"
                     value={description}
@@ -106,7 +106,7 @@ export function EditRecurringExpense() {
                 }
                 {
                     !!id && <div style={{ marginBottom: 10 }}>
-                        <DatePickerContainer style={{ color: '#666' }}>
+                        <DatePickerContainer style={{ color: 'var(--mui-palette-text-secondary)' }}>
                             <span>Data Inativação:</span>
                             <DatePicker customInput={<DatePickerInput style={{ width: 115 }} />} onChange={e => setInactiveAt(e)}
                                 dateFormat="dd/MM/yyyy" locale={ptBr} selected={inactiveAt} />

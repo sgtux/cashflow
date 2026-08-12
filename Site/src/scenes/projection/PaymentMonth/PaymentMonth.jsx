@@ -36,11 +36,11 @@ export function PaymentMonth({ paymentMonth }) {
           <AccordionDetails>
             <List dense={true} style={{ width: '100%' }}>
               {paymentMonth.payments.filter(p => !(p.creditCard || {}).id).map((p, j) =>
-                <ListItem style={{ backgroundColor: j % 2 == 0 ? '#ddd' : '#eee' }} key={j}>
+                <ListItem style={{ backgroundColor: j % 2 == 0 ? 'var(--mui-palette-action-hover)' : 'transparent' }} key={j}>
                   <div style={{ width: '100%' }}>
                     <ImageList rowHeight={20} cols={6}>
                       <ImageListItem cols={3}>
-                        <span style={{ color: '#666' }}>{p.description}</span>
+                        <span style={{ color: 'var(--mui-palette-text-secondary)' }}>{p.description}</span>
                       </ImageListItem>
                       <ImageListItem cols={1}></ImageListItem>
                       <ImageListItem cols={1} style={{ textAlign: 'center' }}>
