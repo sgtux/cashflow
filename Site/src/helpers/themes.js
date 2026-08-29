@@ -4,9 +4,7 @@ export const Colors = {
   AppGreen: '#4b9372',
   AppGreenLight: '#78ba9c',
   AppGreenDark: '#34664f',
-  AppRed: '#bb2222',
-  AppRedLight: '#d9605c',
-  AppRedDark: '#880000',
+  AppRed: '#d9605c',
   AppYellow: '#cc6'
 }
 
@@ -24,18 +22,18 @@ export const AppTheme = createTheme({
     light: {
       palette: {
         primary: { main: Colors.AppGreen, dark: Colors.AppGreenDark },
-        secondary: { main: Colors.AppRed, dark: Colors.AppRedDark },
+        secondary: { main: Colors.AppRed },
         success: { main: Colors.AppGreen, dark: Colors.AppGreenDark },
-        error: { main: Colors.AppRed, dark: Colors.AppRedDark },
+        error: { main: Colors.AppRed },
         warning: { main: Colors.AppYellow }
       }
     },
     dark: {
       palette: {
         primary: { main: Colors.AppGreen, dark: Colors.AppGreenDark },
-        secondary: { main: Colors.AppRed, dark: Colors.AppRedDark },
+        secondary: { main: Colors.AppRed },
         success: { main: Colors.AppGreenLight, dark: Colors.AppGreenDark },
-        error: { main: Colors.AppRedLight, dark: Colors.AppRedDark },
+        error: { main: Colors.AppRed },
         warning: { main: Colors.AppYellow },
         background: { default: '#121212', paper: '#1A2027' }
       }
