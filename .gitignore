@@ -12,3 +12,4 @@ coverage
 Api/Api.sln
 Migrations/Migrations.sln
 Tests/Tests.sln
+.claude

@@ -47,7 +47,6 @@ export function PaymentMonth({ paymentMonth }) {
                         <span style={{ color: 'gray', fontFamily: 'GraphikRegular' }}>
                           {p.qtdInstallments ? `N°: ${p.number} - P: ${p.qtdPaidInstallments}/${p.qtdInstallments}` : ''}
                         </span>
-                        {p.paidDate && <PaidSpan>PAGA</PaidSpan>}
                       </ImageListItem>
                       <ImageListItem cols={1} style={{ textAlign: 'end' }}>
                         <MoneySpan $gain={p.in}>{toReal(p.value)}</MoneySpan>
