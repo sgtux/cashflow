@@ -12,7 +12,7 @@ const getPicture = () => localStorage.getItem(StorageKeys.PICTURE)
 
 const setPicture = picture => picture ? localStorage.setItem(StorageKeys.PICTURE, picture) : localStorage.removeItem(StorageKeys.StorageKeys.PICTURE)
 
-const getThemeMode = () => localStorage.getItem(StorageKeys.THEME_MODE) || 'light'
+const getThemeMode = () => localStorage.getItem(StorageKeys.THEME_MODE) || 'dark'
 
 const setThemeMode = mode => mode ? localStorage.setItem(StorageKeys.THEME_MODE, mode) : localStorage.removeItem(StorageKeys.THEME_MODE)
 

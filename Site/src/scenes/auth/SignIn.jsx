@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { Person, Visibility, VisibilityOff } from '@mui/icons-material'
 import {
   CardContent,
@@ -40,11 +40,10 @@ export function SignInScreen({ changeScene }) {
   const [showPassword, setShowPassword] = useState(false)
 
   const dispatch = useDispatch()
-  const themeMode = useSelector(state => state.appState.themeMode)
 
   useEffect(() => {
     initializeGoogleOauth()
-  }, [themeMode])
+  }, [])
 
   function onInputChange(e) {
     if (e.name === 'email') {
@@ -79,8 +78,9 @@ export function SignInScreen({ changeScene }) {
       google.accounts.id.renderButton(
         googleButton,
         {
-          theme: themeMode === 'dark' ? 'filled_black' : 'outline',
+          theme: 'filled_black',
           size: 'large',
+          width: 240,
         }
       )
       google.accounts.id.prompt()
@@ -141,7 +141,18 @@ export function SignInScreen({ changeScene }) {
           </div>
           <br />
           <Divider />
-          <div style={{ margin: '0 auto', marginTop: 20, width: 240 }} id="googleButton"></div>
+          <div
+            id="googleButton"
+            style={{
+              margin: '0 auto',
+              marginTop: 20,
+              width: 240,
+              colorScheme: 'dark',
+              backgroundColor: '#131314',
+              borderRadius: 4,
+              overflow: 'hidden'
+            }}
+          ></div>
         </form>
       </Card>
     </Zoom>
