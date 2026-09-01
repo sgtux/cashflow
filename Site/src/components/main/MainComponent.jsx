@@ -33,8 +33,9 @@ export function MainComponent() {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    setMode(themeMode)
-  }, [themeMode])
+    // A tela de autenticação é sempre dark; depois do login usa a preferência do usuário.
+    setMode(user ? themeMode : 'dark')
+  }, [themeMode, user])
 
   useEffect(() => {
     registerCallbackUnauthorized(() => setShowModal(true))

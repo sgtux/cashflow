@@ -62,7 +62,7 @@ namespace Cashflow.Api.Services
             if (monthPaymentList != null)
                 return new ResultDataModel<List<PaymentMonthProjectionModel>>(monthPaymentList, true);
 
-            monthPaymentList = new List<PaymentMonthProjectionModel>();
+            monthPaymentList = [];
             var baseFilter = new BaseFilter() { UserId = userId };
             var cards = await _creditCardRepository.GetSome(baseFilter);
             var user = await _userRepository.GetById(userId);
