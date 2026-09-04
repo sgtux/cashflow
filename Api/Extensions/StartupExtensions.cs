@@ -21,6 +21,7 @@ namespace Cashflow.Api.Extensions
             services.AddScoped<FuelExpenseService>();
             services.AddScoped<RemainingBalanceService>();
             services.AddScoped<RecurringExpenseService>();
+            services.AddScoped<RecurringEarningService>();
             services.AddScoped<ProjectionService>();
             services.AddScoped<LogService>();            
         }
@@ -44,6 +45,7 @@ namespace Cashflow.Api.Extensions
             services.AddScoped<IFuelExpenseRepository, FuelExpenseRepository>();
             services.AddScoped<IRemainingBalanceRepository, RemainingBalanceRepository>();
             services.AddScoped<IRecurringExpenseRepository, RecurringExpenseRepository>();
+            services.AddScoped<IRecurringEarningRepository, RecurringEarningRepository>();
             services.AddScoped<ISystemParameterRepository, SystemParameterRepository>();
         }
 

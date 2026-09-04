@@ -131,7 +131,7 @@ namespace Cashflow.Tests.Tests
             var response = await client.PostAsync("/api/token", requestContent);
 
             if (response.StatusCode != HttpStatusCode.OK)
-                throw new Exception($"Invalid UserId {userId}");
+                throw new Exception($"Invalid UserId {userId} - StatusCode: {response.StatusCode} - Body: {await response.Content.ReadAsStringAsync()}");
 
             var accountData = JsonSerializer.Deserialize<ApiResultDataModel<AccountResultModel>>(await response.Content.ReadAsStringAsync(), new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
             return accountData.Data.Token;

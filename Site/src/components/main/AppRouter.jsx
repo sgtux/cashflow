@@ -11,6 +11,8 @@ import {
   Home,
   RecurringExpenses,
   EditRecurringExpense,
+  RecurringEarnings,
+  EditRecurringEarning,
   RemainingBalances,
   Account
 } from '../../scenes'
@@ -28,6 +30,8 @@ export default function () {
       <Route path="/vehicles" element={<Vehicles />} />
       <Route path="/recurring-expenses" element={<RecurringExpenses />} />
       <Route path="/edit-recurring-expenses/:id" element={<EditRecurringExpense />} />
+      <Route path="/recurring-earnings" element={<RecurringEarnings />} />
+      <Route path="/edit-recurring-earnings/:id" element={<EditRecurringEarning />} />
       <Route path="/remaining-balance" element={<RemainingBalances />} />
       <Route path="/account" element={<Account />} />
     </Routes>

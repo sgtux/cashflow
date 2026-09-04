@@ -3,10 +3,6 @@ import DatePicker from 'react-datepicker'
 import ptBr from 'date-fns/locale/pt-BR'
 import {
     Button,
-    FormControl,
-    InputLabel,
-    MenuItem,
-    Select,
     Dialog,
     DialogContent,
     Zoom
@@ -24,34 +20,24 @@ export function EditEarning({ editEarning, onClose, onSave }) {
     const [description, setDescription] = useState('')
     const [value, setValue] = useState('')
     const [date, setDate] = useState('')
-    const [type, setType] = useState('')
-    const [types, setTypes] = useState([])
     const [formIsValid, setFormIsValid] = useState(false)
-
-    useEffect(() => {
-        earningService.getTypes()
-            .then(res => setTypes(res))
-            .catch(err => console.log(err))
-    }, [])
 
     useEffect(() => {
         if (editEarning) {
             setDescription(editEarning.description || '')
             setDate(editEarning.date ? new Date(editEarning.date) : new Date())
             setValue(toReal(editEarning.value))
-            setType(editEarning.type || 2)
         }
     }, [editEarning])
 
     useEffect(() => {
-        setFormIsValid(description && date && fromReal(value) > 0 && type > 0)
-    }, [description, value, date, type])
+        setFormIsValid(description && date && fromReal(value) > 0)
+    }, [description, value, date])
 
     function save() {
         earningService.save({
             id: editEarning.id || 0,
             description,
-            type,
             date,
             value: fromReal(value)
         }).then(() => {
@@ -87,17 +73,7 @@ export function EditEarning({ editEarning, onClose, onSave }) {
                             onChangeValue={(event, value, maskedValue) => setValue(value)}
                             value={value} />
                     </div>
-                    <div style={{marginTop: 20, marginBottom: 20}}>
-                        <FormControl>
-                            <InputLabel htmlFor="select-tipo">Tipo:</InputLabel>
-                            <Select style={{ width: '200px' }} value={type || ''}
-                                onChange={e => setType(e.target.value)}>
-                                <MenuItem value={0}><span style={{ color: 'gray' }}>Selecione</span></MenuItem>
-                                {types.map(p => <MenuItem key={p.id} value={p.id}>{p.description}</MenuItem>)}
-                            </Select>
-                        </FormControl>
-                    </div>
-                    <div style={{ margin: '10px', textAlign: 'center' }}>
+                    <div style={{ margin: '10px', marginTop: 20, textAlign: 'center' }}>
                         <Button onClick={() => save()}
                             disabled={!formIsValid}
                             variant="contained"

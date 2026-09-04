@@ -3,8 +3,7 @@ SELECT
   Description,
   Value,
   Date,
-  UserId,
-  Type
+  UserId
 FROM
   Earning
 WHERE

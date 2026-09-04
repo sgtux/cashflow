@@ -2,18 +2,17 @@ using FluentMigrator;
 
 namespace Cashflow.Tests.Mocks.Database.Tables
 {
-    [Migration(202112152001)]
-    public class Earning : Migration
+    [Migration(202112152013)]
+    public class RecurringEarningHistory : Migration
     {
         public override void Up()
         {
-            Create.Table("Earning")
+            Create.Table("RecurringEarningHistory")
                 .WithColumn("Id").AsInt32().PrimaryKey().Identity()
-                .WithColumn("Description").AsString(255)
                 .WithColumn("Value").AsDecimal(10, 2)
                 .WithColumn("Date").AsDateTime();
 
-            Execute.Sql("ALTER TABLE Earning ADD COLUMN UserId INTEGER REFERENCES User(Id)");
+            Execute.Sql("ALTER TABLE RecurringEarningHistory ADD COLUMN RecurringEarningId INTEGER REFERENCES RecurringEarning(Id)");
         }
 
         public override void Down()

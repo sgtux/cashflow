@@ -20,7 +20,6 @@ namespace Cashflow.Api.Validators
             RuleFor(s => s.Description).NotEmpty().WithMessage(ValidatorMessages.FieldIsRequired("Descrição"));
             RuleFor(s => s.Date).NotEqual(default(System.DateTime)).WithMessage(ValidatorMessages.FieldIsRequired("Data"));
             RuleFor(s => s.Value).GreaterThan(0).WithMessage(ValidatorMessages.GreaterThan("Valor", 0));
-            RuleFor(s => s.Type).IsInEnum().WithMessage("Tipo inválido.");
             RuleFor(s => s).MustAsync((earning, _) => EarningExists(earning)).When(p => p.Id > 0).WithMessage(ValidatorMessages.NotFound("Provento"));
         }
 

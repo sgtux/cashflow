@@ -6,7 +6,7 @@ import { Container } from './styles'
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material'
 import { tableCellClasses } from '@mui/material/TableCell'
 
-import { recurringExpenseService } from '../../services'
+import { recurringEarningService } from '../../services'
 
 import {
     IconButton,
@@ -32,7 +32,7 @@ import {
 import { MainContainer, ConfirmModal } from '../../components/main'
 import { AddFloatingButton, TableActionPayButton } from '../../components'
 import { dateToString, toReal, toast } from '../../helpers'
-import { RecurringExpenseHistoryModal } from './RecurringExpenseHistoryModal/RecurringExpenseHistoryModal'
+import { RecurringEarningHistoryModal } from './RecurringEarningHistoryModal/RecurringEarningHistoryModal'
 
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
@@ -54,11 +54,11 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     },
 }))
 
-export function RecurringExpenses() {
+export function RecurringEarnings() {
 
-    const [recurringExpenses, setRecurringExpenses] = useState([])
+    const [recurringEarnings, setRecurringEarnings] = useState([])
     const [loading, setLoading] = useState(false)
-    const [recurringExpenseEditHistory, setRecurringExpenseEditHistory] = useState(null)
+    const [recurringEarningEditHistory, setRecurringEarningEditHistory] = useState(null)
     const [removeItem, setRemoveItem] = useState(null)
     const [showInactives, setShowInactives] = useState(false)
     const [open, setOpen] = useState({})
@@ -66,43 +66,43 @@ export function RecurringExpenses() {
     useEffect(() => refresh(), [showInactives])
 
     function refresh() {
-        setRecurringExpenseEditHistory(null)
+        setRecurringEarningEditHistory(null)
         setLoading(true)
-        recurringExpenseService.getAll(showInactives)
-            .then(res => setRecurringExpenses(res))
+        recurringEarningService.getAll(showInactives)
+            .then(res => setRecurringEarnings(res))
             .finally(() => setLoading(false))
     }
 
-    function pay(expense) {
+    function receive(earning) {
         setLoading(true)
-        recurringExpenseService.saveHistory({
-            paidValue: expense.value,
+        recurringEarningService.saveHistory({
+            value: earning.value,
             date: new Date(),
-            recurringExpenseId: expense.id
+            recurringEarningId: earning.id
         })
             .then(res => refresh())
             .finally(() => setLoading(false))
     }
 
     function refreshEditHistory() {
-        recurringExpenseService.get(recurringExpenseEditHistory.id)
+        recurringEarningService.get(recurringEarningEditHistory.id)
             .then(res => {
-                setRecurringExpenseEditHistory(res)
+                setRecurringEarningEditHistory(res)
             })
             .catch(err => console.log(err))
     }
 
     function remove() {
         setLoading(true)
-        setRecurringExpenseEditHistory(null)
-        recurringExpenseService.remove(removeItem.id)
+        setRecurringEarningEditHistory(null)
+        recurringEarningService.remove(removeItem.id)
             .then(() => toast.success('Removido com sucesso!'))
             .catch(err => setRemoveItem(null))
             .finally(() => setLoading(false))
     }
 
     return (
-        <MainContainer title="Despesas Recorrentes" loading={loading}>
+        <MainContainer title="Ganhos Recorrentes" loading={loading}>
             <Container>
                 <TableContainer>
                     <Table sx={{ minWidth: 700 }}>
@@ -118,7 +118,7 @@ export function RecurringExpenses() {
                         </TableHead>
 
                         <TableBody>
-                            {recurringExpenses.map((p, i) =>
+                            {recurringEarnings.map((p, i) =>
                                 <React.Fragment key={i}>
                                     <TableRow sx={{ cursor: 'pointer' }}>
                                         <StyledTableCell>
@@ -132,18 +132,18 @@ export function RecurringExpenses() {
 
                                         <StyledTableCell>{p.description}</StyledTableCell>
                                         <StyledTableCell align="right">{toReal(p.value)}</StyledTableCell>
-                                        <StyledTableCell align="center">{p.inactiveAt ? 'Inativo' : p.paid ? 'Pago' : 'Pendente'}</StyledTableCell>
+                                        <StyledTableCell align="center">{p.inactiveAt ? 'Inativo' : p.received ? 'Recebido' : 'Pendente'}</StyledTableCell>
                                         <StyledTableCell align="center">
-                                            {!p.inactiveAt && !p.paid && <TableActionPayButton onClick={() => pay(p)}>Pagar</TableActionPayButton>}
+                                            {!p.inactiveAt && !p.received && <TableActionPayButton onClick={() => receive(p)}>Receber</TableActionPayButton>}
                                         </StyledTableCell>
                                         <StyledTableCell align="center" onClick={e => e.stopPropagation()}>
-                                            <Tooltip title="Histórico de Pagamentos">
-                                                <IconButton onClick={() => setRecurringExpenseEditHistory(p)} color="primary" aria-label="History">
+                                            <Tooltip title="Histórico de Recebimentos">
+                                                <IconButton onClick={() => setRecurringEarningEditHistory(p)} color="primary" aria-label="History">
                                                     <HistoryIcon />
                                                 </IconButton>
                                             </Tooltip>
                                             <Tooltip title="Editar">
-                                                <Link to={`/edit-recurring-expenses/${p.id}`}>
+                                                <Link to={`/edit-recurring-earnings/${p.id}`}>
                                                     <IconButton color="primary" aria-label="Edit">
                                                         <EditIcon />
                                                     </IconButton>
@@ -164,14 +164,14 @@ export function RecurringExpenses() {
                                                         <Table size='small'>
                                                             <TableHead>
                                                                 <StyledTableRow>
-                                                                    <StyledTableCell align="center">Valor Pago</StyledTableCell>
+                                                                    <StyledTableCell align="center">Valor Recebido</StyledTableCell>
                                                                     <StyledTableCell align="center">Data</StyledTableCell>
                                                                 </StyledTableRow>
                                                             </TableHead>
                                                             <TableBody>
                                                                 {p.history.slice(0, 10).map(h =>
                                                                     <StyledTableRow key={h.id} hover>
-                                                                        <StyledTableCell align="center">{toReal(h.paidValue)}</StyledTableCell>
+                                                                        <StyledTableCell align="center">{toReal(h.value)}</StyledTableCell>
                                                                         <StyledTableCell align="center">{dateToString(h.date)}</StyledTableCell>
                                                                     </StyledTableRow>
                                                                 )}
@@ -195,13 +195,13 @@ export function RecurringExpenses() {
             <ConfirmModal show={!!removeItem}
                 onClose={() => setRemoveItem(null)}
                 onConfirm={() => remove()}
-                text={`Deseja realmente remover esta despesa recorrente? (${(removeItem || {}).description || ''})`} />
-            <RecurringExpenseHistoryModal
-                recurringExpense={recurringExpenseEditHistory}
-                show={!!recurringExpenseEditHistory}
+                text={`Deseja realmente remover este ganho recorrente? (${(removeItem || {}).description || ''})`} />
+            <RecurringEarningHistoryModal
+                recurringEarning={recurringEarningEditHistory}
+                show={!!recurringEarningEditHistory}
                 requestRefresh={() => refreshEditHistory()}
                 onCancel={() => refresh()} />
-            <Link to="/edit-recurring-expenses/0">
+            <Link to="/edit-recurring-earnings/0">
                 <AddFloatingButton />
             </Link>
         </MainContainer >

@@ -3,8 +3,7 @@ INSERT INTO
     Description,
     Value,
     Date,
-    UserId,
-    Type
+    UserId
   )
 VALUES
-  (@Description, @Value, @Date, @UserId, @Type)
+  (@Description, @Value, @Date, @UserId)

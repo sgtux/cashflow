@@ -27,11 +27,14 @@ namespace Cashflow.Api.Services
 
         private readonly IRecurringExpenseRepository _recurringExpenseRepository;
 
+        private readonly IRecurringEarningRepository _recurringEarningRepository;
+
         public HomeService(IPaymentRepository paymentRepository,
             IUserRepository userRepository,
             IHouseholdExpenseRepository householdExpenseRepository,
             IVehicleRepository vehicleRepository,
             IRecurringExpenseRepository recurringExpenseRepository,
+            IRecurringEarningRepository recurringEarningRepository,
             IEarningRepository earningRepository,
             AppCache appCache
             )
@@ -43,6 +46,7 @@ namespace Cashflow.Api.Services
             _earningRepository = earningRepository;
             _appCache = appCache;
             _recurringExpenseRepository = recurringExpenseRepository;
+            _recurringEarningRepository = recurringEarningRepository;
         }
 
         public async Task<ResultDataModel<HomeModel>> GetInfo(int userId, short month, short year)
@@ -109,6 +113,16 @@ namespace Cashflow.Api.Services
 
             foreach (var item in await _earningRepository.GetSome(filter))
                 homeModel.Inflows.Add(new InflowOutflowModel(item.Description, item.Value));
+
+            var recurringEarnings = await _recurringEarningRepository.GetSome(new RecurringEarningFilter() { UserId = userId, Active = 1 });
+            foreach (var item in recurringEarnings)
+            {
+                var value = item.HasHistory()
+                    ? (item.History.FirstOrDefault(h => h.Date <= filter.EndDate)?.Value ?? 0)
+                    : item.Value;
+                if (value > 0)
+                    homeModel.Inflows.Add(new InflowOutflowModel(item.Description, value));
+            }
 
             homeModel.Outflows.Add(householdExpenseInflowOutflowModel);
             homeModel.Outflows.Add(paymentInflowOutflowModel);

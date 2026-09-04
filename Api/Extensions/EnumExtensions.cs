@@ -64,18 +64,5 @@ namespace Cashflow.Api.Extensions
                     return "Desconhecido";
             }
         }
-
-        public static string GetDescription(this EarningType e)
-        {
-            switch (e)
-            {
-                case EarningType.Monthy:
-                    return "Recorrente";
-                case EarningType.Normal:
-                    return "Normal";
-                default:
-                    return "Desconhecido";
-            }
-        }
     }
 }
