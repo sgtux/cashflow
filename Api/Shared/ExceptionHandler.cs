@@ -57,7 +57,7 @@ namespace Cashflow.Api.Shared
             var serverErrorMessage = "Erro interno no servidor, procure o administrador do sistema.";
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-            if (appConfig.IsDevelopment)
+            if (appConfig.IsDevelopment || appConfig.IsTest)
                 return context.Response.WriteAsync(JsonSerializer.Serialize(new { exception = exception.ToString(), errors = new[] { serverErrorMessage } }));
             else
                 return context.Response.WriteAsync(JsonSerializer.Serialize(new { errors = new[] { serverErrorMessage } }));

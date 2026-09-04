@@ -12,6 +12,8 @@ namespace Cashflow.Tests.Config
 
         public bool IsDevelopment => false;
 
+        public bool IsTest => true;
+
         public string GoogleOauthAccessTokenUrl => throw new System.NotImplementedException();
 
         public string GoogleOauthIdTokenUrl => throw new System.NotImplementedException();

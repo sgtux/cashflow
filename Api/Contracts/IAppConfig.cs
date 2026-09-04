@@ -12,6 +12,8 @@ namespace Cashflow.Api.Contracts
 
         bool IsDevelopment { get; }
 
+        bool IsTest { get; }
+
         string GoogleOauthAccessTokenUrl { get; }
 
         string GoogleOauthIdTokenUrl { get; }

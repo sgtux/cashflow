@@ -29,6 +29,8 @@ namespace Cashflow.Api.Shared
 
         public bool IsDevelopment => _environmentName == "Development";
 
+        public bool IsTest => false;
+
         public string GoogleOauthAccessTokenUrl { get; }
 
         public string GoogleOauthIdTokenUrl { get; }
