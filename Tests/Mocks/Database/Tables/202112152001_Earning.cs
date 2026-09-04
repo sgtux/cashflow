@@ -11,8 +11,7 @@ namespace Cashflow.Tests.Mocks.Database.Tables
                 .WithColumn("Id").AsInt32().PrimaryKey().Identity()
                 .WithColumn("Description").AsString(255)
                 .WithColumn("Value").AsDecimal(10, 2)
-                .WithColumn("Date").AsDateTime()
-                .WithColumn("Type").AsInt16();
+                .WithColumn("Date").AsDateTime();
 
             Execute.Sql("ALTER TABLE Earning ADD COLUMN UserId INTEGER REFERENCES User(Id)");
         }

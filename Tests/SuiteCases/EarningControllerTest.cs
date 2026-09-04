@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Cashflow.Api.Enums;
 using Cashflow.Api.Infra.Entity;
-using Cashflow.Api.Models;
 using Cashflow.Tests.Tests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -19,13 +17,6 @@ namespace Cashflow.Tests
         {
             var result = await Get<IEnumerable<EarningEntity>>("/api/Earning", 1);
             Assert.IsTrue(result.Data.Count() > 0);
-        }
-
-        [TestMethod]
-        public async Task GetTypes()
-        {
-            var result = await Get<IEnumerable<TypeModel>>("/api/Earning/Types", 1);
-            Assert.IsTrue(result.Data.Count() == 2);
         }
 
         [TestMethod]
@@ -62,26 +53,10 @@ namespace Cashflow.Tests
                 Date = DateTime.Now,
                 Value = 0,
                 UserId = 1,
-                Type = EarningType.Monthy,
                 Description = "Salário"
             };
             var result = await Post("/api/Earning", model, model.UserId);
             TestErrors(model, result, "O campo 'Valor' deve ser maior que 0.");
-        }
-
-        [TestMethod]
-        public async Task AddCurrentEarningWithInvalidType()
-        {
-            var model = new EarningEntity()
-            {
-                Date = new DateTime(2021, 4, 1),
-                Value = 1000,
-                UserId = 2,
-                Type = (EarningType)99,
-                Description = "Salário"
-            };
-            var result = await Post("/api/Earning", model, model.UserId);
-            TestErrors(model, result, "Tipo inválido.");
         }
 
         [TestMethod]
@@ -92,7 +67,6 @@ namespace Cashflow.Tests
                 Date = new DateTime(2021, 4, 1),
                 Value = 1000,
                 UserId = 2,
-                Type = EarningType.Monthy,
                 Description = "Salário"
             };
             var result = await Post("/api/Earning", model, model.UserId);
@@ -107,7 +81,6 @@ namespace Cashflow.Tests
                 Date = new DateTime(2020, 12, 1),
                 Value = 1000,
                 UserId = 1,
-                Type = EarningType.Normal,
                 Description = "Salário"
             };
             Thread.Sleep(500);
@@ -139,7 +112,6 @@ namespace Cashflow.Tests
                 Date = DateTime.Now,
                 Value = 0,
                 UserId = 1,
-                Type = EarningType.Normal,
                 Description = "Salário"
             };
             var result = await Put("/api/Earning", model, model.UserId);
@@ -154,8 +126,7 @@ namespace Cashflow.Tests
                 Id = 2,
                 Date = DateTime.Now,
                 Value = 1000,
-                UserId = 1,
-                Type = EarningType.Normal
+                UserId = 1
             };
             var result = await Put("/api/Earning", model, model.UserId);
             TestErrors(model, result, "O campo 'Descrição' é obrigatório.");
@@ -177,22 +148,6 @@ namespace Cashflow.Tests
         }
 
         [TestMethod]
-        public async Task UpdateEarningWithInvalidType()
-        {
-            var model = new EarningEntity()
-            {
-                Id = 3,
-                Description = "Salário",
-                Date = new DateTime(2020, 4, 1),
-                Value = 1000,
-                UserId = 1,
-                Type = (EarningType)99
-            };
-            var result = await Put("/api/Earning", model, model.UserId);
-            TestErrors(model, result, "Tipo inválido.");
-        }
-
-        [TestMethod]
         public async Task UpdateEarningOk()
         {
             var model = new EarningEntity()
@@ -201,8 +156,7 @@ namespace Cashflow.Tests
                 Description = "Salário",
                 Date = new DateTime(2020, 4, 1),
                 Value = 1000,
-                UserId = 1,
-                Type = EarningType.Monthy
+                UserId = 1
             };
             var result = await Put("/api/Earning", model, model.UserId);
             TestErrors(model, result);

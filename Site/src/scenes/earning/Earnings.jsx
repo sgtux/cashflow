@@ -116,7 +116,7 @@ export function Earnings() {
             {earnings.map((p, i) =>
                 <Paper key={i} style={{ padding: 10, margin: 10, textAlign: 'center', fontFamily: 'GraphikRegular', fontSize: 14 }}>
                     <MoneySpan style={{ fontSize: 16 }} $gain>{toReal(p.value)}</MoneySpan>
-                    <span> - {p.description} {p.type !== 2 ? `(${p.typeDescription}) - ` : ' - '}</span>
+                    <span> - {p.description} - </span>
                     <span>{dateToString(p.date)}</span>
                     <span>
                         {!isSameMonth(new Date(), p.date) &&

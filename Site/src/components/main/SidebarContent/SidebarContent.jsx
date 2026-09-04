@@ -14,6 +14,7 @@ import {
   MoneyBagIcon,
   MoneyExpenseIcon,
   MoneyIncomeIcon,
+  RecurringEarningIcon,
   RecurringExpenseIcon,
   VehicleIcon
 } from '../../icons'
@@ -67,11 +68,13 @@ export function SidebarContent({ closeSidebar }) {
         <Divider />
         <LinkListItem onClick={() => closeSidebar()} to="/earnings" text="Ganhos" icon={MoneyIncomeIcon} />
         <Divider />
+        <LinkListItem onClick={() => closeSidebar()} to="/recurring-earnings" text="Ganhos Recorrentes" icon={RecurringEarningIcon} />
+        <Divider />
         <LinkListItem onClick={() => closeSidebar()} to="/household-expenses" text="Despesas" icon={MoneyExpenseIcon} />
         <Divider />
-        <LinkListItem onClick={() => closeSidebar()} to="/vehicles" text="Veículos" icon={VehicleIcon} />
+        <LinkListItem onClick={() => closeSidebar()} to="/recurring-expenses" text="Despesas Recorrentes" icon={RecurringExpenseIcon} />
         <Divider />
-        <LinkListItem onClick={() => closeSidebar()} to="/recurring-expenses" text="Recorrentes" icon={RecurringExpenseIcon} />
+        <LinkListItem onClick={() => closeSidebar()} to="/vehicles" text="Veículos" icon={VehicleIcon} />
         <Divider />
         <LinkListItem onClick={() => closeSidebar()} to="/remaining-balance" text="Remanescente" icon={MoneyBagIcon} />
         <Divider />

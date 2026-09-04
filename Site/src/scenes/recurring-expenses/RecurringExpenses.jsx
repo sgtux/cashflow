@@ -102,7 +102,7 @@ export function RecurringExpenses() {
     }
 
     return (
-        <MainContainer title="Pagamento Recorrentes" loading={loading}>
+        <MainContainer title="Despesas Recorrentes" loading={loading}>
             <Container>
                 <TableContainer>
                     <Table sx={{ minWidth: 700 }}>

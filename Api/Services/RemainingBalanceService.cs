@@ -27,6 +27,8 @@ namespace Cashflow.Api.Services
 
         private readonly IRecurringExpenseRepository _recurringExpenseRepository;
 
+        private readonly IRecurringEarningRepository _recurringEarningRepository;
+
         private readonly AppCache _appCache;
 
         public RemainingBalanceService(IRemainingBalanceRepository remainingBalanceRepository,
@@ -35,6 +37,7 @@ namespace Cashflow.Api.Services
             IPaymentRepository paymentRepository,
             IEarningRepository earningRepository,
             IRecurringExpenseRepository recurringExpenseRepository,
+            IRecurringEarningRepository recurringEarningRepository,
             AppCache appCache)
         {
             _remainingBalanceRepository = remainingBalanceRepository;
@@ -43,6 +46,7 @@ namespace Cashflow.Api.Services
             _paymentRepository = paymentRepository;
             _earningRepository = earningRepository;
             _recurringExpenseRepository = recurringExpenseRepository;
+            _recurringEarningRepository = recurringEarningRepository;
             _appCache = appCache;
         }
 
@@ -73,6 +77,9 @@ namespace Cashflow.Api.Services
 
             foreach (var item in await _earningRepository.GetSome(filter))
                 total += item.Value;
+
+            foreach (var item in await _recurringEarningRepository.GetSome(new RecurringEarningFilter(filter)))
+                total += item.History?.FirstOrDefault(h => h.Date.SameMonthYear(date))?.Value ?? item.Value;
 
             total -= await CalculateFuelExpenses(filter);
 

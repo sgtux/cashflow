@@ -63,6 +63,12 @@ Ordenado por leverage: itens de "Alto impacto" mudam a estrutura e destravam os 
       variável.
 - [ ] Migrar para `IOptions<T>` + `ValidateOnStart`; usar o `appsettings.json` que
       hoje está praticamente sem uso.
+- [x] Removido `<UserSecretsId>` do `Cashflow.Api.csproj` (2026-09-03). Era código
+      morto: o Secret Manager só injeta valores em `IConfiguration`, e `AppConfig` não
+      lê `IConfiguration` — só `Environment.GetEnvironmentVariable`. Nenhum secret local
+      chegava à aplicação por esse caminho. Ao migrar para `IOptions<T>`/`appsettings`
+      (itens acima), reintroduzir user-secrets **junto** com o binding via
+      `IConfiguration`, senão volta a ser inócuo.
 
 ### 7. Idempotência & concorrência no caminho de escrita
 - **Por quê:** o produto é dado financeiro — registro duplicado ou update perdido

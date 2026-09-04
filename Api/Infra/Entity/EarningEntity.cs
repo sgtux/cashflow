@@ -1,6 +1,4 @@
 using System;
-using Cashflow.Api.Enums;
-using Cashflow.Api.Extensions;
 
 namespace Cashflow.Api.Infra.Entity
 {
@@ -15,9 +13,5 @@ namespace Cashflow.Api.Infra.Entity
         public DateTime Date { get; set; }
 
         public int UserId { get; set; }
-
-        public EarningType Type { get; set; }
-
-        public string TypeDescription => Type.GetDescription();
     }
 }

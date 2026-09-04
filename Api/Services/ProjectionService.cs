@@ -30,6 +30,8 @@ namespace Cashflow.Api.Services
 
         private readonly IRecurringExpenseRepository _recurringExpenseRepository;
 
+        private readonly IRecurringEarningRepository _recurringEarningRepository;
+
         private readonly IUserRepository _userRepository;
 
         private readonly AppCache _appCache;
@@ -41,6 +43,7 @@ namespace Cashflow.Api.Services
            IVehicleRepository vehicleRepository,
            IRemainingBalanceRepository remainingBalanceRepository,
            IRecurringExpenseRepository recurringExpenseRepository,
+           IRecurringEarningRepository recurringEarningRepository,
            IUserRepository userRepository,
            AppCache appCache
            )
@@ -52,6 +55,7 @@ namespace Cashflow.Api.Services
             _vehicleRepository = vehicleRepository;
             _remainingBalanceRepository = remainingBalanceRepository;
             _recurringExpenseRepository = recurringExpenseRepository;
+            _recurringEarningRepository = recurringEarningRepository;
             _userRepository = userRepository;
             _appCache = appCache;
         }
@@ -124,17 +128,19 @@ namespace Cashflow.Api.Services
         private async Task FillEarnings(List<PaymentProjectionModel> list, List<DateTime> dates, BaseFilter filter)
         {
             var earnings = await _earningRepository.GetSome(filter);
-            if (earnings.Any())
-            {
-                List<EarningEntity> monthyEarnings = new List<EarningEntity>();
-                foreach (var date in dates.Order())
-                {
-                    monthyEarnings.AddRange(earnings.Where(p => p.Date.SameMonthYear(date) && p.Type == EarningType.Monthy));
-                    foreach (var item in monthyEarnings)
-                        list.Add(new PaymentProjectionModel($"{item.Description} ({item.TypeDescription})", date, item.Value, MovementProjectionType.Earning));
+            var recurringEarnings = await _recurringEarningRepository.GetSome(new RecurringEarningFilter(filter) { Active = 1 });
 
-                    foreach (var item in earnings.Where(p => p.Type != EarningType.Monthy && p.Date.SameMonthYear(date)))
-                        list.Add(new PaymentProjectionModel($"{item.Description} (Provento)", date, item.Value, MovementProjectionType.Earning));
+            foreach (var date in dates.Order())
+            {
+                foreach (var item in earnings.Where(p => p.Date.SameMonthYear(date)))
+                    list.Add(new PaymentProjectionModel($"{item.Description} (Provento)", date, item.Value, MovementProjectionType.Earning));
+
+                foreach (var item in recurringEarnings)
+                {
+                    var value = item.History?.FirstOrDefault(h => h.Date.SameMonthYear(date))?.Value ?? item.Value;
+
+                    if (value > 0)
+                        list.Add(new PaymentProjectionModel($"{item.Description} (Provento Recorrente)", date, value, MovementProjectionType.Earning));
                 }
             }
         }
