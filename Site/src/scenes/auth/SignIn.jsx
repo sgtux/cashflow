@@ -265,6 +265,7 @@ export function SignInScreen({ changeScene }) {
               onClick={changeScene}
               color="primary">Criar Conta</Button>
           </div>
+          <button type='button' disabled={microsoftLoading} onClick={() => initializeMicrosoftOauth()}>Login Microsoft</button>
           <br />
           <Divider />
           <Box sx={{ ...styles.OAuthButton, marginTop: '20px' }}>
