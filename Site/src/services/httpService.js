@@ -16,11 +16,11 @@ axios.interceptors.response.use(response => response, err => {
 
 const getToken = () => StorageService.getToken()
 
-const sendRequest = (method, url, headers, data) => {
+const sendRequest = async (method, url, headers, data) => {
   return axios({
     method: method,
     headers: headers,
-    url: API_URL + url,
+    url: url.startsWith('http') ? url :`${API_URL}/api${url}`,
     data: data
   }).then(res => {
     if (res.data.requestElapsedTime > 500)
@@ -44,11 +44,22 @@ const sendRequest = (method, url, headers, data) => {
 
 const getHeaders = () => ({ Authorization: `Bearer ${getToken()}`, 'Content-Type': 'application/json' })
 
+const configs = await sendRequest('get', '/Config')
+
+export const appConfig = {
+  googleClientId: configs.googleClientId,
+  authApiUrl: configs.authApiUrl,
+  microsoftClientId: configs.microsoftClientId,
+  microsoftTenantId: configs.microsoftTenantId,
+  microsoftRedirectUri: configs.microsoftRedirectUri,
+  microsoftAuthority: configs.microsoftAuthority
+}
+
 export default {
-  getNotAuthenticated: url => sendRequest('get', `/api${url}`),
-  postNotAuthenticated: (url, body) => sendRequest('post', `/api${url}`, { 'Content-Type': 'application/json' }, body),
-  get: url => sendRequest('get', `/api${url}`, getHeaders()),
-  post: (url, body) => sendRequest('post', `/api${url}`, getHeaders(), body),
-  put: (url, body) => sendRequest('put', `/api${url}`, getHeaders(), body),
-  delete: (url, body) => sendRequest('delete', `/api${url}`, getHeaders(), body)
+  getNotAuthenticated: url => sendRequest('get', url),
+  postNotAuthenticated: (url, body) => sendRequest('post', url, { 'Content-Type': 'application/json' }, body),
+  get: url => sendRequest('get', url, getHeaders()),
+  post: (url, body) => sendRequest('post', url, getHeaders(), body),
+  put: (url, body) => sendRequest('put', url, getHeaders(), body),
+  delete: (url, body) => sendRequest('delete', url, getHeaders(), body)
 }

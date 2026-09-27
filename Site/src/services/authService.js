@@ -1,4 +1,4 @@
-import httpService from './httpService'
+import httpService, {appConfig} from './httpService'
 import { StorageService } from './storage.service'
 
 const login = user =>
@@ -8,9 +8,17 @@ const login = user =>
       return httpService.get('/account')
     })
 
-const getGoogleClientId = () => httpService.getNotAuthenticated('/account/GoogleClientId')
-const googleSignIn = token => httpService.postNotAuthenticated('/account/GoogleSignIn', { idToken: token })
+const googleSignIn = token => httpService.postNotAuthenticated('/api/account/GoogleSignIn', { idToken: token })
   .then(res => {
+    StorageService.setToken(res.token)
+    if (res.picture)
+      StorageService.setPicture(res.picture)
+    return httpService.get('/api/account')
+  })
+
+const oauthSignIn = (token, provider) => httpService.postNotAuthenticated(`${appConfig.authApiUrl}/api/token/oauth`, { idToken: token, provider })
+  .then(res => {
+    console.log(res)
     StorageService.setToken(res.token)
     if (res.picture)
       StorageService.setPicture(res.picture)
@@ -36,6 +44,7 @@ export default {
   createAccount,
   getAccount,
   update,
-  getGoogleClientId,
-  googleSignIn
+  googleSignIn,
+  oauthSignIn,
+  appConfig
 }

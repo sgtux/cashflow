@@ -21,5 +21,13 @@ namespace Cashflow.Tests.Config
         public string DataEncryptionKey => "1234567890123456";
 
         public string GoogleClientId => "123.apps.googleusercontent.com";
+
+        public string MicrosoftClientId => throw new System.NotImplementedException();
+
+        public string MicrosoftTenantId => throw new System.NotImplementedException();
+
+        public string MicrosoftRedirectUri => throw new System.NotImplementedException();
+
+        public string AuthApiUrl => throw new System.NotImplementedException();
     }
 }

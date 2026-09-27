@@ -13,3 +13,4 @@ Api/Api.sln
 Migrations/Migrations.sln
 Tests/Tests.sln
 .claude
+Api/Vulnerabilities.md

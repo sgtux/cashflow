@@ -12,6 +12,14 @@ import { Store } from './store'
 import 'react-toastify/dist/ReactToastify.css'
 import 'react-datepicker/dist/react-datepicker.css'
 
+import { broadcastResponseToMainFrame } from '@azure/msal-browser/redirect-bridge'
+
+function isMsalBridgeResponse() {
+  const hash = window.location.hash.replace(/^#/, '')
+  const search = window.location.search.replace(/^\?/, '')
+  return new URLSearchParams(hash).has('state') || new URLSearchParams(search).has('state')
+}
+
 class App extends React.Component {
   render() {
     return (
@@ -36,6 +44,9 @@ if (module.hot) {
   })
 }
 
-const domNode = document.getElementById('app')
-const root = createRoot(domNode)
-root.render(<App />)
+if (isMsalBridgeResponse()) {
+  broadcastResponseToMainFrame().catch(err => console.error('MSAL redirect bridge error:', err))
+} else {
+  var root = createRoot(document.getElementById('app'))
+  root.render(<App />)
+}
