@@ -1,0 +1,16 @@
+{
+  "name": "Bê-a-bá da Grana · Conta",
+  "short_name": "Bê-a-bá",
+  "description": "Aprenda o básico do dinheiro, um passo de cada vez.",
+  "lang": "pt-BR",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#F5F3EC",
+  "theme_color": "#1F7A5A",
+  "icons": [
+    { "src": "brand/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "brand/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "brand/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
