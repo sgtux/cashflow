@@ -23,7 +23,7 @@ namespace Cashflow.Api.Extensions
             services.AddScoped<RecurringExpenseService>();
             services.AddScoped<RecurringEarningService>();
             services.AddScoped<ProjectionService>();
-            services.AddScoped<LogService>();            
+            services.AddScoped<LogService>();
         }
 
         public static void ConfigureCaches(this IServiceCollection services)
@@ -32,6 +32,7 @@ namespace Cashflow.Api.Extensions
             services.AddScoped<AppCache>();
             services.AddScoped<HomeCache>();
             services.AddScoped<ProjectionCache>();
+            services.AddSingleton<SecurityCache>();
         }
 
         public static void ConfigureRepositories(this IServiceCollection services)

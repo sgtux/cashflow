@@ -28,7 +28,11 @@
         "DATA_ENCRYPTION_KEY": "1234567890123456",
         "GOOGLE_CLIENT_ID": "123.apps.googleusercontent.com",
         "GOOGLE_OAUTH_ACCESS_TOKEN": "https://www.googleapis.com/oauth2/v2/userinfo",
-        "GOOGLE_OAUTH_ID_TOKEN": "https://oauth2.googleapis.com/tokeninfo"
+        "GOOGLE_OAUTH_ID_TOKEN": "https://oauth2.googleapis.com/tokeninfo",
+        "MICROSOFT_CLIENT_ID": "123_trocar",
+        "MICROSOFT_TENANT_ID": "123_trocar",
+        "MICROSOFT_REDIRECT_URI": "http://localhost:8080",
+        "AUTH_API_URL": "http://localhost:9000"
       }
     }
   }

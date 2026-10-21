@@ -19,5 +19,13 @@ namespace Cashflow.Api.Contracts
         string GoogleOauthIdTokenUrl { get; }
 
         string GoogleClientId { get; }
+
+        string MicrosoftClientId { get; }
+
+        string MicrosoftTenantId { get; }
+
+        string MicrosoftRedirectUri { get; }
+
+        string AuthApiUrl { get; }
     }
 }
