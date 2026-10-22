@@ -31,7 +31,7 @@ namespace Cashflow.Api.Services
         public async Task<ResultModel> Add(FuelExpenseEntity fuelExpense, int userId)
         {
             var result = new ResultModel();
-            var validatorResult = await new FuelExpenseValidator(_vehicleRepository, _fuelExpenseRepository, userId).ValidateAsync(fuelExpense);
+            var validatorResult = await new FuelExpenseValidator(_vehicleRepository, _fuelExpenseRepository, _creditCardRepository, userId).ValidateAsync(fuelExpense);
 
             if (validatorResult.IsValid)
             {
@@ -47,7 +47,7 @@ namespace Cashflow.Api.Services
         public async Task<ResultModel> Update(FuelExpenseEntity fuelExpense, int userId)
         {
             var result = new ResultModel();
-            var validatorResult = await new FuelExpenseValidator(_vehicleRepository, _fuelExpenseRepository, userId).ValidateAsync(fuelExpense);
+            var validatorResult = await new FuelExpenseValidator(_vehicleRepository, _fuelExpenseRepository, _creditCardRepository, userId).ValidateAsync(fuelExpense);
 
             if (validatorResult.IsValid)
             {

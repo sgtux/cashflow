@@ -15,6 +15,7 @@ namespace Cashflow.Tests.Mocks.Database.Tables
                 .WithColumn("Date").AsDateTime().NotNullable();
 
             Execute.Sql("ALTER TABLE FuelExpense ADD COLUMN VehicleId INTEGER REFERENCES Vehicle(Id)");
+            Execute.Sql("ALTER TABLE FuelExpense ADD COLUMN CreditCardId INTEGER REFERENCES CreditCard(Id)");
         }
 
         public override void Down()

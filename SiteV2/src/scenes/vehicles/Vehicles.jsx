@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { Box, Button, Card, Collapse, FormControlLabel, Grid2 as Grid, Switch, Typography } from '@mui/material'
+import { Box, Button, Card, Chip, Collapse, FormControlLabel, Grid2 as Grid, Switch, Typography } from '@mui/material'
 import DirectionsCarRoundedIcon from '@mui/icons-material/DirectionsCarRounded'
 import AddRoundedIcon from '@mui/icons-material/AddRounded'
 import EditRoundedIcon from '@mui/icons-material/EditRounded'
 import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded'
 import LocalGasStationRoundedIcon from '@mui/icons-material/LocalGasStationRounded'
 import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded'
+import CreditCardRoundedIcon from '@mui/icons-material/CreditCardRounded'
 
 import { Page, Money, EmptyState, ConfirmDialog, ActionIcon, StatusChip, HelpTip } from '../../components'
 import { vehicleService } from '../../services'
@@ -103,7 +104,11 @@ export function Vehicles() {
                       <Typography variant="body2" sx={{ color: 'text.secondary' }}>Nenhum abastecimento ainda.</Typography>}
                     {(p.fuelExpensesLast10 || []).map(f =>
                       <Box key={f.id} sx={{ display: 'flex', justifyContent: 'space-between', gap: 1, px: 1.5, py: 0.75, borderRadius: 1.5, bgcolor: 'action.hover', flexWrap: 'wrap' }}>
-                        <Typography variant="body2">{dateToString(f.date)} · {toThousandFormat(f.miliage)} km</Typography>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75, flexWrap: 'wrap' }}>
+                          <Typography variant="body2">{dateToString(f.date)} · {toThousandFormat(f.miliage)} km</Typography>
+                          {!!f.creditCardId &&
+                            <Chip size="small" variant="outlined" icon={<CreditCardRoundedIcon />} label={f.creditCardName || 'Cartão'} sx={{ height: 20, fontSize: 11 }} />}
+                        </Box>
                         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                           {toDecimalText(f.litersSupplied)} l a <Money value={f.pricePerLiter} size="xs" />
                         </Typography>

@@ -68,6 +68,7 @@ export const Guides = {
     points: [
       'Cadastre seus veículos e registre cada abastecimento com a quilometragem do painel.',
       'Com isso calculamos quantos km você roda e a média de consumo (km/l).',
+      'Abasteceu no cartão de crédito? Escolha o cartão e o valor entra na fatura certa.',
       'Gastos como manutenção podem ser lançados em Despesas, com o tipo "Veículo".'
     ],
     tip: 'Se a média (km/l) cair, o veículo está gastando mais combustível para rodar a mesma distância. Pode ser pneu murcho ou revisão atrasada.'

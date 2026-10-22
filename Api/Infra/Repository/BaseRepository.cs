@@ -69,6 +69,13 @@ namespace Cashflow.Api.Infra.Repository
             return await _conn.QueryAsync<T, U, T>(query, map, parameters, transaction ?? Transaction);
         }
 
+        protected async Task<IEnumerable<T>> Query<U, V>(ResourceBuilder resource, Func<T, U, V, T> map, object parameters = null, IDbTransaction transaction = null)
+        {
+            var query = await resource.Build();
+            Log(query);
+            return await _conn.QueryAsync<T, U, V, T>(query, map, parameters, transaction ?? Transaction);
+        }
+
         public IDbTransaction BeginTransaction()
         {
             if (Transaction == null)

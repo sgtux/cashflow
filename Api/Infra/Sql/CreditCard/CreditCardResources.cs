@@ -15,5 +15,7 @@ namespace Cashflow.Api.Infra.Sql.CreditCard
         public static ResourceBuilder HasPayments => new ResourceBuilder("CreditCard.HasPayments.sql");
 
         public static ResourceBuilder HasHouseholdExpenses => new ResourceBuilder("CreditCard.HasHouseholdExpenses.sql");
+
+        public static ResourceBuilder HasFuelExpenses => new ResourceBuilder("CreditCard.HasFuelExpenses.sql");
     }
 }

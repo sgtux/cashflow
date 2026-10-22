@@ -18,7 +18,7 @@ namespace Cashflow.Api.Infra.Repository
         public async Task<VehicleEntity> GetById(long id)
         {
             VehicleEntity vehicle = null;
-            await Query<FuelExpenseEntity>(VehicleResources.ById, (x, y) =>
+            await Query<FuelExpenseEntity, CreditCardEntity>(VehicleResources.ById, (x, y, z) =>
             {
                 if (vehicle == null)
                 {
@@ -26,7 +26,10 @@ namespace Cashflow.Api.Infra.Repository
                     vehicle.FuelExpenses = new List<FuelExpenseEntity>();
                 }
                 if (y != null)
+                {
+                    y.CreditCard = z;
                     vehicle.FuelExpenses.Add(y);
+                }
                 return x;
             }, new { Id = id });
 
@@ -36,7 +39,7 @@ namespace Cashflow.Api.Infra.Repository
         public async Task<IEnumerable<VehicleEntity>> GetSome(BaseFilter filter)
         {
             var list = new List<VehicleEntity>();
-            await Query<FuelExpenseEntity>(VehicleResources.Some, (x, y) =>
+            await Query<FuelExpenseEntity, CreditCardEntity>(VehicleResources.Some, (x, y, z) =>
             {
                 var vehicle = list.FirstOrDefault(p => p.Id == x.Id);
                 if (vehicle == null)
@@ -46,7 +49,10 @@ namespace Cashflow.Api.Infra.Repository
                     list.Add(vehicle);
                 }
                 if (y != null)
+                {
+                    y.CreditCard = z;
                     vehicle.FuelExpenses.Add(y);
+                }
                 return x;
             }, filter);
 

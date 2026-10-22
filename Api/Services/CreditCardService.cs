@@ -149,6 +149,9 @@ namespace Cashflow.Api.Services
             if (await _creditCardRepository.HasHouseholdExpenses(id))
                 result.AddNotification(ValidatorMessages.CreditCard.BindedHouseholdExpense);
 
+            if (await _creditCardRepository.HasFuelExpenses(id))
+                result.AddNotification(ValidatorMessages.CreditCard.BindedFuelExpense);
+
             if (!result.IsValid)
                 return result;
 

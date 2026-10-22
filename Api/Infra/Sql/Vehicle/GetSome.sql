@@ -8,7 +8,12 @@ SELECT
     f.ValueSupplied,
     f.PricePerLiter,
     f.VehicleId,
-    f.Date
+    f.CreditCardId,
+    f.Date,
+    c.Id,
+    c.Name,
+    c.InvoiceClosingDay,
+    c.InvoiceDueDay
 FROM
     Vehicle v
     LEFT JOIN FuelExpense f ON v.Id = f.VehicleId
@@ -20,6 +25,7 @@ FROM
         @EndDate IS NULL
         OR f.Date <= @EndDate
     )
+    LEFT JOIN CreditCard c ON c.Id = f.CreditCardId
 WHERE
     v.UserId = @UserId
     AND (@Active IS NULL OR v.Active = @Active)

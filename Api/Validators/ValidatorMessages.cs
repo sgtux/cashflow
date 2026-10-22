@@ -72,6 +72,8 @@ namespace Cashflow.Api.Validators
 
             public string BindedHouseholdExpense = "Este cartão está vinculado à alguma Despesa e não pode ser removido.";
 
+            public string BindedFuelExpense = "Este cartão está vinculado à alguma Despesa de Combustível e não pode ser removido.";
+
             public string InvalidType = "Tipo inválido.";
 
             public string InvalidPaymentValue = "Valor de pagamento inválido.";

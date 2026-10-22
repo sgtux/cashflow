@@ -22,6 +22,8 @@ namespace Cashflow.Api.Infra.Repository
 
         public async Task<bool> HasHouseholdExpenses(int cardId) => await ExecuteScalar<int>(CreditCardResources.HasHouseholdExpenses, new { Id = cardId }) > 0;
 
+        public async Task<bool> HasFuelExpenses(int cardId) => await ExecuteScalar<int>(CreditCardResources.HasFuelExpenses, new { Id = cardId }) > 0;
+
         public Task Remove(long id) => Execute(CreditCardResources.Delete, new { Id = id });
 
         public Task Update(CreditCardEntity card) => Execute(CreditCardResources.Update, card);

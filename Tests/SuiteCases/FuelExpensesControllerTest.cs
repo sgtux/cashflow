@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Tests.Tests;
@@ -125,6 +127,39 @@ namespace Cashflow.Tests
             var model = ValidFuelExpense;
             var result = await Post("/api/FuelExpense", model, 2);
             TestErrors(model, result);
+        }
+
+        [TestMethod]
+        public async Task AddWithCreditCardNotFound()
+        {
+            var model = ValidFuelExpense;
+            model.CreditCardId = 99;
+            var result = await Post("/api/FuelExpense", model, 2);
+            TestErrors(model, result, "Cartão de Crédito não encontrado(a).");
+        }
+
+        [TestMethod]
+        public async Task AddWithCreditCardFromAnotherUser()
+        {
+            var model = ValidFuelExpense;
+            model.CreditCardId = 1;
+            var result = await Post("/api/FuelExpense", model, 2);
+            TestErrors(model, result, "Cartão de Crédito não encontrado(a).");
+        }
+
+        [TestMethod]
+        public async Task AddWithCreditCardOk()
+        {
+            var model = ValidFuelExpense;
+            model.VehicleId = 4;
+            model.CreditCardId = 3;
+            var result = await Post("/api/FuelExpense", model, 2);
+            TestErrors(model, result);
+
+            var vehicle = await Get<JsonElement>("/api/Vehicle/4", 2);
+            var fuelExpense = vehicle.Data.GetProperty("fuelExpenses").EnumerateArray().Single();
+            Assert.AreEqual(3, fuelExpense.GetProperty("creditCardId").GetInt32());
+            Assert.AreEqual("Terceiro Cartão", fuelExpense.GetProperty("creditCardName").GetString());
         }
 
         [TestMethod]
