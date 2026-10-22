@@ -177,10 +177,14 @@ namespace Cashflow.Api.Services
 
             foreach (var date in dates)
             {
-                var fuelExpenses = allFuelExpenses.Where(p => p.Date.SameMonthYear(date));
-                if (fuelExpenses.Any())
-                    list.Add(new PaymentProjectionModel("Gastos em Combustível", date, fuelExpenses.Sum(p => p.ValueSupplied), MovementProjectionType.FuelExpense));
-                else
+                var fuelExpensesInCard = allFuelExpenses.Where(p => p.CreditCardId.HasValue && p.InvoiceDate.SameMonthYear(date));
+                foreach (var item in fuelExpensesInCard)
+                    list.Add(new PaymentProjectionModel("Gastos em Combustível", item.InvoiceDate, item.ValueSupplied, MovementProjectionType.FuelExpense, item.CreditCard));
+
+                var fuelExpensesWithoutCard = allFuelExpenses.Where(p => !p.CreditCardId.HasValue && p.Date.SameMonthYear(date));
+                if (fuelExpensesWithoutCard.Any())
+                    list.Add(new PaymentProjectionModel("Gastos em Combustível", date, fuelExpensesWithoutCard.Sum(p => p.ValueSupplied), MovementProjectionType.FuelExpense));
+                else if (!fuelExpensesInCard.Any())
                     list.Add(new PaymentProjectionModel("Gastos em Combustível (Residual)", date, user.FuelExpenseLimit, MovementProjectionType.FuelExpense));
             }
         }

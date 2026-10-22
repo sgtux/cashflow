@@ -22,7 +22,7 @@ namespace Cashflow.Tests
             var paymentsMonth = payments.First(p => p.MonthYear == now.ToString("MM/yyyy"));
 
             var previousMonthFuelExpense = 100;
-            var currentMonthFuelExpense = 200;
+            var currentMonthFuelExpense = 200 + 300; // 300 Day 5 previous month - CreditCardId = 7, InvoiceDay 4
 
             var previousMonthHousehold = 1000; // Day 3 - CreditCardId = 7, InvoiceDay 4
             var currentMonthHousehold = 300.5M + 1000 + 1000; // 1000 x 2 creditCard Days [4,5] - CreditCardId = 7, InvoiceDay 4

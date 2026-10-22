@@ -3,6 +3,7 @@ SELECT
     ValueSupplied,
     PricePerLiter,
     VehicleId,
+    CreditCardId,
     Date
 FROM
     FuelExpense

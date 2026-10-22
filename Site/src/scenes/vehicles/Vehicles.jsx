@@ -153,6 +153,7 @@ export function Vehicles() {
                                                                     <StyledTableCell align="right">Valor Abastecido</StyledTableCell>
                                                                     <StyledTableCell align="right">Litros Abastecidos</StyledTableCell>
                                                                     <StyledTableCell align="center">Data</StyledTableCell>
+                                                                    <StyledTableCell align="center">Cartão</StyledTableCell>
                                                                 </StyledTableRow>
                                                             </TableHead>
                                                             <TableBody>
@@ -163,6 +164,7 @@ export function Vehicles() {
                                                                         <StyledTableCell align="right">{toReal(fuelExpense.valueSupplied)}</StyledTableCell>
                                                                         <StyledTableCell align="right">{fuelExpense.litersSupplied.toString().replace('.', ',')}</StyledTableCell>
                                                                         <StyledTableCell align="center">{dateToString(fuelExpense.date)}</StyledTableCell>
+                                                                        <StyledTableCell align="center">{fuelExpense.creditCardName || '-'}</StyledTableCell>
                                                                     </StyledTableRow>
                                                                 )}
                                                             </TableBody>

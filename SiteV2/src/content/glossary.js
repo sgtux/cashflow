@@ -113,7 +113,7 @@ export const Glossary = {
   },
   abastecimento: {
     term: 'Abastecimento',
-    short: 'Cada vez que você coloca combustível no veículo. Com a quilometragem, calculamos o consumo.',
+    short: 'Cada vez que você coloca combustível no veículo. Com a quilometragem, calculamos o consumo. Se pagou no cartão, o valor vai para a fatura.',
     example: 'Abasteceu R$ 200 a R$ 5,80 o litro com o painel marcando 45.300 km.'
   },
   kmPorLitro: {

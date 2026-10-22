@@ -15,7 +15,11 @@ import {
     TableBody,
     TableCell,
     CircularProgress,
-    TablePagination
+    TablePagination,
+    FormControl,
+    InputLabel,
+    MenuItem,
+    Select
 } from '@mui/material'
 
 import { tableCellClasses } from '@mui/material/TableCell'
@@ -28,7 +32,7 @@ import {
 import { styled } from '@mui/material/styles'
 
 import { toReal, fromReal, dateToString, toThousandFormat } from '../../../helpers'
-import { vehicleService } from '../../../services'
+import { vehicleService, creditCardService } from '../../../services'
 import { InputMoney, InputText, DatePickerContainer, DatePickerInput } from '../../../components/inputs'
 
 const MAX_VALUE = 999999999
@@ -59,6 +63,8 @@ export function EditFuelExpensesModal({ vehicle, onCancel }) {
     const [miliage, setMiliage] = useState('')
     const [pricePerLiter, setPricePerLiter] = useState('')
     const [valueSupplied, setValueSupplied] = useState('')
+    const [creditCardId, setCreditCardId] = useState('')
+    const [cards, setCards] = useState([])
     const [formIsValid, setFormIsValid] = useState(false)
     const [fuelExpenses, setFuelExpenses] = useState([])
     const [loading, setLoading] = useState(false)
@@ -69,6 +75,7 @@ export function EditFuelExpensesModal({ vehicle, onCancel }) {
     useEffect(() => {
         if (vehicle) {
             refresh()
+            creditCardService.get().then(res => setCards(res || []))
         }
     }, [vehicle])
 
@@ -104,6 +111,7 @@ export function EditFuelExpensesModal({ vehicle, onCancel }) {
             pricePerLiter: fromReal(pricePerLiter),
             valueSupplied: fromReal(valueSupplied),
             vehicleId: vehicle.id,
+            creditCardId: creditCardId ? Number(creditCardId) : null,
         }
         vehicleService.saveFuelExpense(item)
             .then(() => {
@@ -117,6 +125,7 @@ export function EditFuelExpensesModal({ vehicle, onCancel }) {
         setMiliage(item.miliage + '')
         setPricePerLiter(toReal(item.pricePerLiter))
         setValueSupplied(toReal(item.valueSupplied))
+        setCreditCardId(item.creditCardId || '')
         setDate(new Date(item.date))
     }
 
@@ -125,6 +134,7 @@ export function EditFuelExpensesModal({ vehicle, onCancel }) {
         setPricePerLiter('')
         setValueSupplied('')
         setDate('')
+        setCreditCardId('')
         setId(0)
     }
 
@@ -166,6 +176,7 @@ export function EditFuelExpensesModal({ vehicle, onCancel }) {
                                     <StyledTableCell align='right'>Valor Abastecido</StyledTableCell>
                                     <StyledTableCell align='right'>Litros Abastecidos</StyledTableCell>
                                     <StyledTableCell align='center'>Data</StyledTableCell>
+                                    <StyledTableCell align='center'>Cartão</StyledTableCell>
                                     <StyledTableCell align='center'>Ações</StyledTableCell>
                                 </StyledTableRow>
                             </TableHead>
@@ -177,6 +188,7 @@ export function EditFuelExpensesModal({ vehicle, onCancel }) {
                                         <StyledTableCell align='right'>{toReal(p.valueSupplied)}</StyledTableCell>
                                         <StyledTableCell align='right'>{p.litersSupplied.toString().replace('.', ',')}</StyledTableCell>
                                         <StyledTableCell align='center'>{dateToString(p.date)}</StyledTableCell>
+                                        <StyledTableCell align='center'>{p.creditCardName || '-'}</StyledTableCell>
                                         <StyledTableCell align='center'>
                                             <IconButton onClick={() => edit(p)} color="primary" aria-label="Edit">
                                                 <EditIcon />
@@ -215,6 +227,16 @@ export function EditFuelExpensesModal({ vehicle, onCancel }) {
                         Data: <DatePicker onChange={e => setDate(e)}
                             customInput={<DatePickerInput />}
                             dateFormat="dd/MM/yyyy" locale={ptBr} selected={date} />
+                        {!!cards.length &&
+                            <FormControl>
+                                <InputLabel htmlFor="select-cartao">Cartão de Crédito</InputLabel>
+                                <Select style={{ width: '200px' }} value={creditCardId || ''}
+                                    onChange={e => setCreditCardId(e.target.value)}>
+                                    <MenuItem value={0}><span style={{ color: 'gray' }}>LIMPAR</span></MenuItem>
+                                    {cards.map(p => <MenuItem key={p.id} value={p.id}>{p.name}</MenuItem>)}
+                                </Select>
+                            </FormControl>
+                        }
                         <Button onClick={() => clear()} autoFocus>limpar</Button>
                         <Button onClick={() => save()}
                             disabled={!formIsValid}

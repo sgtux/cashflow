@@ -9,5 +9,7 @@ namespace Cashflow.Api.Contracts
         Task<bool> HasPayments(int cardId);
 
         Task<bool> HasHouseholdExpenses(int cardId);
+
+        Task<bool> HasFuelExpenses(int cardId);
     }
 }

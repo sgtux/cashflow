@@ -7,8 +7,8 @@ import { useTheme } from '@mui/material/styles'
 import EditRoundedIcon from '@mui/icons-material/EditRounded'
 import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded'
 
-import { Money, MoneyField, DateField, ActionIcon, ConfirmDialog, HelpTip } from '../../components'
-import { vehicleService } from '../../services'
+import { Money, MoneyField, DateField, SelectField, ActionIcon, ConfirmDialog, HelpTip } from '../../components'
+import { vehicleService, creditCardService } from '../../services'
 import { dateToString, toThousandFormat, toDecimalText, toast } from '../../helpers'
 
 const MAX_VALUE = 999999999
@@ -19,6 +19,8 @@ export function FuelExpensesDialog({ vehicle, onClose }) {
   const [miliage, setMiliage] = useState('')
   const [pricePerLiter, setPricePerLiter] = useState(0)
   const [valueSupplied, setValueSupplied] = useState(0)
+  const [creditCardId, setCreditCardId] = useState(0)
+  const [cards, setCards] = useState([])
   const [fuelExpenses, setFuelExpenses] = useState([])
   const [loading, setLoading] = useState(false)
   const [rowsPerPage, setRowsPerPage] = useState(5)
@@ -33,6 +35,7 @@ export function FuelExpensesDialog({ vehicle, onClose }) {
       clear()
       setPage(0)
       refresh()
+      creditCardService.get().then(res => setCards(res || [])).catch(err => console.log(err))
     }
   }, [vehicle])
 
@@ -49,6 +52,7 @@ export function FuelExpensesDialog({ vehicle, onClose }) {
     setMiliage('')
     setPricePerLiter(0)
     setValueSupplied(0)
+    setCreditCardId(0)
     setDate(null)
   }
 
@@ -57,6 +61,7 @@ export function FuelExpensesDialog({ vehicle, onClose }) {
     setMiliage(String(item.miliage))
     setPricePerLiter(item.pricePerLiter)
     setValueSupplied(item.valueSupplied)
+    setCreditCardId(item.creditCardId || 0)
     setDate(new Date(item.date))
   }
 
@@ -67,6 +72,7 @@ export function FuelExpensesDialog({ vehicle, onClose }) {
       miliage: Number(miliage),
       pricePerLiter,
       valueSupplied,
+      creditCardId: creditCardId ? Number(creditCardId) : null,
       vehicleId: vehicle.id
     }).then(() => {
       toast.success('Abastecimento salvo!')
@@ -108,6 +114,7 @@ export function FuelExpensesDialog({ vehicle, onClose }) {
                     <TableCell align="right">Preço/litro</TableCell>
                     <TableCell align="right">Valor</TableCell>
                     <TableCell align="right">Litros</TableCell>
+                    <TableCell>Cartão</TableCell>
                     <TableCell align="right">Ações</TableCell>
                   </TableRow>
                 </TableHead>
@@ -119,6 +126,7 @@ export function FuelExpensesDialog({ vehicle, onClose }) {
                       <TableCell align="right"><Money value={p.pricePerLiter} /></TableCell>
                       <TableCell align="right"><Money value={p.valueSupplied} tone="out" /></TableCell>
                       <TableCell align="right">{toDecimalText(p.litersSupplied)}</TableCell>
+                      <TableCell>{p.creditCardName || '—'}</TableCell>
                       <TableCell align="right" sx={{ whiteSpace: 'nowrap' }}>
                         <ActionIcon title="Editar" size="small" color="primary" onClick={() => edit(p)}><EditRoundedIcon fontSize="small" /></ActionIcon>
                         <ActionIcon title="Remover" size="small" color="error" onClick={() => setRemoveItem(p)}><DeleteOutlineRoundedIcon fontSize="small" /></ActionIcon>
@@ -149,6 +157,14 @@ export function FuelExpensesDialog({ vehicle, onClose }) {
             <MoneyField label="Preço por litro" value={pricePerLiter} onChange={setPricePerLiter} max={MAX_VALUE} />
             <MoneyField label="Valor total abastecido" value={valueSupplied} onChange={setValueSupplied} max={MAX_VALUE}
               helperText={liters > 0 ? `Aproximadamente ${toDecimalText(liters.toFixed(2))} litros` : ' '} />
+            {!!cards.length &&
+              <Box sx={{ gridColumn: '1 / -1' }}>
+                <SelectField label="Pagou no cartão de crédito?" help="cartao" value={creditCardId || 0} onChange={setCreditCardId}
+                  emptyLabel="Não (dinheiro, Pix ou débito)"
+                  options={cards.map(p => ({ value: p.id, label: p.name }))}
+                  helperText="No cartão, o valor só sai do seu bolso quando a fatura vencer." />
+              </Box>
+            }
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1, mt: 2 }}>
             <Button onClick={clear}>Limpar</Button>

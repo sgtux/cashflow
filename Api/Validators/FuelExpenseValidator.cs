@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Cashflow.Api.Contracts;
 using Cashflow.Api.Infra.Entity;
+using Cashflow.Api.Infra.Filters;
 using FluentValidation;
 
 namespace Cashflow.Api.Validators
@@ -13,15 +14,19 @@ namespace Cashflow.Api.Validators
 
         private readonly IFuelExpenseRepository _fuelExpenseRepository;
 
+        private readonly ICreditCardRepository _creditCardRepository;
+
         private int _userId;
 
         public FuelExpenseValidator(IVehicleRepository vehicleRepository,
             IFuelExpenseRepository fuelExpenseRepository,
+            ICreditCardRepository creditCardRepository,
             int userId)
         {
             _userId = userId;
             _vehicleRepository = vehicleRepository;
             _fuelExpenseRepository = fuelExpenseRepository;
+            _creditCardRepository = creditCardRepository;
             RuleFor(c => c.Miliage).GreaterThan(0).WithMessage(ValidatorMessages.MinValue("Quilometragem", 0));
             RuleFor(c => c.Miliage).LessThan(1000000000).WithMessage(ValidatorMessages.MaxValue("Quilometragem", 999999999));
             RuleFor(c => c.PricePerLiter).GreaterThan(0).WithMessage(ValidatorMessages.MinValue("Preço por Litro", 0));
@@ -32,6 +37,7 @@ namespace Cashflow.Api.Validators
             RuleFor(c => c).MustAsync((fuelExpense, _) => VehicleExists(fuelExpense)).WithMessage(ValidatorMessages.NotFound("Veículo"));
             RuleFor(c => c).MustAsync((fuelExpense, _) => FuelExpenseExists(fuelExpense)).When(c => c.Id > 0).WithMessage(ValidatorMessages.NotFound("Despesa de combustível"));
             RuleFor(c => c).MustAsync((fuelExpense, _) => DataMiliageIsMatch(fuelExpense)).WithMessage("Data e Quilometragem não batem devido à outro abastecimento");
+            RuleFor(c => c).MustAsync((fuelExpense, _) => ValidCreditCard(fuelExpense)).WithMessage(ValidatorMessages.NotFound("Cartão de Crédito"));
         }
 
         private Task<VehicleEntity> GetVehicle(int vehicleId) => _vehicleRepository.GetById(vehicleId);
@@ -59,6 +65,20 @@ namespace Cashflow.Api.Validators
             return !vehicle.FuelExpenses.Any(p => p.Id != fuelExpense.Id && (fuelExpense.Miliage == p.Miliage
                 || (fuelExpense.Miliage > p.Miliage && !IsSameDay(fuelExpense.Date, p.Date) && fuelExpense.Date < p.Date)
                 || fuelExpense.Miliage < p.Miliage && !IsSameDay(fuelExpense.Date, p.Date) && fuelExpense.Date > p.Date));
+        }
+
+        private async Task<bool> ValidCreditCard(FuelExpenseEntity fuelExpense)
+        {
+            if (fuelExpense.CreditCardId > 0)
+            {
+                var cards = await _creditCardRepository.GetSome(new BaseFilter() { UserId = _userId });
+                var card = cards.FirstOrDefault(p => p.Id == fuelExpense.CreditCardId.Value);
+                if (card == null || card.UserId != _userId)
+                    return false;
+            }
+            else
+                fuelExpense.CreditCardId = null;
+            return true;
         }
 
         private bool IsSameDay(DateTime date1, DateTime date2)

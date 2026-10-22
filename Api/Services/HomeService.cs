@@ -72,8 +72,14 @@ namespace Cashflow.Api.Services
             var vehicleInflowOutflowModel = new InflowOutflowModel("Combustível");
             var recurringExpenseInflowOutflowModel = new InflowOutflowModel("Despesas Recorrentes");
 
-            foreach (var item in await _vehicleRepository.GetSome(filter))
-                vehicleInflowOutflowModel.Value += item.FuelExpenses.Sum(p => p.ValueSupplied);
+            var vehicles = await _vehicleRepository.GetSome(new BaseFilter()
+            {
+                StartDate = new DateTime(year, month, 1).AddMonths(-1).FixStartTimeFilter(),
+                EndDate = filter.EndDate,
+                UserId = userId
+            });
+            foreach (var item in vehicles)
+                vehicleInflowOutflowModel.Value += item.FuelExpenses.Where(p => p.InvoiceDate.SameMonthYear(filter.StartDate.Value)).Sum(p => p.ValueSupplied);
             if (vehicleInflowOutflowModel.Value == 0)
                 vehicleInflowOutflowModel.Value = user.FuelExpenseLimit;
 

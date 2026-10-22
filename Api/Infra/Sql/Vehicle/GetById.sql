@@ -8,8 +8,14 @@ SELECT
     f.ValueSupplied,
     f.PricePerLiter,
     f.VehicleId,
-    f.Date
+    f.CreditCardId,
+    f.Date,
+    c.Id,
+    c.Name,
+    c.InvoiceClosingDay,
+    c.InvoiceDueDay
 FROM Vehicle v
 LEFT JOIN FuelExpense f ON v.Id = f.VehicleId
+LEFT JOIN CreditCard c ON c.Id = f.CreditCardId
 WHERE v.Id = @Id
 ORDER BY f.Date DESC, f.Miliage ASC

@@ -4,6 +4,7 @@ SET
   ValueSupplied = @ValueSupplied,
   PricePerLiter = @PricePerLiter,
   VehicleId = @VehicleId,
+  CreditCardId = @CreditCardId,
   Date = @Date
 WHERE
   Id = @Id

@@ -49,6 +49,7 @@
     <EmbeddedResource Include="Infra/Sql/CreditCard/Update.sql" />
     <EmbeddedResource Include="Infra/Sql/CreditCard/HasPayments.sql" />
     <EmbeddedResource Include="Infra/Sql/CreditCard/HasHouseholdExpenses.sql" />
+    <EmbeddedResource Include="Infra/Sql/CreditCard/HasFuelExpenses.sql" />
 
     <EmbeddedResource Include="Infra/Sql/Payment/Delete.sql" />
     <EmbeddedResource Include="Infra/Sql/Payment/GetById.sql" />

@@ -136,6 +136,13 @@ namespace Cashflow.Tests
         }
 
         [TestMethod]
+        public async Task RemoveWithFuelExpense()
+        {
+            var result = await Delete("/api/CreditCard/7", 4);
+            TestErrors(new { a = 7, b = 4 }, result, "Este cartão está vinculado à alguma Despesa de Combustível e não pode ser removido.");
+        }
+
+        [TestMethod]
         public async Task RemoveOK()
         {
             var result = await Delete("/api/CreditCard/2", 1);

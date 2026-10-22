@@ -141,12 +141,12 @@ namespace Cashflow.Api.Services
             var vehicles = await _vehicleRepository.GetSome(new BaseFilter()
             {
                 UserId = filter.UserId,
-                StartDate = filter.StartDate.Value.FixStartTimeFilter(),
+                StartDate = filter.StartDate.Value.AddMonths(-1).FixStartTimeFilter(),
                 EndDate = filter.EndDate.FixEndTimeFilter()
             });
 
             foreach (var item in vehicles)
-                total += item.FuelExpenses.Sum(p => p.ValueSupplied);
+                total += item.FuelExpenses.Where(p => p.CreditCardId.HasValue ? p.InvoiceDate.SameMonthYear(filter.StartDate.Value) : p.Date.SameMonthYear(filter.StartDate.Value)).Sum(p => p.ValueSupplied);
 
             return total;
         }
