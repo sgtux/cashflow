@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Cashflow.Api.Enums;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Tests.Tests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -15,7 +16,8 @@ namespace Cashflow.Tests
         {
             UserId = 2,
             Description = "Extra Income 2",
-            Value = 327
+            Value = 327,
+            Type = EarningType.Salary
         };
 
         private RecurringEarningHistoryEntity DefaultRecurringEarningHistory => new RecurringEarningHistoryEntity()
@@ -49,6 +51,15 @@ namespace Cashflow.Tests
             model.Value = 0;
             var result = await Post("/api/RecurringEarning", model, model.UserId);
             TestErrors(model, result, "O campo 'Valor' deve ser maior que 0.");
+        }
+
+        [TestMethod]
+        public async Task AddWithInvalidType()
+        {
+            var model = DefaultRecurringEarning;
+            model.Type = (EarningType)99;
+            var result = await Post("/api/RecurringEarning", model, model.UserId);
+            TestErrors(model, result, "Tipo inválido");
         }
 
         [TestMethod]

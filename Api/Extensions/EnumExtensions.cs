@@ -64,5 +64,56 @@ namespace Cashflow.Api.Extensions
                     return "Desconhecido";
             }
         }
+
+        public static string GetDescription(this EarningType e)
+        {
+            switch (e)
+            {
+                case EarningType.Salary:
+                    return "Salário";
+                case EarningType.Freelance:
+                    return "Freela / Trabalho extra";
+                case EarningType.Bonus:
+                    return "Bônus / 13º / Férias";
+                case EarningType.Retirement:
+                    return "Aposentadoria / Pensão";
+                case EarningType.Rent:
+                    return "Aluguel recebido";
+                case EarningType.Dividends:
+                    return "Dividendos";
+                case EarningType.Interest:
+                    return "Juros / Rendimentos";
+                case EarningType.Business:
+                    return "Lucro de negócio";
+                case EarningType.Royalties:
+                    return "Direitos autorais / Royalties";
+                case EarningType.Sale:
+                    return "Venda";
+                case EarningType.Gift:
+                    return "Presente / Doação";
+                case EarningType.Refund:
+                    return "Reembolso";
+                case EarningType.Others:
+                    return "Outros";
+                default:
+                    return "Desconhecido";
+            }
+        }
+
+        public static bool IsPassive(this EarningType e)
+        {
+            switch (e)
+            {
+                case EarningType.Retirement:
+                case EarningType.Rent:
+                case EarningType.Dividends:
+                case EarningType.Interest:
+                case EarningType.Business:
+                case EarningType.Royalties:
+                    return true;
+                default:
+                    return false;
+            }
+        }
     }
 }

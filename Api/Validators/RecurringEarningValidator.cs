@@ -14,6 +14,7 @@ namespace Cashflow.Api.Validators
             _recurringEarningRepository = recurringEarningRepository;
             RuleFor(p => p.Description).NotEmpty().WithMessage(ValidatorMessages.FieldIsRequired("Descrição"));
             RuleFor(s => s.Value).GreaterThan(0).WithMessage(ValidatorMessages.GreaterThan("Valor", 0));
+            RuleFor(s => s.Type).IsInEnum().WithMessage("Tipo inválido");
             RuleFor(p => p).MustAsync((recurringEarning, _) => ValidRecurringEarning(recurringEarning)).When(p => p.Id > 0).WithMessage(ValidatorMessages.NotFound("Provento Recorrente"));
         }
 

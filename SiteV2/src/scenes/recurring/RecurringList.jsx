@@ -14,7 +14,7 @@ import { dateToString, toast, sum } from '../../helpers'
 import { HistoryDialog } from './HistoryDialog'
 
 export function RecurringList({ config, icon }) {
-  const { service, texts, doneKey, valueKey, tone } = config
+  const { service, texts, doneKey, valueKey, tone, TypeAvatar } = config
 
   const [items, setItems] = useState([])
   const [loading, setLoading] = useState(false)
@@ -111,10 +111,13 @@ export function RecurringList({ config, icon }) {
                   onClick={() => setOpen({ ...open, [p.id]: !open[p.id] })}>
                   <ExpandMoreRoundedIcon sx={{ transition: '200ms', transform: open[p.id] ? 'rotate(180deg)' : 'none' }} />
                 </ActionIcon>
+                <TypeAvatar type={p.type} />
                 <Box sx={{ flex: '1 1 200px', minWidth: 0 }}>
                   <Typography sx={{ fontWeight: 700 }}>{p.description}</Typography>
                   <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', flexWrap: 'wrap', mt: 0.5 }}>
                     {status(p)}
+                    {p.typeDescription &&
+                      <Typography variant="caption" sx={{ color: 'text.secondary' }}>{p.typeDescription}</Typography>}
                     {p.creditCard && p.creditCard.name &&
                       <Typography variant="caption" sx={{ color: 'text.secondary', display: 'inline-flex', alignItems: 'center', gap: 0.5 }}>
                         <CreditCardRoundedIcon sx={{ fontSize: 14 }} /> {p.creditCard.name}

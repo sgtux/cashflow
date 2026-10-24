@@ -3,12 +3,14 @@ INSERT INTO
         Description,
         Value,
         InactiveAt,
-        UserId
+        UserId,
+        Type
     )
 VALUES
     (
         @Description,
         @Value,
         @InactiveAt,
-        @UserId
+        @UserId,
+        @Type
     )

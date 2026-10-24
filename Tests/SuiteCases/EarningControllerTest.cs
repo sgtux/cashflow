@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Cashflow.Api.Enums;
 using Cashflow.Api.Infra.Entity;
+using Cashflow.Api.Models;
 using Cashflow.Tests.Tests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -71,6 +73,40 @@ namespace Cashflow.Tests
             };
             var result = await Post("/api/Earning", model, model.UserId);
             TestErrors(model, result);
+        }
+
+        [TestMethod]
+        public async Task GetTypes()
+        {
+            var result = await Get<IEnumerable<TypeModel>>("/api/Earning/Types", 1);
+            Assert.AreEqual((int)EarningType.Others, result.Data.Last().Id);
+            Assert.AreEqual(Enum.GetValues<EarningType>().Length, result.Data.Count());
+        }
+
+        [TestMethod]
+        public void IsPassiveByType()
+        {
+            var passives = new[] { EarningType.Retirement, EarningType.Rent, EarningType.Dividends, EarningType.Interest, EarningType.Business, EarningType.Royalties };
+            foreach (var type in Enum.GetValues<EarningType>())
+            {
+                Assert.AreEqual(passives.Contains(type), new EarningEntity() { Type = type }.IsPassive, type.ToString());
+                Assert.AreEqual(passives.Contains(type), new RecurringEarningEntity() { Type = type }.IsPassive, type.ToString());
+            }
+        }
+
+        [TestMethod]
+        public async Task AddEarningWithInvalidType()
+        {
+            var model = new EarningEntity()
+            {
+                Date = new DateTime(2020, 12, 1),
+                Value = 1000,
+                UserId = 1,
+                Description = "Salário",
+                Type = (EarningType)99
+            };
+            var result = await Post("/api/Earning", model, model.UserId);
+            TestErrors(model, result, "Tipo inválido");
         }
 
         [TestMethod]

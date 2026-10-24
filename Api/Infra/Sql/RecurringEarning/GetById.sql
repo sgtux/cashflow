@@ -3,6 +3,7 @@ SELECT
     re.Description,
     re.Value,
     re.InactiveAt,
+    re.Type,
     re.UserId,
     reh.Id,
     reh.Value,

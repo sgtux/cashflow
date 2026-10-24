@@ -3,6 +3,7 @@ UPDATE
 SET
     Description = @Description,
     Value = @Value,
-    InactiveAt = @InactiveAt
+    InactiveAt = @InactiveAt,
+    Type = @Type
 WHERE
     Id = @Id

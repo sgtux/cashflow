@@ -4,7 +4,8 @@ INSERT INTO
         Value,
         InactiveAt,
         CreditCardId,
-        UserId
+        UserId,
+        Type
     )
 VALUES
     (
@@ -12,5 +13,6 @@ VALUES
         @Value,
         @InactiveAt,
         @CreditCardId,
-        @UserId
+        @UserId,
+        @Type
     )

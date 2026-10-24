@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Cashflow.Api.Enums;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Tests.Tests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -13,7 +14,8 @@ namespace Cashflow.Tests
         {
             UserId = 2,
             Description = "Computer Shop 2",
-            Value = 327
+            Value = 327,
+            Type = ExpenseType.Utilities
         };
 
         private RecurringExpenseHistoryEntity DefaultRecurringExpenseHistory => new RecurringExpenseHistoryEntity()
@@ -40,6 +42,15 @@ namespace Cashflow.Tests
             model.Value = 0;
             var result = await Post("/api/RecurringExpense", model, model.UserId);
             TestErrors(model, result, "O campo 'Valor' deve ser maior que 0.");
+        }
+
+        [TestMethod]
+        public async Task AddWithInvalidType()
+        {
+            var model = DefaultRecurringExpense;
+            model.Type = (ExpenseType)99;
+            var result = await Post("/api/RecurringExpense", model, model.UserId);
+            TestErrors(model, result, "Tipo inválido");
         }
 
         [TestMethod]

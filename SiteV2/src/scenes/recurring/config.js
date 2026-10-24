@@ -1,4 +1,5 @@
-import { recurringEarningService, recurringExpenseService } from '../../services'
+import { recurringEarningService, recurringExpenseService, householdExpenseService, earningService } from '../../services'
+import { ExpenseTypeAvatar, EarningTypeAvatar } from '../../components'
 
 // As telas de ganhos fixos e contas fixas têm o mesmo comportamento; muda apenas o vocabulário
 // e os nomes dos campos que a API espera.
@@ -11,6 +12,8 @@ export const RecurringConfigs = {
     parentKey: 'recurringEarningId',
     doneKey: 'received',
     withCreditCard: false,
+    getTypes: earningService.getTypes,
+    TypeAvatar: EarningTypeAvatar,
     guide: 'recurringEarnings',
     help: 'ganhoRecorrente',
     listPath: '/recurring-earnings',
@@ -25,6 +28,8 @@ export const RecurringConfigs = {
       descriptionPlaceholder: 'Ex.: Salário, Aposentadoria, Aluguel recebido',
       valueLabel: 'Quanto costuma receber por mês?',
       valueHelper: 'Uma estimativa. Se vier diferente em algum mês, ajuste no histórico.',
+      typeLabel: 'Tipo de ganho',
+      typeHelper: 'Separar por tipo mostra quanto vem do seu trabalho e quanto vem do seu patrimônio.',
       done: 'Recebido este mês',
       pending: 'Ainda não recebido',
       inactive: 'Encerrado',
@@ -52,6 +57,8 @@ export const RecurringConfigs = {
     parentKey: 'recurringExpenseId',
     doneKey: 'paid',
     withCreditCard: true,
+    getTypes: householdExpenseService.getTypes,
+    TypeAvatar: ExpenseTypeAvatar,
     guide: 'recurringExpenses',
     help: 'despesaRecorrente',
     listPath: '/recurring-expenses',
@@ -66,6 +73,8 @@ export const RecurringConfigs = {
       descriptionPlaceholder: 'Ex.: Aluguel, Internet, Conta de luz, Streaming',
       valueLabel: 'Quanto costuma custar por mês?',
       valueHelper: 'Se o valor muda (como a conta de luz), use uma média.',
+      typeLabel: 'Tipo de gasto',
+      typeHelper: 'Separar por tipo mostra em que você mais gasta.',
       done: 'Paga este mês',
       pending: 'A pagar',
       inactive: 'Encerrada',

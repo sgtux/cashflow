@@ -18,6 +18,9 @@ namespace Cashflow.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] DateTime? fromDate) => HandleResult(await _service.GetByUser(UserId, fromDate));
 
+        [HttpGet("Types")]
+        public IActionResult GetTypes() => HandleResult(_service.GetTypes());
+
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id) => HandleResult(await _service.GetById(id, UserId));
 

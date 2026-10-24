@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Cashflow.Api.Contracts;
+using Cashflow.Api.Enums;
 using Cashflow.Api.Extensions;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Infra.Filters;
@@ -30,6 +32,16 @@ namespace Cashflow.Api.Services
         }
 
         public async Task<ResultDataModel<IEnumerable<EarningEntity>>> GetByUser(int userId, DateTime? from) => new ResultDataModel<IEnumerable<EarningEntity>>(await _earningRepository.GetSome(new BaseFilter() { StartDate = from.FixStartTimeFilter(), UserId = userId }));
+
+        public ResultDataModel<IEnumerable<TypeModel>> GetTypes()
+        {
+            var types = Enum.GetValues<EarningType>()
+                .Where(p => p != EarningType.Others)
+                .Select(p => new TypeModel(p))
+                .OrderBy(p => p.Description)
+                .Append(new TypeModel(EarningType.Others));
+            return new ResultDataModel<IEnumerable<TypeModel>>(types);
+        }
 
         public async Task<ResultModel> Add(EarningEntity earning)
         {
