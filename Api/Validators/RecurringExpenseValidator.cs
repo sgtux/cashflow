@@ -19,6 +19,7 @@ namespace Cashflow.Api.Validators
             _creditCardRepository = creditCardRepository;
             RuleFor(p => p.Description).NotEmpty().WithMessage(ValidatorMessages.FieldIsRequired("Descrição"));
             RuleFor(s => s.Value).GreaterThan(0).WithMessage(ValidatorMessages.GreaterThan("Valor", 0));
+            RuleFor(s => s.Type).IsInEnum().WithMessage("Tipo inválido");
             RuleFor(p => p).MustAsync((recurringExpense, _) => ValidCreditCard(recurringExpense)).WithMessage(ValidatorMessages.NotFound("Cartão de Crédito"));
             RuleFor(p => p).MustAsync((recurringExpense, _) => ValidRecurringExpense(recurringExpense)).When(p => p.Id > 0).WithMessage(ValidatorMessages.NotFound("Despesa Recorrente"));
         }

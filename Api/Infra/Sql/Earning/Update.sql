@@ -3,7 +3,8 @@ UPDATE
 SET
   Description = @Description,
   Value = @Value,
-  Date = @Date
+  Date = @Date,
+  Type = @Type
 WHERE
   Id = @Id
   AND UserId = @UserId

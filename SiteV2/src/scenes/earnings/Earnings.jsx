@@ -8,7 +8,7 @@ import EditRoundedIcon from '@mui/icons-material/EditRounded'
 import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded'
 import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded'
 
-import { Page, Money, EmptyState, ConfirmDialog, ActionIcon } from '../../components'
+import { Page, Money, EmptyState, ConfirmDialog, ActionIcon, EarningTypeAvatar } from '../../components'
 import { earningService } from '../../services'
 import { showGlobalLoader, hideGlobalLoader } from '../../store/actions'
 import { Months, toast, dateToString, isSameMonth, sum } from '../../helpers'
@@ -108,9 +108,10 @@ export function Earnings() {
         <Box sx={{ display: 'grid', gap: 1.25 }}>
           {earnings.map(p =>
             <Card key={p.id} sx={{ p: 1.5, pl: 2, display: 'flex', alignItems: 'center', gap: 2, flexWrap: 'wrap' }}>
+              <EarningTypeAvatar type={p.type} />
               <Box sx={{ flex: '1 1 220px', minWidth: 0 }}>
                 <Typography sx={{ fontWeight: 700 }}>{p.description}</Typography>
-                <Typography variant="body2" sx={{ color: 'text.secondary' }}>Recebido em {dateToString(p.date)}</Typography>
+                <Typography variant="body2" sx={{ color: 'text.secondary' }}>{p.typeDescription} · Recebido em {dateToString(p.date)}</Typography>
               </Box>
               <Money value={p.value} tone="in" size="md" bold />
               <Box>

@@ -4,6 +4,7 @@ SET
     Description = @Description,
     Value = @Value,
     InactiveAt = @InactiveAt,
-    CreditCardId = @CreditCardId
+    CreditCardId = @CreditCardId,
+    Type = @Type
 WHERE
     Id = @Id

@@ -27,24 +27,14 @@ jobs:
           run_install: false
 
       - name: Install dependencies
-        working-directory: ./Site
+        working-directory: ./SiteV2
         run: pnpm install
 
       - name: Build Production Bundle
-        working-directory: ./Site
-        run: pnpm build:prod
-
-      # O SiteV2 roda depois do Site: o build do Site limpa Api/wwwroot inteiro.
-      - name: Install dependencies (SiteV2)
-        working-directory: ./SiteV2
-        run: pnpm install
-
-      - name: Build Production Bundle (SiteV2 em /v2)
         working-directory: ./SiteV2
         run: pnpm build:prod
         env:
-          OUTPUT_PATH: ${{ github.workspace }}/Api/wwwroot/v2
-          PUBLIC_PATH: /v2/
+          OUTPUT_PATH: ${{ github.workspace }}/Api/wwwroot
           SITE_URL: ${{ vars.SITE_URL }}
 
       - name: Set up .NET Core

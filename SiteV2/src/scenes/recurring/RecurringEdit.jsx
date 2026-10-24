@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
-import { Box, Button, Card, TextField } from '@mui/material'
+import { Box, Button, Card, MenuItem, TextField } from '@mui/material'
 import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded'
 import HistoryRoundedIcon from '@mui/icons-material/HistoryRounded'
 
@@ -10,7 +10,7 @@ import { toast } from '../../helpers'
 import { HistoryDialog } from './HistoryDialog'
 
 export function RecurringEdit({ config, icon }) {
-  const { service, texts } = config
+  const { service, texts, TypeAvatar } = config
 
   const params = useParams()
   const navigate = useNavigate()
@@ -20,6 +20,8 @@ export function RecurringEdit({ config, icon }) {
   const [value, setValue] = useState(0)
   const [card, setCard] = useState(0)
   const [cards, setCards] = useState([])
+  const [type, setType] = useState('')
+  const [types, setTypes] = useState([])
   const [inactiveAt, setInactiveAt] = useState(null)
   const [item, setItem] = useState(null)
   const [showHistory, setShowHistory] = useState(false)
@@ -28,6 +30,7 @@ export function RecurringEdit({ config, icon }) {
   useEffect(() => {
     if (config.withCreditCard)
       creditCardService.get().then(res => setCards(res || [])).catch(err => console.log(err))
+    config.getTypes().then(res => setTypes(res || [])).catch(err => console.log(err))
     refresh()
   }, [id])
 
@@ -41,6 +44,7 @@ export function RecurringEdit({ config, icon }) {
           setDescription(res.description || '')
           setValue(res.value || 0)
           setCard((res.creditCard || {}).id || 0)
+          setType(res.type || '')
           setInactiveAt(res.inactiveAt ? new Date(res.inactiveAt) : null)
           setItem(res)
         }
@@ -49,11 +53,11 @@ export function RecurringEdit({ config, icon }) {
       .finally(() => setLoading(false))
   }
 
-  const valid = !!description.trim() && value > 0
+  const valid = !!description.trim() && value > 0 && Number(type) > 0
 
   function save() {
     setLoading(true)
-    const body = { id, description, value, inactiveAt }
+    const body = { id, description, value, inactiveAt, type: Number(type) }
     if (config.withCreditCard)
       body.creditCardId = card || null
     service.save(body)
@@ -73,6 +77,16 @@ export function RecurringEdit({ config, icon }) {
           <TextField label={texts.descriptionLabel} placeholder={texts.descriptionPlaceholder}
             value={description} onChange={e => setDescription(e.target.value)} autoFocus={!id} />
           <MoneyField label={texts.valueLabel} value={value} onChange={setValue} helperText={texts.valueHelper} />
+          <TextField select label={texts.typeLabel} value={type || ''} onChange={e => setType(e.target.value)}
+            helperText={texts.typeHelper}>
+            {types.map(p =>
+              <MenuItem key={p.id} value={p.id}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                  <TypeAvatar type={p.id} size={26} /> {p.description}
+                </Box>
+              </MenuItem>
+            )}
+          </TextField>
           {config.withCreditCard && !!cards.length &&
             <SelectField label="É cobrada no cartão de crédito?" help="cartao" value={card || 0} onChange={setCard}
               emptyLabel="Não, pago por fora (boleto, Pix, débito)"

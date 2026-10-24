@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Cashflow.Api.Enums;
 using Cashflow.Api.Extensions;
 
 namespace Cashflow.Api.Infra.Entity
@@ -14,6 +15,12 @@ namespace Cashflow.Api.Infra.Entity
         public decimal Value { get; set; }
 
         public DateTime? InactiveAt { get; set; }
+
+        public EarningType Type { get; set; } = EarningType.Others;
+
+        public string TypeDescription => Type.GetDescription();
+
+        public bool IsPassive => Type.IsPassive();
 
         public int UserId { get; set; }
 
