@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Cashflow.Api.Enums;
+using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Models;
+using Cashflow.Api.Models.Home;
 using Cashflow.Tests.Tests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -61,6 +63,43 @@ namespace Cashflow.Tests
             }
 
             Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        [TestCategory("Home")]
+        public async Task GetPassiveIncomeCoverage()
+        {
+            var now = DateTime.Now;
+            var dividends = new EarningEntity()
+            {
+                Description = "Rendimentos FII",
+                Value = 300,
+                Date = new DateTime(now.Year, now.Month, 1),
+                Type = EarningType.Dividends,
+                UserId = 3
+            };
+            TestErrors(dividends, await Post("/api/Earning", dividends, dividends.UserId));
+
+            var contribution = new HouseholdExpenseEntity()
+            {
+                Description = "Aporte FII",
+                Value = 200,
+                Date = new DateTime(now.Year, now.Month, 1),
+                Type = ExpenseType.Investment,
+                UserId = 3
+            };
+            TestErrors(contribution, await Post("/api/HouseholdExpense", contribution, contribution.UserId));
+
+            var home = (await Get<HomeModel>($"/api/Home?month={now.Month}&year={now.Year}", 3)).Data;
+
+            Assert.AreEqual(300, home.Inflows.Where(p => p.IsPassive).Sum(p => p.Value));
+            Assert.IsFalse(home.Inflows.First(p => p.Description == "Salário").IsPassive);
+
+            Assert.AreEqual(200, home.InvestmentOutflows);
+            var livingCosts = home.Outflows.Sum(p => p.Value) - 200;
+            Assert.IsTrue(livingCosts > 0);
+            Assert.AreEqual(Math.Round(300 / livingCosts, 4), home.PassiveIncomeCoverage);
+            Assert.AreEqual(300 >= livingCosts, home.OutOfRatRace);
         }
     }
 }

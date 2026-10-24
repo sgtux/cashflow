@@ -11,6 +11,7 @@ import CelebrationRoundedIcon from '@mui/icons-material/CelebrationRounded'
 import SentimentDissatisfiedRoundedIcon from '@mui/icons-material/SentimentDissatisfiedRounded'
 import CreditCardRoundedIcon from '@mui/icons-material/CreditCardRounded'
 import TaskAltRoundedIcon from '@mui/icons-material/TaskAltRounded'
+import DirectionsRunRoundedIcon from '@mui/icons-material/DirectionsRunRounded'
 
 import { Page, MonthStepper, StatCard, SectionCard, Money, LimitMeter, Term } from '../../components'
 import { homeService } from '../../services'
@@ -64,6 +65,29 @@ function Verdict({ inflows, outflows, monthName }) {
   )
 }
 
+function RatRace({ passiveInflows, livingCosts, coverage, outOfRatRace }) {
+  const percent = Math.round(coverage * 100)
+  const gap = livingCosts - passiveInflows
+
+  return (
+    <SectionCard title="Corrida dos ratos" help="corridaDosRatos"
+      icon={<DirectionsRunRoundedIcon sx={{ color: outOfRatRace ? 'success.main' : 'warning.main' }} />}
+      action={<Typography sx={{ fontWeight: 800, fontSize: 20, color: outOfRatRace ? 'success.main' : 'text.primary' }}>{percent}%</Typography>}>
+      <Typography sx={{ mb: 1.5 }}>
+        {outOfRatRace
+          ? <>Sua <Term id="rendaPassiva">renda passiva</Term> já paga todo o seu custo de vida do mês. Você saiu da corrida dos ratos!</>
+          : passiveInflows > 0
+            ? <>Sua <Term id="rendaPassiva">renda passiva</Term> de <Money value={passiveInflows} tone="in" size="inherit" bold /> cobre {percent}% do seu custo de vida (as saídas, sem contar os aportes).
+              Faltam <Money value={gap} tone="out" size="inherit" bold /> por mês para sair da corrida.</>
+            : <>Nenhuma <Term id="rendaPassiva">renda passiva</Term> neste mês. Aluguéis, dividendos e juros que você recebe aparecem aqui.</>}
+      </Typography>
+      <LinearProgress variant="determinate" value={Math.min(percent, 100)}
+        color={outOfRatRace ? 'success' : 'warning'}
+        sx={{ height: 12, borderRadius: 99, bgcolor: 'action.hover' }} />
+    </SectionCard>
+  )
+}
+
 function ShareList({ items, total, tone, empty }) {
   if (!items.length)
     return <Typography sx={{ color: 'text.secondary', py: 2 }}>{empty}</Typography>
@@ -92,7 +116,7 @@ function ShareList({ items, total, tone, empty }) {
 export function Home() {
   const now = new Date()
   const [date, setDate] = useState({ month: now.getMonth() + 1, year: now.getFullYear() })
-  const [data, setData] = useState({ pendingPayments: [], inflows: [], outflows: [], limitValues: [], totalInflows: 0, totalOutflows: 0 })
+  const [data, setData] = useState({ pendingPayments: [], inflows: [], outflows: [], limitValues: [], totalInflows: 0, totalOutflows: 0, totalPassiveInflows: 0, totalLivingCosts: 0, passiveIncomeCoverage: 0, outOfRatRace: false })
 
   const dispatch = useDispatch()
 
@@ -108,7 +132,11 @@ export function Home() {
         outflows: res.outflows || [],
         limitValues: res.limitValues || [],
         totalInflows: res.totalInflows || 0,
-        totalOutflows: res.totalOutflows || 0
+        totalOutflows: res.totalOutflows || 0,
+        totalPassiveInflows: res.totalPassiveInflows || 0,
+        totalLivingCosts: res.totalLivingCosts || 0,
+        passiveIncomeCoverage: res.passiveIncomeCoverage || 0,
+        outOfRatRace: !!res.outOfRatRace
       })
     } catch (err) {
       console.log(err)
@@ -149,6 +177,11 @@ export function Home() {
             icon={<AccountBalanceWalletRoundedIcon fontSize="small" />} caption="Entradas − saídas" />
         </Grid>
       </Grid>
+
+      <Box sx={{ mb: 3 }}>
+        <RatRace passiveInflows={data.totalPassiveInflows} livingCosts={data.totalLivingCosts}
+          coverage={data.passiveIncomeCoverage} outOfRatRace={data.outOfRatRace} />
+      </Box>
 
       <Grid container spacing={2}>
         <Grid size={{ xs: 12, md: 6 }}>

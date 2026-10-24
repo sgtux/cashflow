@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Cashflow.Api.Contracts;
+using Cashflow.Api.Enums;
 using Cashflow.Api.Extensions;
 using Cashflow.Api.Infra.Entity;
 using Cashflow.Api.Infra.Filters;
@@ -89,7 +90,9 @@ namespace Cashflow.Api.Services
                 EndDate = new DateTime(year, month, DateTime.DaysInMonth(year, month)).FixEndTimeFilter(),
                 UserId = userId
             });
-            householdExpenseInflowOutflowModel.Value = householdExpenses.Where(p => p.InvoiceDate.SameMonthYear(filter.StartDate.Value)).Sum(p => p.Value);
+            var monthHouseholdExpenses = householdExpenses.Where(p => p.InvoiceDate.SameMonthYear(filter.StartDate.Value));
+            householdExpenseInflowOutflowModel.Value = monthHouseholdExpenses.Sum(p => p.Value);
+            homeModel.InvestmentOutflows += monthHouseholdExpenses.Where(p => p.Type == ExpenseType.Investment).Sum(p => p.Value);
             if (householdExpenseInflowOutflowModel.Value == 0)
                 householdExpenseInflowOutflowModel.Value = user.ExpenseLimit;
 
@@ -103,6 +106,8 @@ namespace Cashflow.Api.Services
             {
                 var installments = item.Installments.Where(p => p.Date.Year == year && p.Date.Month == month);
                 paymentInflowOutflowModel.Value += installments.Sum(p => p.Value);
+                if (item.Type == ExpenseType.Investment)
+                    homeModel.InvestmentOutflows += installments.Sum(p => p.Value);
 
                 var pendingValue = installments.Where(p => !p.PaidValue.HasValue).Sum(p => p.Value);
                 if (pendingValue > 0)
@@ -113,12 +118,14 @@ namespace Cashflow.Api.Services
             foreach (var item in recurringExpenses)
             {
                 recurringExpenseInflowOutflowModel.Value += item.Value;
+                if (item.Type == ExpenseType.Investment)
+                    homeModel.InvestmentOutflows += item.Value;
                 if (!item.Paid)
                     homeModel.PendingPayments.Add(new PendingPaymentModel($"{item.Description} (Recorrente)", item.Value, item.CreditCardId > 0));
             }
 
             foreach (var item in await _earningRepository.GetSome(filter))
-                homeModel.Inflows.Add(new InflowOutflowModel(item.Description, item.Value));
+                homeModel.Inflows.Add(new InflowOutflowModel(item.Description, item.Value, item.IsPassive));
 
             var recurringEarnings = await _recurringEarningRepository.GetSome(new RecurringEarningFilter() { UserId = userId, Active = 1 });
             foreach (var item in recurringEarnings)
@@ -127,7 +134,7 @@ namespace Cashflow.Api.Services
                     ? (item.History.FirstOrDefault(h => h.Date <= filter.EndDate)?.Value ?? 0)
                     : item.Value;
                 if (value > 0)
-                    homeModel.Inflows.Add(new InflowOutflowModel(item.Description, value));
+                    homeModel.Inflows.Add(new InflowOutflowModel(item.Description, value, item.IsPassive));
             }
 
             homeModel.Outflows.Add(householdExpenseInflowOutflowModel);
