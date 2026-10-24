@@ -81,6 +81,16 @@ export const Glossary = {
     short: 'Soma de tudo que saiu (ou vai sair) no mês: despesas, contas fixas, parcelas e combustível.',
     example: 'Quando as saídas ficam maiores que as entradas, o mês fecha no vermelho.'
   },
+  rendaPassiva: {
+    term: 'Renda passiva',
+    short: 'Dinheiro que entra sem você precisar trabalhar por ele: aluguéis, dividendos (inclusive de FIIs), juros, royalties, lucro de um negócio que roda sozinho e aposentadoria.',
+    example: 'Um FII que paga R$ 80 por mês é renda passiva. O salário não é: se você parar de trabalhar, ele para.'
+  },
+  corridaDosRatos: {
+    term: 'Corrida dos ratos',
+    short: 'Quando todo o dinheiro que paga suas contas depende do seu trabalho. Você sai dela quando a renda passiva cobre todo o seu custo de vida: as saídas do mês, sem contar o que você investe.',
+    example: 'Saídas de R$ 3.500, sendo R$ 500 de aporte, e renda passiva de R$ 750: o custo de vida é R$ 3.000 e você cobre 25%. Ao chegar em 100%, saiu da corrida.'
+  },
   liquido: {
     term: 'Saldo do mês (líquido)',
     short: 'Entradas menos saídas. Positivo: sobrou dinheiro. Negativo: gastou mais do que ganhou.',
@@ -133,5 +143,6 @@ export const GlossaryGroups = [
   { title: 'Contas que se repetem', ids: ['ganhoRecorrente', 'despesaRecorrente', 'pendencia'] },
   { title: 'Cartão e parcelas', ids: ['cartao', 'fatura', 'fechamento', 'vencimento', 'creditoDevedor', 'parcelamento', 'parcela', 'isentar'] },
   { title: 'Planejamento', ids: ['limite', 'projecao', 'acumulado', 'saldoRemanescente', 'devedor', 'residual', 'emergencia'] },
+  { title: 'Liberdade financeira', ids: ['rendaPassiva', 'corridaDosRatos'] },
   { title: 'Veículos', ids: ['abastecimento', 'kmPorLitro'] }
 ]
