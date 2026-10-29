@@ -60,6 +60,10 @@ namespace Cashflow.Api.Extensions
                     return "Financiamento";
                 case ExpenseType.Tech:
                     return "Tecnologia";
+                case ExpenseType.Bills:
+                    return "Água/Luz/Gás";
+                case ExpenseType.Housing:
+                    return "Moradia";
                 default:
                     return "Desconhecido";
             }

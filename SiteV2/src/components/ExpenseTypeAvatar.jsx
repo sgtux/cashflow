@@ -18,6 +18,15 @@ import {
   Sanitizer as CleaningIcon,
   CurrencyExchange as ExchangeIcon,
   Savings as InvestmentIcon,
+  Smartphone as PhoneIcon,
+  SportsEsports as GamesIcon,
+  VolunteerActivism as DonationIcon,
+  LiveTv as StreamsIcon,
+  AccountBalance as LoanIcon,
+  RequestQuote as FinancingIcon,
+  Computer as TechIcon,
+  Lightbulb as BillsIcon,
+  Home as HousingIcon,
   More as OthersIcon
 } from '@mui/icons-material'
 
@@ -40,7 +49,16 @@ export const ExpenseTypes = {
   Cleaning: 15,
   Exchange: 16,
   Investiment: 17,
-  Others: 20
+  Phone: 18,
+  Games: 19,
+  Others: 20,
+  Donation: 21,
+  Streams: 22,
+  Loan: 23,
+  Financing: 24,
+  Tech: 25,
+  Bills: 26,
+  Housing: 27
 }
 
 const config = {
@@ -61,6 +79,15 @@ const config = {
   [ExpenseTypes.Cleaning]: [CleaningIcon, '#4FB0C6'],
   [ExpenseTypes.Exchange]: [ExchangeIcon, '#1F7A5A'],
   [ExpenseTypes.Investiment]: [InvestmentIcon, '#1F7A5A'],
+  [ExpenseTypes.Phone]: [PhoneIcon, '#2A9D8F'],
+  [ExpenseTypes.Games]: [GamesIcon, '#6A4C93'],
+  [ExpenseTypes.Donation]: [DonationIcon, '#E76F51'],
+  [ExpenseTypes.Streams]: [StreamsIcon, '#C1121F'],
+  [ExpenseTypes.Loan]: [LoanIcon, '#B5651D'],
+  [ExpenseTypes.Financing]: [FinancingIcon, '#9A6324'],
+  [ExpenseTypes.Tech]: [TechIcon, '#264653'],
+  [ExpenseTypes.Bills]: [BillsIcon, '#E9B824'],
+  [ExpenseTypes.Housing]: [HousingIcon, '#7B4B2A'],
   [ExpenseTypes.Others]: [OthersIcon, '#8A8F98']
 }
 

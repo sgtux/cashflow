@@ -50,6 +50,10 @@ namespace Cashflow.Api.Enums
 
         Financing = 24,
 
-        Tech = 25
+        Tech = 25,
+
+        Bills = 26,
+
+        Housing = 27
     }
 }
