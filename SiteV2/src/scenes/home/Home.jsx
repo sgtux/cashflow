@@ -155,7 +155,7 @@ export function Home() {
       title="Seu mês em resumo"
       subtitle="Quanto entra, quanto sai e o que ainda falta pagar."
       guide="home"
-      actions={<MonthStepper month={date.month} year={date.year} minYear={now.getFullYear() - 1} maxYear={now.getFullYear()}
+      actions={<MonthStepper month={date.month} year={date.year} minYear={now.getFullYear() - 1} maxYear={now.getFullYear() + 1}
         onChange={(month, year) => setDate({ month, year })} />}>
 
       <FirstSteps />
