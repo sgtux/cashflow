@@ -8,7 +8,10 @@ namespace Cashflow.Tests.Mocks.Database.Seeders
     {
         public override void Up()
         {
-            var previousMonth = DateTime.Now.AddMonths(-1);
+            // Dia 1 do mês: no SQLite as datas do seed ficam como "yyyy-MM-ddTHH:mm:ss" e os filtros chegam como
+            // "yyyy-MM-dd HH:mm:ss", então um registro no último dia do mês ficaria fora do "Date <= @EndDate".
+            var month = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+            var previousMonth = month.AddMonths(-1);
             Insert.IntoTable("FuelExpense")
                 .Row(new { Id = 1, Miliage = 100, PricePerLiter = 9.5, ValueSupplied = 30.5, VehicleId = 1, Date = new DateTime(2020, 10, 1) })
                 .Row(new { Id = 2, Miliage = 100, PricePerLiter = 9.5, ValueSupplied = 30.5, VehicleId = 1, Date = new DateTime(2020, 10, 1) })
@@ -18,8 +21,8 @@ namespace Cashflow.Tests.Mocks.Database.Seeders
                 .Row(new { Id = 6, Miliage = 100, PricePerLiter = 6.5, ValueSupplied = 50.5, VehicleId = 3, Date = new DateTime(2020, 12, 10) })
                 .Row(new { Id = 7, Miliage = 150, PricePerLiter = 7.5, ValueSupplied = 50.5, VehicleId = 3, Date = new DateTime(2020, 12, 11) })
                 .Row(new { Id = 8, Miliage = 200, PricePerLiter = 7.5, ValueSupplied = 50.5, VehicleId = 3, Date = new DateTime(2020, 12, 12) })
-                .Row(new { Id = 9, Miliage = 200, PricePerLiter = 7.5, ValueSupplied = 100, VehicleId = 5, Date = DateTime.Now.AddMonths(-1) })
-                .Row(new { Id = 10, Miliage = 200, PricePerLiter = 7.5, ValueSupplied = 200, VehicleId = 5, Date = DateTime.Now })
+                .Row(new { Id = 9, Miliage = 200, PricePerLiter = 7.5, ValueSupplied = 100, VehicleId = 5, Date = month.AddMonths(-1) })
+                .Row(new { Id = 10, Miliage = 200, PricePerLiter = 7.5, ValueSupplied = 200, VehicleId = 5, Date = month })
                 .Row(new { Id = 11, Miliage = 150, PricePerLiter = 7.5, ValueSupplied = 300, VehicleId = 5, CreditCardId = 7, Date = new DateTime(previousMonth.Year, previousMonth.Month, 5) });
         }
 
