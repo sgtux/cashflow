@@ -1,8 +1,12 @@
 import React from 'react'
-import { Box, IconButton, InputAdornment, MenuItem, TextField, Typography } from '@mui/material'
+import { Box, IconButton, MenuItem, TextField, Typography } from '@mui/material'
 import ChevronLeftRoundedIcon from '@mui/icons-material/ChevronLeftRounded'
 import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded'
 import { CurrencyInput } from 'react-currency-mask'
+import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import dayjs from 'dayjs'
+import 'dayjs/locale/pt-br'
 
 import { Months } from '../helpers'
 import { HelpTip } from './Term'
@@ -34,42 +38,28 @@ export function MoneyField({ label, value, onChange, helperText, help, autoFocus
   )
 }
 
-const pad = n => String(n).padStart(2, '0')
-
-const toInputValue = date => {
+const toDayjs = date => {
   if (!date)
-    return ''
-  const d = new Date(date)
-  if (isNaN(d))
-    return ''
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`
-}
-
-// "2026-10-21" -> Date local (sem o deslocamento de fuso que new Date('2026-10-21') causaria).
-const fromInputValue = text => {
-  if (!text)
     return null
-  const [y, m, d] = text.split('-').map(Number)
-  return new Date(y, m - 1, d)
+  const d = dayjs(date)
+  return d.isValid() ? d : null
 }
 
+// value/onChange trabalham com Date local (meia-noite do dia escolhido). O DatePicker
+// fixa o formato dd/MM/aaaa, independente do idioma do navegador.
 export function DateField({ label, value, onChange, helperText, help, clearable }) {
   return (
-    <TextField
-      type="date"
-      label={<FieldLabel label={label} help={help} />}
-      value={toInputValue(value)}
-      onChange={e => onChange(fromInputValue(e.target.value))}
-      helperText={helperText}
-      slotProps={{
-        inputLabel: { shrink: true },
-        input: clearable && value ? {
-          endAdornment: <InputAdornment position="end">
-            <IconButton size="small" onClick={() => onChange(null)} aria-label="Limpar data">×</IconButton>
-          </InputAdornment>
-        } : undefined
-      }}
-    />
+    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pt-br">
+      <DatePicker
+        label={<FieldLabel label={label} help={help} />}
+        value={toDayjs(value)}
+        onChange={d => onChange(d && d.isValid() ? d.startOf('day').toDate() : null)}
+        slotProps={{
+          field: { clearable },
+          textField: { helperText, fullWidth: true }
+        }}
+      />
+    </LocalizationProvider>
   )
 }
 
