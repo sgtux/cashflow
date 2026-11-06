@@ -9,7 +9,7 @@ import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded'
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded'
 import CreditCardRoundedIcon from '@mui/icons-material/CreditCardRounded'
 
-import { Page, Money, EmptyState, ConfirmDialog, ActionIcon, StatusChip, StatCard, HelpTip } from '../../components'
+import { Page, Money, EmptyState, ConfirmDialog, ActionIcon, StatusChip, StatCard, HelpTip, FormDialog, MoneyField, DateField } from '../../components'
 import { dateToString, toast, sum } from '../../helpers'
 import { HistoryDialog } from './HistoryDialog'
 
@@ -22,6 +22,9 @@ export function RecurringList({ config, icon }) {
   const [historyItem, setHistoryItem] = useState(null)
   const [removeItem, setRemoveItem] = useState(null)
   const [open, setOpen] = useState({})
+  const [doneItem, setDoneItem] = useState(null)
+  const [doneValue, setDoneValue] = useState(0)
+  const [doneDate, setDoneDate] = useState(null)
 
   const navigate = useNavigate()
 
@@ -35,15 +38,25 @@ export function RecurringList({ config, icon }) {
       .finally(() => setLoading(false))
   }
 
-  function quickDone(item) {
+  function startDone(item) {
+    if (!config.askValueOnDone)
+      return saveDone(item, item.value, new Date())
+
+    setDoneItem(item)
+    setDoneValue(item.value)
+    setDoneDate(new Date())
+  }
+
+  function saveDone(item, value, date) {
     setLoading(true)
     service.saveHistory({
-      [valueKey]: item.value,
-      date: new Date(),
+      [valueKey]: value,
+      date,
       [config.parentKey]: item.id
     })
       .then(() => {
         toast.success(`${item.description}: registrado!`)
+        setDoneItem(null)
         refresh()
       })
       .catch(() => setLoading(false))
@@ -131,7 +144,7 @@ export function RecurringList({ config, icon }) {
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
                   {!p.inactiveAt && !p[doneKey] &&
                     <Button size="small" variant="contained" color={tone === 'in' ? 'success' : 'primary'} startIcon={<CheckRoundedIcon />}
-                      title={texts.quickActionHint} onClick={() => quickDone(p)}>
+                      title={texts.quickActionHint} onClick={() => startDone(p)}>
                       {texts.quickAction}
                     </Button>
                   }
@@ -177,6 +190,12 @@ export function RecurringList({ config, icon }) {
         confirmLabel="Remover"
         onClose={() => setRemoveItem(null)}
         onConfirm={remove} />
+      <FormDialog open={!!doneItem} title={texts.doneDialogTitle} subtitle={(doneItem || {}).description}
+        onClose={() => setDoneItem(null)} onSave={() => saveDone(doneItem, doneValue, doneDate)}
+        saveLabel={texts.quickAction} saveDisabled={!(doneValue > 0) || !doneDate || loading} maxWidth="xs">
+        <MoneyField label={texts.historyValueLabel} value={doneValue} onChange={setDoneValue} helperText={texts.doneValueHelper} />
+        <DateField label={texts.doneDateLabel} value={doneDate} onChange={setDoneDate} />
+      </FormDialog>
       <HistoryDialog config={config} item={historyItem} open={!!historyItem}
         requestRefresh={refreshHistory}
         onClose={() => { setHistoryItem(null); refresh() }} />

@@ -45,7 +45,7 @@ namespace Cashflow.Api.Extensions
                 case ExpenseType.Investment:
                     return "Investimentos";
                 case ExpenseType.Phone:
-                    return "Telefone";
+                    return "Telefone/Internet";
                 case ExpenseType.Games:
                     return "Jogos";
                 case ExpenseType.Donation:
