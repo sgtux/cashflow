@@ -109,7 +109,7 @@ namespace Cashflow.Api.Services
                 if (item.Type == ExpenseType.Investment)
                     homeModel.InvestmentOutflows += installments.Sum(p => p.Value);
 
-                var pendingValue = installments.Where(p => !p.PaidValue.HasValue).Sum(p => p.Value);
+                var pendingValue = installments.Where(p => !p.PaidValue.HasValue && !p.Exempt).Sum(p => p.Value);
                 if (pendingValue > 0)
                     homeModel.PendingPayments.Add(new PendingPaymentModel($"{item.Description} (Parcelado)", pendingValue, item.CreditCardId > 0));
             }
